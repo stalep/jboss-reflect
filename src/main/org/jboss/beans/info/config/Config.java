@@ -16,9 +16,11 @@ import java.util.Set;
 import org.jboss.beans.info.spi.AttributeInfo;
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.ConstructorInfo;
+import org.jboss.beans.info.spi.MethodInfo;
 import org.jboss.beans.info.spi.ParameterInfo;
 import org.jboss.beans.info.spi.TypeInfo;
 import org.jboss.container.plugins.joinpoint.bean.ConstructorJoinPoint;
+import org.jboss.container.plugins.joinpoint.bean.MethodJoinPoint;
 import org.jboss.container.plugins.joinpoint.bean.SetterJoinPoint;
 import org.jboss.logging.Logger;
 
@@ -385,6 +387,93 @@ public class Config
          }
       }
       throw new IllegalArgumentException("Attribute " + name + " not found for " + info);
+   }
+   
+   /**
+    * Find a method
+    * 
+    * @param info the bean info
+    * @param name the name of the method
+    * @param paramTypes the parameter types
+    * @param isStatic whether the method is static
+    * @param isPublic whether the method is public
+    * @return the join point
+    * @throws Exception for any error
+    */
+   public static MethodJoinPoint findMethod(BeanInfo info, String name, String[] paramTypes, boolean isStatic, boolean isPublic) throws Exception
+   {
+      boolean trace = log.isTraceEnabled();
+      return findMethod(trace, info, name, paramTypes, isStatic, isPublic);
+   }
+   
+   /**
+    * Find a method
+    * 
+    * @param trace whether trace is enabled
+    * @param info the bean info
+    * @param name the name of the method
+    * @param paramTypes the parameter types
+    * @param isStatic whether the method is static
+    * @param isPublic whether the method is public
+    * @return the join point
+    * @throws Exception for any error
+    */
+   public static MethodJoinPoint findMethod(boolean trace, BeanInfo info, String name, String[] paramTypes, boolean isStatic, boolean isPublic) throws Exception
+   {
+      MethodInfo minfo = resolveMethod(trace, info, name, paramTypes, isStatic, isPublic);
+      return new MethodJoinPoint(minfo);
+   }
+   
+   /**
+    * Resolve a method
+    * 
+    * @param trace whether trace is enabled
+    * @param info the bean info
+    * @param name the name of the method
+    * @param paramTypes the parameter types
+    * @param isStatic whether the method is static
+    * @param isPublic whether the method is public
+    * @return the constructor info
+    */
+   public static MethodInfo resolveMethod(boolean trace, BeanInfo info, String name, String[] paramTypes, boolean isStatic, boolean isPublic)
+   {
+      if (paramTypes == null)
+         paramTypes = new String[0];
+
+      Set methods = info.getMethods();
+      if (methods.isEmpty() == false)
+      {
+         for (Iterator i = info.getClassInfo().getMethods().iterator(); i.hasNext();)
+         {
+            MethodInfo minfo = (MethodInfo) i.next();
+            if (isStatic != minfo.isStatic())
+               continue;
+            if (isPublic == true && minfo.isPublic() != true)
+               continue;
+            if (minfo.getName().equals(name) == false)
+               continue;
+            if (minfo.getParameters().size() != paramTypes.length)
+               continue;
+            int x = 0;
+            boolean found = true;
+            for (Iterator j = minfo.getParameters().iterator(); j.hasNext();)
+            {
+               ParameterInfo pinfo = (ParameterInfo) j.next();
+               if (paramTypes[x++].equals(pinfo.getTypeInfo().getName()) == false)
+               {
+                  found = false;
+                  break;
+               }
+            }
+            if (found)
+            {
+               if (trace)
+                  log.trace("Found method " + minfo);
+               return minfo;
+            }
+         }
+      }
+      throw new IllegalArgumentException("Method " + name + Arrays.asList(paramTypes) + " not found for " + info);
    }
    
    // Constructors --------------------------------------------------

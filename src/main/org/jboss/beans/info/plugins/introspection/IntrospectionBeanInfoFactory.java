@@ -71,7 +71,7 @@ public class IntrospectionBeanInfoFactory implements BeanInfoFactory
       if (typeInfo instanceof ClassInfo)
       {
          ClassInfo classInfo = (ClassInfo) typeInfo;
-         return new AbstractBeanInfo(classInfo);
+         return new AbstractBeanInfo(this, classInfo);
       }
       throw new IllegalArgumentException(name + " is an interface");
    }

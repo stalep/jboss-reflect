@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.jboss.beans.info.spi.BeanInfo;
+import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.beans.info.spi.ClassInfo;
 import org.jboss.beans.info.spi.ConstructorInfo;
 import org.jboss.beans.info.spi.MethodInfo;
@@ -47,6 +48,9 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    /** The events */
    protected Set events;
    
+   /** The BeanInfoFactory */
+   protected BeanInfoFactory beanInfoFactory;
+   
    // Static --------------------------------------------------------
    
    // Constructors --------------------------------------------------
@@ -54,37 +58,41 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    /**
     * Create a new bean info
     * 
+    * @param beanInfoFactory the bean info factory
     * @param classInfo the class info
     */
-   public AbstractBeanInfo(ClassInfo classInfo)
+   public AbstractBeanInfo(BeanInfoFactory beanInfoFactory, ClassInfo classInfo)
    {
-      this(classInfo, Collections.EMPTY_SET);
+      this(beanInfoFactory, classInfo, Collections.EMPTY_SET);
    }
 
    /**
     * Create a new bean info
     * 
+    * @param beanInfoFactory the bean info factory
     * @param classInfo the class info
     * @param events the events
     */
-   public AbstractBeanInfo(ClassInfo classInfo, Set events)
+   public AbstractBeanInfo(BeanInfoFactory beanInfoFactory, ClassInfo classInfo, Set events)
    {
-      this(classInfo, classInfo.getAttributes(), classInfo.getConstructors(),
+      this(beanInfoFactory, classInfo, classInfo.getAttributes(), classInfo.getConstructors(),
             classInfo.getMethods(), events);
    }
 
    /**
     * Create a new bean info
     * 
+    * @param beanInfoFactory the bean info factory
     * @param classInfo the class info
     * @param attributes the attributes
     * @param constructors the constructors
     * @param methods the methods
     * @param events the events
     */
-   public AbstractBeanInfo(ClassInfo classInfo, Set attributes, Set constructors,
+   public AbstractBeanInfo(BeanInfoFactory beanInfoFactory, ClassInfo classInfo, Set attributes, Set constructors,
          Set methods, Set events)
    {
+      this.beanInfoFactory = beanInfoFactory;
       this.name = classInfo.getName();
       this.classInfo = classInfo;
       this.attributes = attributes;
@@ -168,6 +176,11 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    public void setMethods(Set methods)
    {
       this.methods = methods;
+   }
+   
+   public BeanInfoFactory getBeanInfoFactory()
+   {
+      return beanInfoFactory;
    }
 
    // Object overrides -----------------------------------------------

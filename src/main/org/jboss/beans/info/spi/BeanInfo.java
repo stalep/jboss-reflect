@@ -99,5 +99,12 @@ public interface BeanInfo extends JBossInterface
     */
    void setEvents(Set events);
    
+   /**
+    * Get the bean info factory
+    * 
+    * @return the factory
+    */
+   BeanInfoFactory getBeanInfoFactory();
+   
    // Inner classes -------------------------------------------------
 }
