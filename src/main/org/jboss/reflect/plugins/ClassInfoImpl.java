@@ -6,16 +6,15 @@
  */
 package org.jboss.reflect.plugins;
 
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
-
-import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
+
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
 
 /**
  * Class info
@@ -120,12 +119,10 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
     * @param modifiers the class modifiers
     * @param interfaces the interfaces
     * @param superclass the super class
-    * @param annotations the annotations
     */
-   public ClassInfoImpl(String name, int modifiers, InterfaceInfo[] interfaces, 
-                    ClassInfoImpl superclass, AnnotationValue[] annotations)
+   public ClassInfoImpl(String name, int modifiers, InterfaceInfo[] interfaces,
+                        ClassInfoImpl superclass)
    {
-      super(annotations);
       this.name = name;
       this.modifiers = modifiers;
       this.interfaces = interfaces;

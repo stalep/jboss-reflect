@@ -6,12 +6,12 @@
  */
 package org.jboss.reflect.plugins;
 
-import java.io.Serializable;
-import java.util.HashMap;
-
 import org.jboss.reflect.spi.AnnotatedInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.util.JBossObject;
+
+import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * An annotation holder
@@ -54,17 +54,6 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
    {
    }
 
-   /**
-    * Create a new InheritableAnnotationHolder.
-    * 
-    * @param annotations the annotations
-    */
-   public InheritableAnnotationHolder(AnnotationValue[] annotations)
-   {
-      setupAnnotations(annotations);
-   }
-
-
    // Public --------------------------------------------------------
 
    /**
@@ -103,7 +92,7 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
     * 
     * @param annotations the annotations
     */
-   protected void setupAnnotations(AnnotationValue[] annotations)
+   public void setupAnnotations(AnnotationValue[] annotations)
    {
       if (annotations != null && annotations.length > 0)
       {

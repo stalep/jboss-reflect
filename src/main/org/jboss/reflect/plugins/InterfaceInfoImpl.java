@@ -6,7 +6,6 @@
  */
 package org.jboss.reflect.plugins;
 
-import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.InterfaceInfo;
 
 /**
@@ -51,11 +50,10 @@ public class InterfaceInfoImpl extends ClassInfoImpl implements InterfaceInfo
     * @param name the interface name
     * @param modifiers the interface modifier
     * @param interfaces the interfaces
-    * @param annotations the annotations
     */
-   public InterfaceInfoImpl(String name, int modifiers, InterfaceInfo[] interfaces, AnnotationValue[] annotations)
+   public InterfaceInfoImpl(String name, int modifiers, InterfaceInfo[] interfaces)
    {
-      super(name, modifiers, interfaces, null, annotations);
+      super(name, modifiers, interfaces, null);
    }
 
    // Public --------------------------------------------------------

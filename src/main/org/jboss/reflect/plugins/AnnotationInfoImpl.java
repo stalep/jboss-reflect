@@ -6,11 +6,10 @@
  */
 package org.jboss.reflect.plugins;
 
-import java.util.HashMap;
-
 import org.jboss.reflect.spi.AnnotationAttribute;
 import org.jboss.reflect.spi.AnnotationInfo;
-import org.jboss.reflect.spi.AnnotationValue;
+
+import java.util.HashMap;
 
 /**
  * Annotation Info
@@ -49,11 +48,10 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
     * 
     * @param name the name
     * @param modifiers the modifiers
-    * @param annotations the annotation values
     */
-   public AnnotationInfoImpl(String name, int modifiers, AnnotationValue[] annotations)
+   public AnnotationInfoImpl(String name, int modifiers)
    {
-      super(name, modifiers, null, annotations);
+      super(name, modifiers, null);
    }
 
    // Public --------------------------------------------------------

@@ -6,12 +6,13 @@
  */
 package org.jboss.reflect.plugins;
 
-import java.io.Serializable;
-import java.util.HashMap;
-
 import org.jboss.reflect.spi.AnnotatedInfo;
 import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.util.JBossObject;
+
+import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * An annotation holder
@@ -88,8 +89,12 @@ public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Seri
       if (annotations != null && annotations.length > 0)
       {
          this.annotationsArray = annotations;
+         annotationMap = new HashMap();
          for (int i = 0; i < annotations.length; i++)
-            annotationMap.put(annotations[i].getAnnotationType().getName(), annotations[i]);
+         {
+            AnnotationInfo type = annotations[i].getAnnotationType();
+            annotationMap.put(type.getName(), annotations[i]);
+         }
       }
    }
    

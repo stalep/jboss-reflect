@@ -6,10 +6,10 @@
  */
 package org.jboss.reflect.plugins;
 
-import java.util.HashMap;
-
 import org.jboss.reflect.spi.EnumConstantInfo;
 import org.jboss.reflect.spi.EnumInfo;
+
+import java.util.HashMap;
 
 /**
  * Enumeration info
@@ -51,7 +51,7 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
     */
    public EnumInfoImpl(String name, int modifiers)
    {
-      super(name, modifiers, null, null, null);
+      super(name, modifiers, null, null);
    }
 
    // Public --------------------------------------------------------
