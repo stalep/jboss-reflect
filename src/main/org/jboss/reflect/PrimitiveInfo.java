@@ -20,6 +20,9 @@ public class PrimitiveInfo implements TypeInfo, Serializable
 {
    // Constants -----------------------------------------------------
 
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3256718498443835449L;
+
    /** The boolean info */
    public static final PrimitiveInfo BOOLEAN = new PrimitiveInfo("boolean", 0);
 
