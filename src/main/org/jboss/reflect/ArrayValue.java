@@ -7,12 +7,11 @@
 package org.jboss.reflect;
 
 /**
- * comment
+ * Annotation value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface ArrayData extends TypeData
+public interface ArrayValue extends Value
 {
-   boolean isArray();
-   TypeData getComponentType();
+   Value[] values();
 }

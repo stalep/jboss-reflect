@@ -11,11 +11,11 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface EnumData extends TypeData
+public interface EnumInfo extends TypeInfo
 {
    String getName();
    int getModifiers();
-   EnumConstantData[] getEnumConstants();
-   EnumConstantData getEnumConstant(String name);
+   EnumConstantInfo[] getEnumConstants();
+   EnumConstantInfo getEnumConstant(String name);
 
 }

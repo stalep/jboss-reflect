@@ -13,8 +13,8 @@ package org.jboss.reflect;
  */
 public interface AnnotatedData
 {
-   AnnotationData[] getAnnotations();
-   AnnotationData[] getDeclaredAnnotations();
-   AnnotationData getAnnotation(String name);
+   AnnotationValue[] getAnnotations();
+   AnnotationValue[] getDeclaredAnnotations();
+   AnnotationValue getAnnotation(String name);
    boolean isAnnotationPresent(String name);
 }

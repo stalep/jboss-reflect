@@ -11,13 +11,17 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface FieldData extends AnnotatedData
+public interface MethodInfo extends AnnotatedInfo
 {
    String getName();
 
-   ClassData getType();
+   TypeInfo[] getParameterTypes();
+
+   ClassInfo[] getExceptionTypes();
+
+   TypeInfo getReturnType();
 
    int getModifiers();
 
-   ClassData getDeclaringClass();
+   ClassInfo getDeclaringClass();
 }

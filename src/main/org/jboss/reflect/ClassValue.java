@@ -7,13 +7,11 @@
 package org.jboss.reflect;
 
 /**
- * comment
+ * Annotation value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface AnnotationAttribute
+public interface ClassValue extends Value
 {
-   String getName();
-   TypeData getType();
-   Value getDefaultValue();
+   String getValue();
 }

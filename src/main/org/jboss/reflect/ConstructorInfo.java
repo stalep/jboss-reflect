@@ -11,9 +11,13 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface AnnotationAttribute
+public interface ConstructorInfo extends AnnotatedInfo
 {
-   String getName();
-   TypeData getType();
-   Value getDefaultValue();
+   ClassInfo[] getParameterTypes();
+
+   ClassInfo[] getExceptionTypes();
+
+   ClassInfo getDeclaringClass();
+
+   int getModifiers();
 }

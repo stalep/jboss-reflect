@@ -7,12 +7,11 @@
 package org.jboss.reflect;
 
 /**
- * comment
+ * Annotation value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface AnnotationTypeData
+public interface Value
 {
-   AnnotationAttribute[] getAttributes();
-   AnnotationAttribute getAttribute(String name);
+   PrimitiveData getType();
 }

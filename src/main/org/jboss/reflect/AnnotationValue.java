@@ -6,19 +6,15 @@
  */
 package org.jboss.reflect;
 
+
+
 /**
  * comment
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface InterfaceData extends TypeData
+public interface AnnotationValue extends Value
 {
-   String getName();
-
-   int getModifiers();
-
-   InterfaceData[] getInterfaces();
-
-   MethodData[] getDeclaredMethods();
-   MethodData[] getMethods();
+   AnnotationData getAnnotationType();
+   Value getValue(String attributeName);
 }

@@ -6,16 +6,13 @@
  */
 package org.jboss.reflect;
 
-
-
 /**
  * comment
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface AnnotationData extends AnnotatedData
+public interface AnnotationData extends AnnotatedData, TypeData
 {
-   AnnotationTypeData getAnnotationType();
-
-   String getValue(String attributeName);
+   AnnotationAttribute[] getAttributes();
+   AnnotationAttribute getAttribute(String name);
 }

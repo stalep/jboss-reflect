@@ -11,9 +11,8 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface EnumConstantData
+public interface ArrayInfo extends TypeInfo
 {
-   String getName();
-   int ordinal();
-   EnumData getDeclaringClass();
+   boolean isArray();
+   TypeInfo getComponentType();
 }

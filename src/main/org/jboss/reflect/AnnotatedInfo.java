@@ -11,9 +11,10 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface AnnotationAttribute
+public interface AnnotatedInfo
 {
-   String getName();
-   TypeData getType();
-   Value getDefaultValue();
+   AnnotationValue[] getAnnotations();
+   AnnotationValue[] getDeclaredAnnotations();
+   AnnotationValue getAnnotation(String name);
+   boolean isAnnotationPresent(String name);
 }

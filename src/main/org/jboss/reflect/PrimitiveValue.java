@@ -11,9 +11,7 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface AnnotationAttribute
+public interface PrimitiveValue extends Value
 {
-   String getName();
-   TypeData getType();
-   Value getDefaultValue();
+   String getValue();
 }

@@ -11,13 +11,7 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface ConstructorData extends AnnotatedData
+public interface EnumValue
 {
-   ClassData[] getParameterTypes();
-
-   ClassData[] getExceptionTypes();
-
-   ClassData getDeclaringClass();
-
-   int getModifiers();
+   String getValue();
 }

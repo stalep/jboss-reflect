@@ -11,6 +11,8 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface TypeData
+public interface AnnotationInfo extends AnnotatedInfo, TypeInfo
 {
+   AnnotationAttribute[] getAttributes();
+   AnnotationAttribute getAttribute(String name);
 }
