@@ -8,8 +8,8 @@ package org.jboss.joinpoint.plugins.reflect;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.jboss.joinpoint.ConstructorJoinpoint;
-import org.jboss.reflect.ConstructorInfo;
+import org.jboss.joinpoint.spi.ConstructorJoinpoint;
+import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.util.UnreachableStatementException;
 
 /**

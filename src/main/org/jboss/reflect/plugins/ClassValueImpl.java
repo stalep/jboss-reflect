@@ -8,8 +8,8 @@ package org.jboss.reflect.plugins;
 
 import java.io.Serializable;
 
-import org.jboss.reflect.ClassValue;
-import org.jboss.reflect.TypeInfo;
+import org.jboss.reflect.spi.ClassValue;
+import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossObject;
 
 /**

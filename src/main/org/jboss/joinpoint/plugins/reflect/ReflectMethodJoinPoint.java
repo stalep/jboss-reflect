@@ -8,8 +8,8 @@ package org.jboss.joinpoint.plugins.reflect;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.jboss.joinpoint.MethodJoinpoint;
-import org.jboss.reflect.MethodInfo;
+import org.jboss.joinpoint.spi.MethodJoinpoint;
+import org.jboss.reflect.spi.MethodInfo;
 
 /**
  * A method joinpoint

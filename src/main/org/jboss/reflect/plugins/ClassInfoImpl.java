@@ -9,13 +9,13 @@ package org.jboss.reflect.plugins;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
-import org.jboss.reflect.AnnotationValue;
-import org.jboss.reflect.ClassInfo;
-import org.jboss.reflect.ConstructorInfo;
-import org.jboss.reflect.FieldInfo;
-import org.jboss.reflect.InterfaceInfo;
-import org.jboss.reflect.MethodInfo;
-import org.jboss.reflect.TypeInfo;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ConstructorInfo;
+import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.TypeInfo;
 
 /**
  * Class info

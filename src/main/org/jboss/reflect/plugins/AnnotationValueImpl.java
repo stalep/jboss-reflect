@@ -9,10 +9,10 @@ package org.jboss.reflect.plugins;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import org.jboss.reflect.AnnotationInfo;
-import org.jboss.reflect.AnnotationValue;
-import org.jboss.reflect.TypeInfo;
-import org.jboss.reflect.Value;
+import org.jboss.reflect.spi.AnnotationInfo;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.Value;
 import org.jboss.util.JBossObject;
 
 /**

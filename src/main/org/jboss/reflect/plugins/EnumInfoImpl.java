@@ -8,8 +8,8 @@ package org.jboss.reflect.plugins;
 
 import java.util.HashMap;
 
-import org.jboss.reflect.EnumConstantInfo;
-import org.jboss.reflect.EnumInfo;
+import org.jboss.reflect.spi.EnumConstantInfo;
+import org.jboss.reflect.spi.EnumInfo;
 
 /**
  * Enumeration info

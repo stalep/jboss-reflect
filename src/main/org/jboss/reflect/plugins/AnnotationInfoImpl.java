@@ -8,9 +8,9 @@ package org.jboss.reflect.plugins;
 
 import java.util.HashMap;
 
-import org.jboss.reflect.AnnotationAttribute;
-import org.jboss.reflect.AnnotationInfo;
-import org.jboss.reflect.AnnotationValue;
+import org.jboss.reflect.spi.AnnotationAttribute;
+import org.jboss.reflect.spi.AnnotationInfo;
+import org.jboss.reflect.spi.AnnotationValue;
 
 /**
  * Annotation Info

@@ -6,8 +6,8 @@
  */
 package org.jboss.reflect.plugins;
 
-import org.jboss.reflect.AnnotationValue;
-import org.jboss.reflect.InterfaceInfo;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.InterfaceInfo;
 
 /**
  * Interface info

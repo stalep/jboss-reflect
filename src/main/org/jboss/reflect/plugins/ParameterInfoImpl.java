@@ -6,9 +6,9 @@
  */
 package org.jboss.reflect.plugins;
 
-import org.jboss.reflect.AnnotationValue;
-import org.jboss.reflect.ParameterInfo;
-import org.jboss.reflect.TypeInfo;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.ParameterInfo;
+import org.jboss.reflect.spi.TypeInfo;
 
 /**
  * Parameter info

@@ -6,16 +6,16 @@
  */
 package org.jboss.joinpoint.plugins.reflect;
 
-import org.jboss.joinpoint.ConstructorJoinpoint;
-import org.jboss.joinpoint.FieldGetJoinpoint;
-import org.jboss.joinpoint.FieldSetJoinpoint;
-import org.jboss.joinpoint.JoinpointException;
-import org.jboss.joinpoint.JoinpointFactory;
-import org.jboss.joinpoint.MethodJoinpoint;
-import org.jboss.reflect.ClassInfo;
-import org.jboss.reflect.ConstructorInfo;
-import org.jboss.reflect.FieldInfo;
-import org.jboss.reflect.MethodInfo;
+import org.jboss.joinpoint.spi.ConstructorJoinpoint;
+import org.jboss.joinpoint.spi.FieldGetJoinpoint;
+import org.jboss.joinpoint.spi.FieldSetJoinpoint;
+import org.jboss.joinpoint.spi.JoinpointException;
+import org.jboss.joinpoint.spi.JoinpointFactory;
+import org.jboss.joinpoint.spi.MethodJoinpoint;
+import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ConstructorInfo;
+import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.MethodInfo;
 
 /**
  * A join point factory based on reflection

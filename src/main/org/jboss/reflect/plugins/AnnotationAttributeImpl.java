@@ -8,9 +8,9 @@ package org.jboss.reflect.plugins;
 
 import java.io.Serializable;
 
-import org.jboss.reflect.AnnotationAttribute;
-import org.jboss.reflect.TypeInfo;
-import org.jboss.reflect.Value;
+import org.jboss.reflect.spi.AnnotationAttribute;
+import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.Value;
 import org.jboss.util.JBossObject;
 
 /**

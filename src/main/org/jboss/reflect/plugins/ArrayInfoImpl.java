@@ -6,8 +6,8 @@
  */
 package org.jboss.reflect.plugins;
 
-import org.jboss.reflect.ArrayInfo;
-import org.jboss.reflect.TypeInfo;
+import org.jboss.reflect.spi.ArrayInfo;
+import org.jboss.reflect.spi.TypeInfo;
 
 /**
  * Array information

@@ -8,8 +8,8 @@ package org.jboss.reflect.plugins;
 
 import java.io.Serializable;
 
-import org.jboss.reflect.EnumConstantInfo;
-import org.jboss.reflect.EnumInfo;
+import org.jboss.reflect.spi.EnumConstantInfo;
+import org.jboss.reflect.spi.EnumInfo;
 import org.jboss.util.JBossObject;
 
 /**

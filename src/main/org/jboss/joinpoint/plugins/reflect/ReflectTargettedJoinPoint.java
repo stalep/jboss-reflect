@@ -6,7 +6,7 @@
  */
 package org.jboss.joinpoint.plugins.reflect;
 
-import org.jboss.joinpoint.TargettedJoinpoint;
+import org.jboss.joinpoint.spi.TargettedJoinpoint;
 import org.jboss.util.UnreachableStatementException;
 
 /**

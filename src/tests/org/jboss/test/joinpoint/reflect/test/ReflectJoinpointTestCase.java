@@ -6,12 +6,12 @@
  */
 package org.jboss.test.joinpoint.reflect.test;
 
-import org.jboss.joinpoint.Joinpoint;
-import org.jboss.joinpoint.JoinpointFactory;
-import org.jboss.joinpoint.config.Config;
+import org.jboss.joinpoint.plugins.config.Config;
 import org.jboss.joinpoint.plugins.reflect.ReflectJoinpointFactory;
-import org.jboss.reflect.ClassInfo;
+import org.jboss.joinpoint.spi.Joinpoint;
+import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
+import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.test.BaseTestCase;
 import org.jboss.test.joinpoint.reflect.support.SimpleBean;
 

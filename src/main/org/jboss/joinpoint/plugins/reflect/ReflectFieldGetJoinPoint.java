@@ -6,8 +6,8 @@
  */
 package org.jboss.joinpoint.plugins.reflect;
 
-import org.jboss.joinpoint.FieldGetJoinpoint;
-import org.jboss.reflect.FieldInfo;
+import org.jboss.joinpoint.spi.FieldGetJoinpoint;
+import org.jboss.reflect.spi.FieldInfo;
 
 /**
  * A field get joinpoint

@@ -13,16 +13,16 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.jboss.logging.Logger;
-import org.jboss.reflect.ClassInfo;
-import org.jboss.reflect.InterfaceInfo;
-import org.jboss.reflect.PrimitiveInfo;
-import org.jboss.reflect.TypeInfo;
-import org.jboss.reflect.TypeInfoFactory;
 import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.InterfaceInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
+import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.PrimitiveInfo;
+import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.WeakClassCache;
 
 /**

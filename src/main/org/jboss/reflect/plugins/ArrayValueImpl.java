@@ -9,9 +9,9 @@ package org.jboss.reflect.plugins;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.jboss.reflect.ArrayValue;
-import org.jboss.reflect.TypeInfo;
-import org.jboss.reflect.Value;
+import org.jboss.reflect.spi.ArrayValue;
+import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.Value;
 import org.jboss.util.JBossObject;
 
 /**

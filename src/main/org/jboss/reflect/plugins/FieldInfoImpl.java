@@ -9,10 +9,10 @@ package org.jboss.reflect.plugins;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import org.jboss.reflect.AnnotationValue;
-import org.jboss.reflect.ClassInfo;
-import org.jboss.reflect.FieldInfo;
-import org.jboss.reflect.TypeInfo;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.TypeInfo;
 
 /**
  * A field info

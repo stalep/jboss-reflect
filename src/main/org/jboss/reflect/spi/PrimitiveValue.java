@@ -4,26 +4,24 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.reflect.plugins;
+package org.jboss.reflect.spi;
 
 import java.io.Serializable;
 
-import org.jboss.reflect.spi.StringValue;
-import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossObject;
 
 /**
- * A string value
+ * A primitive value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class StringValueImpl extends JBossObject implements StringValue, Serializable
+public class PrimitiveValue extends JBossObject implements Serializable, Value
 {
    // Constants -----------------------------------------------------
 
    /** serialVersionUID */
-   private static final long serialVersionUID = 3977862864859836468L;
+   private static final long serialVersionUID = 3907214866304741945L;
    
    // Attributes ----------------------------------------------------
 
@@ -31,35 +29,36 @@ public class StringValueImpl extends JBossObject implements StringValue, Seriali
    protected String value;
    
    /** The type */
-   protected TypeInfo type;
+   protected PrimitiveInfo type;
 
    // Static --------------------------------------------------------
    
    // Constructors --------------------------------------------------
 
    /**
-    * Create a new string value
+    * Create a primitive value
     */
-   public StringValueImpl()
+   public PrimitiveValue()
    {
    }
-   
+
    /**
-    * Create a new string value
+    * Create a primitive value
     * 
     * @param value the value
     * @param type the type
     */
-   public StringValueImpl(String value, TypeInfo type)
+   public PrimitiveValue(String value, PrimitiveInfo type)
    {
       this.value = value;
       this.type = type;
    }
 
-   // Public --------------------------------------------------------
-
-   // StringValue implementation ------------------------------------
-
+   /**
+    * Get the value
+    * 
+    * @return the value
+    */
    public String getValue()
    {
       return value;
@@ -77,9 +76,9 @@ public class StringValueImpl extends JBossObject implements StringValue, Seriali
    public boolean equals(Object o)
    {
       if (this == o) return true;
-      if (!(o instanceof StringValueImpl)) return false;
+      if (!(o instanceof PrimitiveValue)) return false;
 
-      final StringValueImpl primitiveValue = (StringValueImpl) o;
+      final PrimitiveValue primitiveValue = (PrimitiveValue) o;
 
       if (!type.equals(primitiveValue.type)) return false;
       if (!value.equals(primitiveValue.value)) return false;
