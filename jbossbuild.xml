@@ -35,6 +35,8 @@
 
       <source id="tests" test="org/jboss/test/**/*TestCase.java">
          <include input="main"/>
+         <include input="junit"/>
+         <include input="common-project"/>
          <include input="test-project"/>
       </source>
 
