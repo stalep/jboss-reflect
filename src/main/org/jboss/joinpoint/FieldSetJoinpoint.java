@@ -6,6 +6,8 @@
  */
 package org.jboss.joinpoint;
 
+import org.jboss.reflect.FieldInfo;
+
 /**
  * A field set join point
  *
@@ -17,6 +19,13 @@ public interface FieldSetJoinpoint extends TargettedJoinpoint
    // Constants -----------------------------------------------------
 
    // Public --------------------------------------------------------
+
+   /**
+    * Get the field info for this join point
+    * 
+    * @return the field info
+    */
+   FieldInfo getFieldInfo();
 
    /**
     * The value to set

@@ -6,6 +6,11 @@
  */
 package org.jboss.joinpoint;
 
+import org.jboss.reflect.ClassInfo;
+import org.jboss.reflect.ConstructorInfo;
+import org.jboss.reflect.FieldInfo;
+import org.jboss.reflect.MethodInfo;
+
 
 /**
  * A join point factory.
@@ -19,41 +24,47 @@ public interface JoinpointFactory
    // Public --------------------------------------------------------
 
    /**
+    * Get the class info for this join point factory
+    * 
+    * @return the class info
+    */
+   ClassInfo getClassInfo();
+   
+   /**
     * Get a constructor join point
     * 
-    * @param argumentTypes the argument types
+    * @param constructorInfo the constructor info
     * @return the constructor join point
     * @throws JoinpointException when no such constructor
     */
-   ConstructorJoinpoint getConstructorJoinpoint(Class[] argumentTypes) throws JoinpointException;
+   ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo) throws JoinpointException;
 
    /**
     * Get a field get join point
     * 
-    * @param field the field name
+    * @param fieldInfo the field info
     * @return the field get join point
     * @throws JoinpointException when no such field
     */
-   FieldGetJoinpoint getFieldGetJoinpoint(String field) throws JoinpointException;
+   FieldGetJoinpoint getFieldGetJoinpoint(FieldInfo fieldInfo) throws JoinpointException;
 
    /**
     * Get a field set join point
     * 
-    * @param field the field name
+    * @param fieldInfo the field info
     * @return the field set join point
     * @throws JoinpointException when no such field
     */
-   FieldSetJoinpoint getFieldSetJoinpoint(String field) throws JoinpointException;
+   FieldSetJoinpoint getFieldSetJoinpoint(FieldInfo fieldInfo) throws JoinpointException;
 
    /**
     * Get a method join point
     * 
-    * @param name the method name
-    * @param argumentTypes the argument types
+    * @param methodInfo the method info
     * @return the method join point
     * @throws JoinpointException when no such method
     */
-   MethodJoinpoint getMethodJoinpoint(String name, Class[] argumentTypes) throws JoinpointException;
+   MethodJoinpoint getMethodJoinpoint(MethodInfo methodInfo) throws JoinpointException;
    
    // Inner classes -------------------------------------------------
 }

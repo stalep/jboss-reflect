@@ -6,6 +6,7 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import org.jboss.reflect.AnnotationValue;
@@ -30,6 +31,9 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
 
    /** The field name */
    protected String name;
+   
+   /** The field */
+   protected Field field;
    
    /** The field type */
    protected TypeInfo type;
@@ -75,11 +79,26 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
 
    // Public --------------------------------------------------------
 
+   /**
+    * Set the field
+    * 
+    * @param field the field
+    */
+   public void setField(Field field)
+   {
+      this.field = field;
+   }
+   
    // FieldInfo implementation --------------------------------------
 
    public String getName()
    {
       return name;
+   }
+   
+   public Field getField()
+   {
+      return field;
    }
 
    public TypeInfo getType()

@@ -35,6 +35,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    /** The class name */
    protected String name;
    
+   /** The type */
+   protected Class type;
+   
    /** The class modifiers */
    protected int modifiers;
    
@@ -132,6 +135,16 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    // Public --------------------------------------------------------
 
    /**
+    * Set the type
+    * 
+    * @param type the class
+    */
+   public void setType(Class type)
+   {
+      this.type = type;
+   }
+   
+   /**
     * Set the interfaces
     * 
     * @param interfaces the interfaces
@@ -198,11 +211,6 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
 
    // ClassInfo implementation --------------------------------------
 
-   public String getName()
-   {
-      return name;
-   }
-
    public boolean isInterface()
    {
       return false;
@@ -258,6 +266,18 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public boolean isPublic()
    {
       return Modifier.isPublic(modifiers);
+   }
+
+   // TypeInfo implementation ---------------------------------------
+
+   public String getName()
+   {
+      return name;
+   }
+
+   public Class getType()
+   {
+      return type;
    }
    
    // JBossObject overrides -----------------------------------------

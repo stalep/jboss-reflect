@@ -6,10 +6,10 @@
  */
 package org.jboss.joinpoint.plugins.reflect;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import org.jboss.joinpoint.ConstructorJoinpoint;
+import org.jboss.reflect.ConstructorInfo;
 import org.jboss.util.UnreachableStatementException;
 
 /**
@@ -23,8 +23,8 @@ public class ReflectConstructorJoinPoint implements ConstructorJoinpoint
    
    // Attributes ----------------------------------------------------
 
-   /** The constructor */
-   protected Constructor constructor;
+   /** The constructor info */
+   protected ConstructorInfo constructorInfo;
 
    /** The arguments */
    protected Object[] arguments;
@@ -36,17 +36,22 @@ public class ReflectConstructorJoinPoint implements ConstructorJoinpoint
    /**
     * Create a new constructor join point
     * 
-    * @param constructor the constructor
+    * @param constructorInfo the constructor info
     */
-   public ReflectConstructorJoinPoint(Constructor constructor)
+   public ReflectConstructorJoinPoint(ConstructorInfo constructorInfo)
    {
-      this.constructor = constructor;
+      this.constructorInfo = constructorInfo;
    }
    
    // Public --------------------------------------------------------
    
    // ConstructorJoinpoint implementation ---------------------------
 
+   public ConstructorInfo getConstructorInfo()
+   {
+      return constructorInfo;
+   }
+   
    public Object[] getArguments()
    {
       return arguments;
@@ -75,7 +80,7 @@ public class ReflectConstructorJoinPoint implements ConstructorJoinpoint
    {
       try
       {
-         return constructor.newInstance(arguments);
+         return constructorInfo.getConstructor().newInstance(arguments);
       }
       catch (InvocationTargetException e)
       {
@@ -85,7 +90,7 @@ public class ReflectConstructorJoinPoint implements ConstructorJoinpoint
    
    public String toHumanReadableString()
    {
-      return constructor.toString();
+      return constructorInfo.toString();
    }
 
    // Package protected ---------------------------------------------

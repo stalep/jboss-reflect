@@ -6,6 +6,8 @@
  */
 package org.jboss.reflect;
 
+import java.lang.reflect.Field;
+
 /**
  * A field info
  *
@@ -24,7 +26,14 @@ public interface FieldInfo extends AnnotatedInfo, MemberInfo
     * @return the field name
     */
    String getName();
-
+   
+   /**
+    * Get the field
+    * 
+    * @return the field
+    */
+   Field getField();
+   
    /**
     * Get the field type
     * 

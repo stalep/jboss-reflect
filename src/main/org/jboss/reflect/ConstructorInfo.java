@@ -6,6 +6,8 @@
  */
 package org.jboss.reflect;
 
+import java.lang.reflect.Constructor;
+
 /**
  * Constructor info
  *
@@ -18,6 +20,13 @@ public interface ConstructorInfo extends AnnotatedInfo, MemberInfo
 
    // Public --------------------------------------------------------
 
+   /**
+    * Get the constructor
+    * 
+    * @return the constructor
+    */
+   Constructor getConstructor();
+   
    /**
     * Get the declaring class
     * 

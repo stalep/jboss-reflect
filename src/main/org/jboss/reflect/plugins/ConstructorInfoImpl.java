@@ -6,6 +6,7 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
@@ -31,6 +32,9 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
    
    // Attributes ----------------------------------------------------
 
+   /** The constructor */
+   protected Constructor constructor;
+   
    /** The declring class */
    protected ClassInfo declaringClass;
    
@@ -128,8 +132,23 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
 
    // Public --------------------------------------------------------
 
+   /**
+    * Set the constructor
+    * 
+    * @param constructor the constructor
+    */
+   public void setConstructor(Constructor constructor)
+   {
+      this.constructor = constructor;
+   }
+   
    // ConstructorInfo implementation --------------------------------
 
+   public Constructor getConstructor()
+   {
+      return constructor;
+   }
+   
    public ClassInfo getDeclaringClass()
    {
       return declaringClass;

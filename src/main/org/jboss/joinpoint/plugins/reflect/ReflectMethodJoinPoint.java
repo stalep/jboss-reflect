@@ -7,9 +7,9 @@
 package org.jboss.joinpoint.plugins.reflect;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.jboss.joinpoint.MethodJoinpoint;
+import org.jboss.reflect.MethodInfo;
 
 /**
  * A method joinpoint
@@ -22,8 +22,8 @@ public class ReflectMethodJoinPoint extends ReflectTargettedJoinPoint implements
    
    // Attributes ----------------------------------------------------
 
-   /** The method */
-   protected Method method;
+   /** The method info */
+   protected MethodInfo methodInfo;
 
    /** The arguments */
    protected Object[] arguments;
@@ -35,17 +35,22 @@ public class ReflectMethodJoinPoint extends ReflectTargettedJoinPoint implements
    /**
     * Create a new method join point
     * 
-    * @param method the method
+    * @param methodInfo the methodInfo
     */
-   public ReflectMethodJoinPoint(Method method)
+   public ReflectMethodJoinPoint(MethodInfo methodInfo)
    {
-      this.method = method;
+      this.methodInfo = methodInfo;
    }
    
    // Public --------------------------------------------------------
    
    // MethodJoinpoint implementation --------------------------------
 
+   public MethodInfo getMethodInfo()
+   {
+      return methodInfo;
+   }
+   
    public Object[] getArguments()
    {
       return arguments;
@@ -62,7 +67,7 @@ public class ReflectMethodJoinPoint extends ReflectTargettedJoinPoint implements
    {
       try
       {
-         return method.invoke(target, arguments);
+         return methodInfo.getMethod().invoke(target, arguments);
       }
       catch (InvocationTargetException e)
       {
@@ -72,7 +77,7 @@ public class ReflectMethodJoinPoint extends ReflectTargettedJoinPoint implements
    
    public String toHumanReadableString()
    {
-      return method.toString();
+      return methodInfo.toString();
    }
 
    // Package protected ---------------------------------------------

@@ -25,5 +25,12 @@ public interface TypeInfo
     */
    String getName();
    
+   /**
+    * Get the class
+    * 
+    * @return the class
+    */
+   Class getType();
+   
    // Inner classes -------------------------------------------------
 }

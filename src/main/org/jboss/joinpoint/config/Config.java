@@ -11,9 +11,15 @@ import java.util.Arrays;
 import org.jboss.joinpoint.ConstructorJoinpoint;
 import org.jboss.joinpoint.FieldGetJoinpoint;
 import org.jboss.joinpoint.FieldSetJoinpoint;
+import org.jboss.joinpoint.JoinpointException;
 import org.jboss.joinpoint.JoinpointFactory;
 import org.jboss.joinpoint.MethodJoinpoint;
 import org.jboss.logging.Logger;
+import org.jboss.reflect.ClassInfo;
+import org.jboss.reflect.ConstructorInfo;
+import org.jboss.reflect.FieldInfo;
+import org.jboss.reflect.MethodInfo;
+import org.jboss.reflect.TypeInfo;
 
 /**
  * Config utilities.
@@ -41,7 +47,7 @@ public class Config
     * @return the instantiated object
     * @throws Throwable for any error
     */
-   public static Object instantiate(JoinpointFactory jpf, Class[] paramTypes, Object[] params) throws Throwable
+   public static Object instantiate(JoinpointFactory jpf, String[] paramTypes, Object[] params) throws Throwable
    {
       ConstructorJoinpoint joinpoint = getConstructorJoinpoint(jpf, paramTypes, params);
       return joinpoint.dispatch();
@@ -73,7 +79,7 @@ public class Config
     * @return the result of the invocation
     * @throws Throwable for any error
     */
-   public static Object invoke(Object object, JoinpointFactory jpf, String name, Class[] paramTypes, Object[] params) throws Throwable
+   public static Object invoke(Object object, JoinpointFactory jpf, String name, String[] paramTypes, Object[] params) throws Throwable
    {
       MethodJoinpoint joinpoint = getMethodJoinpoint(object, jpf, name, paramTypes, params);
       return joinpoint.dispatch();
@@ -102,13 +108,14 @@ public class Config
     * @return the Joinpoint
     * @throws Throwable for any error
     */
-   public static ConstructorJoinpoint getConstructorJoinpoint(JoinpointFactory jpf, Class[] paramTypes, Object[] params) throws Throwable
+   public static ConstructorJoinpoint getConstructorJoinpoint(JoinpointFactory jpf, String[] paramTypes, Object[] params) throws Throwable
    {
       boolean trace = log.isTraceEnabled();
       if (trace)
          log.trace("Get constructor Joinpoint jpf=" + jpf + " paramTypes=" + Arrays.asList(paramTypes) + " params=" + Arrays.asList(params));
 
-      ConstructorJoinpoint joinpoint = jpf.getConstructorJoinpoint(paramTypes);
+      ConstructorInfo constructorInfo = findConstructorInfo(jpf.getClassInfo(), paramTypes);
+      ConstructorJoinpoint joinpoint = jpf.getConstructorJoinpoint(constructorInfo);
       joinpoint.setArguments(params);
       return joinpoint;
    }
@@ -128,7 +135,8 @@ public class Config
       if (trace)
          log.trace("Get field get Joinpoint jpf=" + jpf + " target=" + object + " name=" + name);
       
-      FieldGetJoinpoint joinpoint = jpf.getFieldGetJoinpoint(name);
+      FieldInfo fieldInfo = findFieldInfo(jpf.getClassInfo(), name);
+      FieldGetJoinpoint joinpoint = jpf.getFieldGetJoinpoint(fieldInfo);
       joinpoint.setTarget(object);
       return joinpoint;
    }
@@ -149,7 +157,8 @@ public class Config
       if (trace)
          log.trace("Get field set Joinpoint jpf=" + jpf + " target=" + object + " name=" + name + " value=" + value);
       
-      FieldSetJoinpoint joinpoint = jpf.getFieldSetJoinpoint(name);
+      FieldInfo fieldInfo = findFieldInfo(jpf.getClassInfo(), name);
+      FieldSetJoinpoint joinpoint = jpf.getFieldSetJoinpoint(fieldInfo);
       joinpoint.setTarget(object);
       joinpoint.setValue(value);
       return joinpoint;
@@ -166,12 +175,137 @@ public class Config
     * @return the join point
     * @throws Throwable for any error
     */
-   public static MethodJoinpoint getMethodJoinpoint(Object object, JoinpointFactory jpf, String name, Class[] paramTypes, Object[] params) throws Throwable
+   public static MethodJoinpoint getMethodJoinpoint(Object object, JoinpointFactory jpf, String name, String[] paramTypes, Object[] params) throws Throwable
    {
-      MethodJoinpoint joinpoint = jpf.getMethodJoinpoint(name, paramTypes);
+      boolean trace = log.isTraceEnabled();
+      if (trace)
+         log.trace("Get method Joinpoint jpf=" + jpf + " target=" + object + " name=" + name + " paramTypes=" + Arrays.asList(paramTypes));
+
+      MethodInfo methodInfo = findMethodInfo(jpf.getClassInfo(), name, paramTypes);
+      MethodJoinpoint joinpoint = jpf.getMethodJoinpoint(methodInfo);
       joinpoint.setTarget(object);
       joinpoint.setArguments(params);
       return joinpoint;
+   }
+   
+   /**
+    * Find constructor info
+    * 
+    * @param classInfo the class info
+    * @param paramTypes the parameter types
+    * @return the constructor info
+    * @throws JoinpointException when no such constructor
+    */
+   public static ConstructorInfo findConstructorInfo(ClassInfo classInfo, String[] paramTypes) throws JoinpointException
+   {
+      ConstructorInfo[] constructors = classInfo.getDeclaredConstructors();
+      for (int i = 0; i < constructors.length; ++i)
+      {
+         if (equals(paramTypes, constructors[i].getParameterTypes()))
+            return constructors[i];
+      }
+      throw new JoinpointException("Constructor not found " + Arrays.asList(paramTypes) + " in " + Arrays.asList(constructors));
+   }
+   
+   /**
+    * Find field info
+    * 
+    * @param fieldInfo the field info
+    * @param name the field name
+    * @return the field info
+    * @throws JoinpointException when no such field
+    */
+   public static FieldInfo findFieldInfo(ClassInfo classInfo, String name) throws JoinpointException
+   {
+      ClassInfo current = classInfo;
+      while (current != null)
+      {
+         FieldInfo result = locateFieldInfo(current, name);
+         if (result != null)
+            return result;
+         current = classInfo.getSuperclass();
+      }
+      throw new JoinpointException("Field not found '" + name + "' for class " + classInfo.getName());
+   }
+   
+   /**
+    * Find field info
+    * 
+    * @param fieldInfo the field info
+    * @param name the field name
+    * @return the field info or null if not found
+    */
+   private static FieldInfo locateFieldInfo(ClassInfo classInfo, String name)
+   {
+      FieldInfo[] fields = classInfo.getDeclaredFields();
+      for (int i = 0; i < fields.length; ++i)
+      {
+         if (name.equals(fields[i].getName()))
+            return fields[i];
+      }
+      return null;
+   }
+   
+   /**
+    * Find method info
+    * 
+    * @param classInfo the class info
+    * @param name the method name
+    * @param paramTypes the parameter types
+    * @return the method info
+    * @throws JoinpointException when no such method
+    */
+   public static MethodInfo findMethodInfo(ClassInfo classInfo, String name, String[] paramTypes) throws JoinpointException
+   {
+      ClassInfo current = classInfo;
+      while (current != null)
+      {
+         MethodInfo result = locateMethodInfo(current, name, paramTypes);
+         if (result != null)
+            return result;
+         current = classInfo.getSuperclass();
+      }
+      throw new JoinpointException("Method not found " + name + Arrays.asList(paramTypes) + " for class " + classInfo.getName());
+   }
+   
+   /**
+    * Find method info
+    * 
+    * @param classInfo the class info
+    * @param name the method name
+    * @param paramTypes the parameter types
+    * @return the method info or null if not found
+    */
+   private static MethodInfo locateMethodInfo(ClassInfo classInfo, String name, String[] paramTypes)
+   {
+      MethodInfo[] methods = classInfo.getDeclaredMethods();
+      for (int i = 0; i < methods.length; ++i)
+      {
+         if (name.equals(methods[i].getName()) && equals(paramTypes, methods[i].getParameterTypes()))
+            return methods[i];
+      }
+      return null;
+   }
+
+   /**
+    * Test whether type names are equal to type infos
+    * 
+    * @param typeNames the type names
+    * @param typeInfos the type infos
+    * @return true when they are equal
+    */
+   public static boolean equals(String[] typeNames, TypeInfo[] typeInfos)
+   {
+      if (typeNames == null || typeInfos == null)
+         return false;
+      if (typeNames.length != typeInfos.length)
+         return false;
+      for (int i = 0; i < typeNames.length; ++i)
+      {
+         if (typeNames[i].equals(typeInfos[i].getName()) == false)
+            return false;
+      }
+      return true;
    }
    
    // Constructors --------------------------------------------------

@@ -94,7 +94,10 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
       
       ConstructorInfoImpl[] infos = new ConstructorInfoImpl[constructors.length];
       for (int i = 0; i < constructors.length; ++i)
-         infos[i] = new ReflectConstructorInfo(this, declaring, constructors[i]);
+      {
+         infos[i] = new ConstructorInfoImpl(null, getTypeInfos(constructors[i].getParameterTypes()), getClassInfos(constructors[i].getExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
+         infos[i].setConstructor(constructors[i]);
+      }
       return infos;
    }
    
@@ -113,7 +116,10 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
       
       FieldInfoImpl[] infos = new FieldInfoImpl[fields.length];
       for (int i = 0; i < fields.length; ++i)
-         infos[i] = new ReflectFieldInfo(this, declaring, fields[i]);
+      {
+         infos[i] = new FieldInfoImpl(null, fields[i].getName(), getTypeInfo(fields[i].getType()), fields[i].getModifiers(), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
+         infos[i].setField(fields[i]);
+      }
       return infos;
    }
    
@@ -132,7 +138,10 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
       
       MethodInfoImpl[] infos = new MethodInfoImpl[methods.length];
       for (int i = 0; i < methods.length; ++i)
-         infos[i] = new ReflectMethodInfo(this, declaring, methods[i]);
+      {
+         infos[i] = new MethodInfoImpl(null, methods[i].getName(), getTypeInfo(methods[i].getReturnType()), getTypeInfos(methods[i].getParameterTypes()), getClassInfos(methods[i].getExceptionTypes()), methods[i].getModifiers(), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
+         infos[i].setMethod(methods[i]);
+      }
       return infos;
    }
    
@@ -212,6 +221,7 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
          result = new InterfaceInfoImpl(clazz.getName());
       else
          result = new ClassInfoImpl(clazz.getName());
+      result.setType(clazz);
       soft = new SoftReference(result);
       classLoaderCache.put(clazz.getName(), soft);
       

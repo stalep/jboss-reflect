@@ -6,6 +6,8 @@
  */
 package org.jboss.reflect;
 
+import java.lang.reflect.Method;
+
 /**
  * Method info
  *
@@ -34,6 +36,13 @@ public interface MethodInfo extends AnnotatedInfo, MemberInfo
     */
    String getName();
 
+   /**
+    * Get the method
+    * 
+    * @return the method
+    */
+   Method getMethod();
+   
    /**
     * Get the declaring class
     * 

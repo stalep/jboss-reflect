@@ -6,6 +6,8 @@
  */
 package org.jboss.joinpoint;
 
+import org.jboss.reflect.ConstructorInfo;
+
 /**
  * A constructor join point.
  *
@@ -18,6 +20,13 @@ public interface ConstructorJoinpoint extends Joinpoint
 
    // Public --------------------------------------------------------
 
+   /**
+    * Get the constructor info for this join point
+    * 
+    * @return the constructor info
+    */
+   ConstructorInfo getConstructorInfo();
+   
    /**
     * Get the arguments for the constructor
     * 

@@ -6,6 +6,8 @@
  */
 package org.jboss.joinpoint;
 
+import org.jboss.reflect.MethodInfo;
+
 /**
  * A method join point
  *
@@ -18,6 +20,13 @@ public interface MethodJoinpoint extends TargettedJoinpoint
 
    // Public --------------------------------------------------------
 
+   /**
+    * Get the method info
+    * 
+    * @return the method info
+    */
+   MethodInfo getMethodInfo();
+   
    /**
     * Get the arguments of the join point
     * 

@@ -6,6 +6,7 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
@@ -32,6 +33,9 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
 
    /** The method name */
    protected String name;
+   
+   /** The method */
+   protected Method method;
    
    /** The declaring class */
    protected ClassInfo declaringClass;
@@ -141,6 +145,16 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
 
    // Public --------------------------------------------------------
 
+   /**
+    * Set the method
+    * 
+    * @param method the method
+    */
+   public void setMethod(Method method)
+   {
+      this.method = method;
+   }
+   
    // MethodInfo implementation -------------------------------------
 
    public String getName()
@@ -148,6 +162,11 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       return name;
    }
 
+   public Method getMethod()
+   {
+      return method;
+   }
+   
    public ClassInfo getDeclaringClass()
    {
       return declaringClass;

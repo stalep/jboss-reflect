@@ -6,9 +6,8 @@
  */
 package org.jboss.joinpoint.plugins.reflect;
 
-import java.lang.reflect.Field;
-
 import org.jboss.joinpoint.FieldSetJoinpoint;
+import org.jboss.reflect.FieldInfo;
 
 /**
  * A field set joinpoint
@@ -21,8 +20,8 @@ public class ReflectFieldSetJoinPoint extends ReflectTargettedJoinPoint implemen
    
    // Attributes ----------------------------------------------------
 
-   /** The field */
-   protected Field field;
+   /** The field info */
+   protected FieldInfo fieldInfo;
 
    /** The value */
    protected Object value;
@@ -34,17 +33,22 @@ public class ReflectFieldSetJoinPoint extends ReflectTargettedJoinPoint implemen
    /**
     * Create a new field set join point
     * 
-    * @param field the field
+    * @param fieldInfo the field info
     */
-   public ReflectFieldSetJoinPoint(Field field)
+   public ReflectFieldSetJoinPoint(FieldInfo fieldInfo)
    {
-      this.field = field;
+      this.fieldInfo = fieldInfo;
    }
    
    // Public --------------------------------------------------------
    
    // FieldSetJoinpoint implementation ------------------------------
 
+   public FieldInfo getFieldInfo()
+   {
+      return fieldInfo;
+   }
+   
    public Object getValue()
    {
       return value;
@@ -59,13 +63,13 @@ public class ReflectFieldSetJoinPoint extends ReflectTargettedJoinPoint implemen
 
    public Object dispatch() throws Throwable
    {
-      field.set(target, value);
+      fieldInfo.getField().set(target, value);
       return null;
    }
    
    public String toHumanReadableString()
    {
-      return "SET " + field.toString();
+      return "SET " + fieldInfo.toString();
    }
 
    // Package protected ---------------------------------------------

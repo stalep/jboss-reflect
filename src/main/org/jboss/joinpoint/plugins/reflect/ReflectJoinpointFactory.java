@@ -6,15 +6,15 @@
  */
 package org.jboss.joinpoint.plugins.reflect;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import org.jboss.joinpoint.ConstructorJoinpoint;
 import org.jboss.joinpoint.FieldGetJoinpoint;
 import org.jboss.joinpoint.FieldSetJoinpoint;
 import org.jboss.joinpoint.JoinpointException;
 import org.jboss.joinpoint.MethodJoinpoint;
+import org.jboss.reflect.ClassInfo;
+import org.jboss.reflect.ConstructorInfo;
+import org.jboss.reflect.FieldInfo;
+import org.jboss.reflect.MethodInfo;
 
 /**
  * A join point factory based on reflection
@@ -27,70 +27,38 @@ public class ReflectJoinpointFactory
    
    // Attributes ----------------------------------------------------
 
-   /** The class */
-   protected Class clazz;
+   /** The class info */
+   protected ClassInfo classInfo;
    
    // Static --------------------------------------------------------
 
    // Constructors --------------------------------------------------
 
-   public ReflectJoinpointFactory(Class clazz)
+   public ReflectJoinpointFactory(ClassInfo classInfo)
    {
-      this.clazz = clazz;
+      this.classInfo = classInfo;
    }
    
    // Public --------------------------------------------------------
 
-   public ConstructorJoinpoint getConstructorJoinpoint(Class[] argumentTypes) throws JoinpointException
+   public ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo) throws JoinpointException
    {
-      try
-      {
-         Constructor constructor = clazz.getConstructor(argumentTypes);
-         return new ReflectConstructorJoinPoint(constructor);
-      }
-      catch (NoSuchMethodException e)
-      {
-         throw new JoinpointException("Constructor joinpoint not found", e);
-      }
+      return new ReflectConstructorJoinPoint(constructorInfo);
    }
 
-   public FieldGetJoinpoint getFieldGetJoinpoint(String field) throws JoinpointException
+   public FieldGetJoinpoint getFieldGetJoinpoint(FieldInfo fieldInfo) throws JoinpointException
    {
-      try
-      {
-         Field f = clazz.getField(field);
-         return new ReflectFieldGetJoinPoint(f);
-      }
-      catch (NoSuchFieldException e)
-      {
-         throw new JoinpointException("Field joinpoint not found", e);
-      }
+      return new ReflectFieldGetJoinPoint(fieldInfo);
    }
 
-   public FieldSetJoinpoint getFieldSetJoinpoint(String field) throws JoinpointException
+   public FieldSetJoinpoint getFieldSetJoinpoint(FieldInfo fieldInfo) throws JoinpointException
    {
-      try
-      {
-         Field f = clazz.getField(field);
-         return new ReflectFieldSetJoinPoint(f);
-      }
-      catch (NoSuchFieldException e)
-      {
-         throw new JoinpointException("Field joinpoint not found", e);
-      }
+      return new ReflectFieldSetJoinPoint(fieldInfo);
    }
 
-   public MethodJoinpoint getMethodJoinpoint(String name, Class[] argumentTypes, boolean isStatic) throws JoinpointException
+   public MethodJoinpoint getMethodJoinpoint(MethodInfo methodInfo) throws JoinpointException
    {
-      try
-      {
-         Method method = clazz.getMethod(name, argumentTypes);
-         return new ReflectMethodJoinPoint(method);
-      }
-      catch (NoSuchMethodException e)
-      {
-         throw new JoinpointException("Method joinpoint not found", e);
-      }
+      return new ReflectMethodJoinPoint(methodInfo);
    }
 
    // Package protected ---------------------------------------------
