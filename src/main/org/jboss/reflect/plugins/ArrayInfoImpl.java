@@ -19,8 +19,11 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
 {
    // Constants -----------------------------------------------------
    
-   // Attributes ----------------------------------------------------
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3905804162787980599L;
    
+   // Attributes ----------------------------------------------------
+
    /** The component type */
    protected TypeInfo componentType;
    

@@ -6,11 +6,13 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import org.jboss.reflect.ArrayValue;
 import org.jboss.reflect.TypeInfo;
 import org.jboss.reflect.Value;
+import org.jboss.util.JBossObject;
 
 /**
  * Annotation value
@@ -18,9 +20,12 @@ import org.jboss.reflect.Value;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ArrayValueImpl implements ArrayValue
+public class ArrayValueImpl extends JBossObject implements ArrayValue, Serializable
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3979266949899367475L;
    
    // Attributes ----------------------------------------------------
 

@@ -19,6 +19,9 @@ import org.jboss.reflect.plugins.MethodInfoImpl;
 public class ReflectMethodInfo extends MethodInfoImpl
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3256720701896798264L;
    
    // Attributes ----------------------------------------------------
 

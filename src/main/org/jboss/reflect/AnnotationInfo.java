@@ -13,7 +13,7 @@ package org.jboss.reflect;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface AnnotationInfo extends InterfaceInfo
+public interface AnnotationInfo extends InterfaceInfo, ModifierInfo
 {
    // Constants -----------------------------------------------------
 
@@ -27,13 +27,6 @@ public interface AnnotationInfo extends InterfaceInfo
     * @return the name
     */
    String getName();
-
-   /**
-    * Get the modifiers
-    * 
-    * return the modifiers
-    */
-   int getModifiers();
 
    /**
     * Get the attributes

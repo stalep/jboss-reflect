@@ -61,13 +61,6 @@ public interface MethodInfo extends AnnotatedInfo, MemberInfo
     * @return the exception types
     */
    ClassInfo[] getExceptionTypes();
-
-   /**
-    * Get the method modifiers
-    * 
-    * @return the modifiers
-    */
-   int getModifiers();
    
    /**
     * Get the return type

@@ -20,6 +20,9 @@ import org.jboss.reflect.EnumInfo;
 public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3617851958849713457L;
    
    // Attributes ----------------------------------------------------
 

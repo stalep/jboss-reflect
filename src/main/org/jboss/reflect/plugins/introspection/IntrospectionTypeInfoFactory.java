@@ -13,8 +13,10 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.jboss.logging.Logger;
 import org.jboss.reflect.ClassInfo;
 import org.jboss.reflect.InterfaceInfo;
+import org.jboss.reflect.PrimitiveInfo;
 import org.jboss.reflect.TypeInfo;
 import org.jboss.reflect.TypeInfoFactory;
 import org.jboss.reflect.plugins.ClassInfoImpl;
@@ -32,6 +34,9 @@ import org.jboss.util.CollectionsFactory;
 public class IntrospectionTypeInfoFactory implements TypeInfoFactory
 {
    // Constants -----------------------------------------------------
+
+   /** The log */
+   private static final Logger log = Logger.getLogger(IntrospectionTypeInfoFactory.class);
    
    // Attributes ----------------------------------------------------
    
@@ -50,27 +55,28 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
     * @param clazz the class
     * @return the type info
     */
-   public TypeInfo generateTypeInfo(Class clazz)
+   public void generateTypeInfo(Class clazz, ClassInfoImpl info)
    {
-      ClassInfoImpl result;
-      if (clazz.isInterface())
-         result = new InterfaceInfoImpl(clazz.getName());
-      else
+      boolean trace = log.isTraceEnabled();
+      if (trace)
+         log.trace("generate TypeInfo: " + info);
+      
+      if (clazz.isInterface() == false)
       {
-         result = new ClassInfoImpl(clazz.getName());
          Class superClazz = clazz.getSuperclass();
          if (superClazz != null)
          {
             ClassInfoImpl superType = (ClassInfoImpl) getTypeInfo(superClazz);
-            result.setSuperclass(superType);
-            result.setDeclaredConstructors(getConstructors(clazz, result));
+            info.setSuperclass(superType);
+            info.setDeclaredConstructors(getConstructors(clazz, info));
          }
       }
-      result.setDeclaredFields(getFields(clazz, result));
-      result.setDeclaredMethods(getMethods(clazz, result));
-      result.setInterfaces(getInterfaces(clazz));
-      
-      return result;
+      info.setDeclaredFields(getFields(clazz, info));
+      info.setDeclaredMethods(getMethods(clazz, info));
+      info.setInterfaces(getInterfaces(clazz));
+
+      if (trace)
+         log.trace("generated typeInfo " + info);
    }
    
    /**
@@ -187,6 +193,10 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
 
    public TypeInfo getTypeInfo(Class clazz)
    {
+      TypeInfo primitive = PrimitiveInfo.valueOf(clazz.getName());
+      if (primitive != null)
+         return primitive;
+      
       Map classLoaderCache = getClassLoaderCache(clazz.getClassLoader());
 
       SoftReference soft = (SoftReference) classLoaderCache.get(clazz.getName());
@@ -196,10 +206,16 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
          if (info != null)
             return info;
       }
-      
-      TypeInfo result = generateTypeInfo(clazz);
+
+      ClassInfoImpl result;
+      if (clazz.isInterface())
+         result = new InterfaceInfoImpl(clazz.getName());
+      else
+         result = new ClassInfoImpl(clazz.getName());
       soft = new SoftReference(result);
       classLoaderCache.put(clazz.getName(), soft);
+      
+      generateTypeInfo(clazz, result);
       return result;
    }
    

@@ -6,8 +6,11 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.io.Serializable;
+
 import org.jboss.reflect.StringValue;
 import org.jboss.reflect.TypeInfo;
+import org.jboss.util.JBossObject;
 
 /**
  * A string value
@@ -15,9 +18,12 @@ import org.jboss.reflect.TypeInfo;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class StringValueImpl implements StringValue
+public class StringValueImpl extends JBossObject implements StringValue, Serializable
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3977862864859836468L;
    
    // Attributes ----------------------------------------------------
 

@@ -6,6 +6,8 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.util.Arrays;
+
 import org.jboss.reflect.AnnotationValue;
 import org.jboss.reflect.ClassInfo;
 import org.jboss.reflect.MethodInfo;
@@ -21,6 +23,9 @@ import org.jboss.reflect.TypeInfo;
 public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3257007670035756341L;
    
    // Attributes ----------------------------------------------------
 
@@ -171,6 +176,15 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    {
       return returnType;
    }
+   
+   // JBossObject overrides -----------------------------------------
+   
+   protected void toString(StringBuffer buffer)
+   {
+      buffer.append("name=").append(name);
+      buffer.append(Arrays.asList(parameterTypes));
+      buffer.append(" return=").append(returnType);
+   }
 
    // Object overrides ----------------------------------------------
 
@@ -182,13 +196,13 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
 
       final MethodInfoImpl other = (MethodInfoImpl) obj;
 
-      if (!declaringClass.equals(other.declaringClass))
+      if (declaringClass.equals(other.declaringClass) == false)
          return false;
-      if (!name.equals(other.name))
+      if (name.equals(other.name) == false)
          return false;
-      if (parameterTypes != null ? !parameterTypes.equals(other.parameterTypes) : other.parameterTypes != null)
+      if (Arrays.equals(parameterTypes, other.parameterTypes) == false)
          return false;
-      if (!returnType.equals(other.returnType))
+      if (returnType.equals(other.returnType) == false)
          return false;
 
       return true;

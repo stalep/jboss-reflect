@@ -25,6 +25,9 @@ import org.jboss.reflect.TypeInfo;
 public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassInfo
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3545798779904340792L;
    
    // Attributes ----------------------------------------------------
 
@@ -244,6 +247,13 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return superclass;
    }
    
+   // JBossObject overrides -----------------------------------------
+   
+   protected void toString(StringBuffer buffer)
+   {
+      buffer.append("name=").append(name);
+   }
+   
    // Object overrides ----------------------------------------------
 
    public boolean equals(Object obj)
@@ -264,7 +274,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    {
       return (name != null ? name.hashCode() : 0);
    }
-
+   
    // Package protected ---------------------------------------------
 
    // Protected -----------------------------------------------------

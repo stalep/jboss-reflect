@@ -6,13 +6,15 @@
  */
 package org.jboss.reflect;
 
+import org.jboss.util.JBossInterface;
+
 /**
  * Annotated info
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface AnnotatedInfo
+public interface AnnotatedInfo extends JBossInterface
 {
    // Constants -----------------------------------------------------
    

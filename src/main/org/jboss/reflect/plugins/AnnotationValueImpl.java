@@ -6,12 +6,14 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import org.jboss.reflect.AnnotationInfo;
 import org.jboss.reflect.AnnotationValue;
 import org.jboss.reflect.TypeInfo;
 import org.jboss.reflect.Value;
+import org.jboss.util.JBossObject;
 
 /**
  * An annotation value
@@ -19,9 +21,12 @@ import org.jboss.reflect.Value;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class AnnotationValueImpl implements AnnotationValue
+public class AnnotationValueImpl extends JBossObject implements AnnotationValue, Serializable
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3257290210164289843L;
    
    // Attributes ----------------------------------------------------
 

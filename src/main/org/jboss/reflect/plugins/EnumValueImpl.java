@@ -6,8 +6,11 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.io.Serializable;
+
 import org.jboss.reflect.EnumValue;
 import org.jboss.reflect.TypeInfo;
+import org.jboss.util.JBossObject;
 
 /**
  * An enumeration value
@@ -15,9 +18,12 @@ import org.jboss.reflect.TypeInfo;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class EnumValueImpl implements EnumValue
+public class EnumValueImpl extends JBossObject implements EnumValue, Serializable
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 4120848858889662517L;
    
    // Attributes ----------------------------------------------------
 

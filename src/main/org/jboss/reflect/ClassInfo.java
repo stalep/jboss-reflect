@@ -13,7 +13,7 @@ package org.jboss.reflect;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface ClassInfo extends AnnotatedInfo, TypeInfo
+public interface ClassInfo extends AnnotatedInfo, ModifierInfo, TypeInfo
 {
    // Constants -----------------------------------------------------
 
@@ -32,13 +32,6 @@ public interface ClassInfo extends AnnotatedInfo, TypeInfo
     * @return true when an interface
     */
    boolean isInterface();
-   
-   /**
-    * Get the modifiers
-    * 
-    * @return the modifiers
-    */
-   int getModifiers();
 
    /**
     * Get the interfaces

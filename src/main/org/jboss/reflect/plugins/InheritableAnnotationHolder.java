@@ -6,10 +6,12 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import org.jboss.reflect.AnnotatedInfo;
 import org.jboss.reflect.AnnotationValue;
+import org.jboss.util.JBossObject;
 
 /**
  * An annotation holder
@@ -17,9 +19,12 @@ import org.jboss.reflect.AnnotationValue;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class InheritableAnnotationHolder implements AnnotatedInfo
+public class InheritableAnnotationHolder extends JBossObject implements AnnotatedInfo, Serializable
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3257290210164289843L;
    
    // Attributes ----------------------------------------------------
    

@@ -4,7 +4,7 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.test.beaninfo.introspection.support;
+package org.jboss.test.classinfo.introspection.support;
 
 import java.net.URL;
 

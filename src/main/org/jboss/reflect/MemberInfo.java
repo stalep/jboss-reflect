@@ -12,7 +12,7 @@ package org.jboss.reflect;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface MemberInfo
+public interface MemberInfo extends ModifierInfo
 {
    // Constants -----------------------------------------------------
 

@@ -20,7 +20,10 @@ import org.jboss.reflect.plugins.FieldInfoImpl;
 public class ReflectFieldInfo extends FieldInfoImpl
 {
    // Constants -----------------------------------------------------
-   
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3258415032051184946L;
+
    // Attributes ----------------------------------------------------
 
    /** The field object */

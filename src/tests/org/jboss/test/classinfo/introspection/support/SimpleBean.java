@@ -4,7 +4,7 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.test.beaninfo.introspection.support;
+package org.jboss.test.classinfo.introspection.support;
 
 import java.io.Serializable;
 import java.net.URL;
@@ -46,10 +46,8 @@ public class SimpleBean implements Serializable, SimpleInterface
       SimpleBean bean = new SimpleBean(true);
       if (bean.privateAttribute == null)
          bean.privateAttribute = PRIVATE_CONSTANT;
-      bean.setPrivate(bean.getPrivate());
       bean.privateMethod();
       privateStaticMethod();
-      setPrivateStatic(getPrivateStatic());
    }
    
    static void packagePrivateStaticMethod()
@@ -61,42 +59,6 @@ public class SimpleBean implements Serializable, SimpleInterface
    }
    
    private static void privateStaticMethod()
-   {
-   }
-   
-   public static String getPublicStatic()
-   {
-      return null;
-   }
-   
-   public static void setPublicStatic(String s)
-   {
-   }
-   
-   static String getPackagePrivateStatic()
-   {
-      return null;
-   }
-   
-   static void setPackagePrivateStatic(String s)
-   {
-   }
-   
-   protected static String getProtectedStatic()
-   {
-      return null;
-   }
-   
-   protected static void setProtectedStatic(String s)
-   {
-   }
-   
-   private static String getPrivateStatic()
-   {
-      return null;
-   }
-   
-   private static void setPrivateStatic(String s)
    {
    }
    
@@ -123,24 +85,6 @@ public class SimpleBean implements Serializable, SimpleInterface
    }
 
    // Public --------------------------------------------------------
-
-   public Object getAttributeNotSimpleInterface()
-   {
-      return null;
-   }
-
-   public Object getWithNoGetterOnInterface()
-   {
-      return null;
-   }
-
-   public void setWithNoSetterOnInterface(String s)
-   {
-   }
-   
-   public void methodNotSimpleInterface()
-   {
-   }
    
    // SimpleInterface Implementation --------------------------------
    
@@ -273,42 +217,15 @@ public class SimpleBean implements Serializable, SimpleInterface
    {
    }
    
-   String getPackagePrivate()
-   {
-      return null;
-   }
-   
-   void setPackagePrivate(String s)
-   {
-   }
-   
    // Protected -----------------------------------------------------
 
    protected void protectedMethod()
    {
    }
    
-   protected String getProtected()
-   {
-      return null;
-   }
-   
-   protected void setProtected(String s)
-   {
-   }
-   
    // Private -------------------------------------------------------
 
    private void privateMethod()
-   {
-   }
-   
-   private String getPrivate()
-   {
-      return null;
-   }
-   
-   private void setPrivate(String s)
    {
    }
    

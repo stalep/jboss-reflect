@@ -33,13 +33,6 @@ public interface FieldInfo extends AnnotatedInfo, MemberInfo
    TypeInfo getType();
 
    /**
-    * Get the field modifiers
-    * 
-    * @return the field modifiers
-    */
-   int getModifiers();
-
-   /**
     * Get the declaring class
     * 
     * @return the declaring class

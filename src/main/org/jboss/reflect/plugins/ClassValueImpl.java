@@ -6,8 +6,11 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.io.Serializable;
+
 import org.jboss.reflect.ClassValue;
 import org.jboss.reflect.TypeInfo;
+import org.jboss.util.JBossObject;
 
 /**
  * Class value
@@ -15,9 +18,12 @@ import org.jboss.reflect.TypeInfo;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ClassValueImpl implements ClassValue
+public class ClassValueImpl extends JBossObject implements ClassValue, Serializable
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3256721801307566649L;
    
    // Attributes ----------------------------------------------------
 

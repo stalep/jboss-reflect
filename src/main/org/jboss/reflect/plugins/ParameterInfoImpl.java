@@ -18,6 +18,9 @@ import org.jboss.reflect.TypeInfo;
 public class ParameterInfoImpl extends AnnotationHolder implements ParameterInfo
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3256725082746664754L;
    
    // Attributes ----------------------------------------------------
 
@@ -68,6 +71,22 @@ public class ParameterInfoImpl extends AnnotationHolder implements ParameterInfo
 
    // Object overrides ----------------------------------------------
 
+   public boolean equals(Object obj)
+   {
+      if (this == obj)
+         return true;
+      if (obj == null || obj instanceof ParameterInfo == false)
+         return false;
+      
+      ParameterInfo other = (ParameterInfo) obj;
+      return parameterType.equals(other.getParameterType());
+   }
+   
+   public int hashCode()
+   {
+      return parameterType.hashCode();
+   }
+   
    // Package protected ---------------------------------------------
 
    // Protected -----------------------------------------------------

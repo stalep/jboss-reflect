@@ -6,6 +6,8 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.util.Arrays;
+
 import org.jboss.reflect.AnnotationValue;
 import org.jboss.reflect.ClassInfo;
 import org.jboss.reflect.ConstructorInfo;
@@ -23,8 +25,11 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
 {
    // Constants -----------------------------------------------------
    
-   // Attributes ----------------------------------------------------
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3256727273163272758L;
    
+   // Attributes ----------------------------------------------------
+
    /** The declring class */
    protected ClassInfo declaringClass;
    
@@ -153,30 +158,43 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
    {
       return modifiers;
    }
+   
+   protected void toString(StringBuffer buffer)
+   {
+      buffer.append(Arrays.asList(parameterTypes));
+   }
 
    // Object overrides ----------------------------------------------
 
-   public boolean equals(Object o)
+   public boolean equals(Object obj)
    {
-      if (this == o) return true;
-      if (!(o instanceof ConstructorInfoImpl)) return false;
+      if (this == obj) 
+         return true;
+      if (obj == null || obj instanceof ConstructorInfoImpl == false)
+         return false;
 
-      final ConstructorInfoImpl constructorInfo = (ConstructorInfoImpl) o;
-
-      if (!declaringClass.equals(constructorInfo.declaringClass)) return false;
-      if (parameterTypes != null ? !parameterTypes.equals(constructorInfo.parameterTypes) : constructorInfo.parameterTypes != null) return false;
-
+      final ConstructorInfoImpl other = (ConstructorInfoImpl) obj;
+      
+      if (declaringClass.equals(other.declaringClass) == false)
+         return false;
+      if (Arrays.equals(parameterTypes, other.parameterTypes) == false)
+         return false;
+      
       return true;
    }
 
+   public int hashCode()
+   {
+      return hash;
+   }
+   
    // Package protected ---------------------------------------------
 
    // Protected -----------------------------------------------------
 
    protected void calculateHash()
    {
-      int result;
-      result = declaringClass.hashCode();
+      int result = declaringClass.hashCode();
       if (parameterTypes != null)
       {
          for (int i = 0; i < parameterTypes.length; i++)

@@ -21,6 +21,9 @@ import org.jboss.reflect.AnnotationValue;
 public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationInfo
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3546645408219542832L;
    
    // Attributes ----------------------------------------------------
    

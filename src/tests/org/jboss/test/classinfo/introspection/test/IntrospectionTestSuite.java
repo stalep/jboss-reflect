@@ -4,7 +4,7 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.test.beaninfo.introspection.test;
+package org.jboss.test.classinfo.introspection.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

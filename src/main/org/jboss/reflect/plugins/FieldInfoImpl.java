@@ -20,6 +20,9 @@ import org.jboss.reflect.TypeInfo;
 public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3546084661584539959L;
    
    // Attributes ----------------------------------------------------
 
@@ -90,6 +93,13 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
    public ClassInfo getDeclaringClass()
    {
       return declaringClass;
+   }
+   
+   // JBossObject overrides -----------------------------------------
+   
+   protected void toString(StringBuffer buffer)
+   {
+      buffer.append("name=").append(name);
    }
 
    // Object overrides ----------------------------------------------

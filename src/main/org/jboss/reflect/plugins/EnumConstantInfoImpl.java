@@ -6,8 +6,11 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.io.Serializable;
+
 import org.jboss.reflect.EnumConstantInfo;
 import org.jboss.reflect.EnumInfo;
+import org.jboss.util.JBossObject;
 
 /**
  * An enumeration constant
@@ -15,9 +18,12 @@ import org.jboss.reflect.EnumInfo;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class EnumConstantInfoImpl implements EnumConstantInfo
+public class EnumConstantInfoImpl extends JBossObject implements EnumConstantInfo, Serializable
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3761411923568243761L;
    
    // Attributes ----------------------------------------------------
 

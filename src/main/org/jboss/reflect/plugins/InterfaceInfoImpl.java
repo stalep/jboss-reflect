@@ -18,6 +18,9 @@ import org.jboss.reflect.InterfaceInfo;
 public class InterfaceInfoImpl extends ClassInfoImpl implements InterfaceInfo
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3258690987944522291L;
    
    // Attributes ----------------------------------------------------
    

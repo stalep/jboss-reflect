@@ -4,19 +4,21 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.test.container.test;
+package org.jboss.test.reflect;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import org.jboss.test.classinfo.introspection.test.IntrospectionTestSuite;
+
 /**
- * Container Test Suite.
+ * ClassInfo Test Suite.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerTestSuite extends TestSuite
+public class ClassInfoTestSuite extends TestSuite
 {
    // Constants -----------------------------------------------------
 
@@ -31,9 +33,9 @@ public class ContainerTestSuite extends TestSuite
 
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("Container Tests");
+      TestSuite suite = new TestSuite("ClassInfo Tests");
 
-      suite.addTest(new TestSuite(ContainerTestCase.class));
+      suite.addTest(IntrospectionTestSuite.suite());
       
       return suite;
    }

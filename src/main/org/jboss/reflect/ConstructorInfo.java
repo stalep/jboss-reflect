@@ -45,13 +45,6 @@ public interface ConstructorInfo extends AnnotatedInfo, MemberInfo
     * @return the exception types
     */
    ClassInfo[] getExceptionTypes();
-
-   /**
-    * Get the constructor modifier
-    * 
-    * @return the constructor modifier
-    */
-   int getModifiers();
    
    // Private -------------------------------------------------------
    

@@ -19,6 +19,9 @@ import org.jboss.reflect.plugins.ConstructorInfoImpl;
 public class ReflectConstructorInfo extends ConstructorInfoImpl
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3256441404435019826L;
    
    // Attributes ----------------------------------------------------
 

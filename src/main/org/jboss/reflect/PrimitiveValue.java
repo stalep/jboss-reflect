@@ -6,15 +6,22 @@
  */
 package org.jboss.reflect;
 
+import java.io.Serializable;
+
+import org.jboss.util.JBossObject;
+
 /**
  * A primitive value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class PrimitiveValue implements Value
+public class PrimitiveValue extends JBossObject implements Serializable, Value
 {
    // Constants -----------------------------------------------------
+
+   /** serialVersionUID */
+   private static final long serialVersionUID = 3907214866304741945L;
    
    // Attributes ----------------------------------------------------
 

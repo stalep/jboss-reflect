@@ -10,8 +10,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.jboss.test.beaninfo.BeanInfoTestSuite;
-import org.jboss.test.container.test.ContainerTestSuite;
+import org.jboss.test.reflect.ClassInfoTestSuite;
 
 /**
  * All Test Suite.
@@ -36,8 +35,7 @@ public class ContainerAllTestSuite extends TestSuite
    {
       TestSuite suite = new TestSuite("All Tests");
 
-      suite.addTest(BeanInfoTestSuite.suite());
-      suite.addTest(ContainerTestSuite.suite());
+      suite.addTest(ClassInfoTestSuite.suite());
       
       return suite;
    }
