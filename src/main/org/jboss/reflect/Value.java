@@ -13,5 +13,5 @@ package org.jboss.reflect;
  */
 public interface Value
 {
-   PrimitiveData getType();
+   PrimitiveInfo getType();
 }

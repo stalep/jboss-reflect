@@ -14,6 +14,6 @@ package org.jboss.reflect;
 public interface AnnotationAttribute
 {
    String getName();
-   TypeData getType();
+   TypeInfo getType();
    Value getDefaultValue();
 }

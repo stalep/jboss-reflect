@@ -15,6 +15,6 @@ package org.jboss.reflect;
  */
 public interface AnnotationValue extends Value
 {
-   AnnotationData getAnnotationType();
+   AnnotationInfo getAnnotationType();
    Value getValue(String attributeName);
 }
