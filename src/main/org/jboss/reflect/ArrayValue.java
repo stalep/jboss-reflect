@@ -52,7 +52,7 @@ public class ArrayValue implements Value
 
    public void calculateHash()
    {
-      hash = Arrays.hashCode(values);
+      // FIXME java5 hash = Arrays.hashCode(values);
       hash = hash * 29 +  type.hashCode();
    }
 }

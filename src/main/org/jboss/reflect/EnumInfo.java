@@ -24,7 +24,7 @@ public class EnumInfo extends ClassInfo
       this.enumConstants = enumConstants;
       for (int i = 0; i < enumConstants.length; i++)
       {
-         constants.put(enumConstants[i].getName(), enumConstants[i])
+         constants.put(enumConstants[i].getName(), enumConstants[i]);
       }
    }
 
