@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
  * A class adapter.<p>
@@ -22,7 +21,7 @@ import org.jboss.reflect.spi.TypeInfoFactory;
  * The class adapter has the following protocol.
  * 
  * <ol>
- * <li> Use the TypeInfoFactory to obtain information about
+ * <li> Use getClassInfo to obtain information about
  *        the class.
  * <li> Obtain an Instance ClassAdapter if the class information
  *        should be overridden at the instance level, e.g. annotations
@@ -49,11 +48,11 @@ public interface ClassAdapter
    // Public --------------------------------------------------------
 
    /**
-    * Get the type info factory.
+    * Get the class info.
     * 
-    * @return the type info factory
+    * @return the class info
     */
-   TypeInfoFactory getTypeInfoFactory();
+   ClassInfo getClassInfo();
 
    /**
     * Get an instance adapter.

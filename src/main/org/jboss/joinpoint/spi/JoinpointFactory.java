@@ -11,7 +11,6 @@ import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.MethodInfo;
 
-
 /**
  * A join point factory.
  *
