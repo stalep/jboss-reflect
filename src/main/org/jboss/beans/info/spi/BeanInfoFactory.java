@@ -28,5 +28,13 @@ public interface BeanInfoFactory
     */
    BeanInfo getBeanInfo(String className);
    
+   /**
+    * Retrieve the type info
+    * 
+    * @param typeInfo the type info
+    * @return the type info
+    */
+   TypeInfo getTypeInfo(String className);
+   
    // Inner classes -------------------------------------------------
 }

@@ -56,6 +56,11 @@ public class IntrospectionBeanInfoFactory implements BeanInfoFactory
       return info;
    }
    
+   public TypeInfo getTypeInfo(String className)
+   {
+      return Introspection.getTypeInfo(className);
+   }
+   
    // Package protected ---------------------------------------------
 
    // Protected -----------------------------------------------------
