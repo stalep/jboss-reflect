@@ -33,6 +33,13 @@ public interface ConstructorInfo extends AnnotatedInfo, MemberInfo
    TypeInfo[] getParameterTypes();
 
    /**
+    * Get the parameters
+    * 
+    * @return the parameters
+    */
+   ParameterInfo[] getParameters();
+
+   /**
     * Get the exception types
     * 
     * @return the exception types

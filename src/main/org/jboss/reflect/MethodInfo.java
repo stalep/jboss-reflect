@@ -17,7 +17,10 @@ public interface MethodInfo extends AnnotatedInfo, MemberInfo
    // Constants -----------------------------------------------------
    
    /** No parameters */
-   public static final TypeInfo[] NO_PARAMS = {};
+   public static final TypeInfo[] NO_PARAMS_TYPES = {};
+   
+   /** No parameters */
+   public static final ParameterInfo[] NO_PARAMS = {};
    
    /** No Exceptions */
    public static final ClassInfo[] NO_EXCEPTIONS = {};
@@ -44,6 +47,13 @@ public interface MethodInfo extends AnnotatedInfo, MemberInfo
     * @return the parameter types
     */
    TypeInfo[] getParameterTypes();
+
+   /**
+    * Get the parameters
+    * 
+    * @return the parameters
+    */
+   ParameterInfo[] getParameters();
 
    /**
     * Get the exception types

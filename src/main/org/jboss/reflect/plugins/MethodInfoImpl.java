@@ -9,6 +9,7 @@ package org.jboss.reflect.plugins;
 import org.jboss.reflect.AnnotationValue;
 import org.jboss.reflect.ClassInfo;
 import org.jboss.reflect.MethodInfo;
+import org.jboss.reflect.ParameterInfo;
 import org.jboss.reflect.TypeInfo;
 
 /**
@@ -31,6 +32,9 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    
    /** The parameter types */
    protected TypeInfo[] parameterTypes;
+   
+   /** The parameters */
+   protected ParameterInfo[] parameters;
    
    /** The exception types */
    protected ClassInfo[] exceptionTypes;
@@ -70,11 +74,56 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    {
       super(annotations);
       this.name = name;
-      if (parameterTypes == null) 
-         this.parameterTypes = MethodInfo.NO_PARAMS;
-      else 
+      if (parameterTypes == null)
+      {
+         this.parameterTypes = MethodInfo.NO_PARAMS_TYPES;
+         this.parameters = MethodInfo.NO_PARAMS;
+      }
+      else
+      {
          this.parameterTypes = parameterTypes;
+         this.parameters = new ParameterInfoImpl[parameterTypes.length];
+         for (int i = 0; i < parameterTypes.length; ++i)
+            this.parameters[i] = new ParameterInfoImpl(null, null, parameterTypes[i]);
+      }
       if (exceptionTypes == null)
+         this.exceptionTypes = MethodInfo.NO_EXCEPTIONS;
+      else
+         this.exceptionTypes = exceptionTypes;
+      this.modifiers = modifiers;
+      this.declaringClass = declaring;
+      this.returnType = returnType;
+      calculateHash();
+   }
+
+   /**
+    * Create a new MethodInfo.
+    * 
+    * @param annotations the annotations
+    * @param name the method name
+    * @param returnType the return type
+    * @param parameters the parameters
+    * @param exceptionTypes the exception types
+    * @param modifiers the modifiers
+    * @param declaring the declaring class
+    */
+   public MethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, ParameterInfo[] parameters, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   {
+      super(annotations);
+      this.name = name;
+      if (parameters == null || parameters.length == 0)
+      {
+         this.parameterTypes = MethodInfo.NO_PARAMS_TYPES;
+         this.parameters = MethodInfo.NO_PARAMS;
+      }
+      else
+      {
+         this.parameters = parameters;
+         this.parameterTypes = new TypeInfo[parameters.length];
+         for (int i = 0; i < parameters.length; ++i)
+            this.parameterTypes[i] = parameters[i].getParameterType();
+      }
+      if (exceptionTypes == null || exceptionTypes.length == 0)
          this.exceptionTypes = MethodInfo.NO_EXCEPTIONS;
       else
          this.exceptionTypes = exceptionTypes;
@@ -101,6 +150,11 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    public TypeInfo[] getParameterTypes()
    {
       return parameterTypes;
+   }
+
+   public ParameterInfo[] getParameters()
+   {
+      return parameters;
    }
 
    public ClassInfo[] getExceptionTypes()
