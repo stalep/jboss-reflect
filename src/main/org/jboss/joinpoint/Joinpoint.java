@@ -11,7 +11,7 @@ package org.jboss.joinpoint;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface Joinpoint
+public interface Joinpoint extends Cloneable
 {
    /**
     * Invoke on the actual joinpoint
