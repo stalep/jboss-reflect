@@ -69,6 +69,20 @@ public class Config
    }
 
    /**
+    * Unconfigure a field
+    * 
+    * @param object the object to unconfigure
+    * @param jpf the join point factory
+    * @param name the name of the field
+    * @throws Throwable for any error
+    */
+   public static void unconfigure(Object object, JoinpointFactory jpf, String name) throws Throwable
+   {
+      FieldSetJoinpoint joinpoint = getFieldSetJoinpoint(object, jpf, name, null);
+      joinpoint.dispatch();
+   }
+
+   /**
     * Invoke a method
     * 
     * @param object the object to invoke
@@ -83,20 +97,6 @@ public class Config
    {
       MethodJoinpoint joinpoint = getMethodJoinpoint(object, jpf, name, paramTypes, params);
       return joinpoint.dispatch();
-   }
-
-   /**
-    * Unconfigure a field
-    * 
-    * @param object the object to unconfigure
-    * @param jpf the join point factory
-    * @param name the name of the field
-    * @throws Throwable for any error
-    */
-   public static void unconfigure(Object object, JoinpointFactory jpf, String name) throws Throwable
-   {
-      FieldSetJoinpoint joinpoint = getFieldSetJoinpoint(object, jpf, name, null);
-      joinpoint.dispatch();
    }
    
    /**
@@ -223,7 +223,7 @@ public class Config
          FieldInfo result = locateFieldInfo(current, name);
          if (result != null)
             return result;
-         current = classInfo.getSuperclass();
+         current = current.getSuperclass();
       }
       throw new JoinpointException("Field not found '" + name + "' for class " + classInfo.getName());
    }
@@ -263,7 +263,7 @@ public class Config
          MethodInfo result = locateMethodInfo(current, name, paramTypes);
          if (result != null)
             return result;
-         current = classInfo.getSuperclass();
+         current = current.getSuperclass();
       }
       throw new JoinpointException("Method not found " + name + Arrays.asList(paramTypes) + " for class " + classInfo.getName());
    }

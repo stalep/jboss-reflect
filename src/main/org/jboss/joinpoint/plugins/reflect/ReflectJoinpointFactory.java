@@ -10,6 +10,7 @@ import org.jboss.joinpoint.ConstructorJoinpoint;
 import org.jboss.joinpoint.FieldGetJoinpoint;
 import org.jboss.joinpoint.FieldSetJoinpoint;
 import org.jboss.joinpoint.JoinpointException;
+import org.jboss.joinpoint.JoinpointFactory;
 import org.jboss.joinpoint.MethodJoinpoint;
 import org.jboss.reflect.ClassInfo;
 import org.jboss.reflect.ConstructorInfo;
@@ -21,7 +22,7 @@ import org.jboss.reflect.MethodInfo;
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectJoinpointFactory
+public class ReflectJoinpointFactory implements JoinpointFactory
 {
    // Constants -----------------------------------------------------
    
@@ -40,6 +41,13 @@ public class ReflectJoinpointFactory
    }
    
    // Public --------------------------------------------------------
+   
+   // JoinpointFactory implementation -------------------------------
+   
+   public ClassInfo getClassInfo()
+   {
+      return classInfo;
+   }
 
    public ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo) throws JoinpointException
    {

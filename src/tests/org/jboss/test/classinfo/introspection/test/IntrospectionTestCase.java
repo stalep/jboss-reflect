@@ -480,7 +480,7 @@ public class IntrospectionTestCase extends BaseTestCase
       return result;
    }
    
-   protected void enableTraceLogging()
+   protected void configureLogging()
    {
       enableTrace("org.jboss.reflect");
    }
