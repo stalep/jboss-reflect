@@ -66,7 +66,7 @@ public interface ClassAdapter
    /**
     * Get the dependencies of this adapter
     * 
-    * @return the dependencies
+    * @return the dependencies List<Object names>
     */
    List getDependencies();
 
