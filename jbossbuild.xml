@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<!--
+ JBoss, the OpenSource J2EE webOS
+ 
+ Distributable under LGPL license.
+ See terms of license at gnu.org.
+-->
+
+<!-- ================================================================== -->
+<!-- Container component definition                                     -->
+<!-- ================================================================== -->
+
+<project name="project" 
+         default="build" 
+         basedir="."
+>
+   <!-- The main build -->
+   <import file="../jbossas/build.xml"/>
+
+   <!-- =============================================================== -->
+   <!-- The component definition                                        -->
+   <!-- =============================================================== -->
+
+   <componentdef component="container" description="JBoss Container">
+
+      <!-- ============================================================ -->
+      <!-- The main source                                              -->
+      <!-- ============================================================ -->
+
+      <source id="main">
+         <include input="common-project"/>
+         <include input="concurrent"/>
+      </source>
+
+      <source id="tests" test="org/jboss/test/**/*TestCase.java">
+         <include input="main"/>
+         <include input="test-project"/>
+      </source>
+
+      <!-- ============================================================ -->
+      <!-- jboss-container.jar                                          -->
+      <!-- ============================================================ -->
+
+      <artifactdef artifact="jboss-container.jar">
+         <include input="main"/>
+      </artifactdef>
+
+   </componentdef>
+
+   <!-- Generate the targets -->   
+   <generate generate="container"/>
+
+</project>
