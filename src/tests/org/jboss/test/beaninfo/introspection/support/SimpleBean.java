@@ -19,6 +19,8 @@ public class SimpleBean implements Serializable, SimpleInterface
 {
    // Constants -----------------------------------------------------
 
+   private static final long serialVersionUID = 3256728398394177849L;
+
    public static final Object PUBLIC_CONSTANT = new Object();
 
    static final Object PACKAGE_PRIVATE_CONSTANT = new Object();

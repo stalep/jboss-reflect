@@ -15,6 +15,9 @@ package org.jboss.container.spi;
 public class InvocationContextNotFoundException extends RuntimeException
 {
    // Constants -----------------------------------------------------
+
+   /** The serialVersionUID */
+   private static final long serialVersionUID = 3258417231158260273L;
    
    // Static --------------------------------------------------------
    

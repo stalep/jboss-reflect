@@ -15,6 +15,9 @@ package org.jboss.container.spi;
 public class JoinPointException extends RuntimeException
 {
    // Constants -----------------------------------------------------
+
+   /** The serialVersionUID */
+   private static final long serialVersionUID = 3257572793343030583L;
    
    // Static --------------------------------------------------------
    
