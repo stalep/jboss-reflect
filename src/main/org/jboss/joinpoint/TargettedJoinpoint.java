@@ -4,26 +4,33 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.reflect;
+package org.jboss.joinpoint;
 
 /**
- * A type info
+ * A join point with a target
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface TypeInfo
+public interface TargettedJoinpoint extends Joinpoint
 {
    // Constants -----------------------------------------------------
 
    // Public --------------------------------------------------------
+
+   /**
+    * Get the target of the join point 
+    * 
+    * @return the target of the join point
+    */
+   Object getTarget();
    
    /**
-    * Get the type name
+    * Set the target of the join point
     * 
-    * @return the name
+    * @param target the target
     */
-   String getName();
+   void setTarget(Object target);
    
    // Inner classes -------------------------------------------------
 }

@@ -7,13 +7,23 @@
 package org.jboss.joinpoint;
 
 /**
- * comment
+ * A field set join point
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface FieldSetJoinpoint extends Joinpoint
+public interface FieldSetJoinpoint extends TargettedJoinpoint
 {
-   Object getTarget();
-   void setTarget(Object target);
-   void setValue();
+   // Constants -----------------------------------------------------
+
+   // Public --------------------------------------------------------
+
+   /**
+    * The value to set
+    * 
+    * @param value the value to set
+    */
+   void setValue(Object value);
+   
+   // Inner classes -------------------------------------------------
 }

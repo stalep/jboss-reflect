@@ -7,23 +7,29 @@
 package org.jboss.joinpoint;
 
 /**
- * comment
+ * A join point
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public interface Joinpoint extends Cloneable
 {
+   // Constants -----------------------------------------------------
+
+   // Public --------------------------------------------------------
+
    /**
     * Invoke on the actual joinpoint
     *
-    * @return
-    * @throws Throwable
+    * @return the result of the invocation
+    * @throws Throwable for any error
     */
    Object dispatch() throws Throwable;
 
    /**
     * Make a copy of the joinpoint
-    * @return
+    * 
+    * @return a copy of the join point
     */
    Object clone();
 
@@ -33,5 +39,6 @@ public interface Joinpoint extends Cloneable
     * @return a human readable description of the join point
     */
    String toHumanReadableString();
-
+   
+   // Inner classes -------------------------------------------------
 }

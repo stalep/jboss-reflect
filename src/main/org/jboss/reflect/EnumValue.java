@@ -7,16 +7,43 @@
 package org.jboss.reflect;
 
 /**
- * comment
+ * An enumeration value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public class EnumValue implements Value
 {
+   // Constants -----------------------------------------------------
+   
+   // Attributes ----------------------------------------------------
+
+   /** The type */
    protected TypeInfo type;
+   
+   /** The value */
    protected String value;
+   
+   /** The hash code */
    protected int hash = -1;
 
+   // Static --------------------------------------------------------
+   
+   // Constructors --------------------------------------------------
+
+   /**
+    * Create a new EnumValue.
+    */
+   public EnumValue()
+   {
+   }
+
+   /**
+    * Create a new EnumValue.
+    * 
+    * @param type the type
+    * @param value the value
+    */
    public EnumValue(TypeInfo type, String value)
    {
       this.type = type;
@@ -24,15 +51,26 @@ public class EnumValue implements Value
       calculateHash();
    }
 
+   // Public --------------------------------------------------------
+
+   /**
+    * Get the value
+    * 
+    * @return the value
+    */
+   public String getValue()
+   {
+      return value;
+   }
+
+   // Value implementation ------------------------------------------
+
    public TypeInfo getType()
    {
       return type;
    }
 
-   public String getValue()
-   {
-      return value;
-   }
+   // Object overrides ----------------------------------------------
 
    public boolean equals(Object o)
    {
@@ -47,14 +85,27 @@ public class EnumValue implements Value
       return true;
    }
 
-   public int hashCode() { return hash; }
+   public int hashCode()
+   {
+      return hash;
+   }
 
-   public void calculateHash()
+   // Package protected ---------------------------------------------
+
+   // Protected -----------------------------------------------------
+
+   /**
+    * Calculate the hash code
+    */
+   protected void calculateHash()
    {
       int result;
       result = (type != null ? type.hashCode() : 0);
       result = 29 * result + (value != null ? value.hashCode() : 0);
       hash = result;
    }
-
+   
+   // Private -------------------------------------------------------
+   
+   // Inner classes -------------------------------------------------
 }

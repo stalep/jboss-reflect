@@ -7,12 +7,30 @@
 package org.jboss.joinpoint;
 
 /**
- * comment
+ * A constructor join point.
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public interface ConstructorJoinpoint extends Joinpoint
 {
-   public Object[] getArguments();
-   public void setArguments(Object[] args);
+   // Constants -----------------------------------------------------
+
+   // Public --------------------------------------------------------
+
+   /**
+    * Get the arguments for the constructor
+    * 
+    * @return the arguments
+    */
+   Object[] getArguments();
+   
+   /**
+    * Set the arguments for the constructor
+    * 
+    * @param args the arguments
+    */
+   void setArguments(Object[] args);
+   
+   // Inner classes -------------------------------------------------
 }

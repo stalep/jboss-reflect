@@ -9,37 +9,71 @@ package org.jboss.reflect;
 import java.util.HashMap;
 
 /**
- * comment
+ * An annotation holder
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class InheritableAnnotationHolder  implements AnnotatedInfo
+public class InheritableAnnotationHolder implements AnnotatedInfo
 {
+   // Constants -----------------------------------------------------
+   
+   // Attributes ----------------------------------------------------
+   
+   /** Declared annotations Map<String, AnnotationValue> */
    protected HashMap declaredAnnotations;
+   
+   /** All annotations Map<String, AnnotationValue> */
    protected HashMap allAnnotations;
+   
+   /** All annotations */
    protected AnnotationValue[] allAnnotationsArray;
+   
+   /** Declared annotations */
    protected AnnotationValue[] declaredAnnotationsArray;
+   
+   /** The super holder of annotations */
    protected InheritableAnnotationHolder superHolder;
+   
+   // Static --------------------------------------------------------
+   
+   // Constructors --------------------------------------------------
 
-
+   /**
+    * Create a new InheritableAnnotationHolder.
+    */
    public InheritableAnnotationHolder()
    {
    }
 
+   /**
+    * Create a new InheritableAnnotationHolder.
+    * 
+    * @param annotations the annotations
+    */
    public InheritableAnnotationHolder(AnnotationValue[] annotations)
    {
       setupAnnotations(annotations);
    }
 
 
-   public AnnotationValue[] getAnnotations()
-   {
-      return allAnnotationsArray;
-   }
+   // Public --------------------------------------------------------
 
+   /**
+    * Get the declared annotations
+    * 
+    * @return the declared annotations
+    */
    public AnnotationValue[] getDeclaredAnnotations()
    {
       return declaredAnnotationsArray;
+   }
+
+   // AnnotatedInfo implementation ----------------------------------
+
+   public AnnotationValue[] getAnnotations()
+   {
+      return allAnnotationsArray;
    }
 
    public AnnotationValue getAnnotation(String name)
@@ -52,6 +86,15 @@ public class InheritableAnnotationHolder  implements AnnotatedInfo
       return allAnnotations.containsKey(name);
    }
 
+   // Package protected ---------------------------------------------
+
+   // Protected -----------------------------------------------------
+
+   /**
+    * Set up the annotations
+    * 
+    * @param annotations the annotations
+    */
    protected void setupAnnotations(AnnotationValue[] annotations)
    {
       if (annotations != null && annotations.length > 0)
@@ -59,9 +102,7 @@ public class InheritableAnnotationHolder  implements AnnotatedInfo
          declaredAnnotations = new HashMap();
          declaredAnnotationsArray = annotations;
          for (int i = 0; i < annotations.length; i++)
-         {
             declaredAnnotations.put(annotations[i].getAnnotationType().getName(), annotations[i]);
-         }
          allAnnotations = new HashMap();
 
          if (superHolder != null && superHolder.allAnnotationsArray != null)
@@ -70,19 +111,14 @@ public class InheritableAnnotationHolder  implements AnnotatedInfo
             {
                AnnotationValue av = superHolder.allAnnotationsArray[i];
                if (av.getAnnotationType().isAnnotationPresent("java.lang.annotation.Inherited"));
-               {
                   allAnnotations.put(av.getAnnotationType().getName(), av);
-               }
             }
          }
          else
-         {
             allAnnotationsArray = declaredAnnotationsArray;
-         }
+
          for (int i = 0; i < annotations.length; i++)
-         {
             allAnnotations.put(annotations[i].getAnnotationType().getName(), annotations[i]);
-         }
 
          allAnnotationsArray = (AnnotationValue[])allAnnotations.values().toArray(new AnnotationValue[allAnnotations.size()]);
       }
@@ -95,5 +131,8 @@ public class InheritableAnnotationHolder  implements AnnotatedInfo
          }
       }
    }
-
+   
+   // Private -------------------------------------------------------
+   
+   // Inner classes -------------------------------------------------
 }

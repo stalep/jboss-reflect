@@ -7,13 +7,39 @@
 package org.jboss.reflect;
 
 /**
- * comment
+ * Annotated info
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public interface AnnotatedInfo
 {
+   // Constants -----------------------------------------------------
+   
+   // Public --------------------------------------------------------
+
+   /**
+    * Get the annotations
+    * 
+    * @return the annotations
+    */
    AnnotationValue[] getAnnotations();
+   
+   /**
+    * Get an annotation
+    * 
+    * @param name the name
+    * @return the annotation
+    */
    AnnotationValue getAnnotation(String name);
+   
+   /**
+    * Test whether an annotation is present
+    * 
+    * @param name the name
+    * @return true when the annotation is present
+    */
    boolean isAnnotationPresent(String name);
+   
+   // Inner classes -------------------------------------------------
 }

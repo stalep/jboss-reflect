@@ -7,11 +7,23 @@
 package org.jboss.reflect;
 
 /**
- * comment
+ * Member info
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public interface MemberInfo
 {
+   // Constants -----------------------------------------------------
+
+   // Public --------------------------------------------------------
+   
+   /**
+    * Get the declaring class
+    * 
+    * @return the declaring class 
+    */
    ClassInfo getDeclaringClass();
+   
+   // Inner classes -------------------------------------------------
 }

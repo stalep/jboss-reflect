@@ -9,25 +9,47 @@ package org.jboss.reflect;
 import java.util.HashMap;
 
 /**
- * comment
+ * An annotation holder
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public class AnnotationHolder implements AnnotatedInfo
 {
-   protected HashMap annotationMap;
+   // Constants -----------------------------------------------------
+   
+   // Attributes ----------------------------------------------------
+
+   /** The annotations */
    protected AnnotationValue[] annotationsArray;
 
+   /** Annotations map Map<String, AnnotationValue> */
+   protected HashMap annotationMap;
+   
+   // Static --------------------------------------------------------
+   
+   // Constructors --------------------------------------------------
 
+   /**
+    * Create a new annotation holder
+    */
    public AnnotationHolder()
    {
    }
 
+   /**
+    * Create a new AnnotationHolder.
+    * 
+    * @param annotations the annotations
+    */
    public AnnotationHolder(AnnotationValue[] annotations)
    {
       setupAnnotations(annotations);
    }
 
+   // Public --------------------------------------------------------
+
+   // AnnotatedInfo implementation ----------------------------------
 
    public AnnotationValue[] getAnnotations()
    {
@@ -44,16 +66,24 @@ public class AnnotationHolder implements AnnotatedInfo
       return annotationMap.containsKey(name);
    }
 
+   // Package protected ---------------------------------------------
+
+   // Protected -----------------------------------------------------
+
+   /**
+    * Set up the annotations
+    */
    protected void setupAnnotations(AnnotationValue[] annotations)
    {
       if (annotations != null && annotations.length > 0)
       {
          this.annotationsArray = annotations;
          for (int i = 0; i < annotations.length; i++)
-         {
             annotationMap.put(annotations[i].getAnnotationType().getName(), annotations[i]);
-         }
       }
    }
-
+   
+   // Private -------------------------------------------------------
+   
+   // Inner classes -------------------------------------------------
 }

@@ -15,10 +15,36 @@ import java.util.Arrays;
  */
 public class ArrayValue implements Value
 {
+   // Constants -----------------------------------------------------
+   
+   // Attributes ----------------------------------------------------
+
+   /** The type */
    protected TypeInfo type;
+   
+   /** The values */
    protected Value[] values;
+   
+   /** The hash code */
    protected int hash = -1;
 
+   // Static --------------------------------------------------------
+   
+   // Constructors --------------------------------------------------
+
+   /**
+    * Create a new ArrayValue
+    */
+   public ArrayValue()
+   {
+   }
+
+   /**
+    * Create a new ArrayValue
+    * 
+    * @param type the type
+    * @param values the values
+    */
    public ArrayValue(TypeInfo type, Value[] values)
    {
       this.type = type;
@@ -27,15 +53,26 @@ public class ArrayValue implements Value
 
    }
 
+   // Public --------------------------------------------------------
+
+   /**
+    * Get the values
+    * 
+    * @return the values
+    */
+   public Value[] getValues()
+   {
+      return values;
+   }
+
+   // Value implementation ------------------------------------------
+
    public TypeInfo getType()
    {
       return type;
    }
 
-   public Value[] getValues()
-   {
-      return values;
-   }
+   // Object overrides ----------------------------------------------
 
    public boolean equals(Object o)
    {
@@ -50,9 +87,25 @@ public class ArrayValue implements Value
       return true;
    }
 
-   public void calculateHash()
+   public int hashCode()
+   {
+      return hash;
+   }
+   
+   // Package protected ---------------------------------------------
+
+   // Protected -----------------------------------------------------
+
+   /**
+    * Calculate the hash code
+    */
+   protected void calculateHash()
    {
       // FIXME java5 hash = Arrays.hashCode(values);
       hash = hash * 29 +  type.hashCode();
    }
+   
+   // Private -------------------------------------------------------
+   
+   // Inner classes -------------------------------------------------
 }

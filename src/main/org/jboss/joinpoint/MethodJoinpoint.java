@@ -7,15 +7,30 @@
 package org.jboss.joinpoint;
 
 /**
- * comment
+ * A method join point
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface MethodJoinpoint extends Joinpoint
+public interface MethodJoinpoint extends TargettedJoinpoint
 {
-   public void setArguments(Object[] args);
-   public Object[] getArguments();
+   // Constants -----------------------------------------------------
 
-   Object getTarget();
-   public void setTarget(Object obj);
+   // Public --------------------------------------------------------
+
+   /**
+    * Get the arguments of the join point
+    * 
+    * @return the arguments
+    */
+   Object[] getArguments();
+   
+   /**
+    * Set the arguments of the method invocation
+    * 
+    * @param args the arguments
+    */
+   void setArguments(Object[] args);
+   
+   // Inner classes -------------------------------------------------
 }

@@ -7,91 +7,181 @@
 package org.jboss.reflect;
 
 /**
- * comment
+ * Method info
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public class MethodInfo extends AnnotationHolder implements MemberInfo
 {
+   // Constants -----------------------------------------------------
+   
+   /** No parameters */
+   public static final TypeInfo[] NO_PARAMS = {};
+   
+   /** No Exceptions */
+   public static final ClassInfo[] NO_EXCEPTIONS = {};
+   
+   // Attributes ----------------------------------------------------
+
+   /** The method name */
    protected String name;
+   
+   /** The declaring class */
    protected ClassInfo declaringClass;
+   
+   /** The parameter types */
    protected TypeInfo[] parameterTypes;
+   
+   /** The exception types */
    protected ClassInfo[] exceptionTypes;
+   
+   /** The modifiers */
    protected int modifiers;
+   
+   /** The return type */
    protected TypeInfo returnType;
+   
+   /** The hash code */
    protected int hash;
 
-   public static final TypeInfo[] NO_PARAMS = {};
-   public static final ClassInfo[] NO_EXCEPTIONS = {};
+   // Static --------------------------------------------------------
+   
+   // Constructors --------------------------------------------------
 
+   /**
+    * Create a new method info
+    */
    public MethodInfo()
    {
    }
 
+   /**
+    * Create a new MethodInfo.
+    * 
+    * @param annotations the annotations
+    * @param name the method name
+    * @param returnType the return type
+    * @param parameterTypes the parameter types
+    * @param exceptionTypes the exception types
+    * @param modifiers the modifiers
+    * @param declaring the declaring class
+    */
    public MethodInfo(AnnotationValue[] annotations, String name, TypeInfo returnType, TypeInfo[] parameterTypes, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
    {
       super(annotations);
       this.name = name;
-
-      if (parameterTypes == null) this.parameterTypes = NO_PARAMS;
-      else this.parameterTypes = parameterTypes;
-      if (exceptionTypes == null) this.exceptionTypes = NO_EXCEPTIONS;
-      else this.exceptionTypes = exceptionTypes;
-
+      if (parameterTypes == null) 
+         this.parameterTypes = MethodInfo.NO_PARAMS;
+      else 
+         this.parameterTypes = parameterTypes;
+      if (exceptionTypes == null)
+         this.exceptionTypes = MethodInfo.NO_EXCEPTIONS;
+      else
+         this.exceptionTypes = exceptionTypes;
       this.modifiers = modifiers;
       this.declaringClass = declaring;
       this.returnType = returnType;
       calculateHash();
    }
 
+   // Public --------------------------------------------------------
+
+   /**
+    * Get the method name
+    * 
+    * @return the method name
+    */
    public String getName()
    {
       return name;
    }
 
+   /**
+    * Get the declaring class
+    * 
+    * @return the declaring class
+    */
    public ClassInfo getDeclaringClass()
    {
       return declaringClass;
    }
 
+   /**
+    * Get the parameter types
+    * 
+    * @return the parameter types
+    */
    public TypeInfo[] getParameterTypes()
    {
       return parameterTypes;
    }
 
+   /**
+    * Get the exception types
+    * 
+    * @return the exception types
+    */
    public ClassInfo[] getExceptionTypes()
    {
       return exceptionTypes;
    }
 
+   /**
+    * Get the method modifiers
+    * 
+    * @return the modifiers
+    */
    public int getModifiers()
    {
       return modifiers;
    }
-
+   
+   /**
+    * Get the return type
+    * 
+    * @return the return type
+    */
    public TypeInfo getReturnType()
    {
       return returnType;
    }
 
-   public boolean equals(Object o)
+   // Object overrides ----------------------------------------------
+
+   public boolean equals(Object obj)
    {
-      if (this == o) return true;
-      if (!(o instanceof MethodInfo)) return false;
+      if (this == obj) return true;
+      if (obj == null || obj instanceof MethodInfo == false)
+         return false;
 
-      final MethodInfo methodInfo = (MethodInfo) o;
+      final MethodInfo other = (MethodInfo) obj;
 
-      if (!declaringClass.equals(methodInfo.declaringClass)) return false;
-      if (!name.equals(methodInfo.name)) return false;
-      if (parameterTypes != null ? !parameterTypes.equals(methodInfo.parameterTypes) : methodInfo.parameterTypes != null) return false;
-      if (!returnType.equals(methodInfo.returnType)) return false;
+      if (!declaringClass.equals(other.declaringClass))
+         return false;
+      if (!name.equals(other.name))
+         return false;
+      if (parameterTypes != null ? !parameterTypes.equals(other.parameterTypes) : other.parameterTypes != null)
+         return false;
+      if (!returnType.equals(other.returnType))
+         return false;
 
       return true;
    }
 
-   public int hashCode() { return hash; }
+   public int hashCode()
+   {
+      return hash;
+   }
 
-   public void  calculateHash()
+   // Package protected ---------------------------------------------
+
+   // Protected -----------------------------------------------------
+
+   /**
+    * Calculate the hash code
+    */
+   protected void calculateHash()
    {
       int result;
       result = name.hashCode();
@@ -99,12 +189,12 @@ public class MethodInfo extends AnnotationHolder implements MemberInfo
       if (parameterTypes != null)
       {
          for (int i = 0; i < parameterTypes.length; i++)
-         {
             result = 29 * result + parameterTypes[i].hashCode();
-         }
       }
       hash = result;
    }
-
-
+   
+   // Private -------------------------------------------------------
+   
+   // Inner classes -------------------------------------------------
 }

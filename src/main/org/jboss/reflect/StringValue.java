@@ -7,30 +7,66 @@
 package org.jboss.reflect;
 
 /**
- * comment
+ * A string value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public class StringValue implements Value
 {
+   // Constants -----------------------------------------------------
+   
+   // Attributes ----------------------------------------------------
+
+   /** The value */
    protected String value;
+   
+   /** The type */
    protected TypeInfo type;
 
+   // Static --------------------------------------------------------
+   
+   // Constructors --------------------------------------------------
+
+   /**
+    * Create a new string value
+    */
+   public StringValue()
+   {
+   }
+   
+   /**
+    * Create a new string value
+    * 
+    * @param value the value
+    * @param type the type
+    */
    public StringValue(String value, TypeInfo type)
    {
       this.value = value;
       this.type = type;
    }
 
+   // Public --------------------------------------------------------
+
+   /**
+    * Get the value
+    * 
+    * @return the value
+    */
    public String getValue()
    {
       return value;
    }
 
+   // Value implementation ------------------------------------------
+
    public TypeInfo getType()
    {
       return type;
    }
+
+   // Object overrides ----------------------------------------------
 
    public boolean equals(Object o)
    {
@@ -52,4 +88,12 @@ public class StringValue implements Value
       result = 29 * result + type.hashCode();
       return result;
    }
+
+   // Package protected ---------------------------------------------
+
+   // Protected -----------------------------------------------------
+   
+   // Private -------------------------------------------------------
+   
+   // Inner classes -------------------------------------------------
 }

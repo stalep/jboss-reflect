@@ -7,15 +7,40 @@
 package org.jboss.reflect;
 
 /**
- * comment
+ * A primitive value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public class PrimitiveValue implements Value
 {
+   // Constants -----------------------------------------------------
+   
+   // Attributes ----------------------------------------------------
+
+   /** The value */
    protected String value;
+   
+   /** The type */
    protected PrimitiveInfo type;
 
+   // Static --------------------------------------------------------
+   
+   // Constructors --------------------------------------------------
+
+   /**
+    * Create a primitive value
+    */
+   public PrimitiveValue()
+   {
+   }
+
+   /**
+    * Create a primitive value
+    * 
+    * @param value the value
+    * @param type the type
+    */
    public PrimitiveValue(String value, PrimitiveInfo type)
    {
       this.value = value;
@@ -27,10 +52,14 @@ public class PrimitiveValue implements Value
       return value;
    }
 
+   // Value implementation ------------------------------------------
+
    public TypeInfo getType()
    {
       return type;
    }
+
+   // Object overrides ----------------------------------------------
 
    public boolean equals(Object o)
    {
@@ -52,4 +81,12 @@ public class PrimitiveValue implements Value
       result = 29 * result + type.hashCode();
       return result;
    }
+
+   // Package protected ---------------------------------------------
+
+   // Protected -----------------------------------------------------
+   
+   // Private -------------------------------------------------------
+   
+   // Inner classes -------------------------------------------------
 }
