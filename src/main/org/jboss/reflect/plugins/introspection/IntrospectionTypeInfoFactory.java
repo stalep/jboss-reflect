@@ -14,6 +14,7 @@ import org.jboss.reflect.spi.TypeInfoFactory;
  * 
  * This avoids recalculating things everytime an factory is
  * constructed inside the same classloader
+ * 
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public class IntrospectionTypeInfoFactory implements TypeInfoFactory
