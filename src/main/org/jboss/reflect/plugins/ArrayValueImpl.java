@@ -4,57 +4,67 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.reflect;
+package org.jboss.reflect.plugins;
+
+import java.util.Arrays;
+
+import org.jboss.reflect.ArrayValue;
+import org.jboss.reflect.TypeInfo;
+import org.jboss.reflect.Value;
 
 /**
- * A primitive value
+ * Annotation value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class PrimitiveValue implements Value
+public class ArrayValueImpl implements ArrayValue
 {
    // Constants -----------------------------------------------------
    
    // Attributes ----------------------------------------------------
 
-   /** The value */
-   protected String value;
-   
    /** The type */
-   protected PrimitiveInfo type;
+   protected TypeInfo type;
+   
+   /** The values */
+   protected Value[] values;
+   
+   /** The hash code */
+   protected int hash = -1;
 
    // Static --------------------------------------------------------
    
    // Constructors --------------------------------------------------
 
    /**
-    * Create a primitive value
+    * Create a new ArrayValue
     */
-   public PrimitiveValue()
+   public ArrayValueImpl()
    {
    }
 
    /**
-    * Create a primitive value
+    * Create a new ArrayValue
     * 
-    * @param value the value
     * @param type the type
+    * @param values the values
     */
-   public PrimitiveValue(String value, PrimitiveInfo type)
+   public ArrayValueImpl(TypeInfo type, Value[] values)
    {
-      this.value = value;
       this.type = type;
+      this.values = values;
+      calculateHash();
+
    }
 
-   /**
-    * Get the value
-    * 
-    * @return the value
-    */
-   public String getValue()
+   // Public --------------------------------------------------------
+
+   // ArrayValue implementation -------------------------------------
+
+   public Value[] getValues()
    {
-      return value;
+      return values;
    }
 
    // Value implementation ------------------------------------------
@@ -69,27 +79,33 @@ public class PrimitiveValue implements Value
    public boolean equals(Object o)
    {
       if (this == o) return true;
-      if (!(o instanceof PrimitiveValue)) return false;
+      if (!(o instanceof ArrayValueImpl)) return false;
 
-      final PrimitiveValue primitiveValue = (PrimitiveValue) o;
+      final ArrayValueImpl arrayValue = (ArrayValueImpl) o;
 
-      if (!type.equals(primitiveValue.type)) return false;
-      if (!value.equals(primitiveValue.value)) return false;
+      if (!type.equals(arrayValue.type)) return false;
+      if (!Arrays.equals(values, arrayValue.values)) return false;
 
       return true;
    }
 
    public int hashCode()
    {
-      int result;
-      result = value.hashCode();
-      result = 29 * result + type.hashCode();
-      return result;
+      return hash;
    }
-
+   
    // Package protected ---------------------------------------------
 
    // Protected -----------------------------------------------------
+
+   /**
+    * Calculate the hash code
+    */
+   protected void calculateHash()
+   {
+      // FIXME java5 hash = Arrays.hashCode(values);
+      hash = hash * 29 +  type.hashCode();
+   }
    
    // Private -------------------------------------------------------
    

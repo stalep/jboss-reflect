@@ -21,6 +21,11 @@ import org.jboss.reflect.InterfaceInfo;
 import org.jboss.reflect.MethodInfo;
 import org.jboss.reflect.TypeInfo;
 import org.jboss.reflect.TypeInfoFactory;
+import org.jboss.reflect.plugins.ClassInfoImpl;
+import org.jboss.reflect.plugins.ConstructorInfoImpl;
+import org.jboss.reflect.plugins.FieldInfoImpl;
+import org.jboss.reflect.plugins.InterfaceInfoImpl;
+import org.jboss.reflect.plugins.MethodInfoImpl;
 import org.jboss.util.CollectionsFactory;
 
 /**
@@ -51,16 +56,16 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
     */
    public TypeInfo generateTypeInfo(Class clazz)
    {
-      ClassInfo result;
+      ClassInfoImpl result;
       if (clazz.isInterface())
-         result = new InterfaceInfo(clazz.getName());
+         result = new InterfaceInfoImpl(clazz.getName());
       else
       {
-         result = new ClassInfo(clazz.getName());
+         result = new ClassInfoImpl(clazz.getName());
          Class superClazz = clazz.getSuperclass();
          if (superClazz != null)
          {
-            ClassInfo superType = (ClassInfo) getTypeInfo(superClazz);
+            ClassInfoImpl superType = (ClassInfoImpl) getTypeInfo(superClazz);
             result.setSuperclass(superType);
             result.setDeclaredConstructors(getConstructors(clazz, result));
          }
@@ -79,13 +84,13 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
     * @param declaring the declaring class
     * @return the constructor info
     */
-   public ConstructorInfo[] getConstructors(Class clazz, ClassInfo declaring)
+   public ConstructorInfoImpl[] getConstructors(Class clazz, ClassInfo declaring)
    {
       Constructor[] constructors = clazz.getDeclaredConstructors();
       if (constructors == null || constructors.length == 0)
          return null;
       
-      ConstructorInfo[] infos = new ConstructorInfo[constructors.length];
+      ConstructorInfoImpl[] infos = new ConstructorInfoImpl[constructors.length];
       for (int i = 0; i < constructors.length; ++i)
          infos[i] = new ReflectConstructorInfo(this, declaring, constructors[i]);
       return infos;
@@ -98,13 +103,13 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
     * @param declaring the declaring class
     * @return the field info
     */
-   public FieldInfo[] getFields(Class clazz, ClassInfo declaring)
+   public FieldInfoImpl[] getFields(Class clazz, ClassInfo declaring)
    {
       Field[] fields = clazz.getDeclaredFields();
       if (fields == null || fields.length == 0)
          return null;
       
-      FieldInfo[] infos = new FieldInfo[fields.length];
+      FieldInfoImpl[] infos = new FieldInfoImpl[fields.length];
       for (int i = 0; i < fields.length; ++i)
          infos[i] = new ReflectFieldInfo(this, declaring, fields[i]);
       return infos;
@@ -117,13 +122,13 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
     * @param declaring the declaring class
     * @return the method info
     */
-   protected MethodInfo[] getMethods(Class clazz, ClassInfo declaring)
+   protected MethodInfoImpl[] getMethods(Class clazz, ClassInfo declaring)
    {
       Method[] methods = clazz.getDeclaredMethods();
       if (methods == null || methods.length == 0)
          return null;
       
-      MethodInfo[] infos = new MethodInfo[methods.length];
+      MethodInfoImpl[] infos = new MethodInfoImpl[methods.length];
       for (int i = 0; i < methods.length; ++i)
          infos[i] = new ReflectMethodInfo(this, declaring, methods[i]);
       return infos;

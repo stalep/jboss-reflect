@@ -4,15 +4,18 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.reflect;
+package org.jboss.reflect.plugins;
+
+import org.jboss.reflect.StringValue;
+import org.jboss.reflect.TypeInfo;
 
 /**
- * A primitive value
+ * A string value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class PrimitiveValue implements Value
+public class StringValueImpl implements StringValue
 {
    // Constants -----------------------------------------------------
    
@@ -22,36 +25,35 @@ public class PrimitiveValue implements Value
    protected String value;
    
    /** The type */
-   protected PrimitiveInfo type;
+   protected TypeInfo type;
 
    // Static --------------------------------------------------------
    
    // Constructors --------------------------------------------------
 
    /**
-    * Create a primitive value
+    * Create a new string value
     */
-   public PrimitiveValue()
+   public StringValueImpl()
    {
    }
-
+   
    /**
-    * Create a primitive value
+    * Create a new string value
     * 
     * @param value the value
     * @param type the type
     */
-   public PrimitiveValue(String value, PrimitiveInfo type)
+   public StringValueImpl(String value, TypeInfo type)
    {
       this.value = value;
       this.type = type;
    }
 
-   /**
-    * Get the value
-    * 
-    * @return the value
-    */
+   // Public --------------------------------------------------------
+
+   // StringValue implementation ------------------------------------
+
    public String getValue()
    {
       return value;
@@ -69,9 +71,9 @@ public class PrimitiveValue implements Value
    public boolean equals(Object o)
    {
       if (this == o) return true;
-      if (!(o instanceof PrimitiveValue)) return false;
+      if (!(o instanceof StringValueImpl)) return false;
 
-      final PrimitiveValue primitiveValue = (PrimitiveValue) o;
+      final StringValueImpl primitiveValue = (StringValueImpl) o;
 
       if (!type.equals(primitiveValue.type)) return false;
       if (!value.equals(primitiveValue.value)) return false;

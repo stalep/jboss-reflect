@@ -11,13 +11,14 @@ import java.lang.reflect.Method;
 import org.jboss.reflect.ClassInfo;
 import org.jboss.reflect.MethodInfo;
 import org.jboss.reflect.TypeInfoFactory;
+import org.jboss.reflect.plugins.MethodInfoImpl;
 
 /**
  * A method info
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectMethodInfo extends MethodInfo
+public class ReflectMethodInfo extends MethodInfoImpl
 {
    // Constants -----------------------------------------------------
    

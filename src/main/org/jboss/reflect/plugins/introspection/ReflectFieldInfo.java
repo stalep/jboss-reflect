@@ -11,13 +11,14 @@ import java.lang.reflect.Field;
 import org.jboss.reflect.ClassInfo;
 import org.jboss.reflect.FieldInfo;
 import org.jboss.reflect.TypeInfoFactory;
+import org.jboss.reflect.plugins.FieldInfoImpl;
 
 /**
  * A field info
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectFieldInfo extends FieldInfo
+public class ReflectFieldInfo extends FieldInfoImpl
 {
    // Constants -----------------------------------------------------
    

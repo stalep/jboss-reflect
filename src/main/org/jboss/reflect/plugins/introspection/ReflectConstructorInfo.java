@@ -16,13 +16,14 @@ import org.jboss.reflect.FieldInfo;
 import org.jboss.reflect.MethodInfo;
 import org.jboss.reflect.TypeInfo;
 import org.jboss.reflect.TypeInfoFactory;
+import org.jboss.reflect.plugins.ConstructorInfoImpl;
 
 /**
  * A constructor info
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectConstructorInfo extends ConstructorInfo
+public class ReflectConstructorInfo extends ConstructorInfoImpl
 {
    // Constants -----------------------------------------------------
    

@@ -4,54 +4,60 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.reflect;
+package org.jboss.reflect.plugins;
+
+import org.jboss.reflect.EnumValue;
+import org.jboss.reflect.TypeInfo;
 
 /**
- * A primitive value
+ * An enumeration value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class PrimitiveValue implements Value
+public class EnumValueImpl implements EnumValue
 {
    // Constants -----------------------------------------------------
    
    // Attributes ----------------------------------------------------
 
+   /** The type */
+   protected TypeInfo type;
+   
    /** The value */
    protected String value;
    
-   /** The type */
-   protected PrimitiveInfo type;
+   /** The hash code */
+   protected int hash = -1;
 
    // Static --------------------------------------------------------
    
    // Constructors --------------------------------------------------
 
    /**
-    * Create a primitive value
+    * Create a new EnumValue.
     */
-   public PrimitiveValue()
+   public EnumValueImpl()
    {
    }
 
    /**
-    * Create a primitive value
+    * Create a new EnumValue.
     * 
-    * @param value the value
     * @param type the type
+    * @param value the value
     */
-   public PrimitiveValue(String value, PrimitiveInfo type)
+   public EnumValueImpl(TypeInfo type, String value)
    {
-      this.value = value;
       this.type = type;
+      this.value = value;
+      calculateHash();
    }
 
-   /**
-    * Get the value
-    * 
-    * @return the value
-    */
+   // Public --------------------------------------------------------
+
+   // EnumValue implementation --------------------------------------
+
    public String getValue()
    {
       return value;
@@ -69,27 +75,35 @@ public class PrimitiveValue implements Value
    public boolean equals(Object o)
    {
       if (this == o) return true;
-      if (!(o instanceof PrimitiveValue)) return false;
+      if (!(o instanceof EnumValueImpl)) return false;
 
-      final PrimitiveValue primitiveValue = (PrimitiveValue) o;
+      final EnumValueImpl enumValue = (EnumValueImpl) o;
 
-      if (!type.equals(primitiveValue.type)) return false;
-      if (!value.equals(primitiveValue.value)) return false;
+      if (type != null ? !type.equals(enumValue.type) : enumValue.type != null) return false;
+      if (value != null ? !value.equals(enumValue.value) : enumValue.value != null) return false;
 
       return true;
    }
 
    public int hashCode()
    {
-      int result;
-      result = value.hashCode();
-      result = 29 * result + type.hashCode();
-      return result;
+      return hash;
    }
 
    // Package protected ---------------------------------------------
 
    // Protected -----------------------------------------------------
+
+   /**
+    * Calculate the hash code
+    */
+   protected void calculateHash()
+   {
+      int result;
+      result = (type != null ? type.hashCode() : 0);
+      result = 29 * result + (value != null ? value.hashCode() : 0);
+      hash = result;
+   }
    
    // Private -------------------------------------------------------
    

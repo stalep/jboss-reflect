@@ -9,49 +9,14 @@ package org.jboss.reflect;
 import java.util.Arrays;
 
 /**
- * Annotation value
+ * Array value
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ArrayValue implements Value
+public interface ArrayValue extends Value
 {
    // Constants -----------------------------------------------------
-   
-   // Attributes ----------------------------------------------------
-
-   /** The type */
-   protected TypeInfo type;
-   
-   /** The values */
-   protected Value[] values;
-   
-   /** The hash code */
-   protected int hash = -1;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
-
-   /**
-    * Create a new ArrayValue
-    */
-   public ArrayValue()
-   {
-   }
-
-   /**
-    * Create a new ArrayValue
-    * 
-    * @param type the type
-    * @param values the values
-    */
-   public ArrayValue(TypeInfo type, Value[] values)
-   {
-      this.type = type;
-      this.values = values;
-      calculateHash();
-
-   }
 
    // Public --------------------------------------------------------
 
@@ -60,52 +25,7 @@ public class ArrayValue implements Value
     * 
     * @return the values
     */
-   public Value[] getValues()
-   {
-      return values;
-   }
-
-   // Value implementation ------------------------------------------
-
-   public TypeInfo getType()
-   {
-      return type;
-   }
-
-   // Object overrides ----------------------------------------------
-
-   public boolean equals(Object o)
-   {
-      if (this == o) return true;
-      if (!(o instanceof ArrayValue)) return false;
-
-      final ArrayValue arrayValue = (ArrayValue) o;
-
-      if (!type.equals(arrayValue.type)) return false;
-      if (!Arrays.equals(values, arrayValue.values)) return false;
-
-      return true;
-   }
-
-   public int hashCode()
-   {
-      return hash;
-   }
-   
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
-   /**
-    * Calculate the hash code
-    */
-   protected void calculateHash()
-   {
-      // FIXME java5 hash = Arrays.hashCode(values);
-      hash = hash * 29 +  type.hashCode();
-   }
-   
-   // Private -------------------------------------------------------
+   Value[] getValues();
    
    // Inner classes -------------------------------------------------
 }

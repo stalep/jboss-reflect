@@ -4,9 +4,12 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.reflect;
+package org.jboss.reflect.plugins;
 
 import java.util.HashMap;
+
+import org.jboss.reflect.AnnotatedInfo;
+import org.jboss.reflect.AnnotationValue;
 
 /**
  * An annotation holder
@@ -72,6 +75,8 @@ public class AnnotationHolder implements AnnotatedInfo
 
    /**
     * Set up the annotations
+    * 
+    * @param annotations the annotations
     */
    protected void setupAnnotations(AnnotationValue[] annotations)
    {
