@@ -6,6 +6,7 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
 import org.jboss.reflect.AnnotationValue;
@@ -206,11 +207,6 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    {
       return false;
    }
-   
-   public int getModifiers()
-   {
-      return modifiers;
-   }
 
    public InterfaceInfo[] getInterfaces()
    {
@@ -245,6 +241,23 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public ClassInfo getSuperclass()
    {
       return superclass;
+   }
+   
+   // ModifierInfo implementation -----------------------------------
+   
+   public int getModifiers()
+   {
+      return modifiers;
+   }
+   
+   public boolean isStatic()
+   {
+      return Modifier.isStatic(modifiers);
+   }
+   
+   public boolean isPublic()
+   {
+      return Modifier.isPublic(modifiers);
    }
    
    // JBossObject overrides -----------------------------------------

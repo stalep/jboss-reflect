@@ -50,11 +50,10 @@ public interface JoinpointFactory
     * 
     * @param name the method name
     * @param argumentTypes the argument types
-    * @param isStatic whether to only look for static methods
     * @return the method join point
     * @throws JoinpointException when no such method
     */
-   MethodJoinpoint getMethodJoinpoint(String name, Class[] argumentTypes, boolean isStatic) throws JoinpointException;
+   MethodJoinpoint getMethodJoinpoint(String name, Class[] argumentTypes) throws JoinpointException;
    
    // Inner classes -------------------------------------------------
 }

@@ -83,5 +83,19 @@ public interface ModifierInfo
     */
    int getModifiers();
    
+   /**
+    * Whether it is public
+    * 
+    * @return true when public
+    */
+   boolean isPublic();
+   
+   /**
+    * Whether it is static
+    * 
+    * @return true when static
+    */
+   boolean isStatic();
+   
    // Inner classes -------------------------------------------------
 }

@@ -6,6 +6,8 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.lang.reflect.Modifier;
+
 import org.jboss.reflect.AnnotationValue;
 import org.jboss.reflect.ClassInfo;
 import org.jboss.reflect.FieldInfo;
@@ -85,16 +87,28 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
       return type;
    }
 
-   public int getModifiers()
-   {
-      return modifiers;
-   }
-
    public ClassInfo getDeclaringClass()
    {
       return declaringClass;
    }
    
+   // ModifierInfo implementation -----------------------------------
+   
+   public int getModifiers()
+   {
+      return modifiers;
+   }
+   
+   public boolean isStatic()
+   {
+      return Modifier.isStatic(modifiers);
+   }
+   
+   public boolean isPublic()
+   {
+      return Modifier.isPublic(modifiers);
+   }
+
    // JBossObject overrides -----------------------------------------
    
    protected void toString(StringBuffer buffer)

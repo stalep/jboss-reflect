@@ -6,6 +6,7 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import org.jboss.reflect.AnnotationValue;
@@ -148,16 +149,25 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
    {
       return exceptionTypes;
    }
-
-   /**
-    * Get the constructor modifier
-    * 
-    * @return the constructor modifier
-    */
+   
+   // ModifierInfo implementation -----------------------------------
+   
    public int getModifiers()
    {
       return modifiers;
    }
+   
+   public boolean isStatic()
+   {
+      return Modifier.isStatic(modifiers);
+   }
+   
+   public boolean isPublic()
+   {
+      return Modifier.isPublic(modifiers);
+   }
+
+   // JBossObject overrides -----------------------------------------
    
    protected void toString(StringBuffer buffer)
    {

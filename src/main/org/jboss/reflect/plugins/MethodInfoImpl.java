@@ -6,6 +6,7 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import org.jboss.reflect.AnnotationValue;
@@ -166,17 +167,29 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    {
       return exceptionTypes;
    }
-
-   public int getModifiers()
-   {
-      return modifiers;
-   }
    
    public TypeInfo getReturnType()
    {
       return returnType;
    }
    
+   // ModifierInfo implementation -----------------------------------
+   
+   public int getModifiers()
+   {
+      return modifiers;
+   }
+   
+   public boolean isStatic()
+   {
+      return Modifier.isStatic(modifiers);
+   }
+   
+   public boolean isPublic()
+   {
+      return Modifier.isPublic(modifiers);
+   }
+
    // JBossObject overrides -----------------------------------------
    
    protected void toString(StringBuffer buffer)
