@@ -69,7 +69,7 @@ public class InheritableAnnotationHolder  implements AnnotatedInfo
             for (int i = 0; i < superHolder.allAnnotationsArray.length; i++)
             {
                AnnotationValue av = superHolder.allAnnotationsArray[i];
-               if (av.getAnnotationType().isAnnotationPresent(java.lang.annotation.Inherited.class.getName()))
+               if (av.getAnnotationType().isAnnotationPresent("java.lang.annotation.Inherited"));
                {
                   allAnnotations.put(av.getAnnotationType().getName(), av);
                }
