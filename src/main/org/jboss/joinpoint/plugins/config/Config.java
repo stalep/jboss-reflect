@@ -34,6 +34,9 @@ public class Config
    /** The log */
    protected static final Logger log = Logger.getLogger(Config.class);
    
+   /** No parameters */
+   private static final String[] NO_PARAMS_TYPES = new String[0];
+   
    // Attributes ----------------------------------------------------
    
    // Static --------------------------------------------------------
@@ -257,6 +260,9 @@ public class Config
     */
    public static MethodInfo findMethodInfo(ClassInfo classInfo, String name, String[] paramTypes) throws JoinpointException
    {
+      if (paramTypes == null)
+         paramTypes = NO_PARAMS_TYPES;
+      
       ClassInfo current = classInfo;
       while (current != null)
       {

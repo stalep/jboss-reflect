@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.util.JBossInterface;
 
 /**
  * A class adapter.<p>
@@ -41,7 +42,7 @@ import org.jboss.reflect.spi.ClassInfo;
  * 
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface ClassAdapter
+public interface ClassAdapter extends JBossInterface
 {
    // Constants -----------------------------------------------------
 
