@@ -11,14 +11,14 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface InterfaceInfo extends TypeInfo
+public class InterfaceInfo extends ClassInfo
 {
-   String getName();
+   public InterfaceInfo()
+   {
+   }
 
-   int getModifiers();
-
-   InterfaceInfo[] getInterfaces();
-
-   MethodInfo[] getDeclaredMethods();
-   MethodInfo[] getMethods();
+   public InterfaceInfo(String name, int modifiers, InterfaceInfo[] interfaces, MethodInfo[] methods, FieldInfo[] fields, AnnotationValue[] annotations)
+   {
+      super(name, modifiers, interfaces, methods, null, fields, null, annotations);
+   }
 }

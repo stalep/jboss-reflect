@@ -11,13 +11,66 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface FieldInfo extends AnnotatedInfo
+public class FieldInfo extends AnnotationHolder
 {
-   String getName();
+   protected String name;
+   protected TypeInfo type;
+   protected int modifiers;
+   protected ClassInfo declaringClass;
+   protected int hash = -1;
 
-   ClassInfo getType();
+   public FieldInfo()
+   {
+   }
 
-   int getModifiers();
+   public FieldInfo(AnnotationValue[] annotations, String name, TypeInfo type, int modifiers, ClassInfo declaringClass)
+   {
+      super(annotations);
+      this.name = name;
+      this.type = type;
+      this.modifiers = modifiers;
+      this.declaringClass = declaringClass;
+      calculateHash();
+   }
 
-   ClassInfo getDeclaringClass();
+   public String getName()
+   {
+      return name;
+   }
+
+   public TypeInfo getType()
+   {
+      return type;
+   }
+
+   public int getModifiers()
+   {
+      return modifiers;
+   }
+
+   public ClassInfo getDeclaringClass()
+   {
+      return declaringClass;
+   }
+
+   public boolean equals(Object o)
+   {
+      if (this == o) return true;
+      if (!(o instanceof FieldInfo)) return false;
+
+      final FieldInfo fieldInfo = (FieldInfo) o;
+
+      if (!declaringClass.equals(fieldInfo.declaringClass)) return false;
+      if (!name.equals(fieldInfo.name)) return false;
+
+      return true;
+   }
+
+   public void calculateHash()
+   {
+      int result;
+      result = name.hashCode();
+      result = 29 * result + declaringClass.hashCode();
+      hash = result;
+   }
 }

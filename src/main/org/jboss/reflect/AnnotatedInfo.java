@@ -14,7 +14,6 @@ package org.jboss.reflect;
 public interface AnnotatedInfo
 {
    AnnotationValue[] getAnnotations();
-   AnnotationValue[] getDeclaredAnnotations();
    AnnotationValue getAnnotation(String name);
    boolean isAnnotationPresent(String name);
 }

@@ -11,7 +11,39 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface PrimitiveValue extends Value
+public class PrimitiveValue implements Value
 {
-   String getValue();
+   protected String value;
+   protected PrimitiveInfo type;
+
+   public String getValue()
+   {
+      return value;
+   }
+
+   public TypeInfo getType()
+   {
+      return type;
+   }
+
+   public boolean equals(Object o)
+   {
+      if (this == o) return true;
+      if (!(o instanceof PrimitiveValue)) return false;
+
+      final PrimitiveValue primitiveValue = (PrimitiveValue) o;
+
+      if (!type.equals(primitiveValue.type)) return false;
+      if (!value.equals(primitiveValue.value)) return false;
+
+      return true;
+   }
+
+   public int hashCode()
+   {
+      int result;
+      result = value.hashCode();
+      result = 29 * result + type.hashCode();
+      return result;
+   }
 }
