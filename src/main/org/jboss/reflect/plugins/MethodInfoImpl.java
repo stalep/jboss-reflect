@@ -75,7 +75,7 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       else 
          this.parameterTypes = parameterTypes;
       if (exceptionTypes == null)
-         this.exceptionTypes = MethodInfoImpl.NO_EXCEPTIONS;
+         this.exceptionTypes = MethodInfo.NO_EXCEPTIONS;
       else
          this.exceptionTypes = exceptionTypes;
       this.modifiers = modifiers;

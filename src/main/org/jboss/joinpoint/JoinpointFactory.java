@@ -6,11 +6,6 @@
  */
 package org.jboss.joinpoint;
 
-import org.jboss.joinpoint.ConstructorJoinpoint;
-import org.jboss.joinpoint.FieldGetJoinpoint;
-import org.jboss.joinpoint.FieldSetJoinpoint;
-import org.jboss.joinpoint.JoinpointException;
-import org.jboss.joinpoint.MethodJoinpoint;
 
 /**
  * A join point factory.

@@ -7,9 +7,8 @@
 package org.jboss.beans.info.plugins.introspection;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+
 import org.jboss.logging.Logger;
 
 // TODO Review

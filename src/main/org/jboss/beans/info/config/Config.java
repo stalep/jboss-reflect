@@ -7,10 +7,7 @@
 package org.jboss.beans.info.config;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.jboss.beans.info.spi.AttributeInfo;
@@ -18,7 +15,6 @@ import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.ConstructorInfo;
 import org.jboss.beans.info.spi.MethodInfo;
 import org.jboss.beans.info.spi.ParameterInfo;
-import org.jboss.beans.info.spi.TypeInfo;
 import org.jboss.container.plugins.joinpoint.bean.ConstructorJoinPoint;
 import org.jboss.container.plugins.joinpoint.bean.MethodJoinPoint;
 import org.jboss.container.plugins.joinpoint.bean.SetterJoinPoint;
@@ -237,7 +233,6 @@ public class Config
          log.trace("Get attribute setter join point info=" + info + " value=" + value);
       
       SetterJoinPoint joinPoint = findAttributeSetter(trace, info);
-      TypeInfo type = info.getType();
       joinPoint.setValue(value);
       return joinPoint;
    }

@@ -6,7 +6,6 @@
  */
 package org.jboss.reflect;
 
-import java.util.HashMap;
 
 /**
  * Interface info

@@ -6,8 +6,6 @@
  */
 package org.jboss.reflect.plugins;
 
-import java.util.HashMap;
-
 import org.jboss.reflect.AnnotationValue;
 import org.jboss.reflect.InterfaceInfo;
 

@@ -7,15 +7,8 @@
 package org.jboss.reflect.plugins.introspection;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import org.jboss.reflect.ClassInfo;
-import org.jboss.reflect.ConstructorInfo;
-import org.jboss.reflect.FieldInfo;
-import org.jboss.reflect.MethodInfo;
-import org.jboss.reflect.TypeInfo;
-import org.jboss.reflect.TypeInfoFactory;
 import org.jboss.reflect.plugins.ConstructorInfoImpl;
 
 /**

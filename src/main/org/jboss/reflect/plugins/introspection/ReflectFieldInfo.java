@@ -9,7 +9,6 @@ package org.jboss.reflect.plugins.introspection;
 import java.lang.reflect.Field;
 
 import org.jboss.reflect.ClassInfo;
-import org.jboss.reflect.FieldInfo;
 import org.jboss.reflect.TypeInfoFactory;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 
