@@ -308,7 +308,7 @@ public class Config
          return false;
       for (int i = 0; i < typeNames.length; ++i)
       {
-         if (typeNames[i].equals(typeInfos[i].getName()) == false)
+         if (typeNames[i] != null && typeNames[i].equals(typeInfos[i].getName()) == false)
             return false;
       }
       return true;
