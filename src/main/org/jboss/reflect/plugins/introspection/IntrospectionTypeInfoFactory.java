@@ -6,7 +6,6 @@
  */
 package org.jboss.reflect.plugins.introspection;
 
-import java.lang.ref.SoftReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -24,14 +23,16 @@ import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.InterfaceInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
-import org.jboss.util.CollectionsFactory;
+import org.jboss.util.WeakClassCache;
 
 /**
  * An introspection type factory.
  *
+ * FIXME: use lazy loading to avoid reading the entire class model
+ *              needs changes to the classinfo model to use interfaces
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class IntrospectionTypeInfoFactory implements TypeInfoFactory
+public class IntrospectionTypeInfoFactory extends WeakClassCache implements TypeInfoFactory
 {
    // Constants -----------------------------------------------------
 
@@ -206,27 +207,7 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
       if (primitive != null)
          return primitive;
       
-      Map classLoaderCache = getClassLoaderCache(clazz.getClassLoader());
-
-      SoftReference soft = (SoftReference) classLoaderCache.get(clazz.getName());
-      if (soft != null)
-      {
-         TypeInfo info = (TypeInfo) soft.get();
-         if (info != null)
-            return info;
-      }
-
-      ClassInfoImpl result;
-      if (clazz.isInterface())
-         result = new InterfaceInfoImpl(clazz.getName());
-      else
-         result = new ClassInfoImpl(clazz.getName());
-      result.setType(clazz);
-      soft = new SoftReference(result);
-      classLoaderCache.put(clazz.getName(), soft);
-      
-      generateTypeInfo(clazz, result);
-      return result;
+      return (TypeInfo) get(clazz);
    }
    
    public TypeInfo getTypeInfo(String name, ClassLoader cl) throws ClassNotFoundException
@@ -235,29 +216,27 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
       return getTypeInfo(clazz);
    }
 
+   // WeakClassCache overrides --------------------------------------
+   
+   protected Object instantiate(Class clazz)
+   {
+      ClassInfoImpl result;
+      if (clazz.isInterface())
+         result = new InterfaceInfoImpl(clazz.getName());
+      else
+         result = new ClassInfoImpl(clazz.getName());
+      result.setType(clazz);
+      return result;
+   }
+
+   protected void generate(Class clazz, Object result)
+   {
+      generateTypeInfo(clazz, (ClassInfoImpl) result);
+   }
+   
    // Package protected ---------------------------------------------
 
    // Protected -----------------------------------------------------
-   
-   /**
-    * Get the cache for the classloader
-    * 
-    * @param cl the classloader
-    * @return the map
-    */
-   protected Map getClassLoaderCache(ClassLoader cl)
-   {
-      synchronized (cache)
-      {
-         Map result = (Map) cache.get(cl);
-         if (result == null)
-         {
-            result = CollectionsFactory.createMap();
-            cache.put(cl, result);
-         }
-         return result;
-      }
-   }
    
    // Private -------------------------------------------------------
    

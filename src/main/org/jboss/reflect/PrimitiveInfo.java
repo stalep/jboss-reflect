@@ -99,7 +99,7 @@ public class PrimitiveInfo implements TypeInfo, Serializable
     * Create a new primitive info
     * 
     * @param name the name
-    * @param oridinal the oridinal
+    * @param ordinal the oridinal
     * @param type the class
     */
    protected PrimitiveInfo(String name, int ordinal, Class type)

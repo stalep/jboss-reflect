@@ -210,7 +210,7 @@ public class Config
    /**
     * Find field info
     * 
-    * @param fieldInfo the field info
+    * @param classInfo the class info
     * @param name the field name
     * @return the field info
     * @throws JoinpointException when no such field
