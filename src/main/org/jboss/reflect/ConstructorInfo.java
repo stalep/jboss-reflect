@@ -14,8 +14,8 @@ package org.jboss.reflect;
 public class ConstructorInfo extends AnnotationHolder
 {
    protected ClassInfo declaringClass;
-   protected TypeInfo parameterTypes;
-   protected ClassInfo exceptionTypes;
+   protected TypeInfo[] parameterTypes;
+   protected ClassInfo[] exceptionTypes;
    protected int modifiers;
    protected int hash;
 
@@ -23,13 +23,13 @@ public class ConstructorInfo extends AnnotationHolder
    {
    }
 
-   public ConstructorInfo(AnnotationValue[] annotations, ClassInfo declaringClass, TypeInfo parameterTypes, ClassInfo exceptionTypes, int modifiers)
+   public ConstructorInfo(AnnotationValue[] annotations, TypeInfo[] parameterTypes, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
    {
       super(annotations);
-      this.declaringClass = declaringClass;
       this.parameterTypes = parameterTypes;
       this.exceptionTypes = exceptionTypes;
       this.modifiers = modifiers;
+      this.declaringClass = declaring;
       calculateHash();
    }
 
@@ -38,12 +38,12 @@ public class ConstructorInfo extends AnnotationHolder
       return declaringClass;
    }
 
-   public TypeInfo getParameterTypes()
+   public TypeInfo[] getParameterTypes()
    {
       return parameterTypes;
    }
 
-   public ClassInfo getExceptionTypes()
+   public ClassInfo[] getExceptionTypes()
    {
       return exceptionTypes;
    }
@@ -66,11 +66,18 @@ public class ConstructorInfo extends AnnotationHolder
       return true;
    }
 
+
    public void calculateHash()
    {
       int result;
       result = declaringClass.hashCode();
-      result = 29 * result + (parameterTypes != null ? parameterTypes.hashCode() : 0);
+      if (parameterTypes != null)
+      {
+         for (int i = 0; i < parameterTypes.length; i++)
+         {
+            result = 29 * result + parameterTypes[i].hashCode();
+         }
+      }
       hash = result;
    }
 

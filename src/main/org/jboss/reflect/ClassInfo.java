@@ -28,17 +28,50 @@ public class ClassInfo extends InheritableAnnotationHolder implements TypeInfo
    {
    }
 
-   public ClassInfo(String name, int modifiers, InterfaceInfo[] interfaces, MethodInfo[] methods,
-                    ConstructorInfo[] constructors, FieldInfo[] fields, ClassInfo superclass, AnnotationValue[] annotations)
+   public ClassInfo(String name, int modifiers, InterfaceInfo[] interfaces,
+                    ClassInfo superclass, AnnotationValue[] annotations)
    {
       super(annotations);
       this.name = name;
       this.modifiers = modifiers;
       this.interfaces = interfaces;
-      this.methods = methods;
-      this.constructors = constructors;
-      this.fields = fields;
       this.superclass = superclass;
+   }
+
+   public void setDeclaredMethods(MethodInfo[] methods)
+   {
+      this.methods = methods;
+      if (methods != null)
+      {
+         for (int i = 0; i < methods.length; i++)
+         {
+            methods[i].declaringClass = this;
+         }
+      }
+   }
+
+   public void setDeclaredConstructors(ConstructorInfo[] constructors)
+   {
+      this.constructors = constructors;
+      if (constructors != null)
+      {
+         for (int i = 0; i < constructors.length; i++)
+         {
+            constructors[i].declaringClass = this;
+         }
+      }
+   }
+
+   public void setDeclaredFields(FieldInfo[] fields)
+   {
+      this.fields = fields;
+      if (fields != null)
+      {
+         for (int i = 0; i < fields.length; i++)
+         {
+            fields[i].declaringClass = this;
+         }
+      }
    }
 
    public String getName()

@@ -20,7 +20,7 @@ public class EnumInfo extends ClassInfo
 
    public EnumInfo(String name, int modifiers, AnnotationValue[] annotations, EnumConstantInfo[] enumConstants)
    {
-      super(name, modifiers, null, null, null, null, null, annotations);
+      super(name, modifiers, null, null, annotations);
       this.enumConstants = enumConstants;
       for (int i = 0; i < enumConstants.length; i++)
       {

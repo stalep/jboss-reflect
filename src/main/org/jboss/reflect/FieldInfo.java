@@ -23,13 +23,13 @@ public class FieldInfo extends AnnotationHolder
    {
    }
 
-   public FieldInfo(AnnotationValue[] annotations, String name, TypeInfo type, int modifiers, ClassInfo declaringClass)
+   public FieldInfo(AnnotationValue[] annotations, String name, TypeInfo type, int modifiers, ClassInfo declaring)
    {
       super(annotations);
       this.name = name;
       this.type = type;
       this.modifiers = modifiers;
-      this.declaringClass = declaringClass;
+      this.declaringClass = declaring;
       calculateHash();
    }
 

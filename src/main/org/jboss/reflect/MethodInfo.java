@@ -25,14 +25,15 @@ public class MethodInfo extends AnnotationHolder
    {
    }
 
-   public MethodInfo(AnnotationValue[] annotations, String name, ClassInfo declaringClass, TypeInfo[] parameterTypes, ClassInfo[] exceptionTypes, int modifiers)
+   public MethodInfo(AnnotationValue[] annotations, String name, TypeInfo returnType, TypeInfo[] parameterTypes, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
    {
       super(annotations);
       this.name = name;
-      this.declaringClass = declaringClass;
       this.parameterTypes = parameterTypes;
       this.exceptionTypes = exceptionTypes;
       this.modifiers = modifiers;
+      this.declaringClass = declaring;
+      this.returnType = returnType;
       calculateHash();
    }
 
@@ -88,8 +89,13 @@ public class MethodInfo extends AnnotationHolder
       int result;
       result = name.hashCode();
       result = 29 * result + declaringClass.hashCode();
-      result = 29 * result + (parameterTypes != null ? parameterTypes.hashCode() : 0);
-      result = 29 * result + returnType.hashCode();
+      if (parameterTypes != null)
+      {
+         for (int i = 0; i < parameterTypes.length; i++)
+         {
+            result = 29 * result + parameterTypes[i].hashCode();
+         }
+      }
       hash = result;
    }
 

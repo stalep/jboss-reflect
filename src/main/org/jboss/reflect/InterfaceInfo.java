@@ -17,8 +17,8 @@ public class InterfaceInfo extends ClassInfo
    {
    }
 
-   public InterfaceInfo(String name, int modifiers, InterfaceInfo[] interfaces, MethodInfo[] methods, FieldInfo[] fields, AnnotationValue[] annotations)
+   public InterfaceInfo(String name, int modifiers, InterfaceInfo[] interfaces, AnnotationValue[] annotations)
    {
-      super(name, modifiers, interfaces, methods, null, fields, null, annotations);
+      super(name, modifiers, interfaces, null, annotations);
    }
 }

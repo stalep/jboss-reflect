@@ -11,12 +11,12 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public class PrimitiveValue implements Value
+public class StringValue implements Value
 {
    protected String value;
-   protected PrimitiveInfo type;
+   protected TypeInfo type;
 
-   public PrimitiveValue(String value, PrimitiveInfo type)
+   public StringValue(String value, TypeInfo type)
    {
       this.value = value;
       this.type = type;
@@ -35,9 +35,9 @@ public class PrimitiveValue implements Value
    public boolean equals(Object o)
    {
       if (this == o) return true;
-      if (!(o instanceof PrimitiveValue)) return false;
+      if (!(o instanceof StringValue)) return false;
 
-      final PrimitiveValue primitiveValue = (PrimitiveValue) o;
+      final StringValue primitiveValue = (StringValue) o;
 
       if (!type.equals(primitiveValue.type)) return false;
       if (!value.equals(primitiveValue.value)) return false;

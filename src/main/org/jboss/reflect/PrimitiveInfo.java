@@ -8,6 +8,7 @@ package org.jboss.reflect;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * comment
@@ -65,6 +66,26 @@ public class PrimitiveInfo implements TypeInfo, Serializable
    public static final PrimitiveInfo SHORT = new PrimitiveInfo("short", 7);
    public static final PrimitiveInfo VOID = new PrimitiveInfo("void", 8);
    private static final PrimitiveInfo[] values = {BOOLEAN, BYTE, CHAR, DOUBLE, FLOAT, INT, LONG, SHORT, VOID};
+   private static HashMap map = new HashMap();
+
+   static
+   {
+      map.put("boolean", BOOLEAN);
+      map.put("byte", BYTE);
+      map.put("char", CHAR);
+      map.put("double", DOUBLE);
+      map.put("float", FLOAT);
+      map.put("int", INT);
+      map.put("long", LONG);
+      map.put("short", SHORT);
+      map.put("void", VOID);
+
+   }
+
+   public static PrimitiveInfo valueOf(String name)
+   {
+      return (PrimitiveInfo)map.get(name);
+   }
 
    Object readResolve() throws ObjectStreamException
    {

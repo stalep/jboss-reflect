@@ -13,10 +13,8 @@ import java.util.HashMap;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public class AnnotationInfo extends InheritableAnnotationHolder implements AnnotatedInfo, TypeInfo
+public class AnnotationInfo extends InterfaceInfo
 {
-   protected String name;
-   protected int modifiers;
    protected AnnotationAttribute[] attributes;
    protected HashMap attributeMap;
 
@@ -24,11 +22,13 @@ public class AnnotationInfo extends InheritableAnnotationHolder implements Annot
    {
    }
 
-   public AnnotationInfo(String name, int modifiers, AnnotationAttribute[] attributes, AnnotationValue[] annotations)
+   public AnnotationInfo(String name, int modifiers, AnnotationValue[] annotations)
    {
-      super(annotations);
-      this.name = name;
-      this.modifiers = modifiers;
+      super(name, modifiers, null, annotations);
+   }
+
+   public void setAttributes(AnnotationAttribute[] attributes)
+   {
       this.attributes = attributes;
       if (attributes != null && attributes.length > 0)
       {
@@ -39,9 +39,7 @@ public class AnnotationInfo extends InheritableAnnotationHolder implements Annot
             attributeMap.put(attributes[i].getName(), attributes[i]);
          }
       }
-      
    }
-
 
    public String getName()
    {
@@ -58,7 +56,7 @@ public class AnnotationInfo extends InheritableAnnotationHolder implements Annot
       return attributes;
    }
 
-   AnnotationAttribute getAttribute(String name)
+   public AnnotationAttribute getAttribute(String name)
    {
       if (attributeMap == null) return null;
       return (AnnotationAttribute)attributeMap.get(name);
