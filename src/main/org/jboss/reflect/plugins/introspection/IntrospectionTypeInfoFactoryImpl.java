@@ -21,6 +21,7 @@ import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.util.WeakClassCache;
 
 /**
@@ -67,6 +68,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
             info.setDeclaredConstructors(getConstructors(clazz, info));
          }
       }
+      AnnotationValue[] annotations = getAnnotations(clazz);
+      info.setupAnnotations(annotations);
       info.setDeclaredFields(getFields(clazz, info));
       info.setDeclaredMethods(getMethods(clazz, info));
       info.setInterfaces(getInterfaces(clazz));
@@ -74,7 +77,12 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       if (trace)
          log.trace("generated typeInfo " + info);
    }
-   
+
+   public AnnotationValue[] getAnnotations(Object obj)
+   {
+      return new AnnotationValue[0];
+   }
+
    /**
     * Get the constructors
     * 
@@ -91,7 +99,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       ConstructorInfoImpl[] infos = new ConstructorInfoImpl[constructors.length];
       for (int i = 0; i < constructors.length; ++i)
       {
-         infos[i] = new ConstructorInfoImpl(null, getTypeInfos(constructors[i].getParameterTypes()), getClassInfos(constructors[i].getExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
+         AnnotationValue[] annotations = getAnnotations(constructors[i]);
+         infos[i] = new ConstructorInfoImpl(annotations, getTypeInfos(constructors[i].getParameterTypes()), getClassInfos(constructors[i].getExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
          infos[i].setConstructor(constructors[i]);
       }
       return infos;
@@ -113,7 +122,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       FieldInfoImpl[] infos = new FieldInfoImpl[fields.length];
       for (int i = 0; i < fields.length; ++i)
       {
-         infos[i] = new FieldInfoImpl(null, fields[i].getName(), getTypeInfo(fields[i].getType()), fields[i].getModifiers(), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
+         AnnotationValue[] annotations = getAnnotations(fields[i]);
+         infos[i] = new FieldInfoImpl(annotations, fields[i].getName(), getTypeInfo(fields[i].getType()), fields[i].getModifiers(), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
          infos[i].setField(fields[i]);
       }
       return infos;
@@ -135,7 +145,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       MethodInfoImpl[] infos = new MethodInfoImpl[methods.length];
       for (int i = 0; i < methods.length; ++i)
       {
-         infos[i] = new MethodInfoImpl(null, methods[i].getName(), getTypeInfo(methods[i].getReturnType()), getTypeInfos(methods[i].getParameterTypes()), getClassInfos(methods[i].getExceptionTypes()), methods[i].getModifiers(), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
+         AnnotationValue[] annotations = getAnnotations(methods[i]);
+         infos[i] = new MethodInfoImpl(annotations, methods[i].getName(), getTypeInfo(methods[i].getReturnType()), getTypeInfos(methods[i].getParameterTypes()), getClassInfos(methods[i].getExceptionTypes()), methods[i].getModifiers(), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
          infos[i].setMethod(methods[i]);
       }
       return infos;
