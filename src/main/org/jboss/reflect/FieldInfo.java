@@ -11,7 +11,7 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public class FieldInfo extends AnnotationHolder
+public class FieldInfo extends AnnotationHolder implements MemberInfo
 {
    protected String name;
    protected TypeInfo type;

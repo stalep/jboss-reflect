@@ -14,14 +14,12 @@ package org.jboss.reflect;
 public class EnumConstantInfo
 {
    protected String name;
-   protected int ordinal;
    protected EnumInfo declaring;
    protected int hash = -1;
 
-   public EnumConstantInfo(String name, int ordinal, EnumInfo declaring)
+   public EnumConstantInfo(String name, EnumInfo declaring)
    {
       this.name = name;
-      this.ordinal = ordinal;
       this.declaring = declaring;
       calculateHash();
    }
@@ -29,11 +27,6 @@ public class EnumConstantInfo
    public String getName()
    {
       return name;
-   }
-
-   public int getOrdinal()
-   {
-      return ordinal;
    }
 
    public EnumInfo getDeclaring()
@@ -48,7 +41,7 @@ public class EnumConstantInfo
 
       final EnumConstantInfo enumConstantInfo = (EnumConstantInfo) o;
 
-      if (ordinal != enumConstantInfo.ordinal) return false;
+      if (!name.equals(enumConstantInfo.name)) return false;
       if (!declaring.equals(enumConstantInfo.declaring)) return false;
 
       return true;
@@ -59,7 +52,7 @@ public class EnumConstantInfo
    public void calculateHash()
    {
       int result;
-      result = ordinal;
+      result = name.hashCode();
       result = 29 * result + declaring.hashCode();
       hash = result;
    }

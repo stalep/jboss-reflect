@@ -30,7 +30,7 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       return name;
    }
 
-   public String name()
+   public String getName()
    {
       return name;
    }

@@ -78,4 +78,5 @@ public class AnnotationInfo extends InterfaceInfo
    {
       return name.hashCode();
    }
+
 }

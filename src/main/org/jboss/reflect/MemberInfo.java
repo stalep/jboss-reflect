@@ -11,7 +11,7 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public interface TypeInfo
+public interface MemberInfo
 {
-   String getName();
+   ClassInfo getDeclaringClass();
 }

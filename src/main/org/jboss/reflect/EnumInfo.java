@@ -18,9 +18,13 @@ public class EnumInfo extends ClassInfo
    protected EnumConstantInfo[] enumConstants;
    protected HashMap constants = new HashMap();
 
-   public EnumInfo(String name, int modifiers, AnnotationValue[] annotations, EnumConstantInfo[] enumConstants)
+   public EnumInfo(String name, int modifiers)
    {
-      super(name, modifiers, null, null, annotations);
+      super(name, modifiers, null, null, null);
+   }
+
+   public void setEnumConstants(EnumConstantInfo[] enumConstants)
+   {
       this.enumConstants = enumConstants;
       for (int i = 0; i < enumConstants.length; i++)
       {

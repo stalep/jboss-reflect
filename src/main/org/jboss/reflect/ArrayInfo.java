@@ -43,6 +43,11 @@ public class ArrayInfo extends ClassInfo
 
    public int hashCode() { return hash; }
 
+   public String getName()
+   {
+      return componentType.getName() + "[]";
+   }
+
    public void calculateHash()
    {
       int result = super.hashCode();

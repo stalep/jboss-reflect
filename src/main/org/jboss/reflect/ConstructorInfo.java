@@ -11,7 +11,7 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public class ConstructorInfo extends AnnotationHolder
+public class ConstructorInfo extends AnnotationHolder implements MemberInfo
 {
    protected ClassInfo declaringClass;
    protected TypeInfo[] parameterTypes;
@@ -26,8 +26,10 @@ public class ConstructorInfo extends AnnotationHolder
    public ConstructorInfo(AnnotationValue[] annotations, TypeInfo[] parameterTypes, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
    {
       super(annotations);
-      this.parameterTypes = parameterTypes;
-      this.exceptionTypes = exceptionTypes;
+      if (parameterTypes == null) this.parameterTypes = MethodInfo.NO_PARAMS;
+      else this.parameterTypes = parameterTypes;
+      if (exceptionTypes == null) this.exceptionTypes = MethodInfo.NO_EXCEPTIONS;
+      else this.exceptionTypes = exceptionTypes;
       this.modifiers = modifiers;
       this.declaringClass = declaring;
       calculateHash();

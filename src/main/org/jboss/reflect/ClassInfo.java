@@ -124,22 +124,22 @@ public class ClassInfo extends InheritableAnnotationHolder implements TypeInfo
       return null;
    }
 
-   MethodInfo[] getDeclaredMethods()
+   public MethodInfo[] getDeclaredMethods()
    {
       return methods;
    }
 
-   FieldInfo[] getDeclaredFields()
+   public FieldInfo[] getDeclaredFields()
    {
       return fields;
    }
 
-   FieldInfo getDeclaredField(String name)
+   public FieldInfo getDeclaredField(String name)
    {
       return (FieldInfo) fieldMap.get(name);
    }
 
-   ConstructorInfo[] getDeclaredConstructors()
+   public ConstructorInfo[] getDeclaredConstructors()
    {
       return constructors;
    }

@@ -11,7 +11,7 @@ package org.jboss.reflect;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  */
-public class MethodInfo extends AnnotationHolder
+public class MethodInfo extends AnnotationHolder implements MemberInfo
 {
    protected String name;
    protected ClassInfo declaringClass;
@@ -21,6 +21,9 @@ public class MethodInfo extends AnnotationHolder
    protected TypeInfo returnType;
    protected int hash;
 
+   public static final TypeInfo[] NO_PARAMS = {};
+   public static final ClassInfo[] NO_EXCEPTIONS = {};
+
    public MethodInfo()
    {
    }
@@ -29,8 +32,12 @@ public class MethodInfo extends AnnotationHolder
    {
       super(annotations);
       this.name = name;
-      this.parameterTypes = parameterTypes;
-      this.exceptionTypes = exceptionTypes;
+
+      if (parameterTypes == null) this.parameterTypes = NO_PARAMS;
+      else this.parameterTypes = parameterTypes;
+      if (exceptionTypes == null) this.exceptionTypes = NO_EXCEPTIONS;
+      else this.exceptionTypes = exceptionTypes;
+
       this.modifiers = modifiers;
       this.declaringClass = declaring;
       this.returnType = returnType;
