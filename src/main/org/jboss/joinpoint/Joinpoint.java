@@ -25,7 +25,7 @@ public interface Joinpoint
     * Make a copy of the joinpoint
     * @return
     */
-   Joinpoint clone();
+   Object clone();
 
    /**
     * A human readable version of the join point
