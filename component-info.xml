@@ -1,0 +1,16 @@
+<project name="container-component-info">
+   <!-- ============================================================ -->
+   <!-- Container                                                    -->
+   <!-- ============================================================ -->
+
+   <component id="container"
+              module="container"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jboss-container.jar"/>
+      <export>
+         <include input="jboss-container.jar"/>
+      </export>
+   </component>
+
+</project>

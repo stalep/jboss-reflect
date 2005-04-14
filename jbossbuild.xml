@@ -15,8 +15,9 @@
          default="build" 
          basedir="."
 >
-   <!-- The main build -->
-   <import file="../jbossas/build.xml"/>
+
+   <import file="../tools/etc/jbossbuild/tasks.xml"/>
+   <import file="component-info.xml"/>
 
    <!-- =============================================================== -->
    <!-- The component definition                                        -->
@@ -29,15 +30,15 @@
       <!-- ============================================================ -->
 
       <source id="main">
-         <include input="common-project"/>
-         <include input="concurrent"/>
+         <include component="common"/>
+         <include component="oswego-concurrent"/>
       </source>
 
       <source id="tests" test="org/jboss/test/**/*TestCase.java">
          <include input="main"/>
-         <include input="junit"/>
-         <include input="common-project"/>
-         <include input="test-project"/>
+         <include component="junit-junit"/>
+         <include component="common"/>
+         <include component="test"/>
       </source>
 
       <!-- ============================================================ -->
