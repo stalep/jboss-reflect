@@ -7,6 +7,7 @@
 package org.jboss.joinpoint.plugins.config;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.joinpoint.spi.FieldGetJoinpoint;
@@ -20,6 +21,7 @@ import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.beans.metadata.spi.BeanMetaData;
 
 /**
  * Config utilities.
@@ -47,12 +49,13 @@ public class Config
     * @param jpf the join point factory
     * @param paramTypes the parameter types
     * @param params the parameters
+    * @param beanMetaData
     * @return the instantiated object
     * @throws Throwable for any error
     */
-   public static Object instantiate(JoinpointFactory jpf, String[] paramTypes, Object[] params) throws Throwable
+   public static Object instantiate(JoinpointFactory jpf, String[] paramTypes, Object[] params, BeanMetaData beanMetaData) throws Throwable
    {
-      ConstructorJoinpoint joinpoint = getConstructorJoinpoint(jpf, paramTypes, params);
+      ConstructorJoinpoint joinpoint = getConstructorJoinpoint(jpf, paramTypes, params, beanMetaData);
       return joinpoint.dispatch();
    }
 
@@ -108,17 +111,20 @@ public class Config
     * @param jpf the join point factory
     * @param paramTypes the parameter types
     * @param params the parameters
+    * @param beanMetaData
     * @return the Joinpoint
     * @throws Throwable for any error
     */
-   public static ConstructorJoinpoint getConstructorJoinpoint(JoinpointFactory jpf, String[] paramTypes, Object[] params) throws Throwable
+   public static ConstructorJoinpoint getConstructorJoinpoint(JoinpointFactory jpf, String[] paramTypes, Object[] params, BeanMetaData beanMetaData) throws Throwable
    {
       boolean trace = log.isTraceEnabled();
       if (trace)
          log.trace("Get constructor Joinpoint jpf=" + jpf + " paramTypes=" + Arrays.asList(paramTypes) + " params=" + Arrays.asList(params));
 
       ConstructorInfo constructorInfo = findConstructorInfo(jpf.getClassInfo(), paramTypes);
-      ConstructorJoinpoint joinpoint = jpf.getConstructorJoinpoint(constructorInfo);
+      Map metadata = null;
+      if (beanMetaData != null) metadata = beanMetaData.getMetaData();
+      ConstructorJoinpoint joinpoint = jpf.getConstructorJoinpoint(constructorInfo, metadata);
       joinpoint.setArguments(params);
       return joinpoint;
    }

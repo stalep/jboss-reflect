@@ -7,6 +7,7 @@
 package org.jboss.classadapter.spi;
 
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
@@ -65,10 +66,11 @@ public interface ClassAdapter extends JBossInterface
 
    /**
     * Get the dependencies of this adapter
-    * 
-    * @return the dependencies List<Object names>
+    *
+    * @param metadata
+    * @return
     */
-   List getDependencies();
+   List getDependencies(Map metadata);
 
    /**
     * Get the Joinpoint Factory for this adapter.

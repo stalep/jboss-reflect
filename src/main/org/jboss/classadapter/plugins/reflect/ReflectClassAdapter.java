@@ -7,6 +7,7 @@
 package org.jboss.classadapter.plugins.reflect;
 
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.joinpoint.plugins.reflect.ReflectJoinpointFactory;
@@ -58,7 +59,7 @@ public class ReflectClassAdapter extends JBossObject implements ClassAdapter
       return clone;
    }
 
-   public List getDependencies()
+   public List getDependencies(Map metadata)
    {
       return null;
    }

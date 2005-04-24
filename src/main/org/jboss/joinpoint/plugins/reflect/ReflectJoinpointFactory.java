@@ -6,6 +6,7 @@
  */
 package org.jboss.joinpoint.plugins.reflect;
 
+import java.util.Map;
 import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.joinpoint.spi.FieldGetJoinpoint;
 import org.jboss.joinpoint.spi.FieldSetJoinpoint;
@@ -49,7 +50,7 @@ public class ReflectJoinpointFactory implements JoinpointFactory
       return classInfo;
    }
 
-   public ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo) throws JoinpointException
+   public ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo, Map metadata) throws JoinpointException
    {
       return new ReflectConstructorJoinPoint(constructorInfo);
    }
