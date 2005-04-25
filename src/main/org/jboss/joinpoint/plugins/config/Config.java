@@ -8,20 +8,18 @@ package org.jboss.joinpoint.plugins.config;
 
 import java.util.Arrays;
 import java.util.Map;
-
-import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.joinpoint.spi.FieldGetJoinpoint;
 import org.jboss.joinpoint.spi.FieldSetJoinpoint;
 import org.jboss.joinpoint.spi.JoinpointException;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.joinpoint.spi.MethodJoinpoint;
+import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.logging.Logger;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.beans.metadata.spi.BeanMetaData;
 
 /**
  * Config utilities.
@@ -53,15 +51,15 @@ public class Config
     * @return the instantiated object
     * @throws Throwable for any error
     */
-   public static Object instantiate(JoinpointFactory jpf, String[] paramTypes, Object[] params, BeanMetaData beanMetaData) throws Throwable
+   public static Object instantiate(JoinpointFactory jpf, String[] paramTypes, Object[] params, Map metadata) throws Throwable
    {
-      ConstructorJoinpoint joinpoint = getConstructorJoinpoint(jpf, paramTypes, params, beanMetaData);
+      ConstructorJoinpoint joinpoint = getConstructorJoinpoint(jpf, paramTypes, params, metadata);
       return joinpoint.dispatch();
    }
 
    /**
     * Configure a field
-    * 
+    *
     * @param object the object to configure
     * @param jpf the join point factory
     * @param name the name of the field
@@ -111,19 +109,17 @@ public class Config
     * @param jpf the join point factory
     * @param paramTypes the parameter types
     * @param params the parameters
-    * @param beanMetaData
+    * @param metadata
     * @return the Joinpoint
     * @throws Throwable for any error
     */
-   public static ConstructorJoinpoint getConstructorJoinpoint(JoinpointFactory jpf, String[] paramTypes, Object[] params, BeanMetaData beanMetaData) throws Throwable
+   public static ConstructorJoinpoint getConstructorJoinpoint(JoinpointFactory jpf, String[] paramTypes, Object[] params, Map metadata) throws Throwable
    {
       boolean trace = log.isTraceEnabled();
       if (trace)
          log.trace("Get constructor Joinpoint jpf=" + jpf + " paramTypes=" + Arrays.asList(paramTypes) + " params=" + Arrays.asList(params));
 
       ConstructorInfo constructorInfo = findConstructorInfo(jpf.getClassInfo(), paramTypes);
-      Map metadata = null;
-      if (beanMetaData != null) metadata = beanMetaData.getMetaData();
       ConstructorJoinpoint joinpoint = jpf.getConstructorJoinpoint(constructorInfo, metadata);
       joinpoint.setArguments(params);
       return joinpoint;
@@ -131,7 +127,7 @@ public class Config
 
    /**
     * Get a field get joinpoint
-    * 
+    *
     * @param object the object to configure
     * @param jpf the join point factory
     * @param name the name of the field
