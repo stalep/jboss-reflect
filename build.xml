@@ -88,6 +88,7 @@
     <!-- Tasks -->
     <!-- ===== -->
 
+    <property name="source.java" value="${module.source}/main:${module.source}/tests"/>
     <property name="jar.prefix" value="jboss-container"/>
 
     <call target="_default:task-init"/>
