@@ -287,10 +287,13 @@ public class Config
    private static MethodInfo locateMethodInfo(ClassInfo classInfo, String name, String[] paramTypes)
    {
       MethodInfo[] methods = classInfo.getDeclaredMethods();
-      for (int i = 0; i < methods.length; ++i)
+      if (methods != null)
       {
-         if (name.equals(methods[i].getName()) && equals(paramTypes, methods[i].getParameterTypes()))
-            return methods[i];
+         for (int i = 0; i < methods.length; ++i)
+         {
+            if (name.equals(methods[i].getName()) && equals(paramTypes, methods[i].getParameterTypes()))
+               return methods[i];
+         }
       }
       return null;
    }
