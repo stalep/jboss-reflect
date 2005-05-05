@@ -204,12 +204,16 @@ public class Config
    public static ConstructorInfo findConstructorInfo(ClassInfo classInfo, String[] paramTypes) throws JoinpointException
    {
       ConstructorInfo[] constructors = classInfo.getDeclaredConstructors();
-      for (int i = 0; i < constructors.length; ++i)
+      if (constructors != null)
       {
-         if (equals(paramTypes, constructors[i].getParameterTypes()))
-            return constructors[i];
+         for (int i = 0; i < constructors.length; ++i)
+         {
+            if (equals(paramTypes, constructors[i].getParameterTypes()))
+               return constructors[i];
+         }
+         throw new JoinpointException("Constructor not found " + classInfo.getName() + Arrays.asList(paramTypes) + " in " + Arrays.asList(constructors));
       }
-      throw new JoinpointException("Constructor not found " + Arrays.asList(paramTypes) + " in " + Arrays.asList(constructors));
+      throw new JoinpointException("Constructor not found " + classInfo.getName() + Arrays.asList(paramTypes) + " no constructors");
    }
    
    /**
@@ -243,10 +247,13 @@ public class Config
    private static FieldInfo locateFieldInfo(ClassInfo classInfo, String name)
    {
       FieldInfo[] fields = classInfo.getDeclaredFields();
-      for (int i = 0; i < fields.length; ++i)
+      if (fields != null)
       {
-         if (name.equals(fields[i].getName()))
-            return fields[i];
+         for (int i = 0; i < fields.length; ++i)
+         {
+            if (name.equals(fields[i].getName()))
+               return fields[i];
+         }
       }
       return null;
    }
