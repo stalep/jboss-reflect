@@ -56,8 +56,6 @@ public class ReflectClassAdapterFactory implements ClassAdapterFactory
       if (typeInfo instanceof ClassInfo == false)
          throw new IllegalArgumentException("Not a class " + typeInfo.getName());
       ClassInfo classInfo = (ClassInfo) typeInfo;
-      if (classInfo.isInterface())
-         throw new IllegalArgumentException("Interface not allowed " + typeInfo.getName());
       
       return new ReflectClassAdapter(classInfo);
    }
