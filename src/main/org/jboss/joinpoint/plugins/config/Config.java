@@ -184,7 +184,12 @@ public class Config
    {
       boolean trace = log.isTraceEnabled();
       if (trace)
-         log.trace("Get method Joinpoint jpf=" + jpf + " target=" + object + " name=" + name + " paramTypes=" + Arrays.asList(paramTypes));
+      {
+         if (paramTypes != null)
+            log.trace("Get method Joinpoint jpf=" + jpf + " target=" + object + " name=" + name + " paramTypes=" + Arrays.asList(paramTypes));
+         else
+            log.trace("Get method Joinpoint jpf=" + jpf + " target=" + object + " name=" + name + " paramTypes=()");
+      }
 
       MethodInfo methodInfo = findMethodInfo(jpf.getClassInfo(), name, paramTypes);
       MethodJoinpoint joinpoint = jpf.getMethodJoinpoint(methodInfo);
