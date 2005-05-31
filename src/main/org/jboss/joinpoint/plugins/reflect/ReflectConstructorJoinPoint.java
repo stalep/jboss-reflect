@@ -6,7 +6,7 @@
  */
 package org.jboss.joinpoint.plugins.reflect;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Constructor;
 
 import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.reflect.spi.ConstructorInfo;
@@ -78,13 +78,15 @@ public class ReflectConstructorJoinPoint implements ConstructorJoinpoint
 
    public Object dispatch() throws Throwable
    {
+      Constructor constructor = constructorInfo.getConstructor();
       try
       {
-         return constructorInfo.getConstructor().newInstance(arguments);
+         return constructor.newInstance(arguments);
       }
-      catch (InvocationTargetException e)
+      catch (Throwable t)
       {
-         throw e.getTargetException();
+         ReflectJoinpointFactory.handleErrors("new", constructor.getParameterTypes(), arguments, t);
+         throw new UnreachableStatementException();
       }
    }
    

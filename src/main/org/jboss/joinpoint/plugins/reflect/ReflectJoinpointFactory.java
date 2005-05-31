@@ -6,7 +6,10 @@
  */
 package org.jboss.joinpoint.plugins.reflect;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Map;
+
 import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.joinpoint.spi.FieldGetJoinpoint;
 import org.jboss.joinpoint.spi.FieldSetJoinpoint;
@@ -25,25 +28,41 @@ import org.jboss.reflect.spi.MethodInfo;
  */
 public class ReflectJoinpointFactory implements JoinpointFactory
 {
-   // Constants -----------------------------------------------------
-   
-   // Attributes ----------------------------------------------------
-
    /** The class info */
    protected ClassInfo classInfo;
+
+   public static void handleErrors(String context, Class[] parameters, Object[] arguments, Throwable t) throws Throwable
+   {
+      if (t instanceof IllegalArgumentException)
+      {
+         ArrayList expected = new ArrayList();
+         Class[] parameterTypes = parameters;
+         for (int i = 0; i < parameterTypes.length; ++i)
+            expected.add(parameterTypes[i].getName());
+         ArrayList actual = new ArrayList();
+         if (arguments != null)
+         {
+            for (int i = 0; i < arguments.length; ++i)
+            {
+               if (arguments[i] == null)
+                  actual.add(null);
+               else
+                  actual.add(arguments.getClass().getName());
+            }
+         }
+         throw new IllegalArgumentException("Wrong arguments. " + context + " expected=" + expected + " actual=" + actual);
+      }
+      else if (t instanceof InvocationTargetException)
+      {
+         throw ((InvocationTargetException) t).getTargetException();
+      }
+      throw t;
+   }
    
-   // Static --------------------------------------------------------
-
-   // Constructors --------------------------------------------------
-
    public ReflectJoinpointFactory(ClassInfo classInfo)
    {
       this.classInfo = classInfo;
    }
-   
-   // Public --------------------------------------------------------
-   
-   // JoinpointFactory implementation -------------------------------
    
    public ClassInfo getClassInfo()
    {
@@ -69,12 +88,4 @@ public class ReflectJoinpointFactory implements JoinpointFactory
    {
       return new ReflectMethodJoinPoint(methodInfo);
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

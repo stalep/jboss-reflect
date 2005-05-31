@@ -6,10 +6,11 @@
  */
 package org.jboss.joinpoint.plugins.reflect;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.jboss.joinpoint.spi.MethodJoinpoint;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.util.UnreachableStatementException;
 
 /**
  * A method joinpoint
@@ -18,20 +19,11 @@ import org.jboss.reflect.spi.MethodInfo;
  */
 public class ReflectMethodJoinPoint extends ReflectTargettedJoinPoint implements MethodJoinpoint
 {
-   // Constants -----------------------------------------------------
-   
-   // Attributes ----------------------------------------------------
-
    /** The method info */
    protected MethodInfo methodInfo;
 
    /** The arguments */
    protected Object[] arguments;
-   
-   // Static --------------------------------------------------------
-
-   // Constructors --------------------------------------------------
-
    /**
     * Create a new method join point
     * 
@@ -41,10 +33,6 @@ public class ReflectMethodJoinPoint extends ReflectTargettedJoinPoint implements
    {
       this.methodInfo = methodInfo;
    }
-   
-   // Public --------------------------------------------------------
-   
-   // MethodJoinpoint implementation --------------------------------
 
    public MethodInfo getMethodInfo()
    {
@@ -60,18 +48,18 @@ public class ReflectMethodJoinPoint extends ReflectTargettedJoinPoint implements
    {
       this.arguments = args;
    }
-   
-   // Joinpoint implementation --------------------------------------
 
    public Object dispatch() throws Throwable
    {
+      Method method = methodInfo.getMethod();
       try
       {
-         return methodInfo.getMethod().invoke(target, arguments);
+         return method.invoke(target, arguments);
       }
-      catch (InvocationTargetException e)
+      catch (Throwable t)
       {
-         throw e.getTargetException();
+         ReflectJoinpointFactory.handleErrors(method.getName(), method.getParameterTypes(), arguments, t);
+         throw new UnreachableStatementException();
       }
    }
    
