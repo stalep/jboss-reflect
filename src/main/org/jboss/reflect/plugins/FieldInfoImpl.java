@@ -13,6 +13,7 @@ import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.util.JBossStringBuilder;
 
 /**
  * A field info
@@ -130,7 +131,7 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
 
    // JBossObject overrides -----------------------------------------
    
-   protected void toString(StringBuffer buffer)
+   protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);
    }

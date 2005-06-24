@@ -15,6 +15,7 @@ import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.util.JBossStringBuilder;
 
 /**
  * Method info
@@ -211,7 +212,7 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
 
    // JBossObject overrides -----------------------------------------
    
-   protected void toString(StringBuffer buffer)
+   protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);
       buffer.append(Arrays.asList(parameterTypes));

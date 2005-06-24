@@ -12,6 +12,7 @@ import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.util.JBossStringBuilder;
 
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -279,7 +280,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    
    // JBossObject overrides -----------------------------------------
    
-   protected void toString(StringBuffer buffer)
+   protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);
    }

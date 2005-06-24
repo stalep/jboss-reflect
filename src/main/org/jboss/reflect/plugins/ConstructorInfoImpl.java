@@ -16,6 +16,7 @@ import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.util.JBossStringBuilder;
 
 /**
  * Constructor info
@@ -188,7 +189,7 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
 
    // JBossObject overrides -----------------------------------------
    
-   protected void toString(StringBuffer buffer)
+   protected void toString(JBossStringBuilder buffer)
    {
       buffer.append(Arrays.asList(parameterTypes));
    }
