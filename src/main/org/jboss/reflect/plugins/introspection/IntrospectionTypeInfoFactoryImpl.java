@@ -50,7 +50,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
     * Generate the type info for a class
     * 
     * @param clazz the class
-    * @return the type info
+    * @param info the class info
     */
    public void generateTypeInfo(Class clazz, ClassInfoImpl info)
    {

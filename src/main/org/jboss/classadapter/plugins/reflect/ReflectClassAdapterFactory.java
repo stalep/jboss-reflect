@@ -51,6 +51,12 @@ public class ReflectClassAdapterFactory implements ClassAdapterFactory
 
    // Protected -----------------------------------------------------
    
+   /**
+    * Create a class adapter for the type info
+    * 
+    * @param typeInfo the type info
+    * @return the class adapter
+    */
    protected ClassAdapter createClassAdapter(TypeInfo typeInfo)
    {
       if (typeInfo instanceof ClassInfo == false)

@@ -67,8 +67,9 @@ public interface ClassAdapter extends JBossInterface
    /**
     * Get the dependencies of this adapter
     *
-    * @param metadata
-    * @return
+    * @deprecated
+    * @param metadata TODO what is this rubbish???
+    * @return the list of dependencies
     */
    List getDependencies(Map metadata);
 

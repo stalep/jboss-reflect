@@ -47,7 +47,7 @@ public class Config
     * @param jpf the join point factory
     * @param paramTypes the parameter types
     * @param params the parameters
-    * @param beanMetaData
+    * @param metadata TODO more undocumented rubbish
     * @return the instantiated object
     * @throws Throwable for any error
     */

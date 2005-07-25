@@ -34,7 +34,7 @@ public interface JoinpointFactory
     * Get a constructor join point
     * 
     * @param constructorInfo the constructor info
-    * @param metadata
+    * @param metadata - TODO undocumentated rubbish
     * @return the constructor join point
     * @throws JoinpointException when no such constructor
     */

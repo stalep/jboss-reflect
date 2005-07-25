@@ -49,6 +49,11 @@ public class ReflectFieldSetJoinPoint extends ReflectTargettedJoinPoint implemen
       return fieldInfo;
    }
    
+   /**
+    * Get the value
+    * 
+    * @return the value
+    */
    public Object getValue()
    {
       return value;
