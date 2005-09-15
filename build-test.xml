@@ -134,7 +134,7 @@
   <!-- Tests                                                              -->
   <!-- ================================================================== -->
 
-   <target name="tests" depends="init"
+   <target name="tests" depends="most"
       description="Execute all tests in the given test directory.">
       <mkdir dir="${build.reports}"/>
       <mkdir dir="${build.testlog}"/>
