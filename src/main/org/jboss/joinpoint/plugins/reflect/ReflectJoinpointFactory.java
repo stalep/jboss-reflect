@@ -47,7 +47,7 @@ public class ReflectJoinpointFactory implements JoinpointFactory
                if (arguments[i] == null)
                   actual.add(null);
                else
-                  actual.add(arguments.getClass().getName());
+                  actual.add(arguments[i].getClass().getName());
             }
          }
          throw new IllegalArgumentException("Wrong arguments. " + context + " expected=" + expected + " actual=" + actual);
