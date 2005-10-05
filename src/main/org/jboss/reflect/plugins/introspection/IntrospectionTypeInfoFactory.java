@@ -12,27 +12,15 @@ import org.jboss.reflect.spi.TypeInfoFactory;
 /**
  * An introspection type factory that uses a static delegate.<p>
  * 
- * This avoids recalculating things everytime an factory is
+ * This avoids recalculating things everytime a factory is
  * constructed inside the same classloader
  * 
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public class IntrospectionTypeInfoFactory implements TypeInfoFactory
 {
-   // Constants -----------------------------------------------------
-   
    /** The delegate */
    private static IntrospectionTypeInfoFactoryImpl delegate = new IntrospectionTypeInfoFactoryImpl();
-   
-   // Attributes ----------------------------------------------------
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
-
-   // Public --------------------------------------------------------
-
-   // TypeInfoFactory implementation --------------------------------
 
    public TypeInfo getTypeInfo(Class clazz)
    {
@@ -43,12 +31,4 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
    {
       return delegate.getTypeInfo(name, cl);
    }
-   
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

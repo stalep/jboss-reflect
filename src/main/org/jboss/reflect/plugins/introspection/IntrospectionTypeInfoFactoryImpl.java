@@ -33,18 +33,8 @@ import org.jboss.util.WeakClassCache;
  */
 public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory
 {
-   // Constants -----------------------------------------------------
-
    /** The log */
    private static final Logger log = Logger.getLogger(IntrospectionTypeInfoFactoryImpl.class);
-   
-   // Attributes ----------------------------------------------------
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
-
-   // Public --------------------------------------------------------
    
    /**
     * Generate the type info for a class
@@ -205,8 +195,6 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       return result;
    }
 
-   // TypeInfoFactory implementation --------------------------------
-
    public TypeInfo getTypeInfo(Class clazz)
    {
       TypeInfo primitive = PrimitiveInfo.valueOf(clazz.getName());
@@ -221,8 +209,6 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       Class clazz = cl.loadClass(name);
       return getTypeInfo(clazz);
    }
-
-   // WeakClassCache overrides --------------------------------------
    
    protected Object instantiate(Class clazz)
    {
@@ -239,12 +225,4 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
    {
       generateTypeInfo(clazz, (ClassInfoImpl) result);
    }
-   
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }
