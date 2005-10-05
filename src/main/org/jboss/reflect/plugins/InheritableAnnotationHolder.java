@@ -56,8 +56,6 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
       return declaredAnnotationsArray;
    }
 
-   // AnnotatedInfo implementation ----------------------------------
-
    public AnnotationValue[] getAnnotations()
    {
       return allAnnotationsArray;
@@ -72,10 +70,6 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
    {
       return allAnnotations.containsKey(name);
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
 
    /**
     * Set up the annotations
