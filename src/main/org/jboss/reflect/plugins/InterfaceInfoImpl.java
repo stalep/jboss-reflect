@@ -16,16 +16,8 @@ import org.jboss.reflect.spi.InterfaceInfo;
  */
 public class InterfaceInfoImpl extends ClassInfoImpl implements InterfaceInfo
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3258690987944522291L;
-   
-   // Attributes ----------------------------------------------------
-   
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new interface info
@@ -55,21 +47,9 @@ public class InterfaceInfoImpl extends ClassInfoImpl implements InterfaceInfo
    {
       super(name, modifiers, interfaces, null);
    }
-
-   // Public --------------------------------------------------------
-
-   // ClassInfoImpl overrides ---------------------------------------
    
    public boolean isInterface()
    {
       return true;
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

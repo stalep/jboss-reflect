@@ -21,12 +21,8 @@ import java.util.HashMap;
  */
 public class InheritableAnnotationHolder extends JBossObject implements AnnotatedInfo, Serializable
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3257290210164289843L;
-   
-   // Attributes ----------------------------------------------------
    
    /** Declared annotations Map<String, AnnotationValue> */
    protected HashMap declaredAnnotations;
@@ -42,10 +38,6 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
    
    /** The super holder of annotations */
    protected InheritableAnnotationHolder superHolder;
-   
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new InheritableAnnotationHolder.
@@ -53,8 +45,6 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
    public InheritableAnnotationHolder()
    {
    }
-
-   // Public --------------------------------------------------------
 
    /**
     * Get the declared annotations
@@ -128,8 +118,4 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
          }
       }
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }
