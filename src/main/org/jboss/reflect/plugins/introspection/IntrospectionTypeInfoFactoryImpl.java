@@ -47,27 +47,25 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       boolean trace = log.isTraceEnabled();
       if (trace)
          log.trace("generate TypeInfo: " + info);
-      
-      if (clazz.isInterface() == false)
-      {
-         Class superClazz = clazz.getSuperclass();
-         if (superClazz != null)
-         {
-            ClassInfoImpl superType = (ClassInfoImpl) getTypeInfo(superClazz);
-            info.setSuperclass(superType);
-            info.setDeclaredConstructors(getConstructors(clazz, info));
-         }
-      }
       AnnotationValue[] annotations = getAnnotations(clazz);
       info.setupAnnotations(annotations);
-      info.setDeclaredFields(getFields(clazz, info));
-      info.setDeclaredMethods(getMethods(clazz, info));
-      info.setInterfaces(getInterfaces(clazz));
 
       if (trace)
          log.trace("generated typeInfo " + info);
    }
 
+   public ClassInfo getSuperClass(Class clazz)
+   {
+      ClassInfoImpl superType = null;
+      if (clazz.isInterface() == false)
+      {
+         Class superClazz = clazz.getSuperclass();
+         if (superClazz != null)
+            superType = (ClassInfoImpl) getTypeInfo(superClazz);
+      }
+      return superType;
+   }
+   
    public AnnotationValue[] getAnnotations(Object obj)
    {
       return new AnnotationValue[0];
@@ -82,16 +80,20 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
     */
    public ConstructorInfoImpl[] getConstructors(Class clazz, ClassInfo declaring)
    {
-      Constructor[] constructors = clazz.getDeclaredConstructors();
-      if (constructors == null || constructors.length == 0)
-         return null;
-      
-      ConstructorInfoImpl[] infos = new ConstructorInfoImpl[constructors.length];
-      for (int i = 0; i < constructors.length; ++i)
+      ConstructorInfoImpl[] infos = null;
+      if (clazz.isInterface() == false)
       {
-         AnnotationValue[] annotations = getAnnotations(constructors[i]);
-         infos[i] = new ConstructorInfoImpl(annotations, getTypeInfos(constructors[i].getParameterTypes()), getClassInfos(constructors[i].getExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
-         infos[i].setConstructor(constructors[i]);
+         Constructor[] constructors = clazz.getDeclaredConstructors();
+         if (constructors != null && constructors.length > 0)
+         {
+            infos = new ConstructorInfoImpl[constructors.length];
+            for (int i = 0; i < constructors.length; ++i)
+            {
+               AnnotationValue[] annotations = getAnnotations(constructors[i]);
+               infos[i] = new ConstructorInfoImpl(annotations, getTypeInfos(constructors[i].getParameterTypes()), getClassInfos(constructors[i].getExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
+               infos[i].setConstructor(constructors[i]);
+            }
+         }
       }
       return infos;
    }
@@ -126,7 +128,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
     * @param declaring the declaring class
     * @return the method info
     */
-   protected MethodInfoImpl[] getMethods(Class clazz, ClassInfo declaring)
+   public MethodInfoImpl[] getMethods(Class clazz, ClassInfo declaring)
    {
       Method[] methods = clazz.getDeclaredMethods();
       if (methods == null || methods.length == 0)
@@ -218,6 +220,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       else
          result = new ClassInfoImpl(clazz.getName());
       result.setType(clazz);
+      result.setTypeInfoFactory(this);
       return result;
    }
 

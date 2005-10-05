@@ -6,6 +6,11 @@
  */
 package org.jboss.reflect.plugins;
 
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactoryImpl;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
@@ -13,9 +18,6 @@ import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
-
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
 
 /**
  * Class info
@@ -25,13 +27,27 @@ import java.util.HashMap;
  */
 public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassInfo
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3545798779904340792L;
-   
-   // Attributes ----------------------------------------------------
 
+   /** Marker for generation */
+   static final ClassInfo UNKNOWN_CLASS = new UnknownClassInfo();
+
+   /** Marker for generation */
+   static final InterfaceInfo[] UNKNOWN_INTERFACES = new InterfaceInfo[0];
+
+   /** Marker for generation */
+   static final ConstructorInfo[] UNKNOWN_CONSTRUCTORS = new ConstructorInfo[0];
+
+   /** Marker for generation */
+   static final MethodInfo[] UNKNOWN_METHODS = new MethodInfo[0];
+
+   /** Marker for generation */
+   private static final FieldInfo[] UNKNOWN_FIELDS = new FieldInfo[0];
+   
+   /** The typeinfo factory */
+   protected IntrospectionTypeInfoFactoryImpl typeInfoFactory;
+   
    /** The class name */
    protected String name;
    
@@ -42,24 +58,22 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    protected int modifiers;
    
    /** The interfaces */
-   protected InterfaceInfo[] interfaces;
+   protected InterfaceInfo[] interfaces = UNKNOWN_INTERFACES;
    
    /** The methods */
-   protected MethodInfo[] methods;
+   protected MethodInfo[] methods = UNKNOWN_METHODS;
    
    /** The fields */
-   protected FieldInfo[] fields;
+   protected FieldInfo[] fields = UNKNOWN_FIELDS;
    
    /** Field map Map<String, FieldInfo> */
    protected HashMap fieldMap;
 
    /** The super class */
-   protected ClassInfo superclass;
+   protected ClassInfo superclass = UNKNOWN_CLASS;
 
    /** The constructor info */
-   protected ConstructorInfo[] constructors; 
-
-   // Static --------------------------------------------------------
+   protected ConstructorInfo[] constructors = UNKNOWN_CONSTRUCTORS; 
 
    /**
     * Find a method
@@ -93,8 +107,6 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       }
       return null;
    }
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new abstract ClassInfo.
@@ -130,8 +142,6 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       this.superclass = superclass;
    }
 
-   // Public --------------------------------------------------------
-
    /**
     * Set the type
     * 
@@ -140,6 +150,16 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public void setType(Class type)
    {
       this.type = type;
+   }
+
+   /**
+    * Set the typeinfo factory
+    * 
+    * @param the typeinfo factory
+    */
+   public void setTypeInfoFactory(IntrospectionTypeInfoFactoryImpl typeInfoFactory)
+   {
+      this.typeInfoFactory = typeInfoFactory;
    }
    
    /**
@@ -207,7 +227,6 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       this.superclass = superInfo;
    }
 
-   // ClassInfo implementation --------------------------------------
 
    public boolean isInterface()
    {
@@ -216,6 +235,8 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
 
    public InterfaceInfo[] getInterfaces()
    {
+      if (interfaces == UNKNOWN_INTERFACES)
+         setInterfaces(typeInfoFactory.getInterfaces(type));
       return interfaces;
    }
    
@@ -226,30 +247,38 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
 
    public MethodInfo[] getDeclaredMethods()
    {
+      if (methods == UNKNOWN_METHODS)
+         setDeclaredMethods(typeInfoFactory.getMethods(type, this));
       return methods;
    }
 
    public FieldInfo getDeclaredField(String name)
    {
+      if (fields == UNKNOWN_FIELDS)
+         setDeclaredFields(typeInfoFactory.getFields(type, this));
       return (FieldInfo) fieldMap.get(name);
    }
 
    public FieldInfo[] getDeclaredFields()
    {
+      if (fields == UNKNOWN_FIELDS)
+         setDeclaredFields(typeInfoFactory.getFields(type, this));
       return fields;
    }
 
    public ConstructorInfo[] getDeclaredConstructors()
    {
+      if (constructors == UNKNOWN_CONSTRUCTORS)
+         setDeclaredConstructors(typeInfoFactory.getConstructors(type, this));
       return constructors;
    }
 
    public ClassInfo getSuperclass()
    {
+      if (superclass == UNKNOWN_CLASS)
+         setSuperclass(typeInfoFactory.getSuperClass(type));
       return superclass;
    }
-   
-   // ModifierInfo implementation -----------------------------------
    
    public int getModifiers()
    {
@@ -266,8 +295,6 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return Modifier.isPublic(modifiers);
    }
 
-   // TypeInfo implementation ---------------------------------------
-
    public String getName()
    {
       return name;
@@ -278,14 +305,10 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return type;
    }
    
-   // JBossObject overrides -----------------------------------------
-   
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);
    }
-   
-   // Object overrides ----------------------------------------------
 
    public boolean equals(Object obj)
    {
@@ -306,11 +329,100 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return (name != null ? name.hashCode() : 0);
    }
    
-   // Package protected ---------------------------------------------
+   static class UnknownClassInfo implements ClassInfo
+   {
+      public ConstructorInfo[] getDeclaredConstructors()
+      {
+         return null;
+      }
 
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
+      public FieldInfo getDeclaredField(String name)
+      {
+         return null;
+      }
+
+      public FieldInfo[] getDeclaredFields()
+      {
+         return null;
+      }
+
+      public MethodInfo getDeclaredMethod(String name, TypeInfo[] parameters)
+      {
+         return null;
+      }
+
+      public MethodInfo[] getDeclaredMethods()
+      {
+         return null;
+      }
+
+      public InterfaceInfo[] getInterfaces()
+      {
+         return null;
+      }
+
+      public String getName()
+      {
+         return null;
+      }
+
+      public ClassInfo getSuperclass()
+      {
+         return null;
+      }
+
+      public boolean isInterface()
+      {
+         return false;
+      }
+
+      public AnnotationValue getAnnotation(String name)
+      {
+         return null;
+      }
+
+      public AnnotationValue[] getAnnotations()
+      {
+         return null;
+      }
+
+      public boolean isAnnotationPresent(String name)
+      {
+         return false;
+      }
+
+      public String toShortString()
+      {
+         return null;
+      }
+
+      public void toShortString(JBossStringBuilder buffer)
+      {
+      }
+
+      public Class getType()
+      {
+         return null;
+      }
+
+      public int getModifiers()
+      {
+         return 0;
+      }
+
+      public boolean isPublic()
+      {
+         return false;
+      }
+
+      public boolean isStatic()
+      {
+         return false;
+      }
+      
+      public Object clone()
+      {
+         return null;
+      }
+   }
 }
