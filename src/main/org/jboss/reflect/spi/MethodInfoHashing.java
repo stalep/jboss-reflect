@@ -4,16 +4,12 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.reflect.plugins.introspection;
+package org.jboss.reflect.spi;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
-import org.jboss.reflect.spi.ArrayInfo;
-import org.jboss.reflect.spi.MethodInfo;
-import org.jboss.reflect.spi.PrimitiveInfo;
-import org.jboss.reflect.spi.TypeInfo;
 
 /**
  * Create a unique hash for MethodInfo
