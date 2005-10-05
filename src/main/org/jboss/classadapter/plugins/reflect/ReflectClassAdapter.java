@@ -7,7 +7,6 @@
 package org.jboss.classadapter.plugins.reflect;
 
 import java.util.List;
-import java.util.Map;
 
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.joinpoint.plugins.reflect.ReflectJoinpointFactory;
@@ -22,16 +21,8 @@ import org.jboss.util.JBossObject;
  */
 public class ReflectClassAdapter extends JBossObject implements ClassAdapter
 {
-   // Constants -----------------------------------------------------
-
-   // Attributes ----------------------------------------------------
-
    /** The class info */
    protected ClassInfo classInfo;
-   
-   // Static --------------------------------------------------------
-
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new reflected class adapter
@@ -42,10 +33,6 @@ public class ReflectClassAdapter extends JBossObject implements ClassAdapter
    {
       this.classInfo = classInfo;
    }
-   
-   // Public --------------------------------------------------------
-
-   // ClassAdapter implementation -----------------------------------
 
    public ClassInfo getClassInfo()
    {
@@ -59,7 +46,7 @@ public class ReflectClassAdapter extends JBossObject implements ClassAdapter
       return clone;
    }
 
-   public List getDependencies(Map metadata)
+   public List getDependencies()
    {
       return null;
    }
@@ -68,12 +55,4 @@ public class ReflectClassAdapter extends JBossObject implements ClassAdapter
    {
       return new ReflectJoinpointFactory(classInfo);
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
-   // Private -------------------------------------------------------
-
-   // Inner classes -------------------------------------------------
 }

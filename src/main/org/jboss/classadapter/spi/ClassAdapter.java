@@ -7,7 +7,6 @@
 package org.jboss.classadapter.spi;
 
 import java.util.List;
-import java.util.Map;
 
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
@@ -45,10 +44,6 @@ import org.jboss.util.JBossInterface;
  */
 public interface ClassAdapter extends JBossInterface
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the class info.
     * 
@@ -67,11 +62,9 @@ public interface ClassAdapter extends JBossInterface
    /**
     * Get the dependencies of this adapter
     *
-    * @deprecated
-    * @param metadata TODO what is this rubbish???
     * @return the list of dependencies
     */
-   List getDependencies(Map metadata);
+   List getDependencies();
 
    /**
     * Get the Joinpoint Factory for this adapter.
@@ -79,6 +72,4 @@ public interface ClassAdapter extends JBossInterface
     * @return the joinpoint factory
     */
    JoinpointFactory getJoinpointFactory();
-   
-   // Inner classes -------------------------------------------------
 }

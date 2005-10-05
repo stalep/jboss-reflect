@@ -41,8 +41,7 @@ public class ReflectJoinpointTestCase extends BaseTestCase
    public void testSimpleConstructor() throws Throwable
    {
       JoinpointFactory jpf = getJointpointFactory(SimpleBean.class);
-      // TODO: Review METADATA
-      Object object = Config.instantiate(jpf, new String[0], new Object[0], null);
+      Object object = Config.instantiate(jpf, new String[0], new Object[0]);
       assertNotNull(object);
       assertTrue(object instanceof SimpleBean);
       SimpleBean bean = (SimpleBean) object;
@@ -52,8 +51,7 @@ public class ReflectJoinpointTestCase extends BaseTestCase
    public void testConstructorOneParam() throws Throwable
    {
       JoinpointFactory jpf = getJointpointFactory(SimpleBean.class);
-      // TODO: Review METADATA
-      Object object = Config.instantiate(jpf, new String[] { String.class.getName() }, new Object[] { "String" }, null);
+      Object object = Config.instantiate(jpf, new String[] { String.class.getName() }, new Object[] { "String" });
       assertNotNull(object);
       assertTrue(object instanceof SimpleBean);
       SimpleBean bean = (SimpleBean) object;
@@ -63,8 +61,7 @@ public class ReflectJoinpointTestCase extends BaseTestCase
    public void testConstructorTwoParam() throws Throwable
    {
       JoinpointFactory jpf = getJointpointFactory(SimpleBean.class);
-      // TODO: Review METADATA
-      Object object = Config.instantiate(jpf, new String[] { String.class.getName(), Object.class.getName() }, new Object[] { "StringObject", new Object() }, null);
+      Object object = Config.instantiate(jpf, new String[] { String.class.getName(), Object.class.getName() }, new Object[] { "StringObject", new Object() });
       assertNotNull(object);
       assertTrue(object instanceof SimpleBean);
       SimpleBean bean = (SimpleBean) object;

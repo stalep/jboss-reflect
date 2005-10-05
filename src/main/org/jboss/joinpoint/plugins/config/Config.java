@@ -7,13 +7,13 @@
 package org.jboss.joinpoint.plugins.config;
 
 import java.util.Arrays;
-import java.util.Map;
+
+import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.joinpoint.spi.FieldGetJoinpoint;
 import org.jboss.joinpoint.spi.FieldSetJoinpoint;
 import org.jboss.joinpoint.spi.JoinpointException;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.joinpoint.spi.MethodJoinpoint;
-import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.logging.Logger;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
@@ -29,17 +29,11 @@ import org.jboss.reflect.spi.TypeInfo;
  */
 public class Config
 {
-   // Constants -----------------------------------------------------
-
    /** The log */
    protected static final Logger log = Logger.getLogger(Config.class);
    
    /** No parameters */
    private static final String[] NO_PARAMS_TYPES = new String[0];
-   
-   // Attributes ----------------------------------------------------
-   
-   // Static --------------------------------------------------------
    
    /**
     * Instantiate an object
@@ -47,13 +41,12 @@ public class Config
     * @param jpf the join point factory
     * @param paramTypes the parameter types
     * @param params the parameters
-    * @param metadata TODO more undocumented rubbish
     * @return the instantiated object
     * @throws Throwable for any error
     */
-   public static Object instantiate(JoinpointFactory jpf, String[] paramTypes, Object[] params, Map metadata) throws Throwable
+   public static Object instantiate(JoinpointFactory jpf, String[] paramTypes, Object[] params) throws Throwable
    {
-      ConstructorJoinpoint joinpoint = getConstructorJoinpoint(jpf, paramTypes, params, metadata);
+      ConstructorJoinpoint joinpoint = getConstructorJoinpoint(jpf, paramTypes, params);
       return joinpoint.dispatch();
    }
 
@@ -109,18 +102,17 @@ public class Config
     * @param jpf the join point factory
     * @param paramTypes the parameter types
     * @param params the parameters
-    * @param metadata
     * @return the Joinpoint
     * @throws Throwable for any error
     */
-   public static ConstructorJoinpoint getConstructorJoinpoint(JoinpointFactory jpf, String[] paramTypes, Object[] params, Map metadata) throws Throwable
+   public static ConstructorJoinpoint getConstructorJoinpoint(JoinpointFactory jpf, String[] paramTypes, Object[] params) throws Throwable
    {
       boolean trace = log.isTraceEnabled();
       if (trace)
          log.trace("Get constructor Joinpoint jpf=" + jpf + " paramTypes=" + Arrays.asList(paramTypes) + " params=" + Arrays.asList(params));
 
       ConstructorInfo constructorInfo = findConstructorInfo(jpf.getClassInfo(), paramTypes);
-      ConstructorJoinpoint joinpoint = jpf.getConstructorJoinpoint(constructorInfo, metadata);
+      ConstructorJoinpoint joinpoint = jpf.getConstructorJoinpoint(constructorInfo);
       joinpoint.setArguments(params);
       return joinpoint;
    }
@@ -330,16 +322,4 @@ public class Config
       }
       return true;
    }
-   
-   // Constructors --------------------------------------------------
-   
-   // Public --------------------------------------------------------
-   
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

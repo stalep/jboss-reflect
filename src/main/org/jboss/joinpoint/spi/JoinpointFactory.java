@@ -6,7 +6,6 @@
  */
 package org.jboss.joinpoint.spi;
 
-import java.util.Map;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
@@ -19,10 +18,6 @@ import org.jboss.reflect.spi.MethodInfo;
  */
 public interface JoinpointFactory
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the class info for this join point factory
     * 
@@ -34,11 +29,10 @@ public interface JoinpointFactory
     * Get a constructor join point
     * 
     * @param constructorInfo the constructor info
-    * @param metadata - TODO undocumentated rubbish
     * @return the constructor join point
     * @throws JoinpointException when no such constructor
     */
-   ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo, Map metadata) throws JoinpointException;
+   ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo) throws JoinpointException;
 
    /**
     * Get a field get join point
@@ -66,6 +60,4 @@ public interface JoinpointFactory
     * @throws JoinpointException when no such method
     */
    MethodJoinpoint getMethodJoinpoint(MethodInfo methodInfo) throws JoinpointException;
-   
-   // Inner classes -------------------------------------------------
 }
