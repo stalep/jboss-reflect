@@ -9,6 +9,8 @@ package org.jboss.reflect.plugins.introspection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import org.jboss.logging.Logger;
 import org.jboss.reflect.plugins.ClassInfoImpl;
@@ -16,19 +18,18 @@ import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.InterfaceInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.util.WeakClassCache;
 
 /**
  * An introspection type factory.
  *
  * FIXME: use lazy loading to avoid reading the entire class model
- *              needs changes to the classinfo model to use interfaces
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory
@@ -83,7 +84,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       ConstructorInfoImpl[] infos = null;
       if (clazz.isInterface() == false)
       {
-         Constructor[] constructors = clazz.getDeclaredConstructors();
+         Constructor[] constructors = getDeclaredConstructors(clazz);
          if (constructors != null && constructors.length > 0)
          {
             infos = new ConstructorInfoImpl[constructors.length];
@@ -107,7 +108,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
     */
    public FieldInfoImpl[] getFields(Class clazz, ClassInfo declaring)
    {
-      Field[] fields = clazz.getDeclaredFields();
+      Field[] fields = getDeclaredFields(clazz);
       if (fields == null || fields.length == 0)
          return null;
       
@@ -130,7 +131,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
     */
    public MethodInfoImpl[] getMethods(Class clazz, ClassInfo declaring)
    {
-      Method[] methods = clazz.getDeclaredMethods();
+      Method[] methods = getDeclaredMethods(clazz);
       if (methods == null || methods.length == 0)
          return null;
       
@@ -227,5 +228,56 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
    protected void generate(Class clazz, Object result)
    {
       generateTypeInfo(clazz, (ClassInfoImpl) result);
+   }
+   
+   protected Constructor[] getDeclaredConstructors(final Class clazz)
+   {
+      if (System.getSecurityManager() == null)
+         return clazz.getDeclaredConstructors();
+      else
+      {
+         PrivilegedAction action = new PrivilegedAction()
+         {
+            public Object run()
+            {
+               return clazz.getDeclaredConstructors();
+            }
+         };
+         return (Constructor[]) AccessController.doPrivileged(action);
+      }
+   }
+   
+   protected Field[] getDeclaredFields(final Class clazz)
+   {
+      if (System.getSecurityManager() == null)
+         return clazz.getDeclaredFields();
+      else
+      {
+         PrivilegedAction action = new PrivilegedAction()
+         {
+            public Object run()
+            {
+               return clazz.getDeclaredFields();
+            }
+         };
+         return (Field[]) AccessController.doPrivileged(action);
+      }
+   }
+   
+   protected Method[] getDeclaredMethods(final Class clazz)
+   {
+      if (System.getSecurityManager() == null)
+         return clazz.getDeclaredMethods();
+      else
+      {
+         PrivilegedAction action = new PrivilegedAction()
+         {
+            public Object run()
+            {
+               return clazz.getDeclaredMethods();
+            }
+         };
+         return (Method[]) AccessController.doPrivileged(action);
+      }
    }
 }

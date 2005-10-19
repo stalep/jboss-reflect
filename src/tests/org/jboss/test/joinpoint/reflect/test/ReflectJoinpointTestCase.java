@@ -6,13 +6,15 @@
  */
 package org.jboss.test.joinpoint.reflect.test;
 
+import junit.framework.Test;
+
 import org.jboss.joinpoint.plugins.config.Config;
 import org.jboss.joinpoint.plugins.reflect.ReflectJoinpointFactory;
 import org.jboss.joinpoint.spi.Joinpoint;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.test.BaseTestCase;
+import org.jboss.test.ContainerTest;
 import org.jboss.test.joinpoint.reflect.support.SimpleBean;
 
 /**
@@ -21,22 +23,17 @@ import org.jboss.test.joinpoint.reflect.support.SimpleBean;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ReflectJoinpointTestCase extends BaseTestCase
+public class ReflectJoinpointTestCase extends ContainerTest
 {
-   // Constants -----------------------------------------------------
-
-   // Attributes ----------------------------------------------------
-
-   // Static --------------------------------------------------------
-
-   // Constructors --------------------------------------------------
+   public static Test suite()
+   {
+      return suite(ReflectJoinpointTestCase.class);
+   }
 
    public ReflectJoinpointTestCase(String name)
    {
       super(name);
    }
-
-   // Public --------------------------------------------------------
 
    public void testSimpleConstructor() throws Throwable
    {
@@ -107,13 +104,7 @@ public class ReflectJoinpointTestCase extends BaseTestCase
       Joinpoint joinpoint = Config.getMethodJoinpoint(bean, jpf, "toString", new String[0], new Object[0]);
       assertEquals(bean.toString(), joinpoint.dispatch());
    }
-   
-   // TestCase overrides --------------------------------------------
 
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
    protected JoinpointFactory getJointpointFactory(Class clazz)
    {
       IntrospectionTypeInfoFactory typeFactory = new IntrospectionTypeInfoFactory();
@@ -125,9 +116,4 @@ public class ReflectJoinpointTestCase extends BaseTestCase
    {
       enableTrace("org.jboss.joinpoint");
    }
-   
-   // Private -------------------------------------------------------
-
-   // Inner classes -------------------------------------------------
-
 }

@@ -21,12 +21,6 @@ import org.jboss.test.reflect.ClassInfoTestSuite;
  */
 public class ContainerAllTestSuite extends TestSuite
 {
-   // Constants -----------------------------------------------------
-
-   // Attributes ----------------------------------------------------
-   
-   // Static --------------------------------------------------------
-
    public static void main(String[] args)
    {
       TestRunner.run(suite());
@@ -41,18 +35,4 @@ public class ContainerAllTestSuite extends TestSuite
       
       return suite;
    }
-
-   // Constructors --------------------------------------------------
-   
-   // Public --------------------------------------------------------
-   
-   // TestSuite overrides -------------------------------------------
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

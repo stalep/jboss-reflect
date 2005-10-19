@@ -90,6 +90,7 @@
     <!-- ===== -->
 
    <property name="source.java" value="${module.source}/tests"/>
+   <property name="build.classes" value="${module.output}/classes-tests"/>
    <property name="build.testlog" value="${module.output}/log"/>
    <property name="build-bypass.disabled" value="true"/>
 
@@ -149,7 +150,8 @@
          <sysproperty key="build.testlog" value="${build.testlog}"/>
 
          <classpath>
-            <pathelement location="${build.lib}/jboss-container-test.jar"/>
+            <pathelement location="${build.classes}"/>
+            <pathelement location="${build.resources}"/>
             <path refid="javac.classpath"/>
             <path refid="apache.xerces.classpath"/>
          </classpath>
@@ -184,7 +186,8 @@
          <sysproperty key="build.testlog" value="${build.testlog}"/>
 
          <classpath>
-            <pathelement location="${build.lib}/jboss-container-test.jar"/>
+            <pathelement location="${build.classes}"/>
+            <pathelement location="${build.resources}"/>
             <path refid="javac.classpath"/>
             <path refid="apache.xerces.classpath"/>
          </classpath>

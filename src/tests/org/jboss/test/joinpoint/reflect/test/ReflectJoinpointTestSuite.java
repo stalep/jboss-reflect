@@ -18,12 +18,6 @@ import junit.textui.TestRunner;
  */
 public class ReflectJoinpointTestSuite extends TestSuite
 {
-   // Constants -----------------------------------------------------
-
-   // Attributes ----------------------------------------------------
-   
-   // Static --------------------------------------------------------
-
    public static void main(String[] args)
    {
       TestRunner.run(suite());
@@ -33,7 +27,7 @@ public class ReflectJoinpointTestSuite extends TestSuite
    {
       TestSuite suite = new TestSuite("Joinpoint Tests");
 
-      suite.addTest(new TestSuite(ReflectJoinpointTestCase.class));
+      suite.addTest(ReflectJoinpointTestCase.suite());
       
       return suite;
    }

@@ -18,12 +18,6 @@ import junit.textui.TestRunner;
  */
 public class IntrospectionTestSuite extends TestSuite
 {
-   // Constants -----------------------------------------------------
-
-   // Attributes ----------------------------------------------------
-   
-   // Static --------------------------------------------------------
-
    public static void main(String[] args)
    {
       TestRunner.run(suite());
@@ -33,7 +27,7 @@ public class IntrospectionTestSuite extends TestSuite
    {
       TestSuite suite = new TestSuite("Introspection Tests");
 
-      suite.addTest(new TestSuite(IntrospectionTestCase.class));
+      suite.addTest(IntrospectionTestCase.suite());
       
       return suite;
    }

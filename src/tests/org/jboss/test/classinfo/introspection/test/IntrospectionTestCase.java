@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import junit.framework.Test;
+
 import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
@@ -29,7 +31,7 @@ import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.test.BaseTestCase;
+import org.jboss.test.ContainerTest;
 import org.jboss.test.classinfo.introspection.support.SimpleBean;
 import org.jboss.test.classinfo.introspection.support.SimpleInterface;
 
@@ -39,22 +41,18 @@ import org.jboss.test.classinfo.introspection.support.SimpleInterface;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class IntrospectionTestCase extends BaseTestCase
+public class IntrospectionTestCase extends ContainerTest
 {
-   // Constants -----------------------------------------------------
-
-   // Attributes ----------------------------------------------------
-
-   // Static --------------------------------------------------------
-
-   // Constructors --------------------------------------------------
+  
+   public static Test suite()
+   {
+      return suite(IntrospectionTestCase.class);
+   }
 
    public IntrospectionTestCase(String name)
    {
       super(name);
    }
-
-   // Public --------------------------------------------------------
    
    public void testSimpleBeanClassInfo() throws Throwable
    {
@@ -115,12 +113,6 @@ public class IntrospectionTestCase extends BaseTestCase
       checkConstructors(getSimpleBeanConstructors(), cinfo.getDeclaredConstructors());
    }
 
-   // TestCase overrides --------------------------------------------
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
    protected ClassInfo getClassInfo(Class clazz)
    {
       IntrospectionTypeInfoFactory factory = new IntrospectionTypeInfoFactory();
@@ -128,7 +120,7 @@ public class IntrospectionTestCase extends BaseTestCase
       assertNotNull(info);
       assertTrue(info instanceof ClassInfo);
       ClassInfo cinfo = (ClassInfo) info;
-      log.debug(cinfo);
+      getLog().debug(cinfo);
       return cinfo;
    }
    
@@ -147,7 +139,7 @@ public class IntrospectionTestCase extends BaseTestCase
          }
       }
       assertNotNull(simpleInterfaceInfo);
-      log.debug(simpleInterfaceInfo);
+      getLog().debug(simpleInterfaceInfo);
 
       return simpleInterfaceInfo;
    }
@@ -161,8 +153,8 @@ public class IntrospectionTestCase extends BaseTestCase
       HashSet expectClone = new HashSet(expected);
       HashSet actualClone = new HashSet(actual);
       
-      log.debug("checkTypeSet expect=" + expected);
-      log.debug("checkTypeSet actual=" + actual);
+      getLog().debug("checkTypeSet expect=" + expected);
+      getLog().debug("checkTypeSet actual=" + actual);
       
       expectClone.removeAll(actual);
       assertTrue("Expected " + expectClone, expectClone.isEmpty());
@@ -176,8 +168,8 @@ public class IntrospectionTestCase extends BaseTestCase
       HashSet expectClone = new HashSet(expected);
       ArrayList actualClone = new ArrayList(Arrays.asList(actually));
       
-      log.debug("checkFields expect=" + expectClone);
-      log.debug("checkFields actual=" + actualClone);
+      getLog().debug("checkFields expect=" + expectClone);
+      getLog().debug("checkFields actual=" + actualClone);
       
       expectClone.removeAll(actualClone);
       assertTrue("Expected " + expectClone, expectClone.isEmpty());
@@ -198,7 +190,7 @@ public class IntrospectionTestCase extends BaseTestCase
 
    protected void compareField(FieldInfo expect, FieldInfo actual) throws Throwable
    {
-      log.debug("CompareField expect=" + expect + " actual=" + actual);
+      getLog().debug("CompareField expect=" + expect + " actual=" + actual);
 
       assertEquals("Name", expect.getName(), actual.getName());
       assertEquals("Type", expect.getType(), actual.getType());
@@ -212,8 +204,8 @@ public class IntrospectionTestCase extends BaseTestCase
       HashSet expectClone = new HashSet(expected);
       ArrayList actualClone = new ArrayList(Arrays.asList(actually));
       
-      log.debug("checkMethods expect=" + expectClone);
-      log.debug("checkMethods actual=" + actualClone);
+      getLog().debug("checkMethods expect=" + expectClone);
+      getLog().debug("checkMethods actual=" + actualClone);
       
       expectClone.removeAll(actualClone);
       assertTrue("Expected " + expectClone, expectClone.isEmpty());
@@ -234,7 +226,7 @@ public class IntrospectionTestCase extends BaseTestCase
 
    protected void compareMethod(MethodInfo expect, MethodInfo actual) throws Throwable
    {
-      log.debug("MethodField expect=" + expect + " actual=" + actual);
+      getLog().debug("MethodField expect=" + expect + " actual=" + actual);
 
       assertEquals("Name", expect.getName(), actual.getName());
       assertEquals("ReturnType", expect.getReturnType(), actual.getReturnType());
@@ -251,8 +243,8 @@ public class IntrospectionTestCase extends BaseTestCase
       HashSet expectClone = new HashSet(expected);
       ArrayList actualClone = new ArrayList(Arrays.asList(actually));
       
-      log.debug("checkConstructors expect=" + expectClone);
-      log.debug("checkConstructors actual=" + actualClone);
+      getLog().debug("checkConstructors expect=" + expectClone);
+      getLog().debug("checkConstructors actual=" + actualClone);
       
       expectClone.removeAll(actualClone);
       assertTrue("Expected " + expectClone, expectClone.isEmpty());
@@ -273,7 +265,7 @@ public class IntrospectionTestCase extends BaseTestCase
 
    protected void compareConstructor(ConstructorInfo expect, ConstructorInfo actual) throws Throwable
    {
-      log.debug("ConstructorField expect=" + expect + " actual=" + actual);
+      getLog().debug("ConstructorField expect=" + expect + " actual=" + actual);
 
       assertEquals("ParameterTypes", expect.getParameterTypes(), actual.getParameterTypes());
       assertEquals("Parameters", expect.getParameters(), actual.getParameters());
@@ -484,9 +476,4 @@ public class IntrospectionTestCase extends BaseTestCase
    {
       enableTrace("org.jboss.reflect");
    }
-   
-   // Private -------------------------------------------------------
-
-   // Inner classes -------------------------------------------------
-
 }

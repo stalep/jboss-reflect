@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="/thirdparty/apache-log4j/lib/log4j.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/oswego-concurrent/lib/concurrent.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar"/>
-	<classpathentry kind="src" path="src/tests"/>
+	<classpathentry output="output/eclipse-classes-tests" kind="src" path="src/tests"/>
 	<classpathentry kind="src" path="/test"/>
 	<classpathentry kind="output" path="output/eclipse-classes"/>
 </classpath>
