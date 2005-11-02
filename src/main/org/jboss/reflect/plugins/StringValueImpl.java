@@ -35,22 +35,14 @@ import org.jboss.util.JBossObject;
  */
 public class StringValueImpl extends JBossObject implements StringValue, Serializable
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3977862864859836468L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The value */
    protected String value;
    
    /** The type */
    protected TypeInfo type;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new string value
@@ -71,23 +63,15 @@ public class StringValueImpl extends JBossObject implements StringValue, Seriali
       this.type = type;
    }
 
-   // Public --------------------------------------------------------
-
-   // StringValue implementation ------------------------------------
-
    public String getValue()
    {
       return value;
    }
 
-   // Value implementation ------------------------------------------
-
    public TypeInfo getType()
    {
       return type;
    }
-
-   // Object overrides ----------------------------------------------
 
    public boolean equals(Object o)
    {
@@ -109,12 +93,4 @@ public class StringValueImpl extends JBossObject implements StringValue, Seriali
       result = 29 * result + type.hashCode();
       return result;
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

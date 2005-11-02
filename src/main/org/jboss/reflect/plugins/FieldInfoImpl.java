@@ -38,12 +38,8 @@ import org.jboss.util.JBossStringBuilder;
  */
 public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3546084661584539959L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The field name */
    protected String name;
@@ -62,10 +58,6 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
    
    /** The hash code */
    protected int hash = -1;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new field info
@@ -93,8 +85,6 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
       calculateHash();
    }
 
-   // Public --------------------------------------------------------
-
    /**
     * Set the field
     * 
@@ -104,8 +94,6 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
    {
       this.field = field;
    }
-   
-   // FieldInfo implementation --------------------------------------
 
    public String getName()
    {
@@ -127,8 +115,6 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
       return declaringClass;
    }
    
-   // ModifierInfo implementation -----------------------------------
-   
    public int getModifiers()
    {
       return modifiers;
@@ -143,15 +129,11 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
    {
       return Modifier.isPublic(modifiers);
    }
-
-   // JBossObject overrides -----------------------------------------
    
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);
    }
-
-   // Object overrides ----------------------------------------------
 
    public boolean equals(Object obj)
    {
@@ -174,10 +156,6 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
       return hash;
    }
 
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
    /**
     * Calculate the hash code
     */
@@ -188,8 +166,4 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
       result = 29 * result + declaringClass.hashCode();
       hash = result;
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

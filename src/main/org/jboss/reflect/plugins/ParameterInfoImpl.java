@@ -32,22 +32,14 @@ import org.jboss.reflect.spi.TypeInfo;
  */
 public class ParameterInfoImpl extends AnnotationHolder implements ParameterInfo
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3256725082746664754L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The parameter name */
    protected String name;
    
    /** The parameter type */
    protected TypeInfo parameterType;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new method info
@@ -70,10 +62,6 @@ public class ParameterInfoImpl extends AnnotationHolder implements ParameterInfo
       this.parameterType = parameterType;
    }
 
-   // Public --------------------------------------------------------
-
-   // ParameterInfo implementation ----------------------------------
-
    public String getName()
    {
       return name;
@@ -83,8 +71,6 @@ public class ParameterInfoImpl extends AnnotationHolder implements ParameterInfo
    {
       return parameterType;
    }
-
-   // Object overrides ----------------------------------------------
 
    public boolean equals(Object obj)
    {
@@ -101,12 +87,4 @@ public class ParameterInfoImpl extends AnnotationHolder implements ParameterInfo
    {
       return parameterType.hashCode();
    }
-   
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

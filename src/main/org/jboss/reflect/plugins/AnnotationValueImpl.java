@@ -38,12 +38,8 @@ import org.jboss.util.JBossObject;
  */
 public class AnnotationValueImpl extends JBossObject implements AnnotationValue, Serializable
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3257290210164289843L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The annotation type */
    protected AnnotationInfo annotationType;
@@ -53,10 +49,6 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
    
    /** The hash code */
    protected int hash = -1;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new Annotation value
@@ -78,10 +70,6 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
       calculateHash();
    }
 
-   // Public --------------------------------------------------------
-
-   // AnnotationValue implementation --------------------------------
-
    public AnnotationInfo getAnnotationType()
    {
       return annotationType;
@@ -92,14 +80,10 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
       return (Value) attributeValues.get(attributeName);
    }
 
-   // Value implementation ------------------------------------------
-
    public TypeInfo getType()
    {
       return annotationType;
    }
-
-   // Object overrides ----------------------------------------------
 
    public boolean equals(Object o)
    {
@@ -119,10 +103,6 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
       return hash;
    }
 
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
    /**
     * Calculate the hashcode
     */
@@ -133,8 +113,4 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
       result = 29 * result + attributeValues.hashCode();
       hash = result;
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

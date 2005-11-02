@@ -41,12 +41,8 @@ import org.jboss.util.JBossStringBuilder;
  */
 public class ConstructorInfoImpl extends AnnotationHolder implements ConstructorInfo
 {
-   // Constants -----------------------------------------------------
-   
    /** serialVersionUID */
    private static final long serialVersionUID = 3256727273163272758L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The constructor */
    protected Constructor constructor;
@@ -68,10 +64,6 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
    
    /** The hash code */
    protected int hash;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new ConstructorInfo.
@@ -146,8 +138,6 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
       calculateHash();
    }
 
-   // Public --------------------------------------------------------
-
    /**
     * Set the constructor
     * 
@@ -157,8 +147,6 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
    {
       this.constructor = constructor;
    }
-   
-   // ConstructorInfo implementation --------------------------------
 
    public Constructor getConstructor()
    {
@@ -185,8 +173,6 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
       return exceptionTypes;
    }
    
-   // ModifierInfo implementation -----------------------------------
-   
    public int getModifiers()
    {
       return modifiers;
@@ -201,8 +187,6 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
    {
       return Modifier.isPublic(modifiers);
    }
-
-   // JBossObject overrides -----------------------------------------
    
    protected void toString(JBossStringBuilder buffer)
    {
@@ -232,10 +216,6 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
    {
       return hash;
    }
-   
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
 
    protected void calculateHash()
    {
@@ -249,8 +229,4 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
       }
       hash = result;
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

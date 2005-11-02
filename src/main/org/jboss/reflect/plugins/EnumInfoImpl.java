@@ -34,22 +34,14 @@ import java.util.HashMap;
  */
 public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3617851958849713457L;
-   
-   // Attributes ----------------------------------------------------
 
    /** Enumeration constants */
    protected EnumConstantInfoImpl[] enumConstants;
    
    /** The constants */
    protected HashMap constants = new HashMap();
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new EnumInfo.
@@ -68,8 +60,6 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
    {
       super(name, modifiers, null, null);
    }
-
-   // Public --------------------------------------------------------
    
    /**
     * Set the enumeration constants
@@ -82,8 +72,6 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
          constants.put(enumConstants[i].getName(), enumConstants[i]);
    }
 
-   // EnumInfo implementation ---------------------------------------
-
    public EnumConstantInfo[] getEnumConstants()
    {
       return enumConstants;
@@ -93,14 +81,4 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
    {
       return (EnumConstantInfo) constants.get(name);
    }
-
-   // Object overrides ----------------------------------------------
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

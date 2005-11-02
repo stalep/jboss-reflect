@@ -37,8 +37,6 @@ import java.util.HashMap;
  */
 public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Serializable
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3546645408219542832L;
    
@@ -49,10 +47,6 @@ public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Seri
 
    /** Annotations map Map<String, AnnotationValue> */
    protected HashMap annotationMap;
-   
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new annotation holder
@@ -71,10 +65,6 @@ public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Seri
       setupAnnotations(annotations);
    }
 
-   // Public --------------------------------------------------------
-
-   // AnnotatedInfo implementation ----------------------------------
-
    public AnnotationValue[] getAnnotations()
    {
       return annotationsArray;
@@ -89,10 +79,6 @@ public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Seri
    {
       return annotationMap.containsKey(name);
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
 
    /**
     * Set up the annotations
@@ -112,8 +98,4 @@ public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Seri
          }
       }
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

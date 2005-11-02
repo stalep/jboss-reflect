@@ -35,12 +35,8 @@ import org.jboss.util.JBossObject;
  */
 public class ClassValueImpl extends JBossObject implements ClassValue, Serializable
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3256721801307566649L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The value */
    protected String value;
@@ -50,10 +46,6 @@ public class ClassValueImpl extends JBossObject implements ClassValue, Serializa
    
    /** The hash code */
    protected int hash = -1;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new class value
@@ -75,23 +67,15 @@ public class ClassValueImpl extends JBossObject implements ClassValue, Serializa
       calculateHash();
    }
 
-   // Public --------------------------------------------------------
-
-   // ClassValue implementation -------------------------------------
-
    public String getValue()
    {
       return value;
    }
 
-   // Value implementation ------------------------------------------
-
    public TypeInfo getType()
    {
       return type;
    }
-
-   // Object overrides ----------------------------------------------
 
    public boolean equals(Object o)
    {
@@ -108,10 +92,6 @@ public class ClassValueImpl extends JBossObject implements ClassValue, Serializa
 
    public int hashCode() { return hash; }
 
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
    /**
     * Calculate the hash code
     */
@@ -122,8 +102,4 @@ public class ClassValueImpl extends JBossObject implements ClassValue, Serializa
       result = 29 * result + type.hashCode();
       hash = result;
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

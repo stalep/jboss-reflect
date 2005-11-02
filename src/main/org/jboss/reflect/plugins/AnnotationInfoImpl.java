@@ -34,22 +34,14 @@ import java.util.HashMap;
  */
 public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationInfo
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3546645408219542832L;
-   
-   // Attributes ----------------------------------------------------
    
    /** The attributes */
    protected AnnotationAttribute[] attributes;
    
    /** Attribute Map<String, AnnotationAttribute> */
    protected HashMap attributeMap;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new AnnotationInfo.
@@ -68,8 +60,6 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
    {
       super(name, modifiers, null);
    }
-
-   // Public --------------------------------------------------------
 
    /**
     * Set the attributes
@@ -114,8 +104,6 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
       return (AnnotationAttribute) attributeMap.get(name);
    }
 
-   // Object overrides ----------------------------------------------
-
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -132,12 +120,4 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
    {
       return name.hashCode();
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

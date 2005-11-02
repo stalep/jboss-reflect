@@ -32,22 +32,14 @@ import org.jboss.reflect.spi.TypeInfo;
  */
 public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
 {
-   // Constants -----------------------------------------------------
-   
    /** serialVersionUID */
    private static final long serialVersionUID = 3905804162787980599L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The component type */
    protected TypeInfo componentType;
    
    /** The hash code */
    protected int hash = -1;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new ArrayInfo.
@@ -67,25 +59,16 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
       calculateHash();
    }
 
-   // Public --------------------------------------------------------
-
-   // ArrayInfo implementation --------------------------------------
-
    public TypeInfo getComponentType()
    {
       return componentType;
    }
-
-   // TypeInfo implementation ---------------------------------------
 
    public String getName()
    {
       return componentType.getName() + "[]";
    }
    
-   
-   // Object overrides ----------------------------------------------
-
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -101,10 +84,6 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
 
    public int hashCode() { return hash; }
 
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
    /**
     * Calculate the hash code
     */
@@ -114,8 +93,4 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
       result = 29 * result + componentType.hashCode();
       hash = result;
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

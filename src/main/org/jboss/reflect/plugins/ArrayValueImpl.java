@@ -37,12 +37,8 @@ import org.jboss.util.JBossObject;
  */
 public class ArrayValueImpl extends JBossObject implements ArrayValue, Serializable
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3979266949899367475L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The type */
    protected TypeInfo type;
@@ -52,10 +48,6 @@ public class ArrayValueImpl extends JBossObject implements ArrayValue, Serializa
    
    /** The hash code */
    protected int hash = -1;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new ArrayValue
@@ -78,23 +70,15 @@ public class ArrayValueImpl extends JBossObject implements ArrayValue, Serializa
 
    }
 
-   // Public --------------------------------------------------------
-
-   // ArrayValue implementation -------------------------------------
-
    public Value[] getValues()
    {
       return values;
    }
 
-   // Value implementation ------------------------------------------
-
    public TypeInfo getType()
    {
       return type;
    }
-
-   // Object overrides ----------------------------------------------
 
    public boolean equals(Object o)
    {
@@ -113,10 +97,6 @@ public class ArrayValueImpl extends JBossObject implements ArrayValue, Serializa
    {
       return hash;
    }
-   
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
 
    /**
     * Calculate the hash code
@@ -126,8 +106,4 @@ public class ArrayValueImpl extends JBossObject implements ArrayValue, Serializa
       // FIXME java5 hash = Arrays.hashCode(values);
       hash = hash * 29 +  type.hashCode();
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

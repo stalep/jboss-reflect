@@ -36,12 +36,8 @@ import org.jboss.util.JBossObject;
  */
 public class AnnotationAttributeImpl extends JBossObject implements AnnotationAttribute, Serializable
 {
-   // Constants -----------------------------------------------------
-   
    /** serialVersionUID */
    private static final long serialVersionUID = 3546645408219542832L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The name */
    protected String name;
@@ -54,10 +50,6 @@ public class AnnotationAttributeImpl extends JBossObject implements AnnotationAt
    
    /** The hash code */
    protected int hash = -1;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new annotation attribute
@@ -81,10 +73,6 @@ public class AnnotationAttributeImpl extends JBossObject implements AnnotationAt
       calcHashCode();
    }
 
-   // Public --------------------------------------------------------
-
-   // AnnotationAttribute implementation ----------------------------
-
    public String getName()
    {
       return name;
@@ -99,8 +87,6 @@ public class AnnotationAttributeImpl extends JBossObject implements AnnotationAt
    {
       return defaultValue;
    }
-
-   // Object overrides ----------------------------------------------
 
    public boolean equals(Object obj)
    {
@@ -124,10 +110,6 @@ public class AnnotationAttributeImpl extends JBossObject implements AnnotationAt
       return hash;
    }
 
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
    /**
     * Calculate the hash code
     */
@@ -138,8 +120,4 @@ public class AnnotationAttributeImpl extends JBossObject implements AnnotationAt
       result = 29 * result + type.hashCode();
       hash = result;
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

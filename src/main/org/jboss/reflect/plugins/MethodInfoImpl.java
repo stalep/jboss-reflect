@@ -40,12 +40,8 @@ import org.jboss.util.JBossStringBuilder;
  */
 public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3257007670035756341L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The method name */
    protected String name;
@@ -73,10 +69,6 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    
    /** The hash code */
    protected int hash;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new method info
@@ -159,8 +151,6 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       calculateHash();
    }
 
-   // Public --------------------------------------------------------
-
    /**
     * Set the method
     * 
@@ -170,8 +160,6 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    {
       this.method = method;
    }
-   
-   // MethodInfo implementation -------------------------------------
 
    public String getName()
    {
@@ -208,8 +196,6 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       return returnType;
    }
    
-   // ModifierInfo implementation -----------------------------------
-   
    public int getModifiers()
    {
       return modifiers;
@@ -224,8 +210,6 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    {
       return Modifier.isPublic(modifiers);
    }
-
-   // JBossObject overrides -----------------------------------------
    
    protected void toString(JBossStringBuilder buffer)
    {
@@ -233,8 +217,6 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       buffer.append(Arrays.asList(parameterTypes));
       buffer.append(" return=").append(returnType);
    }
-
-   // Object overrides ----------------------------------------------
 
    public boolean equals(Object obj)
    {
@@ -261,10 +243,6 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       return hash;
    }
 
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
    /**
     * Calculate the hash code
     */
@@ -280,8 +258,4 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       }
       hash = result;
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }
