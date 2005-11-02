@@ -24,7 +24,6 @@ package org.jboss.reflect.plugins;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
-import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactoryImpl;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
@@ -60,14 +59,8 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    /** Marker for generation */
    private static final FieldInfo[] UNKNOWN_FIELDS = new FieldInfo[0];
    
-   /** The typeinfo factory */
-   protected IntrospectionTypeInfoFactoryImpl typeInfoFactory;
-   
    /** The class name */
    protected String name;
-   
-   /** The type */
-   protected Class type;
    
    /** The class modifiers */
    protected int modifiers;
@@ -164,17 +157,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
     */
    public void setType(Class type)
    {
-      this.type = type;
-   }
-
-   /**
-    * Set the typeinfo factory
-    * 
-    * @param the typeinfo factory
-    */
-   public void setTypeInfoFactory(IntrospectionTypeInfoFactoryImpl typeInfoFactory)
-   {
-      this.typeInfoFactory = typeInfoFactory;
+      setAnnotatedElement(type);
    }
    
    /**
@@ -251,7 +234,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public InterfaceInfo[] getInterfaces()
    {
       if (interfaces == UNKNOWN_INTERFACES)
-         setInterfaces(typeInfoFactory.getInterfaces(type));
+         setInterfaces(typeInfoFactory.getInterfaces(getType()));
       return interfaces;
    }
    
@@ -263,35 +246,35 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public MethodInfo[] getDeclaredMethods()
    {
       if (methods == UNKNOWN_METHODS)
-         setDeclaredMethods(typeInfoFactory.getMethods(type, this));
+         setDeclaredMethods(typeInfoFactory.getMethods(getType(), this));
       return methods;
    }
 
    public FieldInfo getDeclaredField(String name)
    {
       if (fields == UNKNOWN_FIELDS)
-         setDeclaredFields(typeInfoFactory.getFields(type, this));
+         setDeclaredFields(typeInfoFactory.getFields(getType(), this));
       return (FieldInfo) fieldMap.get(name);
    }
 
    public FieldInfo[] getDeclaredFields()
    {
       if (fields == UNKNOWN_FIELDS)
-         setDeclaredFields(typeInfoFactory.getFields(type, this));
+         setDeclaredFields(typeInfoFactory.getFields(getType(), this));
       return fields;
    }
 
    public ConstructorInfo[] getDeclaredConstructors()
    {
       if (constructors == UNKNOWN_CONSTRUCTORS)
-         setDeclaredConstructors(typeInfoFactory.getConstructors(type, this));
+         setDeclaredConstructors(typeInfoFactory.getConstructors(getType(), this));
       return constructors;
    }
 
    public ClassInfo getSuperclass()
    {
       if (superclass == UNKNOWN_CLASS)
-         setSuperclass(typeInfoFactory.getSuperClass(type));
+         setSuperclass(typeInfoFactory.getSuperClass(getType()));
       return superclass;
    }
    
@@ -317,7 +300,12 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
 
    public Class getType()
    {
-      return type;
+      return (Class) annotatedElement;
+   }
+   
+   protected InheritableAnnotationHolder getSuperHolder()
+   {
+      return (ClassInfoImpl) getSuperclass();
    }
    
    protected void toString(JBossStringBuilder buffer)

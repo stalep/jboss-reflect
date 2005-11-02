@@ -21,12 +21,15 @@
 */
 package org.jboss.reflect.plugins;
 
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactoryImpl;
 import org.jboss.reflect.spi.AnnotatedInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.util.JBossObject;
-
-import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * An annotation holder
@@ -34,26 +37,35 @@ import java.util.HashMap;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class InheritableAnnotationHolder extends JBossObject implements AnnotatedInfo, Serializable
+public abstract class InheritableAnnotationHolder extends JBossObject implements AnnotatedInfo, Serializable
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3257290210164289843L;
    
+   /** Unknown annotations map */
+   static final Map UNKNOWN_ANNOTATIONS_MAP = Collections.unmodifiableMap(new HashMap());
+   
+   /** Unknown annotations */
+   static final AnnotationValue[] UNKNOWN_ANNOTATIONS = new AnnotationValue[0];
+   
    /** Declared annotations Map<String, AnnotationValue> */
-   protected HashMap declaredAnnotations;
+   protected Map declaredAnnotations = UNKNOWN_ANNOTATIONS_MAP;
    
    /** All annotations Map<String, AnnotationValue> */
-   protected HashMap allAnnotations;
+   protected Map allAnnotations = UNKNOWN_ANNOTATIONS_MAP;
    
    /** All annotations */
-   protected AnnotationValue[] allAnnotationsArray;
+   protected AnnotationValue[] allAnnotationsArray = UNKNOWN_ANNOTATIONS;
    
    /** Declared annotations */
-   protected AnnotationValue[] declaredAnnotationsArray;
-   
-   /** The super holder of annotations */
-   protected InheritableAnnotationHolder superHolder;
+   protected AnnotationValue[] declaredAnnotationsArray = UNKNOWN_ANNOTATIONS;
 
+   /** The annotated element */
+   protected Object annotatedElement;
+   
+   /** The typeinfo factory */
+   protected IntrospectionTypeInfoFactoryImpl typeInfoFactory;
+   
    /**
     * Create a new InheritableAnnotationHolder.
     */
@@ -62,27 +74,50 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
    }
 
    /**
+    * Set the typeinfo factory
+    * 
+    * @param the typeinfo factory
+    */
+   public void setTypeInfoFactory(IntrospectionTypeInfoFactoryImpl typeInfoFactory)
+   {
+      this.typeInfoFactory = typeInfoFactory;
+   }
+
+   public void setAnnotatedElement(Object annotatedElement)
+   {
+      this.annotatedElement = annotatedElement;
+   }
+   
+   /**
     * Get the declared annotations
     * 
     * @return the declared annotations
     */
    public AnnotationValue[] getDeclaredAnnotations()
    {
+      if (declaredAnnotationsArray == UNKNOWN_ANNOTATIONS)
+         setupAnnotations(typeInfoFactory.getAnnotations(annotatedElement));
       return declaredAnnotationsArray;
    }
 
    public AnnotationValue[] getAnnotations()
    {
+      if (allAnnotationsArray == UNKNOWN_ANNOTATIONS)
+         setupAnnotations(typeInfoFactory.getAnnotations(annotatedElement));
       return allAnnotationsArray;
    }
 
    public AnnotationValue getAnnotation(String name)
    {
+      if (allAnnotations == UNKNOWN_ANNOTATIONS_MAP)
+         setupAnnotations(typeInfoFactory.getAnnotations(annotatedElement));
       return (AnnotationValue) allAnnotations.get(name);
    }
 
    public boolean isAnnotationPresent(String name)
    {
+      if (allAnnotations == UNKNOWN_ANNOTATIONS_MAP)
+         setupAnnotations(typeInfoFactory.getAnnotations(annotatedElement));
       return allAnnotations.containsKey(name);
    }
 
@@ -93,6 +128,10 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
     */
    public void setupAnnotations(AnnotationValue[] annotations)
    {
+      InheritableAnnotationHolder superHolder = getSuperHolder();
+      AnnotationValue[] superAllAnnotations = superHolder.getAnnotations();
+      
+      
       if (annotations != null && annotations.length > 0)
       {
          declaredAnnotations = new HashMap();
@@ -100,12 +139,12 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
          for (int i = 0; i < annotations.length; i++)
             declaredAnnotations.put(annotations[i].getAnnotationType().getName(), annotations[i]);
          allAnnotations = new HashMap();
-
-         if (superHolder != null && superHolder.allAnnotationsArray != null)
+         
+         if (superHolder != null && superAllAnnotations != null && superAllAnnotations.length != 0)
          {
-            for (int i = 0; i < superHolder.allAnnotationsArray.length; i++)
+            for (int i = 0; i < superAllAnnotations.length; i++)
             {
-               AnnotationValue av = superHolder.allAnnotationsArray[i];
+               AnnotationValue av = superAllAnnotations[i];
                if (av.getAnnotationType().isAnnotationPresent("java.lang.annotation.Inherited"));
                   allAnnotations.put(av.getAnnotationType().getName(), av);
             }
@@ -122,9 +161,28 @@ public class InheritableAnnotationHolder extends JBossObject implements Annotate
       {
          if (superHolder != null)
          {
-            allAnnotations = superHolder.allAnnotations;
-            allAnnotationsArray = superHolder.allAnnotationsArray;
+            allAnnotations = superHolder.getAllAnnotations();
+            allAnnotationsArray = superAllAnnotations;
          }
       }
    }
+   
+   /**
+    * Get all the annotations as a map
+    * 
+    * @return the map
+    */
+   protected Map getAllAnnotations()
+   {
+      if (allAnnotations == UNKNOWN_ANNOTATIONS_MAP)
+         setupAnnotations(typeInfoFactory.getAnnotations(annotatedElement));
+      return allAnnotations;
+   }
+   
+   /**
+    * Get the super holder of annoations
+    * 
+    * @return the super holder
+    */
+   protected abstract InheritableAnnotationHolder getSuperHolder();
 }

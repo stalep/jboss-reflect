@@ -27,7 +27,6 @@ import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import org.jboss.logging.Logger;
 import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
@@ -49,9 +48,6 @@ import org.jboss.util.WeakClassCache;
  */
 public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory
 {
-   /** The log */
-   private static final Logger log = Logger.getLogger(IntrospectionTypeInfoFactoryImpl.class);
-   
    /**
     * Generate the type info for a class
     * 
@@ -60,14 +56,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
     */
    public void generateTypeInfo(Class clazz, ClassInfoImpl info)
    {
-      boolean trace = log.isTraceEnabled();
-      if (trace)
-         log.trace("generate TypeInfo: " + info);
-      AnnotationValue[] annotations = getAnnotations(clazz);
-      info.setupAnnotations(annotations);
-
-      if (trace)
-         log.trace("generated typeInfo " + info);
+      // Everything is done lazily
    }
 
    public ClassInfo getSuperClass(Class clazz)
