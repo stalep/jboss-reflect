@@ -34,13 +34,15 @@ import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.util.JBossObject;
+import org.jboss.util.JBossStringBuilder;
 
 /**
  * A join point factory based on reflection
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectJoinpointFactory implements JoinpointFactory
+public class ReflectJoinpointFactory extends JBossObject implements JoinpointFactory
 {
    /** The class info */
    protected ClassInfo classInfo;
@@ -101,5 +103,10 @@ public class ReflectJoinpointFactory implements JoinpointFactory
    public MethodJoinpoint getMethodJoinpoint(MethodInfo methodInfo) throws JoinpointException
    {
       return new ReflectMethodJoinPoint(methodInfo);
+   }
+   
+   public void toString(JBossStringBuilder buffer)
+   {
+      buffer.append("classInfo=").append(classInfo.getName());
    }
 }
