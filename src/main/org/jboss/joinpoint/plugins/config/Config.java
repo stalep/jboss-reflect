@@ -47,8 +47,11 @@ public class Config
    /** The log */
    protected static final Logger log = Logger.getLogger(Config.class);
    
-   /** No parameters */
+   /** No parameter types */
    private static final String[] NO_PARAMS_TYPES = new String[0];
+   
+   /** No parameters */
+   private static final Object[] NO_PARAMS = new Object[0];
    
    /**
     * Instantiate an object
@@ -115,6 +118,18 @@ public class Config
     * Get a constructor Joinpoint
     * 
     * @param jpf the join point factory
+    * @return the Joinpoint
+    * @throws Throwable for any error
+    */
+   public static ConstructorJoinpoint getConstructorJoinpoint(JoinpointFactory jpf) throws Throwable
+   {
+      return getConstructorJoinpoint(jpf, null, null);
+   }
+   
+   /**
+    * Get a constructor Joinpoint
+    * 
+    * @param jpf the join point factory
     * @param paramTypes the parameter types
     * @param params the parameters
     * @return the Joinpoint
@@ -122,6 +137,12 @@ public class Config
     */
    public static ConstructorJoinpoint getConstructorJoinpoint(JoinpointFactory jpf, String[] paramTypes, Object[] params) throws Throwable
    {
+      if (paramTypes == null)
+         paramTypes = NO_PARAMS_TYPES;
+
+      if (params == null)
+         params = NO_PARAMS;
+      
       boolean trace = log.isTraceEnabled();
       if (trace)
          log.trace("Get constructor Joinpoint jpf=" + jpf + " paramTypes=" + Arrays.asList(paramTypes) + " params=" + Arrays.asList(params));
