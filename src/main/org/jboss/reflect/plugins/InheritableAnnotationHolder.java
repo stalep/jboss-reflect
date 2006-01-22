@@ -76,7 +76,7 @@ public abstract class InheritableAnnotationHolder extends JBossObject implements
    /**
     * Set the typeinfo factory
     * 
-    * @param the typeinfo factory
+    * @param typeInfoFactory the typeinfo factory
     */
    public void setTypeInfoFactory(IntrospectionTypeInfoFactoryImpl typeInfoFactory)
    {
