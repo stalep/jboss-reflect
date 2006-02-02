@@ -217,6 +217,11 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       buffer.append(Arrays.asList(parameterTypes));
       buffer.append(" return=").append(returnType);
    }
+   
+   public void toShortString(JBossStringBuilder buffer)
+   {
+      buffer.append(name);
+   }
 
    public boolean equals(Object obj)
    {
