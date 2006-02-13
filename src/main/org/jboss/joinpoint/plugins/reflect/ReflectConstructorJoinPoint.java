@@ -34,19 +34,11 @@ import org.jboss.util.UnreachableStatementException;
  */
 public class ReflectConstructorJoinPoint implements ConstructorJoinpoint
 {
-   // Constants -----------------------------------------------------
-   
-   // Attributes ----------------------------------------------------
-
    /** The constructor info */
    protected ConstructorInfo constructorInfo;
 
    /** The arguments */
    protected Object[] arguments;
-   
-   // Static --------------------------------------------------------
-
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new constructor join point
@@ -57,10 +49,6 @@ public class ReflectConstructorJoinPoint implements ConstructorJoinpoint
    {
       this.constructorInfo = constructorInfo;
    }
-   
-   // Public --------------------------------------------------------
-   
-   // ConstructorJoinpoint implementation ---------------------------
 
    public ConstructorInfo getConstructorInfo()
    {
@@ -76,8 +64,6 @@ public class ReflectConstructorJoinPoint implements ConstructorJoinpoint
    {
       this.arguments = args;
    }
-   
-   // Joinpoint implementation --------------------------------------
 
    public Object clone()
    {
@@ -109,12 +95,4 @@ public class ReflectConstructorJoinPoint implements ConstructorJoinpoint
    {
       return constructorInfo.toString();
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

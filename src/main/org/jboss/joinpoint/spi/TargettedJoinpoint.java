@@ -29,10 +29,6 @@ package org.jboss.joinpoint.spi;
  */
 public interface TargettedJoinpoint extends Joinpoint
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the target of the join point 
     * 
@@ -46,6 +42,4 @@ public interface TargettedJoinpoint extends Joinpoint
     * @param target the target
     */
    void setTarget(Object target);
-   
-   // Inner classes -------------------------------------------------
 }

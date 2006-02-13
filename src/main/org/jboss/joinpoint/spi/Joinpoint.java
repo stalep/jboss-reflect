@@ -29,10 +29,6 @@ package org.jboss.joinpoint.spi;
  */
 public interface Joinpoint extends Cloneable
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Invoke on the actual joinpoint
     *
@@ -54,6 +50,4 @@ public interface Joinpoint extends Cloneable
     * @return a human readable description of the join point
     */
    String toHumanReadableString();
-   
-   // Inner classes -------------------------------------------------
 }

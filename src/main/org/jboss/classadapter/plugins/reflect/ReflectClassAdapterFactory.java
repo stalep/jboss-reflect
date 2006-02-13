@@ -35,20 +35,8 @@ import org.jboss.reflect.spi.TypeInfoFactory;
  */
 public class ReflectClassAdapterFactory implements ClassAdapterFactory
 {
-   // Constants -----------------------------------------------------
-   
-   // Attributes ----------------------------------------------------
-
    /** The type info factory */
    protected TypeInfoFactory typeInfoFactory = new IntrospectionTypeInfoFactory();
-   
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
-
-   // Public --------------------------------------------------------
-
-   // ClassAdapterFactory implementation ----------------------------
 
    public ClassAdapter getClassAdapter(Class clazz)
    {
@@ -61,10 +49,6 @@ public class ReflectClassAdapterFactory implements ClassAdapterFactory
       TypeInfo typeInfo = typeInfoFactory.getTypeInfo(name, cl);
       return createClassAdapter(typeInfo);
    }
-   
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
    
    /**
     * Create a class adapter for the type info
@@ -80,8 +64,4 @@ public class ReflectClassAdapterFactory implements ClassAdapterFactory
       
       return new ReflectClassAdapter(classInfo);
    }
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

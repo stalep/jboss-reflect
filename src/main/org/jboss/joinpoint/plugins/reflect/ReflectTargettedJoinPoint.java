@@ -31,20 +31,8 @@ import org.jboss.util.UnreachableStatementException;
  */
 public abstract class ReflectTargettedJoinPoint implements TargettedJoinpoint
 {
-   // Constants -----------------------------------------------------
-   
-   // Attributes ----------------------------------------------------
-
    /** The target */
    protected Object target;
-   
-   // Static --------------------------------------------------------
-
-   // Constructors --------------------------------------------------
-   
-   // Public --------------------------------------------------------
-   
-   // TargettedJoinpoint implementation -----------------------------
 
    public Object getTarget()
    {
@@ -55,8 +43,6 @@ public abstract class ReflectTargettedJoinPoint implements TargettedJoinpoint
    {
       this.target = target;
    }
-   
-   // Joinpoint implementation --------------------------------------
 
    public Object clone()
    {
@@ -69,12 +55,4 @@ public abstract class ReflectTargettedJoinPoint implements TargettedJoinpoint
          throw new UnreachableStatementException();
       }
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

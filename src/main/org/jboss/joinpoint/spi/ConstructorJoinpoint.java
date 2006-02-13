@@ -31,10 +31,6 @@ import org.jboss.reflect.spi.ConstructorInfo;
  */
 public interface ConstructorJoinpoint extends Joinpoint
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the constructor info for this join point
     * 
@@ -55,6 +51,4 @@ public interface ConstructorJoinpoint extends Joinpoint
     * @param args the arguments
     */
    void setArguments(Object[] args);
-   
-   // Inner classes -------------------------------------------------
 }

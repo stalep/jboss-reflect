@@ -29,18 +29,8 @@ package org.jboss.joinpoint.spi;
  */
 public class JoinpointException extends RuntimeException
 {
-   // Constants -----------------------------------------------------
-
    /** The serialVersionUID */
    private static final long serialVersionUID = 3257572793343030583L;
-   
-   // Attributes ----------------------------------------------------
-   
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
-
-   // Public --------------------------------------------------------
 
    /**
     * Create a new join point exception
@@ -62,14 +52,4 @@ public class JoinpointException extends RuntimeException
    {
       super(description, cause);
    }
-   
-   // Object overrides ----------------------------------------------
-   
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

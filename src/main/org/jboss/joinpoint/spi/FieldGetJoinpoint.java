@@ -31,16 +31,10 @@ import org.jboss.reflect.spi.FieldInfo;
  */
 public interface FieldGetJoinpoint extends TargettedJoinpoint
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the field info for this join point
     * 
     * @return the field info
     */
    FieldInfo getFieldInfo();
-   
-   // Inner classes -------------------------------------------------
 }

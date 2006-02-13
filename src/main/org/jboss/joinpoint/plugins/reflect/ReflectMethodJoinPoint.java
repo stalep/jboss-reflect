@@ -82,12 +82,4 @@ public class ReflectMethodJoinPoint extends ReflectTargettedJoinPoint implements
    {
       return methodInfo.toString();
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

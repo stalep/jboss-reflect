@@ -34,10 +34,6 @@ package org.jboss.classadapter.spi;
  */
 public interface ClassAdapterFactory
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get a class adapter
     * 
@@ -55,6 +51,4 @@ public interface ClassAdapterFactory
     * @return the class adapter
     */
    ClassAdapter getClassAdapter(Class clazz);
-   
-   // Inner classes -------------------------------------------------
 }

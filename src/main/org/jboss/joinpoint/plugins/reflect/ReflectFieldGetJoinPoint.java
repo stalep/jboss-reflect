@@ -31,16 +31,8 @@ import org.jboss.reflect.spi.FieldInfo;
  */
 public class ReflectFieldGetJoinPoint extends ReflectTargettedJoinPoint implements FieldGetJoinpoint
 {
-   // Constants -----------------------------------------------------
-   
-   // Attributes ----------------------------------------------------
-
    /** The field info */
    protected FieldInfo fieldInfo;
-   
-   // Static --------------------------------------------------------
-
-   // Constructors --------------------------------------------------
 
    /**
     * Create a new field get join point
@@ -51,17 +43,11 @@ public class ReflectFieldGetJoinPoint extends ReflectTargettedJoinPoint implemen
    {
       this.fieldInfo = fieldInfo;
    }
-   
-   // Public --------------------------------------------------------
-   
-   // FieldGetJoinpoint implementation ------------------------------
 
    public FieldInfo getFieldInfo()
    {
       return fieldInfo;
    }
-   
-   // Joinpoint implementation --------------------------------------
    
    public Object dispatch() throws Throwable
    {
@@ -72,12 +58,4 @@ public class ReflectFieldGetJoinPoint extends ReflectTargettedJoinPoint implemen
    {
       return "GET " + fieldInfo.toString();
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

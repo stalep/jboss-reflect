@@ -31,10 +31,6 @@ import org.jboss.reflect.spi.FieldInfo;
  */
 public interface FieldSetJoinpoint extends TargettedJoinpoint
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the field info for this join point
     * 
@@ -48,6 +44,4 @@ public interface FieldSetJoinpoint extends TargettedJoinpoint
     * @param value the value to set
     */
    void setValue(Object value);
-   
-   // Inner classes -------------------------------------------------
 }

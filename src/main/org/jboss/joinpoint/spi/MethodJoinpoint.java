@@ -31,10 +31,6 @@ import org.jboss.reflect.spi.MethodInfo;
  */
 public interface MethodJoinpoint extends TargettedJoinpoint
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the method info
     * 
@@ -55,6 +51,4 @@ public interface MethodJoinpoint extends TargettedJoinpoint
     * @param args the arguments
     */
    void setArguments(Object[] args);
-   
-   // Inner classes -------------------------------------------------
 }
