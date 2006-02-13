@@ -204,6 +204,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
 
    public TypeInfo getTypeInfo(Class clazz)
    {
+      if (clazz == null)
+         throw new IllegalArgumentException("Null class");
       TypeInfo primitive = PrimitiveInfo.valueOf(clazz.getName());
       if (primitive != null)
          return primitive;
@@ -213,6 +215,10 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
    
    public TypeInfo getTypeInfo(String name, ClassLoader cl) throws ClassNotFoundException
    {
+      if (name == null)
+         throw new IllegalArgumentException("Null class name");
+      if (cl == null)
+         throw new IllegalArgumentException("Null classloader");
       Class clazz = cl.loadClass(name);
       return getTypeInfo(clazz);
    }
