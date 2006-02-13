@@ -58,7 +58,6 @@ public class AbstractKernelRepository
    };
 
    private MetaDataCombiner combiner;
-   private MetaDataLoader loader;
 
    public AbstractKernelRepository(MetaDataCombiner combiner)
       throws Exception
