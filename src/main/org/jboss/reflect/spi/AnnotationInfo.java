@@ -30,12 +30,6 @@ package org.jboss.reflect.spi;
  */
 public interface AnnotationInfo extends InterfaceInfo, ModifierInfo
 {
-   // Constants -----------------------------------------------------
-
-   // Static --------------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the name
     * 
@@ -57,6 +51,4 @@ public interface AnnotationInfo extends InterfaceInfo, ModifierInfo
     * @return the attribute
     */
    AnnotationAttribute getAttribute(String name);
-   
-   // Inner classes -------------------------------------------------
 }

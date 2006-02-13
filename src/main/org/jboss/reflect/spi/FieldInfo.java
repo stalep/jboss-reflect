@@ -31,10 +31,6 @@ import java.lang.reflect.Field;
  */
 public interface FieldInfo extends AnnotatedInfo, MemberInfo
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the name
     * 
@@ -62,6 +58,4 @@ public interface FieldInfo extends AnnotatedInfo, MemberInfo
     * @return the declaring class
     */
    ClassInfo getDeclaringClass();
-   
-   // Inner classes -------------------------------------------------
 }

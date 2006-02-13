@@ -31,10 +31,6 @@ import org.jboss.util.JBossInterface;
  */
 public interface AnnotatedInfo extends JBossInterface
 {
-   // Constants -----------------------------------------------------
-   
-   // Public --------------------------------------------------------
-
    /**
     * Get the annotations
     * 
@@ -57,6 +53,4 @@ public interface AnnotatedInfo extends JBossInterface
     * @return true when the annotation is present
     */
    boolean isAnnotationPresent(String name);
-   
-   // Inner classes -------------------------------------------------
 }

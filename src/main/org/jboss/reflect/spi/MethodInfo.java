@@ -31,8 +31,6 @@ import java.lang.reflect.Method;
  */
 public interface MethodInfo extends AnnotatedInfo, MemberInfo
 {
-   // Constants -----------------------------------------------------
-   
    /** No parameters */
    public static final TypeInfo[] NO_PARAMS_TYPES = {};
    
@@ -41,8 +39,6 @@ public interface MethodInfo extends AnnotatedInfo, MemberInfo
    
    /** No Exceptions */
    public static final ClassInfo[] NO_EXCEPTIONS = {};
-
-   // Public --------------------------------------------------------
 
    /**
     * Get the method name
@@ -92,6 +88,4 @@ public interface MethodInfo extends AnnotatedInfo, MemberInfo
     * @return the return type
     */
    TypeInfo getReturnType();
-   
-   // Inner classes -------------------------------------------------
 }

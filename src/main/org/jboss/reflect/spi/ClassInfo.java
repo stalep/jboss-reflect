@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.spi;
 
-
 /**
  * Class info
  *
@@ -30,10 +29,6 @@ package org.jboss.reflect.spi;
  */
 public interface ClassInfo extends AnnotatedInfo, ModifierInfo, TypeInfo
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the class name
     * 
@@ -99,6 +94,4 @@ public interface ClassInfo extends AnnotatedInfo, ModifierInfo, TypeInfo
     * @return the super class
     */
    ClassInfo getSuperclass();
-   
-   // Inner classes -------------------------------------------------
 }

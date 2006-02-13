@@ -29,18 +29,10 @@ package org.jboss.reflect.spi;
  */
 public interface EnumValue extends Value
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the value
     * 
     * @return the value
     */
    String getValue();
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

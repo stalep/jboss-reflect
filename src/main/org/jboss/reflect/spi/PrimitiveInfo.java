@@ -33,8 +33,6 @@ import java.util.HashMap;
  */
 public class PrimitiveInfo implements TypeInfo, Serializable
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3256718498443835449L;
 
@@ -68,8 +66,6 @@ public class PrimitiveInfo implements TypeInfo, Serializable
    /** The primitives */
    private static final PrimitiveInfo[] values = {BOOLEAN, BYTE, CHAR, DOUBLE, FLOAT, INT, LONG, SHORT, VOID};
 
-   // Attributes ----------------------------------------------------
-
    /** The name */
    protected final transient String name;
 
@@ -78,8 +74,6 @@ public class PrimitiveInfo implements TypeInfo, Serializable
    
    /** The type */
    protected final transient Class type;
-
-   // Static --------------------------------------------------------
 
    /** The primitives */
    private static HashMap map = new HashMap();
@@ -108,8 +102,6 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       return (PrimitiveInfo) map.get(name);
    }
 
-   // Constructors --------------------------------------------------
-
    /**
     * Create a new primitive info
     * 
@@ -124,8 +116,6 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       this.type = type;
    }
 
-   // Public --------------------------------------------------------
-
    /**
     * Get the ordinal
     * 
@@ -136,8 +126,6 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       return ordinal;
    }
 
-   // TypeInfo implementation ---------------------------------------
-
    public String getName()
    {
       return name;
@@ -147,8 +135,6 @@ public class PrimitiveInfo implements TypeInfo, Serializable
    {
       return type;
    }
-
-   // Object overrides ----------------------------------------------
 
    public String toString()
    {
@@ -174,18 +160,8 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       return name.hashCode();
    }
 
-   // Serializable implementation -----------------------------------
-
    Object readResolve() throws ObjectStreamException
    {
       return values[ordinal];
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
-   // Private -------------------------------------------------------
-
-   // Inner classes -------------------------------------------------
 }

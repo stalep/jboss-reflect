@@ -28,10 +28,6 @@ package org.jboss.reflect.spi;
  */
 public interface TypeInfoFactory
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get a type info
     * 
@@ -49,6 +45,4 @@ public interface TypeInfoFactory
     * @return the type info
     */
    TypeInfo getTypeInfo(Class clazz);
-   
-   // Inner classes -------------------------------------------------
 }

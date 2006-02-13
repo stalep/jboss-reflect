@@ -29,16 +29,10 @@ package org.jboss.reflect.spi;
  */
 public interface StringValue extends Value
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the value
     * 
     * @return the value
     */
    String getValue();
-   
-   // Inner classes -------------------------------------------------
 }

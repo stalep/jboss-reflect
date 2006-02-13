@@ -33,22 +33,14 @@ import org.jboss.util.JBossObject;
  */
 public class PrimitiveValue extends JBossObject implements Serializable, Value
 {
-   // Constants -----------------------------------------------------
-
    /** serialVersionUID */
    private static final long serialVersionUID = 3907214866304741945L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The value */
    protected String value;
    
    /** The type */
    protected PrimitiveInfo type;
-
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
 
    /**
     * Create a primitive value
@@ -79,14 +71,10 @@ public class PrimitiveValue extends JBossObject implements Serializable, Value
       return value;
    }
 
-   // Value implementation ------------------------------------------
-
    public TypeInfo getType()
    {
       return type;
    }
-
-   // Object overrides ----------------------------------------------
 
    public boolean equals(Object o)
    {
@@ -108,12 +96,4 @@ public class PrimitiveValue extends JBossObject implements Serializable, Value
       result = 29 * result + type.hashCode();
       return result;
    }
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

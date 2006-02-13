@@ -29,10 +29,6 @@ package org.jboss.reflect.spi;
  */
 public interface TypeInfo
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-   
    /**
     * Get the type name
     * 
@@ -46,6 +42,4 @@ public interface TypeInfo
     * @return the class
     */
    Class getType();
-   
-   // Inner classes -------------------------------------------------
 }

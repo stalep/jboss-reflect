@@ -29,16 +29,10 @@ package org.jboss.reflect.spi;
  */
 public interface MemberInfo extends ModifierInfo
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-   
    /**
     * Get the declaring class
     * 
     * @return the declaring class 
     */
    ClassInfo getDeclaringClass();
-   
-   // Inner classes -------------------------------------------------
 }

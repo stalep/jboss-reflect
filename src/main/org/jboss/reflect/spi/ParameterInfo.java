@@ -29,10 +29,6 @@ package org.jboss.reflect.spi;
  */
 public interface ParameterInfo extends AnnotatedInfo
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the parameter name
     * 
@@ -46,6 +42,4 @@ public interface ParameterInfo extends AnnotatedInfo
     * @return the parameter types
     */
    TypeInfo getParameterType();
-   
-   // Inner classes -------------------------------------------------
 }

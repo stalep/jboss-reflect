@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.spi;
 
-
 /**
  * Interface info
  *
@@ -30,9 +29,4 @@ package org.jboss.reflect.spi;
  */
 public interface InterfaceInfo extends ClassInfo
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

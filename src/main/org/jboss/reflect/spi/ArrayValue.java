@@ -30,16 +30,10 @@ package org.jboss.reflect.spi;
  */
 public interface ArrayValue extends Value
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the values
     * 
     * @return the values
     */
    Value[] getValues();
-   
-   // Inner classes -------------------------------------------------
 }

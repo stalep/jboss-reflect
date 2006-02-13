@@ -29,10 +29,6 @@ package org.jboss.reflect.spi;
  */
 public interface AnnotationAttribute
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the attribute name
     * 
@@ -53,6 +49,4 @@ public interface AnnotationAttribute
     * @return the default value
     */
    Value getDefaultValue();
-   
-   // Inner classes -------------------------------------------------
 }

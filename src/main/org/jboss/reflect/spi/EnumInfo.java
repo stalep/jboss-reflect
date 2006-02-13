@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.spi;
 
-
 /**
  * Enumeration info
  *
@@ -30,10 +29,6 @@ package org.jboss.reflect.spi;
  */
 public interface EnumInfo extends ClassInfo
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the constants
     * 
@@ -48,6 +43,4 @@ public interface EnumInfo extends ClassInfo
     * @return the constant
     */
    EnumConstantInfo getEnumConstant(String name);
-   
-   // Inner classes -------------------------------------------------
 }

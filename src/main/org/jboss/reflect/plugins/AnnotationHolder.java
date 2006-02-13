@@ -39,8 +39,6 @@ public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Seri
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3546645408219542832L;
-   
-   // Attributes ----------------------------------------------------
 
    /** The annotations */
    protected AnnotationValue[] annotationsArray;

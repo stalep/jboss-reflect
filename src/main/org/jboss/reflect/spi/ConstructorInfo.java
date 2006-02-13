@@ -31,10 +31,6 @@ import java.lang.reflect.Constructor;
  */
 public interface ConstructorInfo extends AnnotatedInfo, MemberInfo
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the constructor
     * 
@@ -69,8 +65,4 @@ public interface ConstructorInfo extends AnnotatedInfo, MemberInfo
     * @return the exception types
     */
    ClassInfo[] getExceptionTypes();
-   
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
 }

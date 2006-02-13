@@ -80,8 +80,6 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
       }
    }
 
-   // AnnotationInfo implementation ---------------------------------
-
    public String getName()
    {
       return name;

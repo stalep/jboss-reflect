@@ -29,18 +29,10 @@ package org.jboss.reflect.spi;
  */
 public interface ArrayInfo extends ClassInfo
 {
-   // Constants -----------------------------------------------------
-
-   // Static --------------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the component type
     * 
     * @return the component type
     */
    TypeInfo getComponentType();
-   
-   // Inner classes -------------------------------------------------
 }

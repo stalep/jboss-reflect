@@ -193,8 +193,6 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
       buffer.append(Arrays.asList(parameterTypes));
    }
 
-   // Object overrides ----------------------------------------------
-
    public boolean equals(Object obj)
    {
       if (this == obj) 

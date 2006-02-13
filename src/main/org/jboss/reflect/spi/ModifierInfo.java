@@ -30,8 +30,6 @@ import java.lang.reflect.Modifier;
  */
 public interface ModifierInfo
 {
-   // Constants -----------------------------------------------------
-
    /** Final */
    public static final int FINAL = Modifier.FINAL;
 
@@ -88,8 +86,6 @@ public interface ModifierInfo
 
    /** Package Abstract */
    public static final int PACKAGE_ABSTRACT = ABSTRACT;
-   
-   // Public --------------------------------------------------------
 
    /**
     * Get the modifiers
@@ -111,6 +107,4 @@ public interface ModifierInfo
     * @return true when static
     */
    boolean isStatic();
-   
-   // Inner classes -------------------------------------------------
 }

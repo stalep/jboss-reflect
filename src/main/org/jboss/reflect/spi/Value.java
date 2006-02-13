@@ -28,16 +28,10 @@ package org.jboss.reflect.spi;
  */
 public interface Value
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the type of the value
     * 
     * @return the type
     */
    TypeInfo getType();
-   
-   // Inner classes -------------------------------------------------
 }

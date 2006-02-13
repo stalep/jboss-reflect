@@ -30,10 +30,6 @@ package org.jboss.reflect.spi;
  */
 public interface AnnotationValue extends Value
 {
-   // Constants -----------------------------------------------------
-
-   // Public --------------------------------------------------------
-
    /**
     * Get the annotation type
     * 
@@ -48,6 +44,4 @@ public interface AnnotationValue extends Value
     * @return the value
     */
    Value getValue(String attributeName);
-   
-   // Inner classes -------------------------------------------------
 }
