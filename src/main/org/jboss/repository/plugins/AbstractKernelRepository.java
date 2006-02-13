@@ -66,7 +66,6 @@ public class AbstractKernelRepository
       this.combiner = combiner;
    }
 
-   // Data access ------------------------------
    public Object getMetaData(Key key)
    {
       return getMetaData(key, combiner);
@@ -153,7 +152,6 @@ public class AbstractKernelRepository
       }
    }
 
-   // Key info ---------------------------------
    public Iterator getKeyNames()
    {
       return repository.keySet().iterator();

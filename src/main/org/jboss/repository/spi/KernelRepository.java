@@ -30,7 +30,6 @@ import java.util.Map;
  */
 public interface KernelRepository
 {
-   // Data access ------------------------------
    public Object getMetaData(Key key);
 
    public Object getMetaData(Key key, MetaDataCombiner combiner);
@@ -54,8 +53,6 @@ public interface KernelRepository
     @param loader
     */
    public void loadMetaData(MetaDataLoader loader);
-
-   // Key info ---------------------------------
 
    /**
     Get the current repository keys
