@@ -40,6 +40,11 @@ public class InvocationMetaDataCombiner
       this.context = context;
    }
 
+   protected Object getContext()
+   {
+      return context;
+   }
+   
    public MetaDataCombiner getNext()
    {
       return next;
