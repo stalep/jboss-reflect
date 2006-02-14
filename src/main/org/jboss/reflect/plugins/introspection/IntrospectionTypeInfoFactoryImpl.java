@@ -32,10 +32,10 @@ import org.jboss.reflect.plugins.ClassInfoHelper;
 import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
-import org.jboss.reflect.plugins.InterfaceInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
@@ -133,16 +133,16 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       return infos;
    }
    
-   public InterfaceInfoImpl[] getInterfaces(ClassInfoImpl classInfo)
+   public InterfaceInfo[] getInterfaces(ClassInfoImpl classInfo)
    {
       Class clazz = classInfo.getType();
       Class[] interfaces = clazz.getInterfaces();
       if (interfaces == null || interfaces.length == 0)
          return null;
       
-      InterfaceInfoImpl[] infos = new InterfaceInfoImpl[interfaces.length];
+      InterfaceInfo[] infos = new InterfaceInfo[interfaces.length];
       for (int i = 0; i < interfaces.length; ++i)
-         infos[i] = (InterfaceInfoImpl) getTypeInfo(interfaces[i]);
+         infos[i] = (InterfaceInfo) getTypeInfo(interfaces[i]);
       
       return infos;
    }
@@ -206,9 +206,9 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
    {
       ClassInfoImpl result;
       if (clazz.isInterface())
-         result = new InterfaceInfoImpl(clazz.getName());
+         result = new ReflectClassInfoImpl(clazz.getName());
       else
-         result = new ClassInfoImpl(clazz.getName());
+         result = new ReflectClassInfoImpl(clazz.getName());
       result.setType(clazz);
       result.setClassInfoHelper(this);
       result.setAnnotationHelper(this);

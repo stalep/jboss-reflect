@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins;
 
+import org.jboss.reflect.spi.InterfaceInfo;
+
 
 
 /**
@@ -45,7 +47,7 @@ public interface ClassInfoHelper
     * @param classInfo the class info
     * @return the interface info
     */
-   InterfaceInfoImpl[] getInterfaces(ClassInfoImpl classInfo);
+   InterfaceInfo[] getInterfaces(ClassInfoImpl classInfo);
 
    /**
     * Get the constructors
