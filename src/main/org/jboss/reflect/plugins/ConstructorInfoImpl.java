@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
@@ -32,6 +31,7 @@ import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
+import org.jboss.util.NotImplementedException;
 
 /**
  * Constructor info
@@ -43,9 +43,6 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3256727273163272758L;
-
-   /** The constructor */
-   protected Constructor constructor;
    
    /** The declring class */
    protected ClassInfo declaringClass;
@@ -137,21 +134,6 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
       this.declaringClass = declaring;
       calculateHash();
    }
-
-   /**
-    * Set the constructor
-    * 
-    * @param constructor the constructor
-    */
-   public void setConstructor(Constructor constructor)
-   {
-      this.constructor = constructor;
-   }
-
-   public Constructor getConstructor()
-   {
-      return constructor;
-   }
    
    public ClassInfo getDeclaringClass()
    {
@@ -188,6 +170,11 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
       return Modifier.isPublic(modifiers);
    }
    
+   public Object newInstance(Object[] args) throws Throwable
+   {
+      throw new NotImplementedException("newInstance");
+   }
+
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append(Arrays.asList(parameterTypes));

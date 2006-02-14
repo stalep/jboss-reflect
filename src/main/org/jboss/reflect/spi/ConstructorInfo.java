@@ -21,8 +21,6 @@
 */
 package org.jboss.reflect.spi;
 
-import java.lang.reflect.Constructor;
-
 /**
  * Constructor info
  *
@@ -31,13 +29,6 @@ import java.lang.reflect.Constructor;
  */
 public interface ConstructorInfo extends AnnotatedInfo, MemberInfo
 {
-   /**
-    * Get the constructor
-    * 
-    * @return the constructor
-    */
-   Constructor getConstructor();
-   
    /**
     * Get the declaring class
     * 
@@ -65,4 +56,13 @@ public interface ConstructorInfo extends AnnotatedInfo, MemberInfo
     * @return the exception types
     */
    ClassInfo[] getExceptionTypes();
+   
+   /**
+    * Create a new instance
+    * 
+    * @param args the arguments
+    * @return the instance
+    * @throws Throwable for any error
+    */
+   Object newInstance(Object[] args) throws Throwable;
 }

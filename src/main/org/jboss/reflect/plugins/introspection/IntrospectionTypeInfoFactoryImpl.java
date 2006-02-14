@@ -85,17 +85,17 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
     */
    public ConstructorInfoImpl[] getConstructors(Class clazz, ClassInfo declaring)
    {
-      ConstructorInfoImpl[] infos = null;
+      ReflectConstructorInfoImpl[] infos = null;
       if (clazz.isInterface() == false)
       {
          Constructor[] constructors = getDeclaredConstructors(clazz);
          if (constructors != null && constructors.length > 0)
          {
-            infos = new ConstructorInfoImpl[constructors.length];
+            infos = new ReflectConstructorInfoImpl[constructors.length];
             for (int i = 0; i < constructors.length; ++i)
             {
                AnnotationValue[] annotations = getAnnotations(constructors[i]);
-               infos[i] = new ConstructorInfoImpl(annotations, getTypeInfos(constructors[i].getParameterTypes()), getClassInfos(constructors[i].getExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
+               infos[i] = new ReflectConstructorInfoImpl(annotations, getTypeInfos(constructors[i].getParameterTypes()), getClassInfos(constructors[i].getExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
                infos[i].setConstructor(constructors[i]);
             }
          }

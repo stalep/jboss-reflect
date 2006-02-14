@@ -22,7 +22,6 @@
 package org.jboss.joinpoint.plugins.reflect;
 
 import org.jboss.joinpoint.spi.ConstructorJoinpoint;
-import org.jboss.reflect.plugins.introspection.ReflectionUtils;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.util.UnreachableStatementException;
 
@@ -78,7 +77,7 @@ public class ReflectConstructorJoinPoint implements ConstructorJoinpoint
 
    public Object dispatch() throws Throwable
    {
-      return ReflectionUtils.newInstance(constructorInfo.getConstructor(), arguments);
+      return constructorInfo.newInstance(arguments);
    }
    
    public String toHumanReadableString()
