@@ -21,9 +21,6 @@
 */
 package org.jboss.joinpoint.plugins.reflect;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-
 import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.joinpoint.spi.FieldGetJoinpoint;
 import org.jboss.joinpoint.spi.FieldSetJoinpoint;
@@ -46,34 +43,6 @@ public class ReflectJoinpointFactory extends JBossObject implements JoinpointFac
 {
    /** The class info */
    protected ClassInfo classInfo;
-
-   public static void handleErrors(String context, Class[] parameters, Object[] arguments, Throwable t) throws Throwable
-   {
-      if (t instanceof IllegalArgumentException)
-      {
-         ArrayList expected = new ArrayList();
-         Class[] parameterTypes = parameters;
-         for (int i = 0; i < parameterTypes.length; ++i)
-            expected.add(parameterTypes[i].getName());
-         ArrayList actual = new ArrayList();
-         if (arguments != null)
-         {
-            for (int i = 0; i < arguments.length; ++i)
-            {
-               if (arguments[i] == null)
-                  actual.add(null);
-               else
-                  actual.add(arguments[i].getClass().getName());
-            }
-         }
-         throw new IllegalArgumentException("Wrong arguments. " + context + " expected=" + expected + " actual=" + actual);
-      }
-      else if (t instanceof InvocationTargetException)
-      {
-         throw ((InvocationTargetException) t).getTargetException();
-      }
-      throw t;
-   }
    
    public ReflectJoinpointFactory(ClassInfo classInfo)
    {
