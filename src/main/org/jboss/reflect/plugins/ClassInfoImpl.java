@@ -83,6 +83,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    /** The constructor info */
    protected ConstructorInfo[] constructors = UNKNOWN_CONSTRUCTORS; 
 
+   /** The class info helper */
+   protected ClassInfoHelper classInfoHelper;
+   
    /**
     * Find a method
     * 
@@ -150,6 +153,16 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       this.superclass = superclass;
    }
 
+   /**
+    * Set the class info helper
+    * 
+    * @param helper the helper
+    */
+   public void setClassInfoHelper(ClassInfoHelper helper)
+   {
+      this.classInfoHelper = helper;
+   }
+   
    /**
     * Set the type
     * 
@@ -220,7 +233,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
     * 
     * @param superInfo the super class
     */
-   public void setSuperclass(ClassInfo superInfo)
+   public void setSuperclass(ClassInfoImpl superInfo)
    {
       this.superclass = superInfo;
    }
@@ -234,7 +247,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public InterfaceInfo[] getInterfaces()
    {
       if (interfaces == UNKNOWN_INTERFACES)
-         setInterfaces(typeInfoFactory.getInterfaces(getType()));
+         setInterfaces(classInfoHelper.getInterfaces(this));
       return interfaces;
    }
    
@@ -246,35 +259,35 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public MethodInfo[] getDeclaredMethods()
    {
       if (methods == UNKNOWN_METHODS)
-         setDeclaredMethods(typeInfoFactory.getMethods(getType(), this));
+         setDeclaredMethods(classInfoHelper.getMethods(this));
       return methods;
    }
 
    public FieldInfo getDeclaredField(String name)
    {
       if (fields == UNKNOWN_FIELDS)
-         setDeclaredFields(typeInfoFactory.getFields(getType(), this));
+         setDeclaredFields(classInfoHelper.getFields(this));
       return (FieldInfo) fieldMap.get(name);
    }
 
    public FieldInfo[] getDeclaredFields()
    {
       if (fields == UNKNOWN_FIELDS)
-         setDeclaredFields(typeInfoFactory.getFields(getType(), this));
+         setDeclaredFields(classInfoHelper.getFields(this));
       return fields;
    }
 
    public ConstructorInfo[] getDeclaredConstructors()
    {
       if (constructors == UNKNOWN_CONSTRUCTORS)
-         setDeclaredConstructors(typeInfoFactory.getConstructors(getType(), this));
+         setDeclaredConstructors(classInfoHelper.getConstructors(this));
       return constructors;
    }
 
    public ClassInfo getSuperclass()
    {
       if (superclass == UNKNOWN_CLASS)
-         setSuperclass(typeInfoFactory.getSuperClass(getType()));
+         setSuperclass(classInfoHelper.getSuperClass(this));
       return superclass;
    }
    

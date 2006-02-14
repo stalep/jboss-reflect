@@ -27,6 +27,8 @@ import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
+import org.jboss.reflect.plugins.AnnotationHelper;
+import org.jboss.reflect.plugins.ClassInfoHelper;
 import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
@@ -34,7 +36,6 @@ import org.jboss.reflect.plugins.InterfaceInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
@@ -46,7 +47,7 @@ import org.jboss.util.WeakClassCache;
  * FIXME: use lazy loading to avoid reading the entire class model
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory
+public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory, AnnotationHelper, ClassInfoHelper
 {
    /**
     * Generate the type info for a class
@@ -59,8 +60,9 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       // Everything is done lazily
    }
 
-   public ClassInfo getSuperClass(Class clazz)
+   public ClassInfoImpl getSuperClass(ClassInfoImpl classInfo)
    {
+      Class clazz = classInfo.getType();
       ClassInfoImpl superType = null;
       if (clazz.isInterface() == false)
       {
@@ -76,15 +78,9 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       return new AnnotationValue[0];
    }
 
-   /**
-    * Get the constructors
-    * 
-    * @param clazz the class
-    * @param declaring the declaring class
-    * @return the constructor info
-    */
-   public ConstructorInfoImpl[] getConstructors(Class clazz, ClassInfo declaring)
+   public ConstructorInfoImpl[] getConstructors(ClassInfoImpl classInfo)
    {
+      Class clazz = classInfo.getType();
       ReflectConstructorInfoImpl[] infos = null;
       if (clazz.isInterface() == false)
       {
@@ -103,15 +99,9 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       return infos;
    }
    
-   /**
-    * Get the fields
-    * 
-    * @param clazz the class
-    * @param declaring the declaring class
-    * @return the field info
-    */
-   public FieldInfoImpl[] getFields(Class clazz, ClassInfo declaring)
+   public FieldInfoImpl[] getFields(ClassInfoImpl classInfo)
    {
+      Class clazz = classInfo.getType();
       Field[] fields = getDeclaredFields(clazz);
       if (fields == null || fields.length == 0)
          return null;
@@ -126,15 +116,9 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       return infos;
    }
    
-   /**
-    * Get the methods
-    * 
-    * @param clazz the class
-    * @param declaring the declaring class
-    * @return the method info
-    */
-   public MethodInfoImpl[] getMethods(Class clazz, ClassInfo declaring)
+   public MethodInfoImpl[] getMethods(ClassInfoImpl classInfo)
    {
+      Class clazz = classInfo.getType();
       Method[] methods = getDeclaredMethods(clazz);
       if (methods == null || methods.length == 0)
          return null;
@@ -149,21 +133,16 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       return infos;
    }
    
-   /**
-    * Get the interfaces
-    * 
-    * @param clazz the class
-    * @return the interface info
-    */
-   public InterfaceInfo[] getInterfaces(Class clazz)
+   public InterfaceInfoImpl[] getInterfaces(ClassInfoImpl classInfo)
    {
+      Class clazz = classInfo.getType();
       Class[] interfaces = clazz.getInterfaces();
       if (interfaces == null || interfaces.length == 0)
          return null;
       
-      InterfaceInfo[] infos = new InterfaceInfo[interfaces.length];
+      InterfaceInfoImpl[] infos = new InterfaceInfoImpl[interfaces.length];
       for (int i = 0; i < interfaces.length; ++i)
-         infos[i] = (InterfaceInfo) getTypeInfo(interfaces[i]);
+         infos[i] = (InterfaceInfoImpl) getTypeInfo(interfaces[i]);
       
       return infos;
    }
@@ -231,7 +210,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       else
          result = new ClassInfoImpl(clazz.getName());
       result.setType(clazz);
-      result.setTypeInfoFactory(this);
+      result.setClassInfoHelper(this);
+      result.setAnnotationHelper(this);
       return result;
    }
 
