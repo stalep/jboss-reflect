@@ -139,11 +139,11 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       if (methods == null || methods.length == 0)
          return null;
       
-      MethodInfoImpl[] infos = new MethodInfoImpl[methods.length];
+      ReflectMethodInfoImpl[] infos = new ReflectMethodInfoImpl[methods.length];
       for (int i = 0; i < methods.length; ++i)
       {
          AnnotationValue[] annotations = getAnnotations(methods[i]);
-         infos[i] = new MethodInfoImpl(annotations, methods[i].getName(), getTypeInfo(methods[i].getReturnType()), getTypeInfos(methods[i].getParameterTypes()), getClassInfos(methods[i].getExceptionTypes()), methods[i].getModifiers(), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
+         infos[i] = new ReflectMethodInfoImpl(annotations, methods[i].getName(), getTypeInfo(methods[i].getReturnType()), getTypeInfos(methods[i].getParameterTypes()), getClassInfos(methods[i].getExceptionTypes()), methods[i].getModifiers(), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
          infos[i].setMethod(methods[i]);
       }
       return infos;

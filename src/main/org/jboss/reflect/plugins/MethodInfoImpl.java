@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
@@ -31,6 +30,7 @@ import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
+import org.jboss.util.NotImplementedException;
 
 /**
  * Method info
@@ -45,9 +45,6 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
 
    /** The method name */
    protected String name;
-   
-   /** The method */
-   protected Method method;
    
    /** The declaring class */
    protected ClassInfo declaringClass;
@@ -151,24 +148,9 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       calculateHash();
    }
 
-   /**
-    * Set the method
-    * 
-    * @param method the method
-    */
-   public void setMethod(Method method)
-   {
-      this.method = method;
-   }
-
    public String getName()
    {
       return name;
-   }
-
-   public Method getMethod()
-   {
-      return method;
    }
    
    public ClassInfo getDeclaringClass()
@@ -211,6 +193,11 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       return Modifier.isPublic(modifiers);
    }
    
+   public Object invoke(Object target, Object[] args) throws Throwable
+   {
+      throw new NotImplementedException("invoke");
+   }
+
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);

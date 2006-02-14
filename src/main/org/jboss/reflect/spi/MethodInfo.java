@@ -21,8 +21,6 @@
 */
 package org.jboss.reflect.spi;
 
-import java.lang.reflect.Method;
-
 /**
  * Method info
  *
@@ -46,13 +44,6 @@ public interface MethodInfo extends AnnotatedInfo, MemberInfo
     * @return the method name
     */
    String getName();
-
-   /**
-    * Get the method
-    * 
-    * @return the method
-    */
-   Method getMethod();
    
    /**
     * Get the declaring class
@@ -88,4 +79,14 @@ public interface MethodInfo extends AnnotatedInfo, MemberInfo
     * @return the return type
     */
    TypeInfo getReturnType();
+
+   /**
+    * Invoke the method
+    * 
+    * @param target the target
+    * @param args the arguments
+    * @return the result of the invocation
+    * @throws Throwable for any error
+    */
+   Object invoke(Object target, Object[] args) throws Throwable;
 }

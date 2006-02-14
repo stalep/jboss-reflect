@@ -22,7 +22,6 @@
 package org.jboss.joinpoint.plugins.reflect;
 
 import org.jboss.joinpoint.spi.MethodJoinpoint;
-import org.jboss.reflect.plugins.introspection.ReflectionUtils;
 import org.jboss.reflect.spi.MethodInfo;
 
 /**
@@ -64,7 +63,7 @@ public class ReflectMethodJoinPoint extends ReflectTargettedJoinPoint implements
 
    public Object dispatch() throws Throwable
    {
-      return ReflectionUtils.invoke(methodInfo.getMethod(), target, arguments);
+      return methodInfo.invoke(target, arguments);
    }
    
    public String toHumanReadableString()
