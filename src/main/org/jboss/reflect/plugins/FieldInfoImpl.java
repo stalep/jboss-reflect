@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import org.jboss.reflect.spi.AnnotationValue;
@@ -29,6 +28,7 @@ import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
+import org.jboss.util.NotImplementedException;
 
 /**
  * A field info
@@ -43,9 +43,6 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
 
    /** The field name */
    protected String name;
-   
-   /** The field */
-   protected Field field;
    
    /** The field type */
    protected TypeInfo type;
@@ -85,24 +82,9 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
       calculateHash();
    }
 
-   /**
-    * Set the field
-    * 
-    * @param field the field
-    */
-   public void setField(Field field)
-   {
-      this.field = field;
-   }
-
    public String getName()
    {
       return name;
-   }
-   
-   public Field getField()
-   {
-      return field;
    }
 
    public TypeInfo getType()
@@ -130,6 +112,16 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
       return Modifier.isPublic(modifiers);
    }
    
+   public Object get(Object target) throws Throwable
+   {
+      throw new NotImplementedException("get");
+   }
+
+   public Object set(Object target, Object value) throws Throwable
+   {
+      throw new NotImplementedException("set");
+   }
+
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);

@@ -21,8 +21,6 @@
 */
 package org.jboss.reflect.spi;
 
-import java.lang.reflect.Field;
-
 /**
  * A field info
  *
@@ -39,13 +37,6 @@ public interface FieldInfo extends AnnotatedInfo, MemberInfo
    String getName();
    
    /**
-    * Get the field
-    * 
-    * @return the field
-    */
-   Field getField();
-   
-   /**
     * Get the field type
     * 
     * @return the field type
@@ -58,4 +49,22 @@ public interface FieldInfo extends AnnotatedInfo, MemberInfo
     * @return the declaring class
     */
    ClassInfo getDeclaringClass();
+   
+   /**
+    * Get the value of the field
+    * 
+    * @param target the target
+    * @throws Throwable for any error
+    */
+   Object get(Object target) throws Throwable;
+   
+   /**
+    * Set the value of the field
+    * 
+    * @param target the target
+    * @param value the value
+    * @return null
+    * @throws Throwable for any error
+    */
+   Object set(Object target, Object value) throws Throwable;
 }

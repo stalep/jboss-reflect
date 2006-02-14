@@ -22,7 +22,6 @@
 package org.jboss.joinpoint.plugins.reflect;
 
 import org.jboss.joinpoint.spi.FieldGetJoinpoint;
-import org.jboss.reflect.plugins.introspection.ReflectionUtils;
 import org.jboss.reflect.spi.FieldInfo;
 
 /**
@@ -52,7 +51,7 @@ public class ReflectFieldGetJoinPoint extends ReflectTargettedJoinPoint implemen
    
    public Object dispatch() throws Throwable
    {
-      return ReflectionUtils.getField(fieldInfo.getField(), target);
+      return fieldInfo.get(target);
    }
    
    public String toHumanReadableString()
