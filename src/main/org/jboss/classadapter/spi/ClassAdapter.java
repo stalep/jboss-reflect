@@ -87,4 +87,11 @@ public interface ClassAdapter extends JBossInterface
     * @return the joinpoint factory
     */
    JoinpointFactory getJoinpointFactory();
+   
+   /**
+    * Get the classloader associated with this class adapter
+    * 
+    * @return the classloader
+    */
+   ClassLoader getClassLoader();
 }

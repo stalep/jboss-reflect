@@ -25,9 +25,14 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import org.jboss.reflect.plugins.ClassInfoImpl;
+import org.jboss.reflect.plugins.ValueConvertor;
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
+
 /**
  * Primitive info
  *
+ * @todo fix the introspection assumption
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
@@ -65,6 +70,9 @@ public class PrimitiveInfo implements TypeInfo, Serializable
 
    /** The primitives */
    private static final PrimitiveInfo[] values = {BOOLEAN, BYTE, CHAR, DOUBLE, FLOAT, INT, LONG, SHORT, VOID};
+
+   /** The type info factory */
+   protected static final TypeInfoFactory typeInfoFactory = new IntrospectionTypeInfoFactory();
 
    /** The name */
    protected final transient String name;
@@ -134,6 +142,27 @@ public class PrimitiveInfo implements TypeInfo, Serializable
    public Class getType()
    {
       return type;
+   }
+   
+   public Object convertValue(Object value) throws Throwable
+   {
+      return ValueConvertor.convertValue(type, value);
+   }
+
+   public boolean isArray()
+   {
+      return false;
+   }
+
+   public TypeInfo getArrayType(int depth)
+   {
+      Class arrayClass = ClassInfoImpl.getArrayClass(getType(), depth);
+      return typeInfoFactory.getTypeInfo(arrayClass);
+   }
+
+   public Object[] newArrayInstance(int size) throws Throwable
+   {
+      throw new UnsupportedOperationException("Not an array " + name);
    }
 
    public String toString()

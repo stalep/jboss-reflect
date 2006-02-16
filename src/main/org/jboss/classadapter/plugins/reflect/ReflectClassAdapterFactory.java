@@ -23,8 +23,8 @@ package org.jboss.classadapter.plugins.reflect;
 
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
+import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
-import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 
@@ -41,26 +41,20 @@ public class ReflectClassAdapterFactory implements ClassAdapterFactory
    public ClassAdapter getClassAdapter(Class clazz)
    {
       TypeInfo typeInfo = typeInfoFactory.getTypeInfo(clazz);
-      return createClassAdapter(typeInfo);
+      return getClassAdapter(typeInfo);
    }
    
    public ClassAdapter getClassAdapter(String name, ClassLoader cl) throws ClassNotFoundException
    {
       TypeInfo typeInfo = typeInfoFactory.getTypeInfo(name, cl);
-      return createClassAdapter(typeInfo);
+      return getClassAdapter(typeInfo);
    }
    
-   /**
-    * Create a class adapter for the type info
-    * 
-    * @param typeInfo the type info
-    * @return the class adapter
-    */
-   protected ClassAdapter createClassAdapter(TypeInfo typeInfo)
+   public ClassAdapter getClassAdapter(TypeInfo typeInfo)
    {
-      if (typeInfo instanceof ClassInfo == false)
+      if (typeInfo instanceof ClassInfoImpl == false)
          throw new IllegalArgumentException("Not a class " + typeInfo.getName());
-      ClassInfo classInfo = (ClassInfo) typeInfo;
+      ClassInfoImpl classInfo = (ClassInfoImpl) typeInfo;
       
       return new ReflectClassAdapter(classInfo);
    }

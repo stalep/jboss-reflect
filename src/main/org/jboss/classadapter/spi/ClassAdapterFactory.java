@@ -21,6 +21,8 @@
 */
 package org.jboss.classadapter.spi;
 
+import org.jboss.reflect.spi.TypeInfo;
+
 /**
  * A class adapter factory.<p>
  * 
@@ -51,4 +53,12 @@ public interface ClassAdapterFactory
     * @return the class adapter
     */
    ClassAdapter getClassAdapter(Class clazz);
+
+   /**
+    * Get a class adapter
+    * 
+    * @param type the type info
+    * @return the class adapter
+    */
+   ClassAdapter getClassAdapter(TypeInfo typeInfo);
 }

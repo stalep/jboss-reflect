@@ -21,6 +21,7 @@
 */
 package org.jboss.reflect.plugins;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
@@ -32,10 +33,12 @@ import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
+import org.jboss.util.UnreachableStatementException;
 
 /**
  * Class info
  *
+ * @todo fix the introspection assumption
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
@@ -119,6 +122,19 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return null;
    }
 
+   /**
+    * Get an array class
+    * 
+    * @todo fixme there must be a better way to do this!
+    * @param clazz the class
+    * @param depth the depth
+    * @return the array class
+    */
+   public static Class getArrayClass(Class clazz, int depth)
+   {
+      return Array.newInstance(clazz, depth).getClass();
+   }
+   
    /**
     * Create a new abstract ClassInfo.
     */
@@ -316,6 +332,30 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return (Class) annotatedElement;
    }
    
+   public Object convertValue(Object value) throws Throwable
+   {
+      return ValueConvertor.convertValue(getType(), value);
+   }
+
+   public boolean isArray()
+   {
+      return getType().isArray();
+   }
+
+   public TypeInfo getArrayType(int depth)
+   {
+      Class arrayClass = getArrayClass(getType(), depth);
+      return classInfoHelper.getTypeInfo(arrayClass);
+   }
+
+   public Object[] newArrayInstance(int size) throws Throwable
+   {
+      Class clazz = getType();
+      if (clazz.isArray() == false)
+         throw new ClassCastException(clazz + " is not an array.");
+      return (Object[]) Array.newInstance(clazz.getComponentType(), size);
+   }
+
    protected InheritableAnnotationHolder getSuperHolder()
    {
       return (ClassInfoImpl) getSuperclass();
@@ -349,96 +389,117 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    {
       public ConstructorInfo[] getDeclaredConstructors()
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public FieldInfo getDeclaredField(String name)
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public FieldInfo[] getDeclaredFields()
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public MethodInfo getDeclaredMethod(String name, TypeInfo[] parameters)
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public MethodInfo[] getDeclaredMethods()
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public InterfaceInfo[] getInterfaces()
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public String getName()
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public ClassInfo getSuperclass()
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public boolean isInterface()
       {
-         return false;
+         throw new UnreachableStatementException();
       }
 
       public AnnotationValue getAnnotation(String name)
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public AnnotationValue[] getAnnotations()
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public boolean isAnnotationPresent(String name)
       {
-         return false;
+         throw new UnreachableStatementException();
       }
 
       public String toShortString()
       {
-         return null;
+         throw new UnreachableStatementException();
       }
 
       public void toShortString(JBossStringBuilder buffer)
       {
+         throw new UnreachableStatementException();
       }
 
       public Class getType()
       {
-         return null;
+         throw new UnreachableStatementException();
+      }
+
+      public Object convertValue(Object value) throws Throwable
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public TypeInfo getArrayType(int depth)
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public boolean isArray()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public Object[] newArrayInstance(int size) throws Throwable
+      {
+         throw new UnreachableStatementException();
       }
 
       public int getModifiers()
       {
-         return 0;
+         throw new UnreachableStatementException();
       }
 
       public boolean isPublic()
       {
-         return false;
+         throw new UnreachableStatementException();
       }
 
       public boolean isStatic()
       {
-         return false;
+         throw new UnreachableStatementException();
       }
       
       public Object clone()
       {
-         return null;
+         throw new UnreachableStatementException();
       }
    }
 }

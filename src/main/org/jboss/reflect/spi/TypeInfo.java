@@ -38,8 +38,42 @@ public interface TypeInfo
    
    /**
     * Get the class
-    * 
+    *
+    * @deprecated I'm not sure this should be here?
     * @return the class
     */
    Class getType();
+   
+   /**
+    * Convert a value
+    * 
+    * @param value the original value
+    * @return the converted value
+    * @throws Throwble for any error
+    */
+   Object convertValue(Object value) throws Throwable;
+   
+   /**
+    * Whether this type is an array
+    * 
+    * @return true when an array
+    */
+   boolean isArray();
+   
+   /**
+    * Whether this type is an array
+    * 
+    * @param depth the array depth
+    * @return the array type
+    */
+   TypeInfo getArrayType(int depth);
+   
+   /**
+    * Create a new array
+    * 
+    * @param size the size
+    * @return the converted value
+    * @throws Throwble for any error
+    */
+   Object[] newArrayInstance(int size) throws Throwable;
 }

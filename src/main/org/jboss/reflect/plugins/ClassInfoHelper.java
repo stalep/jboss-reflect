@@ -22,12 +22,12 @@
 package org.jboss.reflect.plugins;
 
 import org.jboss.reflect.spi.InterfaceInfo;
-
-
+import org.jboss.reflect.spi.TypeInfo;
 
 /**
  * ClassInfoHelper.
  * 
+ * @todo fix the introspection assumption
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
@@ -72,4 +72,12 @@ public interface ClassInfoHelper
     * @return the method info
     */
    MethodInfoImpl[] getMethods(ClassInfoImpl classInfo);
+
+   /**
+    * Get a type info
+    * 
+    * @param clazz the class
+    * @return the type info
+    */
+   TypeInfo getTypeInfo(Class clazz);
 }
