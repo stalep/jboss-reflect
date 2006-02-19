@@ -19,33 +19,33 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.reflect;
+package org.jboss.test.classinfo.test;
 
 import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 
-import org.jboss.test.classinfo.introspection.test.IntrospectionTestSuite;
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
+import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
- * ClassInfo Test Suite.
+ * Introspection ClassInfo Test Case.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ClassInfoTestSuite extends TestSuite
+public class IntrospectionClassInfoTestCase extends ClassInfoTest
 {
-   public static void main(String[] args)
-   {
-      TestRunner.run(suite());
-   }
-
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("ClassInfo Tests");
+      return suite(IntrospectionClassInfoTestCase.class);
+   }
+   
+   public IntrospectionClassInfoTestCase(String name)
+   {
+      super(name);
+   }
 
-      suite.addTest(IntrospectionTestSuite.suite());
-      
-      return suite;
+   protected TypeInfoFactory getTypeInfoFactory()
+   {
+      return new IntrospectionTypeInfoFactory();
    }
 }

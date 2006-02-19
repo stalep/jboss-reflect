@@ -25,8 +25,8 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import org.jboss.test.classinfo.test.ClassInfoTestSuite;
 import org.jboss.test.joinpoint.reflect.test.ReflectJoinpointTestSuite;
-import org.jboss.test.reflect.ClassInfoTestSuite;
 
 /**
  * All Test Suite.

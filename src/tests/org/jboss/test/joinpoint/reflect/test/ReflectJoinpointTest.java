@@ -21,14 +21,12 @@
 */
 package org.jboss.test.joinpoint.reflect.test;
 
-import junit.framework.Test;
-
 import org.jboss.joinpoint.plugins.config.Config;
 import org.jboss.joinpoint.plugins.reflect.ReflectJoinpointFactory;
 import org.jboss.joinpoint.spi.Joinpoint;
 import org.jboss.joinpoint.spi.JoinpointFactory;
-import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.test.ContainerTest;
 import org.jboss.test.joinpoint.reflect.support.SimpleBean;
 
@@ -38,14 +36,9 @@ import org.jboss.test.joinpoint.reflect.support.SimpleBean;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ReflectJoinpointTestCase extends ContainerTest
+public abstract class ReflectJoinpointTest extends ContainerTest
 {
-   public static Test suite()
-   {
-      return suite(ReflectJoinpointTestCase.class);
-   }
-
-   public ReflectJoinpointTestCase(String name)
+   public ReflectJoinpointTest(String name)
    {
       super(name);
    }
@@ -122,10 +115,12 @@ public class ReflectJoinpointTestCase extends ContainerTest
 
    protected JoinpointFactory getJointpointFactory(Class clazz)
    {
-      IntrospectionTypeInfoFactory typeFactory = new IntrospectionTypeInfoFactory();
+      TypeInfoFactory typeFactory = getTypeInfoFactory();
       ClassInfo info = (ClassInfo) typeFactory.getTypeInfo(clazz);
       return new ReflectJoinpointFactory(info);
    }
+   
+   protected abstract TypeInfoFactory getTypeInfoFactory();
    
    protected void configureLogging()
    {

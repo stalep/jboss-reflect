@@ -19,46 +19,33 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.classinfo.introspection.test;
+package org.jboss.test.joinpoint.reflect.test;
 
 import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
+import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
- * Introspection Test Suite.
+ * Introspection Joinpoint Test Case.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class IntrospectionTestSuite extends TestSuite
+public class IntrospectionJoinpointTestCase extends ReflectJoinpointTest
 {
-   public static void main(String[] args)
-   {
-      TestRunner.run(suite());
-   }
-
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("Introspection Tests");
-
-      suite.addTest(IntrospectionTestCase.suite());
-      
-      return suite;
+      return suite(IntrospectionJoinpointTestCase.class);
+   }
+   
+   public IntrospectionJoinpointTestCase(String name)
+   {
+      super(name);
    }
 
-
-   // Constructors --------------------------------------------------
-   
-   // Public --------------------------------------------------------
-   
-   // TestSuite overrides -------------------------------------------
-
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-
-   // Private -------------------------------------------------------
-   
-   // Inner classes -------------------------------------------------
+   protected TypeInfoFactory getTypeInfoFactory()
+   {
+      return new IntrospectionTypeInfoFactory();
+   }
 }

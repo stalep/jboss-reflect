@@ -19,19 +19,19 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.joinpoint.reflect.test;
+package org.jboss.test.classinfo.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 /**
- * Joiinpoint Test Suite.
+ * ClassInfo Test Suite.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ReflectJoinpointTestSuite extends TestSuite
+public class ClassInfoTestSuite extends TestSuite
 {
    public static void main(String[] args)
    {
@@ -40,9 +40,9 @@ public class ReflectJoinpointTestSuite extends TestSuite
 
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("Joinpoint Tests");
+      TestSuite suite = new TestSuite("ClassInfo Tests");
 
-      suite.addTest(IntrospectionJoinpointTestCase.suite());
+      suite.addTest(IntrospectionClassInfoTestCase.suite());
       
       return suite;
    }

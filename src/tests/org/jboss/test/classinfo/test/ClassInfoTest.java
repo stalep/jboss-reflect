@@ -19,7 +19,7 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.classinfo.introspection.test;
+package org.jboss.test.classinfo.test;
 
 import java.io.Serializable;
 import java.net.URL;
@@ -29,13 +29,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import junit.framework.Test;
-
 import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
 import org.jboss.reflect.plugins.ParameterInfoImpl;
-import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
@@ -47,24 +44,18 @@ import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.test.ContainerTest;
-import org.jboss.test.classinfo.introspection.support.SimpleBean;
-import org.jboss.test.classinfo.introspection.support.SimpleInterface;
+import org.jboss.test.classinfo.support.SimpleBean;
+import org.jboss.test.classinfo.support.SimpleInterface;
 
 /**
- * Introspection Test Case.
+ * ClassInfo Test Case.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class IntrospectionTestCase extends ContainerTest
+public abstract class ClassInfoTest extends ContainerTest
 {
-  
-   public static Test suite()
-   {
-      return suite(IntrospectionTestCase.class);
-   }
-
-   public IntrospectionTestCase(String name)
+   public ClassInfoTest(String name)
    {
       super(name);
    }
@@ -130,7 +121,7 @@ public class IntrospectionTestCase extends ContainerTest
 
    protected ClassInfo getClassInfo(Class clazz)
    {
-      IntrospectionTypeInfoFactory factory = new IntrospectionTypeInfoFactory();
+      TypeInfoFactory factory = getTypeInfoFactory();
       TypeInfo info = factory.getTypeInfo(clazz);
       assertNotNull(info);
       assertTrue(info instanceof ClassInfo);
@@ -292,7 +283,7 @@ public class IntrospectionTestCase extends ContainerTest
    
    protected Set getSimpleInterfaceFields()
    {
-      TypeInfoFactory factory = new IntrospectionTypeInfoFactory(); 
+      TypeInfoFactory factory = getTypeInfoFactory();
 
       ClassInfo simpleInterface = (ClassInfo) factory.getTypeInfo(SimpleInterface.class);
       
@@ -305,7 +296,7 @@ public class IntrospectionTestCase extends ContainerTest
    
    protected Set getSimpleInterfaceMethods()
    {
-      TypeInfoFactory factory = new IntrospectionTypeInfoFactory(); 
+      TypeInfoFactory factory = getTypeInfoFactory();
 
       ClassInfo simpleInterface = (ClassInfo) factory.getTypeInfo(SimpleInterface.class);
       
@@ -366,7 +357,7 @@ public class IntrospectionTestCase extends ContainerTest
    
    protected Set getSimpleBeanFields()
    {
-      TypeInfoFactory factory = new IntrospectionTypeInfoFactory(); 
+      TypeInfoFactory factory = getTypeInfoFactory();
 
       TypeInfo longType = PrimitiveInfo.LONG;
       
@@ -389,7 +380,7 @@ public class IntrospectionTestCase extends ContainerTest
    
    protected Set getSimpleBeanMethods()
    {
-      TypeInfoFactory factory = new IntrospectionTypeInfoFactory(); 
+      TypeInfoFactory factory = getTypeInfoFactory();
 
       ClassInfo simpleBean = (ClassInfo) factory.getTypeInfo(SimpleBean.class);
       
@@ -457,7 +448,7 @@ public class IntrospectionTestCase extends ContainerTest
    
    protected Set getSimpleBeanConstructors()
    {
-      TypeInfoFactory factory = new IntrospectionTypeInfoFactory(); 
+      TypeInfoFactory factory = getTypeInfoFactory();
 
       ClassInfo simpleBean = (ClassInfo) factory.getTypeInfo(SimpleBean.class);
 
@@ -486,6 +477,8 @@ public class IntrospectionTestCase extends ContainerTest
       
       return result;
    }
+
+   protected abstract TypeInfoFactory getTypeInfoFactory();
    
    protected void configureLogging()
    {
