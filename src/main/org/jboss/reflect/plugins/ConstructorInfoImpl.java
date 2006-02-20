@@ -184,17 +184,14 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
    {
       if (this == obj) 
          return true;
-      if (obj == null || obj instanceof ConstructorInfoImpl == false)
+      if (obj == null || obj instanceof ConstructorInfo == false)
          return false;
 
-      final ConstructorInfoImpl other = (ConstructorInfoImpl) obj;
+      final ConstructorInfo other = (ConstructorInfo) obj;
       
-      if (declaringClass.equals(other.declaringClass) == false)
+      if (declaringClass.equals(other.getDeclaringClass()) == false)
          return false;
-      if (Arrays.equals(parameterTypes, other.parameterTypes) == false)
-         return false;
-      
-      return true;
+      return (Arrays.equals(parameterTypes, other.getParameterTypes()));
    }
 
    public int hashCode()

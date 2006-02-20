@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="/thirdparty/oswego-concurrent/lib/concurrent.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar"/>
 	<classpathentry kind="src" path="/test"/>
+	<classpathentry sourcepath="/javassist" kind="lib" path="/thirdparty/javassist/lib/javassist.jar"/>
 	<classpathentry kind="output" path="output/eclipse-classes"/>
 </classpath>

@@ -26,7 +26,6 @@ import java.util.List;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.joinpoint.plugins.reflect.ReflectJoinpointFactory;
 import org.jboss.joinpoint.spi.JoinpointFactory;
-import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.util.JBossObject;
 
@@ -38,14 +37,14 @@ import org.jboss.util.JBossObject;
 public class ReflectClassAdapter extends JBossObject implements ClassAdapter
 {
    /** The class info */
-   protected ClassInfoImpl classInfo;
+   protected ClassInfo classInfo;
 
    /**
     * Create a new reflected class adapter
     * 
     * @param classInfo the class info
     */
-   public ReflectClassAdapter(ClassInfoImpl classInfo)
+   public ReflectClassAdapter(ClassInfo classInfo)
    {
       this.classInfo = classInfo;
    }
@@ -58,7 +57,7 @@ public class ReflectClassAdapter extends JBossObject implements ClassAdapter
    public ClassAdapter getInstanceAdapter(ClassInfo classInfo)
    {
       ReflectClassAdapter clone = (ReflectClassAdapter) clone();
-      clone.classInfo = (ClassInfoImpl) classInfo;
+      clone.classInfo = classInfo;
       return clone;
    }
 

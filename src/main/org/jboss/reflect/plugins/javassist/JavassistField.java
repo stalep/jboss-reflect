@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,32 +19,31 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.joinpoint.reflect.test;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+package org.jboss.reflect.plugins.javassist;
 
 /**
- * Joinpoint Test Suite.
+ * JavassistField.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ReflectJoinpointTestSuite extends TestSuite
+public interface JavassistField
 {
-   public static void main(String[] args)
-   {
-      TestRunner.run(suite());
-   }
+   /**
+    * Get the field
+    * 
+    * @param target the target
+    * @return the result
+    * @throws Throwable for any error
+    */
+   Object get(Object target) throws Throwable;
 
-   public static Test suite()
-   {
-      TestSuite suite = new TestSuite("Joinpoint Tests");
-
-      suite.addTest(IntrospectionJoinpointTestCase.suite());
-      suite.addTest(JavassistJoinpointTestCase.suite());
-      
-      return suite;
-   }
+   /**
+    * Set the field
+    * 
+    * @param target the target
+    * @param value the value
+    * @throws Throwable for any error
+    */
+   void set(Object target, Object value) throws Throwable;
 }

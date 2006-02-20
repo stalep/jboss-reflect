@@ -68,6 +68,7 @@
     <!-- The combined library classpath -->
     <path id="library.classpath">
       <path refid="junit.junit.classpath"/>
+      <path refid="javassist.classpath"/>
       <path refid="apache.log4j.classpath"/>
       <path refid="oswego.concurrent.classpath"/>
     </path>

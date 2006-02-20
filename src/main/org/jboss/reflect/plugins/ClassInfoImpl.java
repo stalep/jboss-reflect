@@ -125,7 +125,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    /**
     * Get an array class
     * 
-    * @todo fixme there must be a better way to do this!
+    * @todo there must be a better way to do this!
     * @param clazz the class
     * @param depth the depth
     * @return the array class
@@ -370,12 +370,12 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    {
       if (this == obj)
          return true;
-      if (obj == null || obj instanceof ClassInfoImpl == false)
+      if (obj == null || obj instanceof ClassInfo == false)
          return false;
 
-      final ClassInfoImpl other = (ClassInfoImpl) obj;
+      final ClassInfo other = (ClassInfo) obj;
 
-      if (name != null ? name.equals(other.name) == false : other.name != null)
+      if (name != null ? name.equals(other.getName()) == false : other.getName() != null)
          return false;
       return true;
    }

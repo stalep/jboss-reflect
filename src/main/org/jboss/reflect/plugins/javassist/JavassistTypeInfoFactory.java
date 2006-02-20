@@ -19,43 +19,31 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.classadapter.plugins.reflect;
+package org.jboss.reflect.plugins.javassist;
 
-import org.jboss.classadapter.spi.ClassAdapter;
-import org.jboss.classadapter.spi.ClassAdapterFactory;
-import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
-import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
- * A reflected class adapter factory.
+ * An javassist type factory that uses a static delegate.<p>
+ * 
+ * This avoids recalculating things everytime a factory is
+ * constructed inside the same classloader
  * 
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectClassAdapterFactory implements ClassAdapterFactory
+public class JavassistTypeInfoFactory implements TypeInfoFactory
 {
-   /** The type info factory */
-   protected TypeInfoFactory typeInfoFactory = new IntrospectionTypeInfoFactory();
+   /** The delegate */
+   private static JavassistTypeInfoFactoryImpl delegate = new JavassistTypeInfoFactoryImpl();
 
-   public ClassAdapter getClassAdapter(Class clazz)
+   public TypeInfo getTypeInfo(Class clazz)
    {
-      TypeInfo typeInfo = typeInfoFactory.getTypeInfo(clazz);
-      return getClassAdapter(typeInfo);
+      return delegate.getTypeInfo(clazz);
    }
    
-   public ClassAdapter getClassAdapter(String name, ClassLoader cl) throws ClassNotFoundException
+   public TypeInfo getTypeInfo(String name, ClassLoader cl) throws ClassNotFoundException
    {
-      TypeInfo typeInfo = typeInfoFactory.getTypeInfo(name, cl);
-      return getClassAdapter(typeInfo);
-   }
-   
-   public ClassAdapter getClassAdapter(TypeInfo typeInfo)
-   {
-      if (typeInfo instanceof ClassInfo == false)
-         throw new IllegalArgumentException("Not a class " + typeInfo.getName());
-      ClassInfo classInfo = (ClassInfo) typeInfo;
-      
-      return new ReflectClassAdapter(classInfo);
+      return delegate.getTypeInfo(name, cl);
    }
 }

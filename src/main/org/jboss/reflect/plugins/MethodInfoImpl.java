@@ -213,21 +213,18 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    public boolean equals(Object obj)
    {
       if (this == obj) return true;
-      if (obj == null || obj instanceof MethodInfoImpl == false)
+      if (obj == null || obj instanceof MethodInfo == false)
          return false;
 
-      final MethodInfoImpl other = (MethodInfoImpl) obj;
+      final MethodInfo other = (MethodInfo) obj;
 
-      if (declaringClass.equals(other.declaringClass) == false)
+      if (name.equals(other.getName()) == false)
          return false;
-      if (name.equals(other.name) == false)
+      if (declaringClass.equals(other.getDeclaringClass()) == false)
          return false;
-      if (Arrays.equals(parameterTypes, other.parameterTypes) == false)
+      if (returnType.equals(other.getReturnType()) == false)
          return false;
-      if (returnType.equals(other.returnType) == false)
-         return false;
-
-      return true;
+      return Arrays.equals(parameterTypes, other.getParameterTypes());
    }
 
    public int hashCode()
@@ -240,14 +237,6 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
     */
    protected void calculateHash()
    {
-      int result;
-      result = name.hashCode();
-      result = 29 * result + declaringClass.hashCode();
-      if (parameterTypes != null)
-      {
-         for (int i = 0; i < parameterTypes.length; i++)
-            result = 29 * result + parameterTypes[i].hashCode();
-      }
-      hash = result;
+      hash = name.hashCode();
    }
 }

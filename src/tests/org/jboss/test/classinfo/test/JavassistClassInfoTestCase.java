@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,32 +19,33 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.joinpoint.reflect.test;
+package org.jboss.test.classinfo.test;
 
 import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+
+import org.jboss.reflect.plugins.javassist.JavassistTypeInfoFactory;
+import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
- * Joinpoint Test Suite.
+ * Javassist ClassInfo Test Case.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ReflectJoinpointTestSuite extends TestSuite
+public class JavassistClassInfoTestCase extends ClassInfoTest
 {
-   public static void main(String[] args)
-   {
-      TestRunner.run(suite());
-   }
-
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("Joinpoint Tests");
+      return suite(JavassistClassInfoTestCase.class);
+   }
+   
+   public JavassistClassInfoTestCase(String name)
+   {
+      super(name);
+   }
 
-      suite.addTest(IntrospectionJoinpointTestCase.suite());
-      suite.addTest(JavassistJoinpointTestCase.suite());
-      
-      return suite;
+   protected TypeInfoFactory getTypeInfoFactory()
+   {
+      return new JavassistTypeInfoFactory();
    }
 }

@@ -130,17 +130,14 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
    public boolean equals(Object obj)
    {
       if (this == obj) return true;
-      if (obj == null || obj instanceof FieldInfoImpl == false) 
+      if (obj == null || obj instanceof FieldInfo == false) 
          return false;
 
-      final FieldInfoImpl other = (FieldInfoImpl) obj;
+      final FieldInfo other = (FieldInfo) obj;
 
-      if (!declaringClass.equals(other.declaringClass))
+      if (name.equals(other.getName()) == false)
          return false;
-      if (!name.equals(other.name))
-         return false;
-
-      return true;
+      return declaringClass.equals(other.getDeclaringClass());
    }
 
    public int hashCode()
@@ -153,9 +150,6 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
     */
    protected void calculateHash()
    {
-      int result;
-      result = name.hashCode();
-      result = 29 * result + declaringClass.hashCode();
-      hash = result;
+      hash = name.hashCode();
    }
 }

@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,32 +19,35 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.joinpoint.reflect.test;
+package org.jboss.reflect.plugins.javassist;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import org.jboss.reflect.spi.AnnotatedInfo;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.util.JBossObject;
 
 /**
- * Joinpoint Test Suite.
+ * JavassistAnnotatedInfo.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ReflectJoinpointTestSuite extends TestSuite
+public class JavassistAnnotatedInfo extends JBossObject implements AnnotatedInfo
 {
-   public static void main(String[] args)
+   public AnnotationValue getAnnotation(String name)
    {
-      TestRunner.run(suite());
+      // @todo getAnnotation
+      throw new org.jboss.util.NotImplementedException("getAnnotation");
    }
 
-   public static Test suite()
+   public AnnotationValue[] getAnnotations()
    {
-      TestSuite suite = new TestSuite("Joinpoint Tests");
+      // @todo getAnnotations
+      return null;
+   }
 
-      suite.addTest(IntrospectionJoinpointTestCase.suite());
-      suite.addTest(JavassistJoinpointTestCase.suite());
-      
-      return suite;
+   public boolean isAnnotationPresent(String name)
+   {
+      // @todo isAnnotationPresent
+      throw new org.jboss.util.NotImplementedException("isAnnotationPresent");
    }
 }
