@@ -22,6 +22,7 @@
 package org.jboss.repository.spi;
 
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Collections;
@@ -128,6 +129,7 @@ public class Key implements Comparable
       if( attributes.containsKey(CommonNames.SESSION) )
          level = CommonNames.SESSION_LEVEL;
    }
+   
    protected void parseName(String nameExpr)
       throws ParseException
    {
@@ -138,7 +140,7 @@ public class Key implements Comparable
       {
          name = nameExpr.substring(0, colon);
          // Parse the key=value pairs
-         StringTokenizer tokenizer = new StringTokenizer(nameExpr.substring(colon), ",=");
+         StringTokenizer tokenizer = new StringTokenizer(nameExpr.substring(colon + 1), ",=");
          while( tokenizer.hasMoreTokens() )
          {
             String key = tokenizer.nextToken();
@@ -147,6 +149,11 @@ public class Key implements Comparable
                throw new ParseException("No value for key: "+key, attributes.size());
             }
             String value = tokenizer.nextToken();
+            
+            if (attributes == null)
+            {
+               attributes = new HashMap();
+            }
             attributes.put(key, value);
          }
       }
