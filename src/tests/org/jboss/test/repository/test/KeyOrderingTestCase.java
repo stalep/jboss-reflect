@@ -26,7 +26,6 @@ import java.util.TreeMap;
 import junit.framework.TestCase;
 
 import org.jboss.repository.spi.Key;
-;
 
 /**
  * Registry Test Case.
