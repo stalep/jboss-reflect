@@ -39,7 +39,7 @@ import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.util.CollectionsFactory;
+import org.jboss.util.collection.CollectionsFactory;
 import org.jboss.util.JBossStringBuilder;
 
 /**
@@ -52,31 +52,31 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
 {
    /** The factory */
    private JavassistTypeInfoFactoryImpl factory;
-   
+
    /** The CtClass */
    private CtClass ctClass;
-   
+
    /** The class */
    private Class clazz;
-   
+
    /** The constructors */
    private Map constructors = CollectionsFactory.createLazyMap();
-   
+
    /** The constructors */
    private ConstructorInfo[] constructorArray = null;
-   
+
    /** The fields */
    private Map fields = CollectionsFactory.createLazyMap();
-   
+
    /** The fields */
    private FieldInfo[] fieldArray = null;
-   
+
    /** The methods */
    private Map methods = CollectionsFactory.createLazyMap();
-   
+
    /** The methods */
    private MethodInfo[] methodArray = null;
-   
+
    /**
     * Create a new JavassistTypeInfo.
     * 
@@ -153,7 +153,7 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
          throw JavassistTypeInfoFactoryImpl.raiseClassNotFound("for interfaces of " + getName(), e);
       }
    }
-   
+
    public ConstructorInfo[] getDeclaredConstructors()
    {
       if (constructorArray == null)
@@ -232,7 +232,7 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
          return null;
       return generateMethodInfo(key);
    }
-   
+
    public MethodInfo[] getDeclaredMethods()
    {
       if (methodArray == null)
@@ -302,7 +302,7 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
          return true;
       if (obj == null || obj instanceof TypeInfo == false)
          return false;
-      
+
       TypeInfo other = (TypeInfo) obj;
       return getName().equals(other.getName());
    }
@@ -355,7 +355,7 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
          throw JavassistTypeInfoFactoryImpl.raiseClassNotFound("for constructor of " + getName(), e);
       }
    }
-   
+
    /**
     * Generate field info
     * 
@@ -431,7 +431,7 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
       }
       return info;
    }
-   
+
    /**
     * Get the parameter types
     * 
@@ -442,11 +442,11 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
    {
       if (key.params == null)
          return null;
-      
+
       CtClass[] result = new CtClass[key.params.length];
       for (int i = 0; i < key.params.length; ++i)
          result[i] = factory.getCtClass(key.params[i]);
-      
+
       return result;
    }
 }

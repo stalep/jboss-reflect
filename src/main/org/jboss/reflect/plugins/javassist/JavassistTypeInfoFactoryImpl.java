@@ -30,7 +30,7 @@ import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.JBossStringBuilder;
-import org.jboss.util.WeakClassCache;
+import org.jboss.util.collection.WeakClassCache;
 
 /**
  * A javassist type factory.
@@ -40,7 +40,7 @@ import org.jboss.util.WeakClassCache;
 public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory
 {
    static final ClassPool pool = ClassPool.getDefault();
-   
+
    /**
     * Raise NoClassDefFoundError for javassist not found
     * 
@@ -56,7 +56,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          ex.initCause(e.getCause()); // Hide the javassist error
       throw ex;
    }
-   
+
    /**
     * Raise NoClassDefFoundError for javassist not found
     * 
@@ -71,7 +71,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       ex.initCause(e);
       throw ex;
    }
-   
+
    /**
     * Raise NoSuchMethodError for javassist not found
     * 
@@ -87,7 +87,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          ex.initCause(e.getCause()); // Hide the javassist error
       throw ex;
    }
-   
+
    /**
     * Raise NoSuchFieldError for javassist not found
     * 
@@ -103,7 +103,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          ex.initCause(e.getCause()); // Hide the javassist error
       throw ex;
    }
-   
+
    protected Object instantiate(Class clazz)
    {
       CtClass ctClass = getCtClass(clazz.getName());
@@ -168,7 +168,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       }
       return clazz.getName();
    }
-   
+
    /**
     * Get the CtClass
     * 
@@ -186,7 +186,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          throw raiseClassNotFound(name, e);
       }
    }
-   
+
    protected void generate(Class clazz, Object result)
    {
       // Everything is done lazily
@@ -200,7 +200,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       TypeInfo primitive = PrimitiveInfo.valueOf(clazz.getName());
       if (primitive != null)
          return primitive;
-      
+
       return (TypeInfo) get(clazz);
    }
 
@@ -214,7 +214,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       TypeInfo primitive = PrimitiveInfo.valueOf(name);
       if (primitive != null)
          return primitive;
-      
+
       Class clazz = cl.loadClass(name);
       return getTypeInfo(clazz);
    }

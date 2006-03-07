@@ -39,7 +39,7 @@ import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.util.WeakClassCache;
+import org.jboss.util.collection.WeakClassCache;
 
 /**
  * An introspection type factory.
