@@ -30,6 +30,7 @@ import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
@@ -123,6 +124,11 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return classAdapter.getJoinpointFactory();
    }
    
+   public MetaDataContextFactory getMetaDataContextFactory()
+   {
+      return classAdapter.getMetaDataContextFactory();
+   }
+
    public Set getConstructors()
    {
       return constructors;
