@@ -30,6 +30,7 @@ import java.util.TreeSet;
 import java.util.Iterator;
 
 import org.jboss.repository.spi.CommonNames;
+import org.jboss.util.JBossStringBuilder;
 
 /**
  @author Scott.Stark@jboss.org
@@ -92,6 +93,9 @@ public class Key implements Comparable
                String key1 = (String) keys.next();
                String value1 = (String) attributes.get(key1);
                String value2 = (String) keyAttrs.get(key1);
+               
+               if (value1 == null && value2 == null)
+                  compare = 0;
                if( value1 == null )
                   compare = -1;
                else if( value2 == null )
@@ -157,6 +161,36 @@ public class Key implements Comparable
             attributes.put(key, value);
          }
       }
+   }
+   
+   public String toString()
+   {
+      JBossStringBuilder sb = new JBossStringBuilder();
+      sb.append("[Key[");
+      sb.append(name);
+      sb.append(":");
+      
+      boolean first = true;
+      for (Iterator it = attributes.keySet().iterator() ; it.hasNext() ; )
+      {
+         Object key = it.next();
+         
+         if (first)
+         {
+            first = false;
+         }
+         else
+         {
+            sb.append(", ");
+         }
+         
+         sb.append(key);
+         sb.append("=");
+         sb.append(attributes.get(key));
+      }
+      
+      sb.append("]]");
+      return sb.toString();
    }
 
 }
