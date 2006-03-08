@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.repository.spi.MetaDataContext;
 import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossInterface;
 
@@ -97,9 +98,24 @@ public interface ClassAdapter extends JBossInterface
    ClassLoader getClassLoader();
    
    /**
-    * Get the MetaDataContextFactorty for this adpater
+    * Get the MetaDataContextFactory for this adpater
     * 
     * @return the metadata context factory
     */
    MetaDataContextFactory getMetaDataContextFactory();
+   
+
+   /**
+    * Get the MetaDataContext for this adpater
+    * 
+    * @return the metadata context factory
+    */
+   MetaDataContext getMetaDataContext();
+   
+   /**
+    * Set the MetaDataContext for this adpater
+    * 
+    * @return the metadata context factory
+    */
+   void setMetaDataContext(MetaDataContext ctx);
 }

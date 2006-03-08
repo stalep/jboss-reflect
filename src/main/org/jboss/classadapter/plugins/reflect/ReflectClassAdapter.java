@@ -28,6 +28,7 @@ import org.jboss.joinpoint.plugins.reflect.ReflectJoinpointFactory;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.repository.plugins.basic.BasicMetaDataContextFactory;
+import org.jboss.repository.spi.MetaDataContext;
 import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossObject;
 
@@ -40,6 +41,9 @@ public class ReflectClassAdapter extends JBossObject implements ClassAdapter
 {
    /** The class info */
    protected ClassInfo classInfo;
+   
+   /** The metadata context */
+   protected MetaDataContext metaDataContext;
 
    /**
     * Create a new reflected class adapter
@@ -83,5 +87,13 @@ public class ReflectClassAdapter extends JBossObject implements ClassAdapter
       return new BasicMetaDataContextFactory();
    }
    
-   
+   public MetaDataContext getMetaDataContext()
+   {
+      return metaDataContext;
+   }
+
+   public void setMetaDataContext(MetaDataContext ctx)
+   {
+      metaDataContext = ctx;
+   }   
 }

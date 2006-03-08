@@ -26,6 +26,7 @@ import java.util.Set;
 
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.repository.spi.MetaDataContext;
 import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossInterface;
 
@@ -88,6 +89,16 @@ public interface BeanInfo extends JBossInterface
     */
    void setProperties(Set properties);
    
+   /**
+    * Get the metadata context
+    */
+   MetaDataContext getMetaDataContext();
+
+   /**
+    * Set the metadata context
+    */
+   void setMetaDataContext(MetaDataContext ctx);
+
    /**
     * Get the constructor info.
     *
