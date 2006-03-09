@@ -35,8 +35,6 @@ public interface MetaDataContext
    
    Map getScope();
    
-   Object getTarget();
-   
    void setTarget(Object tgt);
    
    Object getAnnotation(Class ann);
