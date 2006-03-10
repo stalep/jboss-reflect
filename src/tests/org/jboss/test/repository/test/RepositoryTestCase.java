@@ -102,4 +102,23 @@ public class RepositoryTestCase extends TestCase
       assertTrue(session.equals("session0"));
    }
 
+   public void testCrap() throws Throwable
+   {
+      BasicKernelRepository bkp = new BasicKernelRepository();
+
+      HashMap attrs = new HashMap();
+      attrs.put(CommonNames.DOMAIN, "domain0");
+      attrs.put(CommonNames.CLUSTER, "cluster0");
+      attrs.put(CommonNames.SERVER, "server0");
+//      attrs.put("proprietaryKey", "something");
+      
+      Key key = new Key("permissions", attrs);
+      BasicMetaData data = new BasicMetaData(0, "test");
+      bkp.addMetaData(key, data);
+
+      Object stored = bkp.getMetaData(key);
+      assertEquals("test", stored);
+      
+
+   }
 }

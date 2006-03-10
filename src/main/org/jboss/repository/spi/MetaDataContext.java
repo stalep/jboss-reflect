@@ -21,6 +21,7 @@
 */ 
 package org.jboss.repository.spi;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,6 +39,14 @@ public interface MetaDataContext
    void setTarget(Object tgt);
    
    Object getAnnotation(Class ann);
+   
+   boolean hasAnnotation(String ann);
 
+   Object getAnnotation(Method m, Class ann);
+   
+   boolean hasAnnotation(Method m, String ann);
+   
    void addAnnotations(Set annotations);
+   
+   void addPropertyAnnotations(String propertyName, Set annotations);
 }
