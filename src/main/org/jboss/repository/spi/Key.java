@@ -22,6 +22,8 @@
 package org.jboss.repository.spi;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -38,7 +40,7 @@ import org.jboss.util.JBossStringBuilder;
  */
 public class Key implements Comparable
 {
-   private String name;
+   private String[] name;
    private Map attributes;
    private int level;
 
@@ -48,14 +50,21 @@ public class Key implements Comparable
       parseName(nameExpr);
       defineLevel();
    }
-   public Key(String name, Map attributes)
+   public Key(String[] name, Map attributes)
    {
       this.name = name;
       this.attributes = attributes;
       defineLevel();
    }
 
-   public String getName()
+   public Key(String name, Map attributes)
+   {
+      this.name = new String[] {name};
+      this.attributes = attributes;
+      defineLevel();
+   }
+
+   public String[] getName()
    {
       return name;
    }
@@ -75,7 +84,21 @@ public class Key implements Comparable
          throw new ClassCastException("Argument is not a Key, type="+obj.getClass());
 
       Key key = (Key) obj;
-      int compare = name.compareTo(key.name);
+      int compare = -name.length + key.name.length;
+      if (compare != 0)
+      {
+         return compare;
+      }
+      
+      for (int i = 0 ; i < name.length ; i++)
+      {
+         compare = name[i].compareTo(key.name[i]);
+         if (compare != 0)
+         {
+            return compare;
+         }
+      }
+      
       if( compare == 0 )
       {
          Map keyAttrs = key.attributes;
@@ -113,7 +136,11 @@ public class Key implements Comparable
    }
    public int hashCode()
    {
-      int hashCode = name.hashCode() + attributes.hashCode();
+      int hashCode = attributes.hashCode();
+      for (int i = 0 ; i < name.length ; i++)
+      {
+         hashCode += name[i].hashCode();
+      }
       return hashCode;
    }
 
@@ -139,10 +166,10 @@ public class Key implements Comparable
    {
       int colon = nameExpr.indexOf(':');
       if( colon < 0 )
-         name = nameExpr;
+         parseNamePart(nameExpr);
       else
       {
-         name = nameExpr.substring(0, colon);
+         parseNamePart(nameExpr.substring(0, colon));
          // Parse the key=value pairs
          StringTokenizer tokenizer = new StringTokenizer(nameExpr.substring(colon + 1), ",=");
          while( tokenizer.hasMoreTokens() )
@@ -163,11 +190,22 @@ public class Key implements Comparable
       }
    }
    
+   private void parseNamePart(String namePart)
+   {
+      ArrayList names = new ArrayList();
+      StringTokenizer tokenizer = new StringTokenizer(namePart, ",");
+      while (tokenizer.hasMoreTokens())
+      {
+         names.add(tokenizer.nextToken());
+      }
+      name = (String[])names.toArray(new String[names.size()]);
+   }
+   
    public String toString()
    {
       JBossStringBuilder sb = new JBossStringBuilder();
       sb.append("[Key[");
-      sb.append(name);
+      sb.append(Arrays.asList(name));
       sb.append(":");
       
       boolean first = true;
