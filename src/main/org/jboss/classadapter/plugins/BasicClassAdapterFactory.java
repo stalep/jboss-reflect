@@ -19,25 +19,34 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.classadapter.plugins.reflect;
+package org.jboss.classadapter.plugins;
 
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
-import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
- * A reflected class adapter factory.
+ * A class adapter factory.
  * 
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectClassAdapterFactory implements ClassAdapterFactory
+public class BasicClassAdapterFactory implements ClassAdapterFactory
 {
    /** The type info factory */
-   protected TypeInfoFactory typeInfoFactory = new IntrospectionTypeInfoFactory();
+   protected TypeInfoFactory typeInfoFactory;
 
+   public TypeInfoFactory getTypeInfoFactory()
+   {
+      return typeInfoFactory;
+   }
+
+   public void setTypeInfoFactory(TypeInfoFactory typeInfoFactory)
+   {
+      this.typeInfoFactory = typeInfoFactory;
+   }
+   
    public ClassAdapter getClassAdapter(Class clazz)
    {
       TypeInfo typeInfo = typeInfoFactory.getTypeInfo(clazz);
@@ -56,6 +65,6 @@ public class ReflectClassAdapterFactory implements ClassAdapterFactory
          throw new IllegalArgumentException("Not a class " + typeInfo.getName());
       ClassInfo classInfo = (ClassInfo) typeInfo;
       
-      return new ReflectClassAdapter(classInfo);
+      return new BasicClassAdapter(classInfo);
    }
 }

@@ -26,11 +26,12 @@ import java.lang.reflect.Constructor;
 import org.jboss.beans.info.plugins.AbstractBeanInfoFactory;
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
-import org.jboss.classadapter.plugins.reflect.ReflectClassAdapterFactory;
+import org.jboss.classadapter.plugins.BasicClassAdapterFactory;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.config.spi.Configuration;
 import org.jboss.logging.Logger;
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 
@@ -133,19 +134,20 @@ public abstract class AbstractConfiguration implements Configuration
     */
    protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Exception
    {
-      ClassAdapterFactory result = new ReflectClassAdapterFactory();
+      ClassAdapterFactory result = new BasicClassAdapterFactory();
       
       // FIXME This is a temporary hack while I am refactoring
       try
       {
          Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.prototype.AOPClassAdapterFactory");
          Constructor constructor = clazz.getConstructor(new Class[] { ClassAdapterFactory.class } );
-         return (ClassAdapterFactory) constructor.newInstance(new Object[] { result });
+         result = (ClassAdapterFactory) constructor.newInstance(new Object[] { result });
       }
       catch (ClassNotFoundException ignored)
       {
          log.trace("No AOP in classpath " + ignored.getMessage());
-         return result;
       }
+      result.setTypeInfoFactory(new IntrospectionTypeInfoFactory());
+      return result;
    }
 }

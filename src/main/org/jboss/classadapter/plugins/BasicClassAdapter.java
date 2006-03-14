@@ -19,7 +19,7 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.classadapter.plugins.reflect;
+package org.jboss.classadapter.plugins;
 
 import java.util.List;
 
@@ -33,11 +33,11 @@ import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossObject;
 
 /**
- * A reflected class adapter.
+ * A class adapter.
  * 
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectClassAdapter extends JBossObject implements ClassAdapter
+public class BasicClassAdapter extends JBossObject implements ClassAdapter
 {
    /** The class info */
    protected ClassInfo classInfo;
@@ -50,7 +50,7 @@ public class ReflectClassAdapter extends JBossObject implements ClassAdapter
     * 
     * @param classInfo the class info
     */
-   public ReflectClassAdapter(ClassInfo classInfo)
+   public BasicClassAdapter(ClassInfo classInfo)
    {
       this.classInfo = classInfo;
    }
@@ -62,7 +62,7 @@ public class ReflectClassAdapter extends JBossObject implements ClassAdapter
 
    public ClassAdapter getInstanceAdapter(ClassInfo classInfo)
    {
-      ReflectClassAdapter clone = (ReflectClassAdapter) clone();
+      BasicClassAdapter clone = (BasicClassAdapter) clone();
       clone.classInfo = classInfo;
       return clone;
    }

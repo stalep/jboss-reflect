@@ -22,6 +22,7 @@
 package org.jboss.classadapter.spi;
 
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
  * A class adapter factory.<p>
@@ -61,4 +62,18 @@ public interface ClassAdapterFactory
     * @return the class adapter
     */
    ClassAdapter getClassAdapter(TypeInfo typeInfo);
+
+   /**
+    * Get the typeInfoFactory.
+    * 
+    * @return the typeInfoFactory.
+    */
+   TypeInfoFactory getTypeInfoFactory();
+
+   /**
+    * Set the typeInfoFactory.
+    * 
+    * @param typeInfoFactory the typeInfoFactory.
+    */
+   void setTypeInfoFactory(TypeInfoFactory typeInfoFactory);
 }
