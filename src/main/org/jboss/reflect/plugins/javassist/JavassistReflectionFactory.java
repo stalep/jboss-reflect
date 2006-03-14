@@ -595,9 +595,12 @@ public class JavassistReflectionFactory
          buffer.append(".longValue()");
       else if (CtClass.shortType.equals(primitive))
          buffer.append(".shortValue()");
-      throw new UnreachableStatementException();
+      else
+      {
+         throw new UnreachableStatementException();
+      }
    }
-   
+
    /**
     * Get the boxed type
     * 
