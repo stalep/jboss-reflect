@@ -24,10 +24,10 @@ package org.jboss.classadapter.plugins;
 import java.util.List;
 
 import org.jboss.classadapter.spi.ClassAdapter;
-import org.jboss.joinpoint.plugins.BasicJoinpointFactory;
+import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.joinpoint.spi.JoinpointFactory;
+import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.repository.plugins.basic.BasicMetaDataContextFactory;
 import org.jboss.repository.spi.MetaDataContext;
 import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossObject;
@@ -39,6 +39,9 @@ import org.jboss.util.JBossObject;
  */
 public class BasicClassAdapter extends JBossObject implements ClassAdapter
 {
+   /** The class adapter factory */
+   protected ClassAdapterFactory classAdapterFactory;
+   
    /** The class info */
    protected ClassInfo classInfo;
    
@@ -48,10 +51,12 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
    /**
     * Create a new reflected class adapter
     * 
-    * @param classInfo the class info
+    * @param factory class adapter factory
+    * @param classInfo class info
     */
-   public BasicClassAdapter(ClassInfo classInfo)
+   public BasicClassAdapter(ClassAdapterFactory factory, ClassInfo classInfo)
    {
+      this.classAdapterFactory = factory;
       this.classInfo = classInfo;
    }
 
@@ -74,7 +79,8 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
 
    public JoinpointFactory getJoinpointFactory()
    {
-      return new BasicJoinpointFactory(classInfo);
+      JoinpointFactoryBuilder builder = classAdapterFactory.getConfiguration().getJoinpointFactoryBuilder();
+      return builder.createJoinpointFactory(classInfo, metaDataContext);
    }
 
    public ClassLoader getClassLoader()
@@ -84,7 +90,7 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
 
    public MetaDataContextFactory getMetaDataContextFactory()
    {
-      return new BasicMetaDataContextFactory();
+      return classAdapterFactory.getConfiguration().getMetaDataContextFactory();
    }
    
    public MetaDataContext getMetaDataContext()

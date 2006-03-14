@@ -68,6 +68,6 @@ public class BasicClassAdapterFactory implements ClassAdapterFactory
          throw new IllegalArgumentException("Not a class " + typeInfo.getName());
       ClassInfo classInfo = (ClassInfo) typeInfo;
       
-      return new BasicClassAdapter(classInfo);
+      return new BasicClassAdapter(this, classInfo);
    }
 }

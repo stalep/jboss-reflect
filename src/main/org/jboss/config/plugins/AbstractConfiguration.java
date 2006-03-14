@@ -30,11 +30,15 @@ import org.jboss.classadapter.plugins.BasicClassAdapterFactory;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.config.spi.Configuration;
+import org.jboss.joinpoint.plugins.BasicJoinpointFactoryBuilder;
+import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.logging.Logger;
 import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.repository.plugins.basic.BasicMetaDataContextFactory;
+import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.NestedRuntimeException;
 
 /**
@@ -56,6 +60,12 @@ public abstract class AbstractConfiguration implements Configuration
    
    /** The default type info factory */
    private TypeInfoFactory typeInfoFactory;
+   
+   /** The default type joinpoint factory builder */
+   private JoinpointFactoryBuilder joinpointFactoryBuilder;
+   
+   /** The default metadata context factory */
+   private MetaDataContextFactory metaDataContextFactory;
 
    /**
     * Create an abstract configuration
@@ -118,6 +128,54 @@ public abstract class AbstractConfiguration implements Configuration
       return typeInfoFactory;
    }
 
+   public JoinpointFactoryBuilder getJoinpointFactoryBuilder()
+   {
+      if (joinpointFactoryBuilder == null)
+      {
+         try
+         {
+            joinpointFactoryBuilder = createDefaultJoinpointFactoryBuilder();
+         }
+         catch (RuntimeException e)
+         {
+            throw e;
+         }
+         catch (Error e)
+         {
+            throw e;
+         }
+         catch (Throwable t)
+         {
+            throw new NestedRuntimeException("Cannot create JoinpointFactoryBuilder", t);
+         }
+      }
+      return joinpointFactoryBuilder;
+   }
+
+   public MetaDataContextFactory getMetaDataContextFactory()
+   {
+      if (metaDataContextFactory == null)
+      {
+         try
+         {
+            metaDataContextFactory = createDefaultMetaDataContextFactory();
+         }
+         catch (RuntimeException e)
+         {
+            throw e;
+         }
+         catch (Error e)
+         {
+            throw e;
+         }
+         catch (Throwable t)
+         {
+            throw new NestedRuntimeException("Cannot create MetaDataContextFactory", t);
+         }
+      }
+      return metaDataContextFactory;
+   }
+
    /**
     * Get the BeanInfoFactory
     * 
@@ -164,18 +222,6 @@ public abstract class AbstractConfiguration implements Configuration
    protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable
    {
       ClassAdapterFactory result = new BasicClassAdapterFactory();
-      
-      // FIXME This is a temporary hack while I am refactoring
-      try
-      {
-         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.prototype.AOPClassAdapterFactory");
-         Constructor constructor = clazz.getConstructor(new Class[] { ClassAdapterFactory.class } );
-         result = (ClassAdapterFactory) constructor.newInstance(new Object[] { result });
-      }
-      catch (ClassNotFoundException ignored)
-      {
-         log.trace("No AOP in classpath " + ignored.getMessage());
-      }
       result.setConfiguration(this);
       return result;
    }
@@ -189,5 +235,49 @@ public abstract class AbstractConfiguration implements Configuration
    protected TypeInfoFactory createDefaultTypeInfoFactory() throws Throwable
    {
       return new IntrospectionTypeInfoFactory();
+   }
+
+   /**
+    * Create the default joinpoint factory builder
+    * 
+    * @return the joinpoint factory builder
+    * @throws Throwable for any error
+    */
+   protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
+   {
+      JoinpointFactoryBuilder result = new BasicJoinpointFactoryBuilder();
+      
+      // FIXME This is a temporary hack while I am refactoring
+      try
+      {
+         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.prototype.AOPJoinpointFactoryBuilder");
+         result = (JoinpointFactoryBuilder) clazz.newInstance();
+      }
+      catch (ClassNotFoundException ignored)
+      {
+         log.trace("No AOP in classpath " + ignored.getMessage());
+      }
+      return result;
+   }
+
+   /**
+    * Create the default metadata context factory
+    * 
+    * @return the metadata context factory
+    * @throws Throwable for any error
+    */
+   protected MetaDataContextFactory createDefaultMetaDataContextFactory() throws Throwable
+   {
+      // FIXME This is a temporary hack while I am refactoring
+      try
+      {
+         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.prototype.AOPMetaDataContextFactory");
+         return (MetaDataContextFactory) clazz.newInstance();
+      }
+      catch (ClassNotFoundException ignored)
+      {
+         log.trace("No AOP in classpath " + ignored.getMessage());
+      }
+      return new BasicMetaDataContextFactory();
    }
 }

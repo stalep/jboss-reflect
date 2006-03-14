@@ -22,9 +22,11 @@
 package org.jboss.config.spi;
 
 import org.jboss.beans.info.spi.BeanInfo;
+import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.repository.spi.MetaDataContextFactory;
 
 /**
  * Configuration.<p>
@@ -89,4 +91,18 @@ public interface Configuration
     * @return the TypeInfoFactory
     */
    TypeInfoFactory getTypeInfoFactory();
+
+   /**
+    * Get the joinpoint factory builder
+    * 
+    * @return the JoinpointFactoryBuilder
+    */
+   JoinpointFactoryBuilder getJoinpointFactoryBuilder();
+
+   /**
+    * Get the metadata context factory
+    * 
+    * @return the MetaDataContextFactory
+    */
+   MetaDataContextFactory getMetaDataContextFactory();
 }
