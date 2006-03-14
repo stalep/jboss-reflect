@@ -21,8 +21,6 @@
 */
 package org.jboss.config.plugins;
 
-import java.lang.reflect.Constructor;
-
 import org.jboss.beans.info.plugins.AbstractBeanInfoFactory;
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
