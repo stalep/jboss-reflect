@@ -19,7 +19,7 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.joinpoint.plugins.reflect;
+package org.jboss.joinpoint.plugins;
 
 import org.jboss.joinpoint.spi.FieldSetJoinpoint;
 import org.jboss.reflect.spi.FieldInfo;
@@ -29,7 +29,7 @@ import org.jboss.reflect.spi.FieldInfo;
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectFieldSetJoinPoint extends ReflectTargettedJoinPoint implements FieldSetJoinpoint
+public class BasicFieldSetJoinPoint extends BasicTargettedJoinPoint implements FieldSetJoinpoint
 {
    /** The field info */
    protected FieldInfo fieldInfo;
@@ -42,7 +42,7 @@ public class ReflectFieldSetJoinPoint extends ReflectTargettedJoinPoint implemen
     * 
     * @param fieldInfo the field info
     */
-   public ReflectFieldSetJoinPoint(FieldInfo fieldInfo)
+   public BasicFieldSetJoinPoint(FieldInfo fieldInfo)
    {
       this.fieldInfo = fieldInfo;
    }

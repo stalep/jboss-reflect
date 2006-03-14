@@ -19,62 +19,19 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.joinpoint.reflect.support;
+package org.jboss.test.joinpoint.support;
 
 /**
- * A simple bean
+ * A simple interface
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class SimpleBean implements SimpleInterface
+public interface SimpleInterface
 {
    // Constants -----------------------------------------------------
 
-   // Attributes ----------------------------------------------------
-   
-   public Object publicField = "DefaultValue";
-   
-   private String constructorUsed;
-   
-   // Static --------------------------------------------------------
-   
-   // Constructors --------------------------------------------------
-
-   public SimpleBean()
-   {
-      constructorUsed = "()";
-   }
-
-   public SimpleBean(String string)
-   {
-      constructorUsed = string;
-   }
-
-   public SimpleBean(String string, Object object)
-   {
-      constructorUsed = string;
-   }
-   
    // Public --------------------------------------------------------
-   
-   public String getConstructorUsed()
-   {
-      return constructorUsed;
-   }
-   
-   public String echo(String value)
-   {
-      return value;
-   }
-   
-   // SimpleInterface Implementation --------------------------------
-   
-   // Package protected ---------------------------------------------
-   
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
    
    // Inner classes -------------------------------------------------
 }

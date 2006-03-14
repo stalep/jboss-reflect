@@ -19,29 +19,48 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.joinpoint.plugins.reflect;
+package org.jboss.joinpoint.plugins;
 
-import org.jboss.joinpoint.spi.TargettedJoinpoint;
+import org.jboss.joinpoint.spi.ConstructorJoinpoint;
+import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.util.UnreachableStatementException;
 
 /**
- * A targetted joinpoint
+ * A constructor joinpoint
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public abstract class ReflectTargettedJoinPoint implements TargettedJoinpoint
+public class BasicConstructorJoinPoint implements ConstructorJoinpoint
 {
-   /** The target */
-   protected Object target;
+   /** The constructor info */
+   protected ConstructorInfo constructorInfo;
 
-   public Object getTarget()
+   /** The arguments */
+   protected Object[] arguments;
+
+   /**
+    * Create a new constructor join point
+    * 
+    * @param constructorInfo the constructor info
+    */
+   public BasicConstructorJoinPoint(ConstructorInfo constructorInfo)
    {
-      return target;
+      this.constructorInfo = constructorInfo;
    }
 
-   public void setTarget(Object target)
+   public ConstructorInfo getConstructorInfo()
    {
-      this.target = target;
+      return constructorInfo;
+   }
+   
+   public Object[] getArguments()
+   {
+      return arguments;
+   }
+
+   public void setArguments(Object[] args)
+   {
+      this.arguments = args;
    }
 
    public Object clone()
@@ -54,5 +73,15 @@ public abstract class ReflectTargettedJoinPoint implements TargettedJoinpoint
       {
          throw new UnreachableStatementException();
       }
+   }
+
+   public Object dispatch() throws Throwable
+   {
+      return constructorInfo.newInstance(arguments);
+   }
+   
+   public String toHumanReadableString()
+   {
+      return constructorInfo.toString();
    }
 }

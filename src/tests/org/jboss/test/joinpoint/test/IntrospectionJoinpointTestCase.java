@@ -19,43 +19,33 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.joinpoint.plugins.reflect;
+package org.jboss.test.joinpoint.test;
 
-import org.jboss.joinpoint.spi.FieldGetJoinpoint;
-import org.jboss.reflect.spi.FieldInfo;
+import junit.framework.Test;
+
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
+import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
- * A field get joinpoint
- *
- * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
+ * Introspection Joinpoint Test Case.
+ * 
+ * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @version $Revision$
  */
-public class ReflectFieldGetJoinPoint extends ReflectTargettedJoinPoint implements FieldGetJoinpoint
+public class IntrospectionJoinpointTestCase extends JoinpointTest
 {
-   /** The field info */
-   protected FieldInfo fieldInfo;
-
-   /**
-    * Create a new field get join point
-    * 
-    * @param fieldInfo the field info
-    */
-   public ReflectFieldGetJoinPoint(FieldInfo fieldInfo)
+   public static Test suite()
    {
-      this.fieldInfo = fieldInfo;
-   }
-
-   public FieldInfo getFieldInfo()
-   {
-      return fieldInfo;
+      return suite(IntrospectionJoinpointTestCase.class);
    }
    
-   public Object dispatch() throws Throwable
+   public IntrospectionJoinpointTestCase(String name)
    {
-      return fieldInfo.get(target);
+      super(name);
    }
-   
-   public String toHumanReadableString()
+
+   protected TypeInfoFactory getTypeInfoFactory()
    {
-      return "GET " + fieldInfo.toString();
+      return new IntrospectionTypeInfoFactory();
    }
 }

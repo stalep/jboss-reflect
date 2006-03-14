@@ -19,7 +19,7 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.joinpoint.reflect.test;
+package org.jboss.test.joinpoint.test;
 
 import org.jboss.joinpoint.plugins.Config;
 import org.jboss.joinpoint.plugins.BasicJoinpointFactory;
@@ -28,7 +28,7 @@ import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.test.ContainerTest;
-import org.jboss.test.joinpoint.reflect.support.SimpleBean;
+import org.jboss.test.joinpoint.support.SimpleBean;
 
 /**
  * Joinpoint Test Case.
@@ -36,9 +36,9 @@ import org.jboss.test.joinpoint.reflect.support.SimpleBean;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public abstract class ReflectJoinpointTest extends ContainerTest
+public abstract class JoinpointTest extends ContainerTest
 {
-   public ReflectJoinpointTest(String name)
+   public JoinpointTest(String name)
    {
       super(name);
    }

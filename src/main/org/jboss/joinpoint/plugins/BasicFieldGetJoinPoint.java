@@ -19,55 +19,43 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.joinpoint.plugins.reflect;
+package org.jboss.joinpoint.plugins;
 
-import org.jboss.joinpoint.spi.MethodJoinpoint;
-import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.joinpoint.spi.FieldGetJoinpoint;
+import org.jboss.reflect.spi.FieldInfo;
 
 /**
- * A method joinpoint
+ * A field get joinpoint
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectMethodJoinPoint extends ReflectTargettedJoinPoint implements MethodJoinpoint
+public class BasicFieldGetJoinPoint extends BasicTargettedJoinPoint implements FieldGetJoinpoint
 {
-   /** The method info */
-   protected MethodInfo methodInfo;
+   /** The field info */
+   protected FieldInfo fieldInfo;
 
-   /** The arguments */
-   protected Object[] arguments;
    /**
-    * Create a new method join point
+    * Create a new field get join point
     * 
-    * @param methodInfo the methodInfo
+    * @param fieldInfo the field info
     */
-   public ReflectMethodJoinPoint(MethodInfo methodInfo)
+   public BasicFieldGetJoinPoint(FieldInfo fieldInfo)
    {
-      this.methodInfo = methodInfo;
+      this.fieldInfo = fieldInfo;
    }
 
-   public MethodInfo getMethodInfo()
+   public FieldInfo getFieldInfo()
    {
-      return methodInfo;
+      return fieldInfo;
    }
    
-   public Object[] getArguments()
-   {
-      return arguments;
-   }
-
-   public void setArguments(Object[] args)
-   {
-      this.arguments = args;
-   }
-
    public Object dispatch() throws Throwable
    {
-      return methodInfo.invoke(target, arguments);
+      return fieldInfo.get(target);
    }
    
    public String toHumanReadableString()
    {
-      return methodInfo.toString();
+      return "GET " + fieldInfo.toString();
    }
 }

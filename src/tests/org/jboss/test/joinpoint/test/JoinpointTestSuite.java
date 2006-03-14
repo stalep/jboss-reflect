@@ -19,33 +19,32 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.joinpoint.reflect.test;
+package org.jboss.test.joinpoint.test;
 
 import junit.framework.Test;
-
-import org.jboss.reflect.plugins.javassist.JavassistTypeInfoFactory;
-import org.jboss.reflect.spi.TypeInfoFactory;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
 
 /**
- * Javassist Joinpoint Test Case.
+ * Joinpoint Test Suite.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class JavassistJoinpointTestCase extends ReflectJoinpointTest
+public class JoinpointTestSuite extends TestSuite
 {
-   public static Test suite()
+   public static void main(String[] args)
    {
-      return suite(JavassistJoinpointTestCase.class);
-   }
-   
-   public JavassistJoinpointTestCase(String name)
-   {
-      super(name);
+      TestRunner.run(suite());
    }
 
-   protected TypeInfoFactory getTypeInfoFactory()
+   public static Test suite()
    {
-      return new JavassistTypeInfoFactory();
+      TestSuite suite = new TestSuite("Joinpoint Tests");
+
+      suite.addTest(IntrospectionJoinpointTestCase.suite());
+      suite.addTest(JavassistJoinpointTestCase.suite());
+      
+      return suite;
    }
 }

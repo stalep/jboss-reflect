@@ -26,7 +26,7 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.reflect.test.ReflectJoinpointTestSuite;
+import org.jboss.test.joinpoint.test.JoinpointTestSuite;
 
 /**
  * All Test Suite.
@@ -46,7 +46,7 @@ public class ContainerAllTestSuite extends TestSuite
       TestSuite suite = new TestSuite("All Tests");
 
       suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(ReflectJoinpointTestSuite.suite());
+      suite.addTest(JoinpointTestSuite.suite());
       
       return suite;
    }

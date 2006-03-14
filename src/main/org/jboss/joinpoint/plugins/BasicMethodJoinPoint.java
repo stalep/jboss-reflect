@@ -19,33 +19,55 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.joinpoint.reflect.test;
+package org.jboss.joinpoint.plugins;
 
-import junit.framework.Test;
-
-import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
-import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.joinpoint.spi.MethodJoinpoint;
+import org.jboss.reflect.spi.MethodInfo;
 
 /**
- * Introspection Joinpoint Test Case.
- * 
- * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision$
+ * A method joinpoint
+ *
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class IntrospectionJoinpointTestCase extends ReflectJoinpointTest
+public class BasicMethodJoinPoint extends BasicTargettedJoinPoint implements MethodJoinpoint
 {
-   public static Test suite()
+   /** The method info */
+   protected MethodInfo methodInfo;
+
+   /** The arguments */
+   protected Object[] arguments;
+   /**
+    * Create a new method join point
+    * 
+    * @param methodInfo the methodInfo
+    */
+   public BasicMethodJoinPoint(MethodInfo methodInfo)
    {
-      return suite(IntrospectionJoinpointTestCase.class);
-   }
-   
-   public IntrospectionJoinpointTestCase(String name)
-   {
-      super(name);
+      this.methodInfo = methodInfo;
    }
 
-   protected TypeInfoFactory getTypeInfoFactory()
+   public MethodInfo getMethodInfo()
    {
-      return new IntrospectionTypeInfoFactory();
+      return methodInfo;
+   }
+   
+   public Object[] getArguments()
+   {
+      return arguments;
+   }
+
+   public void setArguments(Object[] args)
+   {
+      this.arguments = args;
+   }
+
+   public Object dispatch() throws Throwable
+   {
+      return methodInfo.invoke(target, arguments);
+   }
+   
+   public String toHumanReadableString()
+   {
+      return methodInfo.toString();
    }
 }

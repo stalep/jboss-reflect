@@ -19,7 +19,7 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.joinpoint.plugins.reflect;
+package org.jboss.joinpoint.plugins;
 
 import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.joinpoint.spi.FieldGetJoinpoint;
@@ -35,16 +35,16 @@ import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
 /**
- * A join point factory based on reflection
+ * A basic join point factory
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ReflectJoinpointFactory extends JBossObject implements JoinpointFactory
+public class BasicJoinpointFactory extends JBossObject implements JoinpointFactory
 {
    /** The class info */
    protected ClassInfo classInfo;
    
-   public ReflectJoinpointFactory(ClassInfo classInfo)
+   public BasicJoinpointFactory(ClassInfo classInfo)
    {
       this.classInfo = classInfo;
    }
@@ -56,22 +56,22 @@ public class ReflectJoinpointFactory extends JBossObject implements JoinpointFac
 
    public ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo) throws JoinpointException
    {
-      return new ReflectConstructorJoinPoint(constructorInfo);
+      return new BasicConstructorJoinPoint(constructorInfo);
    }
 
    public FieldGetJoinpoint getFieldGetJoinpoint(FieldInfo fieldInfo) throws JoinpointException
    {
-      return new ReflectFieldGetJoinPoint(fieldInfo);
+      return new BasicFieldGetJoinPoint(fieldInfo);
    }
 
    public FieldSetJoinpoint getFieldSetJoinpoint(FieldInfo fieldInfo) throws JoinpointException
    {
-      return new ReflectFieldSetJoinPoint(fieldInfo);
+      return new BasicFieldSetJoinPoint(fieldInfo);
    }
 
    public MethodJoinpoint getMethodJoinpoint(MethodInfo methodInfo) throws JoinpointException
    {
-      return new ReflectMethodJoinPoint(methodInfo);
+      return new BasicMethodJoinPoint(methodInfo);
    }
    
    public void toString(JBossStringBuilder buffer)

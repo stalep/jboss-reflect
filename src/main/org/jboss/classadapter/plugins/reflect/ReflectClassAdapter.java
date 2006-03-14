@@ -24,7 +24,7 @@ package org.jboss.classadapter.plugins.reflect;
 import java.util.List;
 
 import org.jboss.classadapter.spi.ClassAdapter;
-import org.jboss.joinpoint.plugins.reflect.ReflectJoinpointFactory;
+import org.jboss.joinpoint.plugins.BasicJoinpointFactory;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.repository.plugins.basic.BasicMetaDataContextFactory;
@@ -74,7 +74,7 @@ public class ReflectClassAdapter extends JBossObject implements ClassAdapter
 
    public JoinpointFactory getJoinpointFactory()
    {
-      return new ReflectJoinpointFactory(classInfo);
+      return new BasicJoinpointFactory(classInfo);
    }
 
    public ClassLoader getClassLoader()
