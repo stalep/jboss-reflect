@@ -24,6 +24,7 @@ package org.jboss.config.spi;
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
  * Configuration.<p>
@@ -81,4 +82,11 @@ public interface Configuration
     * @throws Throwable for any error
     */
    ClassInfo getClassInfo(Class clazz) throws Throwable;
+
+   /**
+    * Get the type info factory
+    * 
+    * @return the TypeInfoFactory
+    */
+   TypeInfoFactory getTypeInfoFactory();
 }

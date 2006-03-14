@@ -34,6 +34,8 @@ import org.jboss.logging.Logger;
 import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.util.NestedRuntimeException;
 
 /**
  * Abstract configuration.
@@ -51,6 +53,9 @@ public abstract class AbstractConfiguration implements Configuration
    
    /** The default class adaptor factory */
    private ClassAdapterFactory classAdapterFactory;
+   
+   /** The default type info factory */
+   private TypeInfoFactory typeInfoFactory;
 
    /**
     * Create an abstract configuration
@@ -59,43 +64,67 @@ public abstract class AbstractConfiguration implements Configuration
    {
    }
    
-   public BeanInfo getBeanInfo(String className, ClassLoader cl) throws Exception
+   public BeanInfo getBeanInfo(String className, ClassLoader cl) throws Throwable
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(className, cl);
       return getBeanInfoFactory().getBeanInfo(classAdapter);
    }
    
-   public BeanInfo getBeanInfo(Class clazz) throws Exception
+   public BeanInfo getBeanInfo(Class clazz) throws Throwable
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(clazz);
       return getBeanInfoFactory().getBeanInfo(classAdapter);
    }
    
-   public BeanInfo getBeanInfo(TypeInfo typeInfo) throws Exception
+   public BeanInfo getBeanInfo(TypeInfo typeInfo) throws Throwable
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(typeInfo);
       return getBeanInfoFactory().getBeanInfo(classAdapter);
    }
    
-   public ClassInfo getClassInfo(String className, ClassLoader cl) throws Exception
+   public ClassInfo getClassInfo(String className, ClassLoader cl) throws Throwable
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(className, cl);
       return classAdapter.getClassInfo();
    }
    
-   public ClassInfo getClassInfo(Class clazz) throws Exception
+   public ClassInfo getClassInfo(Class clazz) throws Throwable
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(clazz);
       return classAdapter.getClassInfo();
+   }
+
+   public TypeInfoFactory getTypeInfoFactory()
+   {
+      if (typeInfoFactory == null)
+      {
+         try
+         {
+            typeInfoFactory = createDefaultTypeInfoFactory();
+         }
+         catch (RuntimeException e)
+         {
+            throw e;
+         }
+         catch (Error e)
+         {
+            throw e;
+         }
+         catch (Throwable t)
+         {
+            throw new NestedRuntimeException("Cannot create TypeInfoFactory", t);
+         }
+      }
+      return typeInfoFactory;
    }
 
    /**
     * Get the BeanInfoFactory
     * 
     * @return the BeanInfoFactory
-    * @throws Exception for any error
+    * @throws Throwable for any error
     */
-   protected BeanInfoFactory getBeanInfoFactory() throws Exception
+   protected BeanInfoFactory getBeanInfoFactory() throws Throwable
    {
       if (beanInfoFactory == null)
          beanInfoFactory = createDefaultBeanInfoFactory();
@@ -106,9 +135,9 @@ public abstract class AbstractConfiguration implements Configuration
     * Get the class adapter factory
     * 
     * @return the ClassAdapterFactory
-    * @throws Exception for any error
+    * @throws Throwable for any error
     */
-   protected ClassAdapterFactory getClassAdapterFactory() throws Exception
+   protected ClassAdapterFactory getClassAdapterFactory() throws Throwable
    {
       if (classAdapterFactory == null)
          classAdapterFactory = createDefaultClassAdapterFactory();
@@ -119,20 +148,20 @@ public abstract class AbstractConfiguration implements Configuration
     * Create the default bean info factory
     * 
     * @return the bean info factory
-    * @throws Exception for any error
+    * @throws Throwable for any error
     */
-   protected BeanInfoFactory createDefaultBeanInfoFactory() throws Exception
+   protected BeanInfoFactory createDefaultBeanInfoFactory() throws Throwable
    {
       return new AbstractBeanInfoFactory();
    }
 
    /**
-    * Create the default type info factory
+    * Create the default class adapter factory
     * 
-    * @return the type info factory
-    * @throws Exception for any error
+    * @return the class adapter factory
+    * @throws Throwable for any error
     */
-   protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Exception
+   protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable
    {
       ClassAdapterFactory result = new BasicClassAdapterFactory();
       
@@ -147,7 +176,18 @@ public abstract class AbstractConfiguration implements Configuration
       {
          log.trace("No AOP in classpath " + ignored.getMessage());
       }
-      result.setTypeInfoFactory(new IntrospectionTypeInfoFactory());
+      result.setConfiguration(this);
       return result;
+   }
+
+   /**
+    * Create the default type info factory
+    * 
+    * @return the type info factory
+    * @throws Throwable for any error
+    */
+   protected TypeInfoFactory createDefaultTypeInfoFactory() throws Throwable
+   {
+      return new IntrospectionTypeInfoFactory();
    }
 }

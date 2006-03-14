@@ -23,6 +23,7 @@ package org.jboss.classadapter.plugins;
 
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
+import org.jboss.config.spi.Configuration;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
@@ -35,26 +36,28 @@ import org.jboss.reflect.spi.TypeInfoFactory;
 public class BasicClassAdapterFactory implements ClassAdapterFactory
 {
    /** The type info factory */
-   protected TypeInfoFactory typeInfoFactory;
+   protected Configuration configuration;
 
-   public TypeInfoFactory getTypeInfoFactory()
+   public Configuration getConfiguration()
    {
-      return typeInfoFactory;
+      return configuration;
    }
 
-   public void setTypeInfoFactory(TypeInfoFactory typeInfoFactory)
+   public void setConfiguration(Configuration configuration)
    {
-      this.typeInfoFactory = typeInfoFactory;
+      this.configuration = configuration;
    }
    
    public ClassAdapter getClassAdapter(Class clazz)
    {
+      TypeInfoFactory typeInfoFactory = configuration.getTypeInfoFactory();
       TypeInfo typeInfo = typeInfoFactory.getTypeInfo(clazz);
       return getClassAdapter(typeInfo);
    }
    
    public ClassAdapter getClassAdapter(String name, ClassLoader cl) throws ClassNotFoundException
    {
+      TypeInfoFactory typeInfoFactory = configuration.getTypeInfoFactory();
       TypeInfo typeInfo = typeInfoFactory.getTypeInfo(name, cl);
       return getClassAdapter(typeInfo);
    }
