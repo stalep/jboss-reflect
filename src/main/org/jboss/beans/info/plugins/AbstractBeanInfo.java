@@ -64,6 +64,9 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    /** The BeanInfoFactory */
    protected BeanInfoFactory beanInfoFactory;
 
+   /** The metadata context */
+   protected MetaDataContext metaDataContext;
+
    
    /**
     * Create a new bean info
@@ -118,12 +121,12 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
 
    public List getDependencies()
    {
-      return classAdapter.getDependencies();
+      return classAdapter.getDependencies(metaDataContext);
    }
 
    public JoinpointFactory getJoinpointFactory()
    {
-      return classAdapter.getJoinpointFactory();
+      return classAdapter.getJoinpointFactory(metaDataContext);
    }
    
    public MetaDataContextFactory getMetaDataContextFactory()
@@ -133,13 +136,13 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
 
    public MetaDataContext getMetaDataContext()
    {
-      return classAdapter.getMetaDataContext();
+      return metaDataContext;
    }
 
 
    public void setMetaDataContext(MetaDataContext ctx)
    {
-      classAdapter.setMetaDataContext(ctx);
+      metaDataContext = ctx;
    }
 
 

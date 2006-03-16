@@ -220,6 +220,19 @@ public abstract class AbstractConfiguration implements Configuration
    protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable
    {
       ClassAdapterFactory result = new BasicClassAdapterFactory();
+      
+      // FIXME This is a temporary hack while Adrian is refactoring :-)
+      try
+      {
+         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.prototype.AOPClassAdapterFactory");
+         result = (ClassAdapterFactory) clazz.newInstance();
+      }
+      catch (ClassNotFoundException ignored)
+      {
+         log.trace("No AOP in classpath " + ignored.getMessage());
+      }
+      
+      
       result.setConfiguration(this);
       return result;
    }

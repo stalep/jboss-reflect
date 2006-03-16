@@ -45,9 +45,6 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
    /** The class info */
    protected ClassInfo classInfo;
    
-   /** The metadata context */
-   protected MetaDataContext metaDataContext;
-
    /**
     * Create a new reflected class adapter
     * 
@@ -72,12 +69,12 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
       return clone;
    }
 
-   public List getDependencies()
+   public List getDependencies(MetaDataContext metaDataContext)
    {
       return null;
    }
 
-   public JoinpointFactory getJoinpointFactory()
+   public JoinpointFactory getJoinpointFactory(MetaDataContext metaDataContext)
    {
       JoinpointFactoryBuilder builder = classAdapterFactory.getConfiguration().getJoinpointFactoryBuilder();
       return builder.createJoinpointFactory(classInfo, metaDataContext);
@@ -92,14 +89,4 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
    {
       return classAdapterFactory.getConfiguration().getMetaDataContextFactory();
    }
-   
-   public MetaDataContext getMetaDataContext()
-   {
-      return metaDataContext;
-   }
-
-   public void setMetaDataContext(MetaDataContext ctx)
-   {
-      metaDataContext = ctx;
-   }   
 }
