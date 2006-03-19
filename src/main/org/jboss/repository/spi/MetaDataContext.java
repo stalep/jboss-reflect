@@ -48,5 +48,5 @@ public interface MetaDataContext
    
    void addAnnotations(Set annotations);
    
-   void addPropertyAnnotations(String propertyName, Set propertyInfos, Set annotations);
+   void addPropertyAnnotations(String propertyName, Set propertyInfos, Set annotations);   
 }

@@ -88,7 +88,7 @@ public interface ClassAdapter extends JBossInterface
     * 
     * @return the joinpoint factory
     */
-   JoinpointFactory getJoinpointFactory(MetaDataContext metaDataContext);
+   JoinpointFactory getJoinpointFactory();
    
    /**
     * Get the classloader associated with this class adapter
@@ -103,4 +103,18 @@ public interface ClassAdapter extends JBossInterface
     * @return the metadata context factory
     */
    MetaDataContextFactory getMetaDataContextFactory();
+
+   /**
+    * Get the metadata context
+    * 
+    * @return the metadata context
+    */
+   MetaDataContext getMetaDataContext();
+   
+   /**
+    * Set the metadata context
+    * 
+    * @param metaCtx a metadata context
+    */
+   void setMetaDataContext(MetaDataContext metaCtx);
 }

@@ -64,10 +64,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    /** The BeanInfoFactory */
    protected BeanInfoFactory beanInfoFactory;
 
-   /** The metadata context */
-   protected MetaDataContext metaDataContext;
 
-   
    /**
     * Create a new bean info
     * 
@@ -98,6 +95,16 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       this.events = events;
    }
    
+   protected AbstractBeanInfo(AbstractBeanInfo template)
+   {
+      this.name = template.name;
+      this.classAdapter = template.classAdapter.getInstanceAdapter(template.classAdapter.getClassInfo());
+      this.properties = template.properties;
+      this.constructors = template.constructors;
+      this.methods = template.methods;
+      this.events = template.events;
+      this.beanInfoFactory = template.beanInfoFactory;
+   }
 
    public String getName()
    {
@@ -119,32 +126,20 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return classAdapter.getClassInfo();
    }
 
-   public List getDependencies()
+   public List getDependencies(MetaDataContext metaCtx)
    {
-      return classAdapter.getDependencies(metaDataContext);
+      return classAdapter.getDependencies(metaCtx);
    }
 
    public JoinpointFactory getJoinpointFactory()
    {
-      return classAdapter.getJoinpointFactory(metaDataContext);
+      return classAdapter.getJoinpointFactory();
    }
    
    public MetaDataContextFactory getMetaDataContextFactory()
    {
       return classAdapter.getMetaDataContextFactory();
    }
-
-   public MetaDataContext getMetaDataContext()
-   {
-      return metaDataContext;
-   }
-
-
-   public void setMetaDataContext(MetaDataContext ctx)
-   {
-      metaDataContext = ctx;
-   }
-
 
    public Set getConstructors()
    {
@@ -181,6 +176,16 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return beanInfoFactory;
    }
    
+   public MetaDataContext getMetaDataContext()
+   {
+      return classAdapter.getMetaDataContext();
+   }
+
+   public void setMetaDataContext(MetaDataContext metaCtx)
+   {
+      classAdapter.setMetaDataContext(metaCtx);
+   }
+
    public boolean equals(Object object)
    {
       if (object == null || object instanceof AbstractBeanInfo == false)
@@ -225,5 +230,11 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    public int getHashCode()
    {
       return name.hashCode();
+   }
+
+
+   public BeanInfo getInstanceInfo()
+   {
+      return new AbstractInstanceBeanInfo(this);
    }
 }

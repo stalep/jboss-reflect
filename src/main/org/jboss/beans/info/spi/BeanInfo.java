@@ -52,6 +52,12 @@ public interface BeanInfo extends JBossInterface
     */
    ClassInfo getClassInfo();
 
+   /**
+    * Return a BeanInfo for this bean instance
+    * 
+    * @return an instance info for this bean
+    */
+   BeanInfo getInstanceInfo();
 
    /**
     * Bean may have additional dependencies
@@ -59,7 +65,7 @@ public interface BeanInfo extends JBossInterface
     *
     * @return the list of dependencies
     */
-   List getDependencies();
+   List getDependencies(MetaDataContext metaCtx);
 
    /**
     * Get the joinpoint factory
@@ -89,16 +95,6 @@ public interface BeanInfo extends JBossInterface
     */
    void setProperties(Set properties);
    
-   /**
-    * Get the metadata context
-    */
-   MetaDataContext getMetaDataContext();
-
-   /**
-    * Set the metadata context
-    */
-   void setMetaDataContext(MetaDataContext ctx);
-
    /**
     * Get the constructor info.
     *
@@ -147,4 +143,19 @@ public interface BeanInfo extends JBossInterface
     * @return the factory
     */
    BeanInfoFactory getBeanInfoFactory();
+   
+   
+   /**
+    * Get the metadata context
+    * 
+    * @return the metadata context
+    */
+   MetaDataContext getMetaDataContext();
+   
+   /**
+    * Set the metadata context
+    * 
+    * @param metaCtx a metadata context
+    */
+   void setMetaDataContext(MetaDataContext metaCtx);
 }
