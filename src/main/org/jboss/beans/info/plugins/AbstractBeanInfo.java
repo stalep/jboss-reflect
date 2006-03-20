@@ -126,9 +126,9 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return classAdapter.getClassInfo();
    }
 
-   public List getDependencies(MetaDataContext metaCtx)
+   public List getDependencies()
    {
-      return classAdapter.getDependencies(metaCtx);
+      return classAdapter.getDependencies();
    }
 
    public JoinpointFactory getJoinpointFactory()

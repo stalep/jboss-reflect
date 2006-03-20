@@ -65,7 +65,7 @@ public interface BeanInfo extends JBossInterface
     *
     * @return the list of dependencies
     */
-   List getDependencies(MetaDataContext metaCtx);
+   List getDependencies();
 
    /**
     * Get the joinpoint factory

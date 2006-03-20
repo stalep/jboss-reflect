@@ -46,7 +46,7 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
    protected ClassInfo classInfo;
 
    /** The metadata context */
-   MetaDataContext metaDataContext;
+   protected MetaDataContext metaDataContext;
    
    /**
     * Create a new reflected class adapter
@@ -72,7 +72,7 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
       return clone;
    }
 
-   public List getDependencies(MetaDataContext metaDataContext)
+   public List getDependencies()
    {
       return null;
    }
