@@ -22,7 +22,7 @@
 package org.jboss.repository.spi;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,13 +41,13 @@ public interface MetaDataContext
    
    Object getAnnotation(Class ann);
    
-   ArrayList getAnnotations();
+   List getAnnotations();
    
    boolean hasAnnotation(String ann);
 
    Object getAnnotation(Method m, Class ann);
    
-   ArrayList getAnnotationsForMethods(String[] methodNames);
+   List getAnnotationsForMethods(String[] methodNames);
    
    boolean hasAnnotation(Method m, String ann);
    
