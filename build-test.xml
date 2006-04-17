@@ -71,6 +71,7 @@
       <path refid="javassist.classpath"/>
       <path refid="apache.log4j.classpath"/>
       <path refid="oswego.concurrent.classpath"/>
+      <path refid="jboss.profiler.jvmti.classpath"/>
     </path>
 
     <!-- ======= -->
@@ -96,6 +97,11 @@
    <property name="build-bypass.disabled" value="true"/>
 
    <call target="_default:task-init"/>
+  	
+    <path id="thirdparty.classpath">
+       <path refid="library.classpath"/>
+       <path refid="dependentmodule.classpath"/>
+    </path>
 
   </target>
 
@@ -202,5 +208,23 @@
                fork="${junit.batchtest.fork}"/>
       </junit>
    </target>
+   
+   <target name="memory-test" depends="most" description="Execute MemoryLeakTestCase">
+   	
+	      <junit printsummary="yes" fork="yes" haltonfailure="no">
+         <classpath>
+            <pathelement location="${build.classes}"/>
+            <pathelement location="${build.resources}"/>
+	         <path refid="thirdparty.classpath"/>
+            <path refid="javac.classpath"/>
+            <path refid="apache.xerces.classpath"/>
+         </classpath>
+         <jvmarg value="-agentlib:jbossAgent"/>
+         <formatter type="plain" usefile="true"/>
+         <formatter type="xml" usefile="true"/>
+	      <test fork="yes" todir="${build.reports}" name="org.jboss.test.memorytests.ClassInfoMemoryTestCase"/>
+	      </junit>
+
+	   </target>
 
 </project>
