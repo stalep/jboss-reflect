@@ -210,6 +210,8 @@
    </target>
    
    <target name="memory-test" depends="most" description="Execute MemoryLeakTestCase">
+      <mkdir dir="${build.reports}"/>
+      <mkdir dir="${build.testlog}"/>
    	
 	      <junit printsummary="yes" fork="yes" haltonfailure="no">
          <classpath>
