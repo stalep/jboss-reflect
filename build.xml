@@ -108,11 +108,32 @@
      | documentation compiles.
    -->
 
+  <!-- Exclude the jdk5 based sources by default -->
+  <property name="javac.excludes" value="org/jboss/profileservice/**,org/jboss/vfs/**" />
+
   <target name="compile"
 	  description="Compile all source files."
 	  depends="_default:compile-classes,
-              _default:compile-etc"
+              _default:compile-etc,
+              compile-classes-jdk5"
   />
+
+  <target name="compile-classes-jdk5" if="HAVE_JDK_1.5">
+     <javac destdir="${build.classes}"
+       optimize="${javac.optimize}"
+       source="1.5"
+       target="1.5"
+       debug="${javac.debug}"
+       depend="${javac.depend}"
+       verbose="${javac.verbose}"
+       deprecation="${javac.deprecation}"
+       includeAntRuntime="${javac.include.ant.runtime}"
+       includeJavaRuntime="${javac.include.java.runtime}"
+       failonerror="${javac.fail.onerror}">
+       <src path="${source.java}"/>
+       <classpath refid="javac.classpath"/>
+     </javac>
+  </target>
 
   <!-- ================================================================== -->
   <!-- Archives                                                           -->

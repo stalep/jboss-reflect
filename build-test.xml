@@ -116,6 +116,8 @@
      | different type of compile that needs to be performed, short of
      | documentation compiles.
    -->
+   <!-- Exclude the jdk5 based sources by default -->
+   <property name="javac.excludes" value="org/jboss/test/vfs/**" />
 
   <target name="compile"
 	  description="Compile all source files."
