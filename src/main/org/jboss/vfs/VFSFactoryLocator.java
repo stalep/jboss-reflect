@@ -20,7 +20,10 @@ import java.io.InputStreamReader;
  */
 public class VFSFactoryLocator
 {
+   /** The VSFactory mapped keyed by the VFS protocol string */
    private static HashMap<String, VFSFactory> factoryByProtocol = new HashMap<String, VFSFactory>();
+   /** The default file protocol faactory */
+   private static final String FILE_FACTORY = "org.jboss.vfs.file.DefaultVFSFactory";
    /** Has the default initialzation been performed */
    private static boolean initialized;
 
@@ -44,6 +47,7 @@ public class VFSFactoryLocator
     * if there is no factory registered for the rootURL protocol.
     */
    public synchronized static VFSFactory getFactory(URL rootURL)
+      throws Exception
    {
       if( initialized == false )
          init();
@@ -53,30 +57,36 @@ public class VFSFactoryLocator
    }
 
    /**
-    * Load the default protocol VFS factories by searing for the
-    * META-INF/services/org.jboss.vfs.VFSFactory service provider config files.
+    * Load the default protocol VFS factories by searching for the
+    * META-INF/services/org.jboss.vfs.VFSFactory service provider config files
+    * using the thread context class loader. If that fails to locate a resource,
+    * default to the file
     */
    private static synchronized void init()
+      throws Exception
    {
       // Try to locate
       ClassLoader loader = Thread.currentThread().getContextClassLoader();
-      try
+      Enumeration urls = loader.getResources("META-INF/services/org.jboss.vfs.VFSFactory");
+      while( urls.hasMoreElements() )
       {
-         Enumeration urls = loader.getResources("META-INF/services/org.jboss.vfs.VFSFactory");
-         while( urls.hasMoreElements() )
+         URL url = (URL) urls.nextElement();
+         VFSFactory[] factories = loadFactories(url, loader);
+         for(int n = 0; n < factories.length; n ++)
          {
-            URL url = (URL) urls.nextElement();
-            VFSFactory[] factories = loadFactories(url, loader);
-            for(int n = 0; n < factories.length; n ++)
-            {
-               VFSFactory factory = factories[n];
-               registerFactory(factory);
-            }
+            VFSFactory factory = factories[n];
+            registerFactory(factory);
          }
       }
-      catch(IOException e)
+
+      // If there are no factories load the FILE_FACTORY
+      if( factoryByProtocol.size() == 0 )
       {
+         Class<VFSFactory> c = (Class<VFSFactory>) loader.loadClass(FILE_FACTORY);
+         VFSFactory factory = c.newInstance();
+         registerFactory(factory);
       }
+      initialized = true;
    }
 
    /**
