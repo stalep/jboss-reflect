@@ -121,10 +121,58 @@
 
   <target name="compile"
 	  description="Compile all source files."
-	  depends="_default:compile-classes"
+	  depends="_default:compile-classes, compile-resources, compile-classes-jdk5"
   />
 
-  <!-- ================================================================== -->
+   <target name="compile-classes-jdk5" if="HAVE_JDK_1.5">
+      <javac destdir="${build.classes}"
+        optimize="${javac.optimize}"
+        source="1.5"
+        target="1.5"
+        debug="${javac.debug}"
+        depend="${javac.depend}"
+        verbose="${javac.verbose}"
+        deprecation="${javac.deprecation}"
+        includeAntRuntime="${javac.include.ant.runtime}"
+        includeJavaRuntime="${javac.include.java.runtime}"
+        failonerror="${javac.fail.onerror}">
+        <src path="${source.java}"/>
+        <classpath refid="javac.classpath"/>
+      </javac>
+   </target>
+
+   <target name="compile-resources">
+      <jar destfile="${build.lib}/jar1.jar">
+         <zipfileset dir="${build.classes}">
+            <include name="org/jboss/test/vfs/support/jar1/**" />
+         </zipfileset>
+      </jar>
+      <jar destfile="${build.lib}/jar2.jar">
+         <zipfileset dir="${build.classes}">
+            <include name="org/jboss/test/vfs/support/jar2/**" />
+         </zipfileset>
+      </jar>
+      <jar destfile="${build.lib}/outer.jar">
+        <manifest>
+           <attribute name="Specification-Title" value="outer-jar" />
+           <attribute name="Specification-Version" value="1.0.0.GA" />
+           <attribute name="Specification-Vendor" value="JBoss Inc." />
+           <attribute name="Implementation-Title" value="outer-jar-test" />
+           <attribute name="Implementation-URL" value="www.jboss.org" />
+           <attribute name="Implementation-Version" value="1.0.0.GA-jboss" />
+           <attribute name="Implementation-Vendor" value="JBoss Inc." />
+        </manifest>
+         <zipfileset dir="${build.lib}">
+            <include name="jar1.jar" />
+            <include name="jar2.jar" />
+         </zipfileset>
+         <zipfileset dir="${build.classes}">
+            <include name="org/jboss/test/vfs/support/*" />
+         </zipfileset>
+      </jar>
+   </target>
+
+   <!-- ================================================================== -->
   <!-- Archives                                                           -->
   <!-- ================================================================== -->
 
