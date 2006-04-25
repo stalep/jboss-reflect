@@ -4,6 +4,8 @@
 package org.jboss.vfs.file;
 
 import java.net.URL;
+import java.io.IOException;
+
 import org.jboss.vfs.VFSFactory;
 import org.jboss.vfs.spi.ReadOnlyVFS;
 
@@ -29,7 +31,7 @@ public class DefaultVFSFactory implements VFSFactory
     * @param root
     * @return A ReadOnlyVFS for file URLs rooted at the root
     */
-   public ReadOnlyVFS getVFS(URL root)
+   public ReadOnlyVFS getVFS(URL root) throws IOException
    {
       return new FileSystemVFS(root);
    }
