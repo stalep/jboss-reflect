@@ -2,20 +2,22 @@ package org.jboss.vfs.file;
 
 import org.jboss.vfs.spi.VirtualFile;
 
-import java.util.jar.JarFile;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
-import java.util.Set;
-import java.util.Enumeration;
-import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.File;
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.zip.ZipInputStream;
 
 /**
+ * A top level jar implementation of VirtualFile.
+ * 
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
@@ -77,14 +79,14 @@ public class JarImpl
          if( isJar(entry.getName()) )
          {
             InputStream is = jar.getInputStream(entry);
-            JarInputStream jis;
-            if( (is instanceof JarInputStream) )
+            ZipInputStream jis;
+            if( (is instanceof ZipInputStream) )
             {
-               jis = (JarInputStream) is;
+               jis = (ZipInputStream) is;
             }
             else
             {
-               jis = new JarInputStream(is);
+               jis = new ZipInputStream(is);
             }
             tmp.add(new NestedJarFromStream(jis, jarURL, entry));
          }
@@ -106,14 +108,14 @@ public class JarImpl
          if( isJar(entry.getName()) )
          {
             InputStream is = jar.getInputStream(entry);
-            JarInputStream jis;
-            if( (is instanceof JarInputStream) )
+            ZipInputStream jis;
+            if( (is instanceof ZipInputStream) )
             {
-               jis = (JarInputStream) is;
+               jis = (ZipInputStream) is;
             }
             else
             {
-               jis = new JarInputStream(is);
+               jis = new ZipInputStream(is);
             }
             child = new NestedJarFromStream(jis, jarURL, entry);
          }
