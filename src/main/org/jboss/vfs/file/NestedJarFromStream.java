@@ -5,26 +5,28 @@ package org.jboss.vfs.file;
 
 import org.jboss.vfs.spi.VirtualFile;
 
-import java.util.jar.JarInputStream;
-import java.util.jar.JarEntry;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
+ * A nested jar implementation used to represent a jar within a jar.
+ * 
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
 public class NestedJarFromStream
    implements VirtualFile
 {
-   private JarInputStream jis;
+   private ZipInputStream zis;
    private HashMap<String, JarEntryContents> entries = new HashMap<String, JarEntryContents>();
    private URL jarURL;
    private URL entryURL;
@@ -33,13 +35,19 @@ public class NestedJarFromStream
    private long size;
    private boolean inited;
 
-   NestedJarFromStream(JarInputStream jis, URL jarURL, JarEntry entry)
+   /**
+    * Create a nested jar from the parent zip inputstream/zip entry.
+    * @param zis - the jar zip input stream
+    * @param jarURL - the URL to use as the jar URL
+    * @param entry - the parent jar ZipEntry for the nested jar
+    */
+   public NestedJarFromStream(ZipInputStream zis, URL jarURL, ZipEntry entry)
    {
       this.jarURL = jarURL;
       this.name = entry.getName();
       this.lastModified = entry.getTime();
       this.size = entry.getSize();
-      this.jis = jis;
+      this.zis = zis;
    }
 
    public int size()
@@ -62,13 +70,13 @@ public class NestedJarFromStream
       JarEntryContents jec = entries.get(name);
       return jec;
    }
-   public JarEntry getJarEntry(String name)
+   public ZipEntry getJarEntry(String name)
       throws IOException
    {
       if( inited == false )
          init();
       JarEntryContents jec = entries.get(name);
-      JarEntry entry = (jec != null ? jec.getEntry() : null);
+      ZipEntry entry = (jec != null ? jec.getEntry() : null);
       return entry;
    }
    public byte[] getContents(String name)
@@ -128,15 +136,15 @@ public class NestedJarFromStream
    // Stream accessor
    public InputStream openStream() throws IOException
    {
-      return jis;
+      return zis;
    }
 
    public void close()
       throws IOException
    {
       entries.clear();
-      if( jis != null )
-         jis.close();
+      if( zis != null )
+         zis.close();
    }
 
    public URL toURL() throws MalformedURLException
@@ -172,37 +180,37 @@ public class NestedJarFromStream
       throws IOException
    {
       inited = true;
-      JarEntry entry = jis.getNextJarEntry();
+      ZipEntry entry = zis.getNextEntry();
       while( entry != null )
       {
          try
          {
             String url = toURL().toExternalForm() + "!/" +  entry.getName();
             URL jecURL = new URL(url);
-            JarEntryContents jec = new JarEntryContents(entry, jecURL, jis);
+            JarEntryContents jec = new JarEntryContents(entry, jecURL, zis);
             entries.put(entry.getName(), jec);
-            entry = jis.getNextJarEntry();
+            entry = zis.getNextEntry();
          }
          catch(MalformedURLException e)
          {
             e.printStackTrace();
          }
       }
-      jis.close();
-      jis = null;
+      zis.close();
+      zis = null;
    }
 
    public static class JarEntryContents
       implements VirtualFile
    {
-      private JarEntry entry;
+      private ZipEntry entry;
       private URL entryURL;
       private byte[] contents;
       private boolean isJar;
       private NestedJarFromStream njar;
       private InputStream openStream;
 
-      JarEntryContents(JarEntry entry, URL entryURL, InputStream jis)
+      JarEntryContents(ZipEntry entry, URL entryURL, InputStream zis)
          throws IOException
       {
          this.entry = entry;
@@ -214,15 +222,15 @@ public class NestedJarFromStream
 
          ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
          byte[] tmp = new byte[1024];
-         while( jis.available() > 0 )
+         while( zis.available() > 0 )
          {
-            int length = jis.read(tmp);
+            int length = zis.read(tmp);
             if( length > 0 )
                baos.write(tmp, 0, length);
          }
          contents = baos.toByteArray();
       }
-      public JarEntry getEntry()
+      public ZipEntry getEntry()
       {
          return entry;
       }
@@ -292,7 +300,7 @@ public class NestedJarFromStream
             openStream = njar.openStream();
          else
             openStream = new ByteArrayInputStream(contents);
-         return null;
+         return openStream;
       }
 
       public synchronized void close()
@@ -338,8 +346,8 @@ public class NestedJarFromStream
          if( isJar && njar == null )
          {
             ByteArrayInputStream bais = new ByteArrayInputStream(contents);
-            JarInputStream jis = new JarInputStream(bais);
-            njar = new NestedJarFromStream(jis, entryURL, entry);
+            ZipInputStream zis = new ZipInputStream(bais);
+            njar = new NestedJarFromStream(zis, entryURL, entry);
          }
       }
    }
