@@ -8,12 +8,12 @@ package org.jboss.vfs.file;
 
 import org.jboss.vfs.spi.VirtualFile;
 
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /** A java.io.File based implementation of VirtualFile
@@ -28,16 +28,19 @@ public class FileImpl
    private InputStream contentIS;
    private File file;
    private VirtualFile[] children;
+   private FileSystemVFS vfs;
 
-   public FileImpl(URL path)
+   public FileImpl(URL path, FileSystemVFS vfs)
    {
       this.path = path;
       this.file = new File(path.getPath());
+      this.vfs = vfs;
    }
-   public FileImpl(File file) throws MalformedURLException
+   public FileImpl(File file, FileSystemVFS vfs) throws MalformedURLException
    {
       this.path = file.toURL();
       this.file = file;
+      this.vfs = vfs;
    }
 
    public String getName()
@@ -54,7 +57,7 @@ public class FileImpl
          ArrayList<VirtualFile> tmp = new ArrayList<VirtualFile>();
          for(File f : listing)
          {
-            VirtualFile child = getChild(f);
+            VirtualFile child = getChild(f.getName());
             tmp.add(child);
          }
          children = new VirtualFile[tmp.size()];
@@ -66,15 +69,11 @@ public class FileImpl
    public VirtualFile findChild(String name)
       throws IOException
    {
-      VirtualFile child = null;
-      File test = new File(file, name);
-      if( test.exists() )
+      VirtualFile child = getChild(name);
+      if( child == null )
       {
-         child = getChild(test);
-      }
-      else
-      {
-         throw new FileNotFoundException(test.getAbsolutePath()+" does not exist");
+         String path = file.getAbsolutePath();
+         throw new FileNotFoundException(name+", not found under: "+path);
       }
       return child;
    }
@@ -122,14 +121,10 @@ public class FileImpl
       return path;
    }
 
-   private VirtualFile getChild(File f)
+   private VirtualFile getChild(String name)
       throws IOException
    {
-      VirtualFile child;
-      if( JarImpl.isJar(f.getName()) )
-         child = new JarImpl(f.getAbsolutePath());
-      else
-         child = new FileImpl(f);
+      VirtualFile child = vfs.getChild(this.path, name);
       return child;
    }
 }
