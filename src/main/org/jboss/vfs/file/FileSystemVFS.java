@@ -6,18 +6,18 @@
 */
 package org.jboss.vfs.file;
 
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.io.FileNotFoundException;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.jboss.vfs.spi.ReadOnlyVFS;
 import org.jboss.vfs.spi.VirtualFile;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /** A simple implementation of ReadOnlyVFS that only understands file URLs
  *  
@@ -30,6 +30,7 @@ public class FileSystemVFS
    private static Logger log = Logger.getLogger("org.jboss.vfs.file.FileSystemVFS");
    private URL rootURL;
    private File vfsRoot;
+   /** Cache of rootURL absolute paths to previously resolved files */
    private ConcurrentHashMap<String, VirtualFile> fileCache;
 
    FileSystemVFS(URL rootURL)
@@ -42,17 +43,27 @@ public class FileSystemVFS
    public VirtualFile resolveFile(String path)
       throws FileNotFoundException, MalformedURLException
    {
-      URL filePath = new URL(rootURL, path);
-      FileImpl file = new FileImpl(filePath);
-      return file;
+      try
+      {
+         VirtualFile vf = this.resolveFile(path, "");
+         return vf;
+      }
+      catch(FileNotFoundException e)
+      {
+         throw e;
+      }
+      catch (IOException e)
+      {
+         FileNotFoundException fnfe = new FileNotFoundException(path);
+         fnfe.initCause(e);
+         throw fnfe;
+      }
    }
 
    public VirtualFile resolveFile(String path, List<String> searchContexts)
       throws IOException
    {
       VirtualFile match = null;
-      // Parse the path into its components
-      String[] atoms = path.split("!/");
       for(String ctx : searchContexts)
       {
          // Check the cache
@@ -81,12 +92,22 @@ public class FileSystemVFS
       fileCache.clear();
    }
 
+   /**
+    * Resolve the given path against the filesystem search context. This first
+    * locates the VirtualFile corresponding to the searchContext, and then
+    * resolves the file against it.
+    * 
+    * @param path a VFS path
+    * @param searchContext - the filesystem path to start the search from
+    * @return the resolved VirtualFile
+    * @throws IOException
+    */
    private VirtualFile resolveFile(String path, String searchContext)
       throws IOException
    {
       VirtualFile match = null;
       // Parse the search context into its components
-      String[] ctxAtoms = searchContext.split("!/");
+      String[] ctxAtoms = searchContext.split("!/|/");
       // Look for a
       boolean inJar = false;
       StringBuffer activePath = new StringBuffer(rootURL.getPath());
@@ -95,8 +116,8 @@ public class FileSystemVFS
       {
          activePath.append('/');
          activePath.append(atom);
-         VirtualFile atomVF = fileCache.get(atom);
-         JarImpl jar = null;
+         String atomPath = activePath.toString();
+         VirtualFile atomVF = fileCache.get(atomPath);
          if( atomVF == null )
          {
             try
@@ -106,16 +127,18 @@ public class FileSystemVFS
                {
                   atomVF = prevVF.findChild(atom);
                }
+               else if( JarImpl.isJar(atom) )
+               {
+                  atomVF = new JarImpl(atomPath);
+                  inJar = true;
+               }
                else
                {
-                  if( JarImpl.isJar(atom) )
-                  {
-                     jar = new JarImpl(activePath.toString());
-                     atomVF = jar;
-                     inJar = true;
-                  }
+                  URL atomParentURL = prevVF == null ? rootURL : prevVF.toURL();
+                  URL filePath = new URL(atomParentURL, atom);
+                  atomVF = new FileImpl(filePath, this);
                }
-               fileCache.put(activePath.toString(), atomVF);
+               fileCache.put(atomPath, atomVF);
                prevVF = atomVF;
             }
             catch(IOException e)
@@ -124,9 +147,59 @@ public class FileSystemVFS
                   "Failed to create virtual file for atom up to: "+activePath, e);
             }
          }
+         else
+         {
+            prevVF = atomVF;
+         }
       }
+      if( prevVF == null )
+         throw new FileNotFoundException("Failed to find file for path: "+path);
       match = prevVF.findChild(path);
       return match;
+   }
+
+   VirtualFile getChild(URL parentURL, String path)
+      throws IOException
+   {
+      // Parse the search context into its components
+      String[] ctxAtoms = path.split("!/|/");
+      // Look for a
+      boolean inJar = false;
+      StringBuffer activePath = new StringBuffer(parentURL.getPath());
+      VirtualFile childVF = null;
+      for(String atom : ctxAtoms)
+      {
+         activePath.append('/');
+         activePath.append(atom);
+         String atomPath = activePath.toString();
+         VirtualFile atomVF = fileCache.get(atomPath);
+         if( atomVF == null )
+         {
+            // Create the atom file and cache it
+            if( inJar == true )
+            {
+               atomVF = childVF.findChild(atom);
+            }
+            else if( JarImpl.isJar(atom) )
+            {
+               atomVF = new JarImpl(atomPath);
+               inJar = true;
+            }
+            else
+            {
+               URL atomParentURL = childVF == null ? rootURL : childVF.toURL();
+               URL filePath = new URL(atomParentURL, atom);
+               atomVF = new FileImpl(filePath, this);
+            }
+            fileCache.put(atomPath, atomVF);
+            childVF = atomVF;
+         }
+         else
+         {
+            childVF = atomVF;
+         }
+      }
+      return childVF;
    }
 
    private void validateURL(URL path)
