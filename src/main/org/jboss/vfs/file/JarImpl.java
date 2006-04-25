@@ -46,6 +46,13 @@ public class JarImpl
       return removed;
    }
 
+   /**
+    * Utility method for validating a jar file.
+    * @todo need to deal with unpacked jars
+    * @param name a path name
+    * @return true if name ends in one of the registered jar suffixes,
+    *    false otherwise.
+    */
    public static boolean isJar(String name)
    {
       int lastDot = name.lastIndexOf('.');
