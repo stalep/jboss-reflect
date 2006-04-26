@@ -34,7 +34,17 @@ import java.net.MalformedURLException;
 
 public interface VirtualFile
 {
+   /**
+    * Get the simple VF name (X.java)
+    * @return the simple file name
+    */
    public String getName();
+
+   /**
+    * Get the VFS relative path name (org/jboss/X.java)
+    * @return the VFS relative path name
+    */
+   public String getPathName();
 
    public VirtualFile[] getChildren() throws IOException;
    public VirtualFile findChild(String name) throws IOException;
@@ -42,12 +52,36 @@ public interface VirtualFile
    // Convience attribute accessors
    public long getLastModified();
    public long getSize();
+
+   /**
+    * Is this VF a directory that can contain children
+    * @return true if a directory.
+    */
    public boolean isDirectory();
+
+   /**
+    * Is this VF a simple file that cannot contain children.
+    * @return  true if a regular file.
+    */
    public boolean isFile();
 
-   // Stream accessor
+   /**
+    * Access the file contents.
+    * @return An InputStream for the file contents.
+    * @throws IOException
+    */
    public InputStream openStream() throws IOException;
+
+   /**
+    * Close the file resources (stream, etc.)
+    * @throws IOException
+    */
    public void close() throws IOException;
 
+   /**
+    * Get the VF URL (file://root/org/jboss/X.java)
+    * @return the full URL to the VF in the VFS.
+    * @throws MalformedURLException
+    */
    public URL toURL() throws MalformedURLException;
 }
