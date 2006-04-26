@@ -15,6 +15,8 @@ import java.lang.management.MemoryMXBean;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.HashSet;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -24,6 +26,7 @@ import java.util.zip.ZipInputStream;
 import org.jboss.test.BaseTestCase;
 import org.jboss.vfs.VFSFactory;
 import org.jboss.vfs.VFSFactoryLocator;
+import org.jboss.vfs.visitor.SuffixMatchVisitor;
 import org.jboss.vfs.file.JarImpl;
 import org.jboss.vfs.file.NestedJarFromStream;
 import org.jboss.vfs.spi.ReadOnlyVFS;
@@ -72,7 +75,7 @@ public class TestFileVFS extends BaseTestCase
       JarEntry jar1 = jf.getJarEntry("jar1.jar");
       URL jar1URL = new URL(outerJar.toURL(), "jar1.jar");
       ZipInputStream jis1 = new ZipInputStream(jf.getInputStream(jar1));
-      NestedJarFromStream njfs = new NestedJarFromStream(jis1, jar1URL, jar1);
+      NestedJarFromStream njfs = new NestedJarFromStream(jis1, jar1URL, "/jar1.jar", jar1);
       NestedJarFromStream.JarEntryContents e1 = njfs.getEntry("org/jboss/test/vfs/support/jar1/ClassInJar1.class");
       assertNotNull(e1);
       log.info("org/jboss/test/vfs/support/CommonClass.class: "+e1);
@@ -89,7 +92,7 @@ public class TestFileVFS extends BaseTestCase
       JarEntry jar2 = jf.getJarEntry("jar2.jar");
       URL jar2URL = new URL(outerJar.toURL(), "jar2.jar");
       ZipInputStream jis2 = new ZipInputStream(jf.getInputStream(jar2));
-      NestedJarFromStream njfs2 = new NestedJarFromStream(jis2, jar2URL, jar2);
+      NestedJarFromStream njfs2 = new NestedJarFromStream(jis2, jar2URL, "/jar2.jar", jar2);
       NestedJarFromStream.JarEntryContents e2 = njfs2.getEntry("org/jboss/test/vfs/support/jar2/ClassInJar2.class");
       assertNotNull(e2);
       log.info("org/jboss/test/vfs/support/CommonClass.class: "+e2);
@@ -149,6 +152,9 @@ public class TestFileVFS extends BaseTestCase
       // Find the outer.jar
       VirtualFile outerJar = vfs.resolveFile("outer.jar");
       assertNotNull("outer.jar", outerJar);
+      assertEquals("outer.jar name", "outer.jar", outerJar.getName());
+      assertEquals("outer.jar path", "output/lib/outer.jar", outerJar.getPathName());
+      
       VirtualFile outerJarMF = vfs.resolveFile("outer.jar/META-INF/MANIFEST.MF");
       assertNotNull("outer.jar/META-INF/MANIFEST.MF", outerJarMF);
       
@@ -187,63 +193,38 @@ public class TestFileVFS extends BaseTestCase
       mfIS.close();
    }
 
-   public void test403AllJarsSize()
+   /**
+    * Test a scan of the outer.jar vfs to locate all .class files
+    * @throws Exception
+    */
+   public void testClassScan()
       throws Exception
    {
-      FileWriter out = new FileWriter("/usr/local/java5/test403AllJarsSize.txt");
-      MemoryMXBean mem = ManagementFactory.getMemoryMXBean();
-      out.write("Starting heap usage: "+mem.getHeapMemoryUsage()+"\n");
-      File jboss403 = new File("/cvs/Releases/jboss-4.0.3");
-      File lib = new File(jboss403, "lib");
-      File serverLib = new File(jboss403, "server/all/lib");
+      // this expects to be run with a working dir of the container root
+      File outerJarFile = new File("output/lib/outer.jar");
+      URL rootURL = outerJarFile.toURL();
+      VFSFactory factory = VFSFactoryLocator.getFactory(rootURL);
+      ReadOnlyVFS vfs = factory.getVFS(rootURL);
 
-      long size = 0;
-      File[] jars = lib.listFiles();
-      for(File jar : jars)
+      HashSet<String> expectedClasses = new HashSet<String>();
+      expectedClasses.add("jar1.jar/org/jboss/test/vfs/support/jar1/ClassInJar1.class");
+      expectedClasses.add("jar2.jar/org/jboss/test/vfs/support/jar2/ClassInJar2.class");
+      expectedClasses.add("org/jboss/test/vfs/support/CommonClass.class");
+      SuffixMatchVisitor classVisitor = new SuffixMatchVisitor(".class");
+      Iterator<VirtualFile> classes = vfs.scan(classVisitor);
+      int count = 0;
+      while( classes.hasNext() )
       {
-         if( jar.isFile() == false )
-            continue;
-         JarImpl jf = new JarImpl(jar.getAbsolutePath());
-         VirtualFile[] children = jf.getChildren();
-         for(VirtualFile vf : children)
+         VirtualFile cf = classes.next();
+         String path = cf.getPathName();
+         if( path.endsWith(".class") )
          {
-            size += vf.getSize();
+            assertTrue(path, expectedClasses.contains(path));
+            count ++;
          }
       }
-      jars = serverLib.listFiles();
-      for(File jar : jars)
-      {
-         if( jar.isFile() == false )
-            continue;
-         JarImpl jf = new JarImpl(jar.getAbsolutePath());
-         VirtualFile[] children = jf.getChildren();
-         for(VirtualFile vf : children)
-         {
-            size += vf.getSize();
-         }
-      }
-      out.write("Jar contents size: "+(size/(1024*1024))+"Mb\n");
-      out.write("Ending heap usage: "+mem.getHeapMemoryUsage()+"\n");
-      out.close();
+      assertEquals("There were 3 classes", 3, count);
    }
-
-   public void testEarNavigation()
-      throws Exception
-   {
-      VirtualFile ear = new JarImpl("/usr/local/java5/jbosstest-web.ear");
-      log.info("Size: "+ear.getSize());
-      VirtualFile[] files = ear.getChildren();
-      HashMap<String, VirtualFile> classes = new HashMap<String, VirtualFile>();
-      for(VirtualFile vf : files)
-      {
-         log.info(vf);
-         if( vf.isDirectory() )
-            findClasses(vf, classes);
-      }
-
-      assertTrue("classes count > 0 ", classes.size() > 0);
-   }
-
 
    private void findClasses(VirtualFile jar,
                             HashMap<String, VirtualFile> classes) throws IOException
