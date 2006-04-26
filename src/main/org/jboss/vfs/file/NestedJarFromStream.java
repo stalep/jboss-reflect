@@ -30,6 +30,7 @@ public class NestedJarFromStream
    private HashMap<String, JarEntryContents> entries = new HashMap<String, JarEntryContents>();
    private URL jarURL;
    private URL entryURL;
+   private String vfsPath;
    private String name;
    private long lastModified;
    private long size;
@@ -41,10 +42,15 @@ public class NestedJarFromStream
     * @param jarURL - the URL to use as the jar URL
     * @param entry - the parent jar ZipEntry for the nested jar
     */
-   public NestedJarFromStream(ZipInputStream zis, URL jarURL, ZipEntry entry)
+   public NestedJarFromStream(ZipInputStream zis, URL jarURL,
+      String jarVfsPath, ZipEntry entry)
    {
       this.jarURL = jarURL;
       this.name = entry.getName();
+      if( jarVfsPath.length() > 0 )
+         this.vfsPath = jarVfsPath + "/" + name;
+      else
+         this.vfsPath = name;
       this.lastModified = entry.getTime();
       this.size = entry.getSize();
       this.zis = zis;
@@ -92,6 +98,10 @@ public class NestedJarFromStream
    public String getName()
    {
       return name;
+   }
+   public String getPathName()
+   {
+      return vfsPath;
    }
 
    public VirtualFile[] getChildren()
@@ -187,7 +197,7 @@ public class NestedJarFromStream
          {
             String url = toURL().toExternalForm() + "!/" +  entry.getName();
             URL jecURL = new URL(url);
-            JarEntryContents jec = new JarEntryContents(entry, jecURL, zis);
+            JarEntryContents jec = new JarEntryContents(entry, jecURL, zis, getPathName());
             entries.put(entry.getName(), jec);
             entry = zis.getNextEntry();
          }
@@ -205,16 +215,19 @@ public class NestedJarFromStream
    {
       private ZipEntry entry;
       private URL entryURL;
+      private String vfsPath;
       private byte[] contents;
       private boolean isJar;
       private NestedJarFromStream njar;
       private InputStream openStream;
 
-      JarEntryContents(ZipEntry entry, URL entryURL, InputStream zis)
+      JarEntryContents(ZipEntry entry, URL entryURL, InputStream zis,
+         String parentVfsPath)
          throws IOException
       {
          this.entry = entry;
          this.entryURL = entryURL;
+         this.vfsPath = parentVfsPath + "/" + entry.getName();
          this.isJar = JarImpl.isJar(entry.getName());
          int size = (int) entry.getSize();
          if( size <= 0 )
@@ -242,6 +255,10 @@ public class NestedJarFromStream
       public String getName()
       {
          return entry.getName();
+      }
+      public String getPathName()
+      {
+         return vfsPath;
       }
 
       public VirtualFile[] getChildren() throws IOException
@@ -347,7 +364,7 @@ public class NestedJarFromStream
          {
             ByteArrayInputStream bais = new ByteArrayInputStream(contents);
             ZipInputStream zis = new ZipInputStream(bais);
-            njar = new NestedJarFromStream(zis, entryURL, entry);
+            njar = new NestedJarFromStream(zis, entryURL, getPathName(), entry);
          }
       }
    }

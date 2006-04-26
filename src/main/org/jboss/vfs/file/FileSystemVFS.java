@@ -8,6 +8,7 @@ package org.jboss.vfs.file;
 
 import org.jboss.vfs.spi.ReadOnlyVFS;
 import org.jboss.vfs.spi.VirtualFile;
+import org.jboss.vfs.spi.VFSVisitor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,14 +31,19 @@ public class FileSystemVFS
 {
    private static Logger log = Logger.getLogger("org.jboss.vfs.file.FileSystemVFS");
    private URL rootURL;
-   private File vfsRoot;
+   private VirtualFile vfsRoot;
    /** Cache of rootURL absolute paths to previously resolved files */
    private ConcurrentHashMap<String, VirtualFile> fileCache;
 
    FileSystemVFS(URL rootURL)
+      throws IOException
    {
       this.rootURL = rootURL;
-      vfsRoot = new File(rootURL.getFile());
+      String path = rootURL.getPath();
+      if( JarImpl.isJar(path) )
+         vfsRoot = new JarImpl(path, "");
+      else
+         vfsRoot = new FileImpl(rootURL, "", this);
       fileCache = new ConcurrentHashMap<String, VirtualFile>();
    }
 
@@ -92,6 +99,12 @@ public class FileSystemVFS
       fileCache.clear();
    }
 
+   public Iterator<VirtualFile> scan(VFSVisitor acceptVisitor)
+   {
+      FileScanner scanner = new FileScanner(vfsRoot, acceptVisitor);
+      return scanner;
+   }
+
    /**
     * Resolve the given path against the filesystem search context. This first
     * locates the VirtualFile corresponding to the searchContext, and then
@@ -110,13 +123,15 @@ public class FileSystemVFS
       String[] ctxAtoms = searchContext.split("!/|/");
       // Look for a
       boolean inJar = false;
-      StringBuffer activePath = new StringBuffer(rootURL.getPath());
+      StringBuffer vfsPath = new StringBuffer();
       VirtualFile prevVF = null;
       for(String atom : ctxAtoms)
       {
-         activePath.append('/');
-         activePath.append(atom);
-         String atomPath = activePath.toString();
+         if( vfsPath.length() > 0 )
+            vfsPath.append('/');
+         vfsPath.append(atom);
+         String atomPath = vfsPath.toString();
+         String absPath = rootURL.getPath() + atomPath;
          VirtualFile atomVF = fileCache.get(atomPath);
          if( atomVF == null )
          {
@@ -129,14 +144,14 @@ public class FileSystemVFS
                }
                else if( JarImpl.isJar(atom) )
                {
-                  atomVF = new JarImpl(atomPath);
+                  atomVF = new JarImpl(absPath, atomPath);
                   inJar = true;
                }
                else
                {
                   URL atomParentURL = prevVF == null ? rootURL : prevVF.toURL();
                   URL filePath = new URL(atomParentURL, atom);
-                  atomVF = new FileImpl(filePath, this);
+                  atomVF = new FileImpl(filePath, atomPath, this);
                }
                fileCache.put(atomPath, atomVF);
                prevVF = atomVF;
@@ -144,7 +159,7 @@ public class FileSystemVFS
             catch(IOException e)
             {
                log.log(Level.FINE,
-                  "Failed to create virtual file for atom up to: "+activePath, e);
+                  "Failed to create virtual file for atom up to: "+absPath, e);
             }
          }
          else
@@ -165,13 +180,15 @@ public class FileSystemVFS
       String[] ctxAtoms = path.split("!/|/");
       // Look for a
       boolean inJar = false;
-      StringBuffer activePath = new StringBuffer(parentURL.getPath());
+      StringBuffer vfsPath = new StringBuffer();
       VirtualFile childVF = null;
       for(String atom : ctxAtoms)
       {
-         activePath.append('/');
-         activePath.append(atom);
-         String atomPath = activePath.toString();
+         if( vfsPath.length() > 0 )
+            vfsPath.append('/');
+         vfsPath.append(atom);
+         String atomPath = vfsPath.toString();
+         String absPath = rootURL.getPath() + atomPath;
          VirtualFile atomVF = fileCache.get(atomPath);
          if( atomVF == null )
          {
@@ -182,14 +199,14 @@ public class FileSystemVFS
             }
             else if( JarImpl.isJar(atom) )
             {
-               atomVF = new JarImpl(atomPath);
+               atomVF = new JarImpl(absPath, atomPath);
                inJar = true;
             }
             else
             {
                URL atomParentURL = childVF == null ? rootURL : childVF.toURL();
                URL filePath = new URL(atomParentURL, atom);
-               atomVF = new FileImpl(filePath, this);
+               atomVF = new FileImpl(filePath, atomPath, this);
             }
             fileCache.put(atomPath, atomVF);
             childVF = atomVF;

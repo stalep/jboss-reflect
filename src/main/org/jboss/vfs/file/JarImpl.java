@@ -34,6 +34,7 @@ public class JarImpl
    }
    private JarFile jar;
    private File file;
+   private String vfsPath;
 
    public static boolean addJarSuffix(String suffix)
    {
@@ -63,16 +64,21 @@ public class JarImpl
    }
 
 
-   public JarImpl(String path)
+   public JarImpl(String path, String vfsPath)
       throws IOException
    {
       file = new File(path);
       jar = new JarFile(file);
+      this.vfsPath = vfsPath;
    }
 
    public String getName()
    {
       return file.getName();
+   }
+   public String getPathName()
+   {
+      return vfsPath;
    }
 
    public VirtualFile[] getChildren() throws IOException
@@ -95,10 +101,10 @@ public class JarImpl
             {
                jis = new ZipInputStream(is);
             }
-            tmp.add(new NestedJarFromStream(jis, jarURL, entry));
+            tmp.add(new NestedJarFromStream(jis, jarURL, vfsPath, entry));
          }
          else
-            tmp.add(new JarFileEntry(jarURL, entry, jar));
+            tmp.add(new JarFileEntry(jarURL, vfsPath, entry, jar));
       }
       VirtualFile[] children = new VirtualFile[tmp.size()];
       tmp.toArray(children);
@@ -124,10 +130,10 @@ public class JarImpl
             {
                jis = new ZipInputStream(is);
             }
-            child = new NestedJarFromStream(jis, jarURL, entry);
+            child = new NestedJarFromStream(jis, jarURL, vfsPath, entry);
          }
          else
-            child = new JarFileEntry(jarURL, entry, jar);
+            child = new JarFileEntry(jarURL, vfsPath, entry, jar);
       }
       return child;
    }

@@ -23,18 +23,27 @@ public class JarFileEntry
    private JarEntry entry;
    private JarFile jar;
    private URL jarURL;
+   private String vfsPath;
    private InputStream entryIS;
 
-   JarFileEntry(URL jarURL, JarEntry entry, JarFile jar)
+   JarFileEntry(URL jarURL, String jarVfsPath, JarEntry entry, JarFile jar)
    {
       this.jarURL = jarURL;
       this.entry = entry;
       this.jar = jar;
+      if( jarVfsPath.length() == 0 )
+         this.vfsPath = entry.getName();
+      else
+         this.vfsPath = jarVfsPath + "/" + entry.getName();
    }
 
    public String getName()
    {
       return entry.getName();
+   }
+   public String getPathName()
+   {
+      return vfsPath;
    }
 
    public VirtualFile[] getChildren()

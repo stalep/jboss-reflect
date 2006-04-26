@@ -25,27 +25,34 @@ public class FileImpl
    implements VirtualFile
 {
    private URL path;
+   private String vfsPath;
    private InputStream contentIS;
    private File file;
    private VirtualFile[] children;
    private FileSystemVFS vfs;
 
-   public FileImpl(URL path, FileSystemVFS vfs)
+   public FileImpl(URL path, String vfsPath, FileSystemVFS vfs)
    {
       this.path = path;
+      this.vfsPath = vfsPath;
       this.file = new File(path.getPath());
       this.vfs = vfs;
    }
-   public FileImpl(File file, FileSystemVFS vfs) throws MalformedURLException
+   public FileImpl(File file, String vfsPath, FileSystemVFS vfs) throws MalformedURLException
    {
       this.path = file.toURL();
+      this.vfsPath = vfsPath;
       this.file = file;
       this.vfs = vfs;
    }
 
    public String getName()
    {
-      return path.getPath();
+      return file.getName();
+   }
+   public String getPathName()
+   {
+      return vfsPath;
    }
 
    public VirtualFile[] getChildren()
