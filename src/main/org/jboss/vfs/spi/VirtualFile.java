@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.MalformedURLException;
+import java.util.List;
 
 /**
  * @author Scott.Stark@jboss.org
@@ -47,7 +48,10 @@ public interface VirtualFile
    public String getPathName();
 
    public VirtualFile[] getChildren() throws IOException;
+   public List<VirtualFile> getChildrenRecursively() throws IOException;
+   public List<VirtualFile> getChildrenRecursively(VirtualFileFilter filter) throws IOException;
    public VirtualFile findChild(String name) throws IOException;
+
 
    // Convience attribute accessors
    public long getLastModified();
@@ -64,6 +68,7 @@ public interface VirtualFile
     * @return  true if a regular file.
     */
    public boolean isFile();
+   public boolean isArchive();
 
    /**
     * Access the file contents.

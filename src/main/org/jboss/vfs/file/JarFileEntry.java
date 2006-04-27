@@ -4,9 +4,12 @@
 package org.jboss.vfs.file;
 
 import org.jboss.vfs.spi.VirtualFile;
+import org.jboss.vfs.spi.VirtualFileFilter;
 
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -51,6 +54,21 @@ public class JarFileEntry
       return new VirtualFile[0];
    }
 
+   public List<VirtualFile> getChildrenRecursively() throws IOException
+   {
+      return new ArrayList<VirtualFile>();
+   }
+
+   public List<VirtualFile> getChildrenRecursively(VirtualFileFilter filter) throws IOException
+   {
+      return new ArrayList<VirtualFile>();
+   }
+
+   public boolean isArchive()
+   {
+      return false;
+   }
+
    public VirtualFile findChild(String name)
       throws IOException
    {
@@ -93,7 +111,7 @@ public class JarFileEntry
 
    public URL toURL() throws MalformedURLException
    {
-      URL entryURL = new URL(jarURL, entry.getName());
+      URL entryURL = new URL("jar:" + jarURL.toString() + "!/" + entry.getName());
       return entryURL;
    }
 

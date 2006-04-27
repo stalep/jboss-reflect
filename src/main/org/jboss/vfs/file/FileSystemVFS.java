@@ -9,6 +9,8 @@ package org.jboss.vfs.file;
 import org.jboss.vfs.spi.ReadOnlyVFS;
 import org.jboss.vfs.spi.VirtualFile;
 import org.jboss.vfs.spi.VFSVisitor;
+import org.jboss.vfs.VFSFactory;
+import org.jboss.vfs.VFSFactoryLocator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /** A simple implementation of ReadOnlyVFS that only understands file URLs
- *  
+ *
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
@@ -109,7 +111,7 @@ public class FileSystemVFS
     * Resolve the given path against the filesystem search context. This first
     * locates the VirtualFile corresponding to the searchContext, and then
     * resolves the file against it.
-    * 
+    *
     * @param path a VFS path
     * @param searchContext - the filesystem path to start the search from
     * @return the resolved VirtualFile
@@ -204,7 +206,9 @@ public class FileSystemVFS
             }
             else
             {
-               URL atomParentURL = childVF == null ? rootURL : childVF.toURL();
+               URL atomParentURL = childVF == null ? parentURL : childVF.toURL();
+               String parentString = atomParentURL.toString();
+               if (!parentString.endsWith("/")) atomParentURL = new URL(parentString + "/");
                URL filePath = new URL(atomParentURL, atom);
                atomVF = new FileImpl(filePath, atomPath, this);
             }
@@ -226,4 +230,28 @@ public class FileSystemVFS
       if( scheme.equalsIgnoreCase("file") == false )
          throw new FileNotFoundException("Only file schemes are supported, invalid path: "+path);
    }
+
+   /**
+    * get VirtualFile from filesystem path
+    *
+    * @param fp path, i.e. "/home/wburke/foo.jar"
+    * @return
+    */
+   public static VirtualFile getVirtualFile(String fileSystemPath)
+   {
+      try
+      {
+         File fp = new File(fileSystemPath);
+         URL parent = fp.getParentFile().toURL();
+         VFSFactory factory = VFSFactoryLocator.getFactory(parent);
+         ReadOnlyVFS vfs = factory.getVFS(parent);
+         return (vfs.resolveFile(fp.getName()));
+      }
+      catch (Exception e)
+      {
+         throw new RuntimeException(e);
+      }
+
+   }
+
 }

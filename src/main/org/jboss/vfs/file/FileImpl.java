@@ -7,6 +7,7 @@
 package org.jboss.vfs.file;
 
 import org.jboss.vfs.spi.VirtualFile;
+import org.jboss.vfs.spi.VirtualFileFilter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,9 +16,10 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /** A java.io.File based implementation of VirtualFile
- * 
+ *
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
@@ -29,6 +31,7 @@ public class FileImpl
    private InputStream contentIS;
    private File file;
    private VirtualFile[] children;
+   private List<VirtualFile> recursiveChildren;
    private FileSystemVFS vfs;
 
    public FileImpl(URL path, String vfsPath, FileSystemVFS vfs)
@@ -73,6 +76,38 @@ public class FileImpl
       return children;
    }
 
+   public List<VirtualFile> getChildrenRecursively() throws IOException
+   {
+      if (isDirectory() && recursiveChildren == null)
+      {
+         recursiveChildren = new ArrayList<VirtualFile>();
+         getChildren();
+         if (children != null  && children.length > 0)
+         {
+            for (VirtualFile vf : children)
+            {
+               recursiveChildren.add(vf);
+               if (vf.isDirectory() && !vf.isArchive())
+               {
+                  recursiveChildren.addAll(vf.getChildrenRecursively());
+               }
+            }
+         }
+      }
+      return recursiveChildren;
+   }
+
+   public List<VirtualFile> getChildrenRecursively(VirtualFileFilter filter) throws IOException
+   {
+      getChildrenRecursively();
+      ArrayList<VirtualFile> filtered = new ArrayList<VirtualFile>();
+      for (VirtualFile vf : recursiveChildren)
+      {
+         if (filter.accepts(vf)) filtered.add(vf);
+      }
+      return filtered;
+   }
+
    public VirtualFile findChild(String name)
       throws IOException
    {
@@ -99,6 +134,11 @@ public class FileImpl
    public boolean isDirectory()
    {
       return file.isDirectory();
+   }
+
+   public boolean isArchive()
+   {
+      return file.isDirectory() && JarImpl.isJar(getName());
    }
 
    public boolean isFile()

@@ -4,6 +4,7 @@
 package org.jboss.vfs.file;
 
 import org.jboss.vfs.spi.VirtualFile;
+import org.jboss.vfs.spi.VirtualFileFilter;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -54,6 +57,11 @@ public class NestedJarFromStream
       this.lastModified = entry.getTime();
       this.size = entry.getSize();
       this.zis = zis;
+   }
+
+   public boolean isArchive()
+   {
+      return true;
    }
 
    public int size()
@@ -112,6 +120,26 @@ public class NestedJarFromStream
       VirtualFile[] children = new VirtualFile[entries.size()];
       entries.values().toArray(children);
       return children;
+   }
+
+   public List<VirtualFile> getChildrenRecursively() throws IOException
+   {
+      List<VirtualFile> rtn = new ArrayList<VirtualFile>();
+      for (VirtualFile vf : getChildren())
+      {
+         rtn.add(vf);
+      }
+      return null;
+   }
+
+   public List<VirtualFile> getChildrenRecursively(VirtualFileFilter filter) throws IOException
+   {
+      List<VirtualFile> filtered = new ArrayList<VirtualFile>();
+      for (VirtualFile vf : getChildrenRecursively())
+      {
+         if (filter.accepts(vf)) filtered.add(vf);
+      }
+      return filtered;
    }
 
    public VirtualFile findChild(String name)
@@ -243,6 +271,11 @@ public class NestedJarFromStream
          }
          contents = baos.toByteArray();
       }
+      public boolean isArchive()
+      {
+         return isJar;
+      }
+
       public ZipEntry getEntry()
       {
          return entry;
@@ -270,6 +303,25 @@ public class NestedJarFromStream
             children = njar.getChildren();
          }
          return children;
+      }
+      public List<VirtualFile> getChildrenRecursively() throws IOException
+      {
+         List<VirtualFile> rtn = new ArrayList<VirtualFile>();
+         for (VirtualFile vf : getChildren())
+         {
+            rtn.add(vf);
+         }
+         return null;
+      }
+
+      public List<VirtualFile> getChildrenRecursively(VirtualFileFilter filter) throws IOException
+      {
+         List<VirtualFile> filtered = new ArrayList<VirtualFile>();
+         for (VirtualFile vf : getChildrenRecursively())
+         {
+            if (filter.accepts(vf)) filtered.add(vf);
+         }
+         return filtered;
       }
       public VirtualFile findChild(String name)
          throws IOException

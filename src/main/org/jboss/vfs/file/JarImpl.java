@@ -1,6 +1,7 @@
 package org.jboss.vfs.file;
 
 import org.jboss.vfs.spi.VirtualFile;
+import org.jboss.vfs.spi.VirtualFileFilter;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Set;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -17,7 +19,7 @@ import java.util.zip.ZipInputStream;
 
 /**
  * A top level jar implementation of VirtualFile.
- * 
+ *
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
@@ -81,6 +83,11 @@ public class JarImpl
       return vfsPath;
    }
 
+   public boolean isArchive()
+   {
+      return true;
+   }
+
    public VirtualFile[] getChildren() throws IOException
    {
       Enumeration<JarEntry> entries = jar.entries();
@@ -109,6 +116,26 @@ public class JarImpl
       VirtualFile[] children = new VirtualFile[tmp.size()];
       tmp.toArray(children);
       return children;
+   }
+
+   public List<VirtualFile> getChildrenRecursively() throws IOException
+   {
+      List<VirtualFile> rtn = new ArrayList<VirtualFile>();
+      for (VirtualFile vf : getChildren())
+      {
+         rtn.add(vf);
+      }
+      return rtn;
+   }
+
+   public List<VirtualFile> getChildrenRecursively(VirtualFileFilter filter) throws IOException
+   {
+      List<VirtualFile> filtered = new ArrayList<VirtualFile>();
+      for (VirtualFile vf : getChildrenRecursively())
+      {
+         if (filter.accepts(vf)) filtered.add(vf);
+      }
+      return filtered;
    }
 
    public VirtualFile findChild(String name) throws IOException
