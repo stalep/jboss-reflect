@@ -25,13 +25,14 @@ package org.jboss.profileservice.spi;
 import java.util.Map;
 
 /**
+ * A profile represents a named collection of deployments on a server
+ * 
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
-
 public interface Profile
 {
-   /** The version of the profile */
+   /** The x.y.z version of the profile */
    public String getVersion();
 
    public DeploymentTemplate getTemplate(String name);
