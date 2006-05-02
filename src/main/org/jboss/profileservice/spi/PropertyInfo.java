@@ -29,7 +29,6 @@ import java.util.Set;
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
-
 public interface PropertyInfo
 {
    public String getName();
@@ -39,4 +38,18 @@ public interface PropertyInfo
    public Comparable<?> getMaxValue();
    public boolean isValue(Object obj);
    public OpenType<?> getOpenType();
+
+   /**
+    * Get the current property value. Must interact with the
+    * Policy somehow.
+    * @return current property value.
+    */
+   public Object getValue();
+
+   /**
+    * Set the current property value. Must interact with the
+    * Policy somehow.
+    * @param value - current property value.
+    */
+   public void setValue(Object value);
 }
