@@ -22,6 +22,8 @@
 
 package org.jboss.profileservice.spi;
 
+import org.jboss.profileservice.spi.management.ManagementView;
+
 /**
  * The entry point service for accessing/administiring server profiles
  *  
@@ -45,9 +47,35 @@ public interface ProfileService
     * @return keys for all known profiles
     */
    public ProfileKey[] getProfileKeys();
-   public Profile getProfile(ProfileKey key);
 
-   // Administring profiles
+   /**
+    * Obtain the profile for the key.
+    * 
+    * @param key - the key for the profile
+    * @return the matching profile.
+    * @throws NoSuchProfileException
+    */
+   public Profile getProfile(ProfileKey key)
+      throws NoSuchProfileException;
+
+   /**
+    * Get a list of the deployment names associated with a profile.
+    * @param key - the key for the profile
+    * @return the list of deployment names.
+    * @throws NoSuchProfileException
+    */
+   public String[] getProfileDeploymentNames(ProfileKey key)
+      throws NoSuchProfileException;
+
+   /**
+    * Obtain the ManagementView plugin
+    * @return the ManagementView plugin if supported
+    */
+   public ManagementView getViewManager();
+
+   // Admin of profiles @todo could be an option plugin
    public Profile newProfile(ProfileKey key);
-   public void removeProfile(ProfileKey key);
+   public void removeProfile(ProfileKey key)
+      throws NoSuchProfileException;
+
 }
