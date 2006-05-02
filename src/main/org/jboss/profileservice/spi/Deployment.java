@@ -25,18 +25,21 @@ package org.jboss.profileservice.spi;
 import org.jboss.vfs.spi.VirtualFile;
 
 /**
+ * A deployment is an encapsulation of the deployment beans and resources.
+ * 
+ * 
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
-
 public interface Deployment
 {
    /** The deployment type */
    public String getType();
    /** The deployment name */
    public String getName();
-   /** The deployment virtual files */
+   /** The deployment virtual files, jars, resources */
    public VirtualFile[] getFiles();
+   /** The MC bean information for the deployment */
    public DeploymentBean[] getBeans();
    public String[] getDependencies();
 }
