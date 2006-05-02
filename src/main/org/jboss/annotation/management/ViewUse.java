@@ -22,21 +22,19 @@
 
 package org.jboss.annotation.management;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.ElementType;
-
 /**
- * A meta-annotation that identifies a management view. A management view
- * is a hierarchy of managed property names that defines a view which
- * can be used to create/update a deployment.
+ * An enum for the types of management views a {@link ManagedProperty property}
+ * is associated with.
  * 
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
-@Retention(value=RetentionPolicy.RUNTIME)
-@Target(value= ElementType.ANNOTATION_TYPE)
-public @interface ManagedObject
+public enum ViewUse
 {
+   /** A read-write property used for creating/updating a config */
+   CONFIGURATION,
+   /** A read-only type of property */
+   RUNTIME,
+   /** A read-only type of property that provides runtime stats */
+   STATISTIC
 }
