@@ -109,7 +109,7 @@
    -->
 
   <!-- Exclude the jdk5 based sources by default -->
-  <property name="javac.excludes" value="org/jboss/profileservice/**,org/jboss/vfs/**" />
+  <property name="javac.excludes" value="org/jboss/annotation/**,org/jboss/profileservice/**,org/jboss/vfs/**" />
 
   <target name="compile"
 	  description="Compile all source files."
@@ -139,11 +139,11 @@
   <!-- Archives                                                           -->
   <!-- ================================================================== -->
 
-  <!-- 
+  <!--
      |  Build all jar files.
     -->
   <target name="module-jars" depends="init">
-    
+
     <!-- Build jboss-kernel.jar -->
     <jar jarfile="${build.lib}/jboss-container.jar" manifest="${build.etc}/default.mf">
       <fileset dir="${build.classes}"/>
