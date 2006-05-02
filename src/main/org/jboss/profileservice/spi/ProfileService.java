@@ -23,13 +23,31 @@
 package org.jboss.profileservice.spi;
 
 /**
+ * The entry point service for accessing/administiring server profiles
+ *  
+ * @todo this should be broken up into different feature plugin services
+ * 
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
 public interface ProfileService
 {
-   public String[] getProfileNames();
-   public Profile getProfile(String name);
-   public Profile newProfile();
-   public void removeProfile(String name);
+   // Querying profiles
+
+   /**
+    * Get the unique domains for which profiles exist
+    * @return array of profile domains
+    */
+   public String[] getDomains();
+
+   /**
+    * Get the keys for all known profiles
+    * @return keys for all known profiles
+    */
+   public ProfileKey[] getProfileKeys();
+   public Profile getProfile(ProfileKey key);
+
+   // Administring profiles
+   public Profile newProfile(ProfileKey key);
+   public void removeProfile(ProfileKey key);
 }
