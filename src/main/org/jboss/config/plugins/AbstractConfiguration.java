@@ -224,7 +224,7 @@ public abstract class AbstractConfiguration implements Configuration
       // FIXME This is a temporary hack while Adrian is refactoring :-)
       try
       {
-         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.prototype.AOPClassAdapterFactory");
+         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.integration.AOPClassAdapterFactory");
          result = (ClassAdapterFactory) clazz.newInstance();
       }
       catch (ClassNotFoundException ignored)
@@ -261,7 +261,7 @@ public abstract class AbstractConfiguration implements Configuration
       // FIXME This is a temporary hack while I am refactoring
       try
       {
-         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.prototype.AOPJoinpointFactoryBuilder");
+         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.integration.AOPJoinpointFactoryBuilder");
          result = (JoinpointFactoryBuilder) clazz.newInstance();
       }
       catch (ClassNotFoundException ignored)
@@ -282,7 +282,7 @@ public abstract class AbstractConfiguration implements Configuration
       // FIXME This is a temporary hack while I am refactoring
       try
       {
-         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.prototype.AOPMetaDataContextFactory");
+         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.integration.AOPMetaDataContextFactory");
          return (MetaDataContextFactory) clazz.newInstance();
       }
       catch (ClassNotFoundException ignored)
