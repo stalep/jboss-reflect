@@ -79,11 +79,20 @@
     <!-- ======= -->
 
     &modules;
+<!-- this -->
+<property name="jboss.this.root" value="${module.root}/output"/>
+<property name="jboss.this.lib" value="${jboss.this.root}/lib"/>
+<path id="jboss.this.classpath">
+   <fileset dir="${jboss.this.lib}">
+      <include name="*.jar"/>
+      <exclude name="${jar.prefix}.jar"/>
+   </fileset>
+</path>
 
     <!-- The combined dependant module classpath -->
     <path id="dependentmodule.classpath">
+      <path refid="jboss.this.classpath"/>
       <path refid="jboss.common.classpath"/>
-      <path refid="jboss.container.classpath"/>
       <path refid="jboss.test.classpath"/>
     </path>
 
