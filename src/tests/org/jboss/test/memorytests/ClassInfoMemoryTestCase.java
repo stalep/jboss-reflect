@@ -32,7 +32,6 @@ import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.test.JBossMemoryTestCase;
 
-import junit.framework.TestCase;
 /**
  * ClassInfo Test Case.
  * 

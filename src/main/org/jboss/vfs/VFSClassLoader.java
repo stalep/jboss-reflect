@@ -14,7 +14,6 @@ import java.security.SecureClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Vector;
 
 import org.jboss.classloading.spi.ClassLoadingDomain;
@@ -125,7 +124,7 @@ public class VFSClassLoader extends SecureClassLoader
    public Enumeration<URL> findResources(String name) throws IOException
    {
       Vector<URL> resources = new Vector<URL>();
-      for(ClassPathVFS cp : classpath)
+      /*for(ClassPathVFS cp : classpath)
       {
          List<VirtualFile> matches = null;//cp.vfs.resolveFiles(name, cp.searchCtxs);
          for(VirtualFile vf : matches)
@@ -133,7 +132,7 @@ public class VFSClassLoader extends SecureClassLoader
             URL resURL = vf.toURL();
             resources.add(resURL);
          }
-      }
+      }*/
       return resources.elements();
    }
 

@@ -223,14 +223,6 @@ public class FileSystemVFS
       return childVF;
    }
 
-   private void validateURL(URL path)
-      throws FileNotFoundException
-   {
-      String scheme = path.getProtocol();
-      if( scheme.equalsIgnoreCase("file") == false )
-         throw new FileNotFoundException("Only file schemes are supported, invalid path: "+path);
-   }
-
    /**
     * get VirtualFile from filesystem path
     *

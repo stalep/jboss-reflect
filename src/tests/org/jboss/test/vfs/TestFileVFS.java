@@ -7,16 +7,13 @@
 package org.jboss.test.vfs;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -26,11 +23,10 @@ import java.util.zip.ZipInputStream;
 import org.jboss.test.BaseTestCase;
 import org.jboss.vfs.VFSFactory;
 import org.jboss.vfs.VFSFactoryLocator;
-import org.jboss.vfs.visitor.SuffixMatchVisitor;
-import org.jboss.vfs.file.JarImpl;
 import org.jboss.vfs.file.NestedJarFromStream;
 import org.jboss.vfs.spi.ReadOnlyVFS;
 import org.jboss.vfs.spi.VirtualFile;
+import org.jboss.vfs.visitor.SuffixMatchVisitor;
 
 /**
  * Tests of the VFS implementation
@@ -225,18 +221,4 @@ public class TestFileVFS extends BaseTestCase
       }
       assertEquals("There were 3 classes", 3, count);
    }
-
-   private void findClasses(VirtualFile jar,
-                            HashMap<String, VirtualFile> classes) throws IOException
-   {
-      VirtualFile[] contents = jar.getChildren();
-      for(VirtualFile vf : contents)
-      {
-         if( vf.isDirectory() )
-            findClasses(vf, classes);
-         if( vf.getName().endsWith(".class") )
-            classes.put(vf.getName(), vf);
-      }
-   }
-
 }

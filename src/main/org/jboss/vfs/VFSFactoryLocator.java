@@ -3,14 +3,13 @@
  */
 package org.jboss.vfs;
 
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Enumeration;
-import java.util.ArrayList;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
 
 /**
  * A singleton factory for locating VFSFactory instances given VFS root URLs.
@@ -33,8 +32,7 @@ public class VFSFactoryLocator
       for(int n = 0; n < protocols.length; n ++)
       {
          String protocol = protocols[n];
-         VFSFactory prevFactory = factoryByProtocol.put(protocol, factory);
-
+         factoryByProtocol.put(protocol, factory);
       }
    }
 

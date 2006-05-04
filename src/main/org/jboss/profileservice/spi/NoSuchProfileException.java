@@ -30,6 +30,9 @@ package org.jboss.profileservice.spi;
  */
 public class NoSuchProfileException extends Exception
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = 461561859030090797L;
+
    public NoSuchProfileException(String message)
    {
       super(message);

@@ -6,12 +6,11 @@
 */
 package org.jboss.vfs;
 
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipEntry;
-import java.util.jar.Manifest;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
 import java.io.FileInputStream;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * @author Scott.Stark@jboss.org
@@ -109,8 +108,6 @@ public class JarTraversal
    public static void main(String[] args) throws Exception
    {
       String name = args[0];
-      JarFile jarFile = new JarFile(name);
-      Manifest mf = jarFile.getManifest();
       FileInputStream fis = new FileInputStream(name);
       ZipInputStream zis = new ZipInputStream(fis);
       System.out.println(name);

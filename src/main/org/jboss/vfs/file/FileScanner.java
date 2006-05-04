@@ -22,14 +22,13 @@
 
 package org.jboss.vfs.file;
 
-import java.util.Iterator;
-import java.util.Stack;
-import java.util.ArrayList;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import org.jboss.vfs.spi.VirtualFile;
-import org.jboss.vfs.spi.VFSVisitor;
 import org.jboss.logging.Logger;
+import org.jboss.vfs.spi.VFSVisitor;
+import org.jboss.vfs.spi.VirtualFile;
 
 /**
  * Depth first implementation of the iterator.
