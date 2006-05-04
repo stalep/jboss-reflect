@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
+import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.ClassInfo;
@@ -74,7 +75,8 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
 
    public List getDependencies()
    {
-      return null;
+      DependencyBuilder builder = classAdapterFactory.getConfiguration().getDependencyBuilder();
+      return builder.getDependencies(this);
    }
 
    public JoinpointFactory getJoinpointFactory()

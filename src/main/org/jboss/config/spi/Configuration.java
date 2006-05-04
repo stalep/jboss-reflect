@@ -22,6 +22,7 @@
 package org.jboss.config.spi;
 
 import org.jboss.beans.info.spi.BeanInfo;
+import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
@@ -91,6 +92,13 @@ public interface Configuration
     * @return the TypeInfoFactory
     */
    TypeInfoFactory getTypeInfoFactory();
+
+   /**
+    * Get the dependency builder
+    * 
+    * @return the DependencyFactoryBuilder
+    */
+   DependencyBuilder getDependencyBuilder();
 
    /**
     * Get the joinpoint factory builder

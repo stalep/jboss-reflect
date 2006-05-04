@@ -25,6 +25,7 @@ import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
+import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.config.spi.Configuration;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.ClassInfo;
@@ -55,6 +56,9 @@ public abstract class AbstractConfiguration implements Configuration
    
    /** The default metadata context factory */
    private MetaDataContextFactory metaDataContextFactory;
+   
+   /** The dependency builder */
+   private DependencyBuilder dependencyBuilder;
 
    /**
     * Create an abstract configuration
@@ -165,6 +169,30 @@ public abstract class AbstractConfiguration implements Configuration
       return metaDataContextFactory;
    }
 
+   public DependencyBuilder getDependencyBuilder()
+   {
+      if (dependencyBuilder == null)
+      {
+         try
+         {
+            dependencyBuilder = createDefaultDependencyBuilder();
+         }
+         catch (RuntimeException e)
+         {
+            throw e;
+         }
+         catch (Error e)
+         {
+            throw e;
+         }
+         catch (Throwable t)
+         {
+            throw new NestedRuntimeException("Cannot create DependencyBuilder", t);
+         }
+      }
+      return dependencyBuilder;
+   }
+
    /**
     * Get the BeanInfoFactory
     * 
@@ -230,4 +258,12 @@ public abstract class AbstractConfiguration implements Configuration
     * @throws Throwable for any error
     */
    protected abstract MetaDataContextFactory createDefaultMetaDataContextFactory() throws Throwable;
+
+   /**
+    * Create the default dependency builder
+    * 
+    * @return the dependency builder
+    * @throws Throwable for any error
+    */
+   protected abstract DependencyBuilder createDefaultDependencyBuilder() throws Throwable;
 }

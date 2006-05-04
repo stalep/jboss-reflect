@@ -21,20 +21,21 @@
 */
 package org.jboss.classadapter.plugins.dependency;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
+
+import org.jboss.classadapter.spi.ClassAdapter;
+import org.jboss.classadapter.spi.DependencyBuilder;
 
 /**
- * Dependency.
+ * AbstractDependencyBuilder.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
-public @interface Dependency
+public class AbstractDependencyBuilder implements DependencyBuilder
 {
-   String name();
+   public List getDependencies(ClassAdapter classAdapter)
+   {
+      return null;
+   }
 }

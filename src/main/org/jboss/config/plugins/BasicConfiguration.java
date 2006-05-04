@@ -24,7 +24,9 @@ package org.jboss.config.plugins;
 import org.jboss.beans.info.plugins.AbstractBeanInfoFactory;
 import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.classadapter.plugins.BasicClassAdapterFactory;
+import org.jboss.classadapter.plugins.dependency.AbstractDependencyBuilder;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
+import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.joinpoint.plugins.BasicJoinpointFactoryBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
@@ -38,7 +40,7 @@ import org.jboss.repository.spi.MetaDataContextFactory;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public abstract class BasicConfiguration extends AbstractConfiguration
+public class BasicConfiguration extends AbstractConfiguration
 {
    /**
     * Create an abstract configuration
@@ -47,58 +49,33 @@ public abstract class BasicConfiguration extends AbstractConfiguration
    {
    }
    
-   /**
-    * Create the default bean info factory
-    * 
-    * @return the bean info factory
-    * @throws Throwable for any error
-    */
    protected BeanInfoFactory createDefaultBeanInfoFactory() throws Throwable
    {
       return new AbstractBeanInfoFactory();
    }
 
-   /**
-    * Create the default class adapter factory
-    * 
-    * @return the class adapter factory
-    * @throws Throwable for any error
-    */
    protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable
    {
       return new BasicClassAdapterFactory();
    }
 
-   /**
-    * Create the default type info factory
-    * 
-    * @return the type info factory
-    * @throws Throwable for any error
-    */
    protected TypeInfoFactory createDefaultTypeInfoFactory() throws Throwable
    {
       return new IntrospectionTypeInfoFactory();
    }
 
-   /**
-    * Create the default joinpoint factory builder
-    * 
-    * @return the joinpoint factory builder
-    * @throws Throwable for any error
-    */
    protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
    {
       return new BasicJoinpointFactoryBuilder();
    }
 
-   /**
-    * Create the default metadata context factory
-    * 
-    * @return the metadata context factory
-    * @throws Throwable for any error
-    */
    protected MetaDataContextFactory createDefaultMetaDataContextFactory() throws Throwable
    {
       return new BasicMetaDataContextFactory();
+   }
+
+   protected DependencyBuilder createDefaultDependencyBuilder() throws Throwable
+   {
+      return new AbstractDependencyBuilder();
    }
 }

@@ -26,6 +26,7 @@ import java.util.StringTokenizer;
 
 import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
+import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.config.plugins.AbstractConfiguration;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.logging.Logger;
@@ -76,23 +77,11 @@ public class PropertyConfiguration extends AbstractConfiguration
       return properties;
    }
    
-   /**
-    * Create the default bean info factory
-    * 
-    * @return the bean info factory
-    * @throws Throwable for any error
-    */
    protected BeanInfoFactory createDefaultBeanInfoFactory() throws Throwable
    {
       return (BeanInfoFactory) loadFromProperties(PropertyConfigurationConstants.BEAN_INFO_FACTORY_NAME, PropertyConfigurationConstants.BEAN_INFO_FACTORY_DEFAULT, BeanInfoFactory.class);
    }
    
-   /**
-    * Create the default class adapter factory
-    * 
-    * @return the class adapter factory
-    * @throws Throwable for any error
-    */
    protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable
    {
       ClassAdapterFactory result = (ClassAdapterFactory) loadFromProperties(PropertyConfigurationConstants.CLASS_ADAPTER_FACTORY_NAME, PropertyConfigurationConstants.CLASS_ADAPTER_FACTORY_DEFAULT, ClassAdapterFactory.class);
@@ -100,37 +89,24 @@ public class PropertyConfiguration extends AbstractConfiguration
       return result;
    }
 
-   /**
-    * Create the default type info factory
-    * 
-    * @return the type info factory
-    * @throws Throwable for any error
-    */
    protected TypeInfoFactory createDefaultTypeInfoFactory() throws Throwable
    {
       return (TypeInfoFactory) loadFromProperties(PropertyConfigurationConstants.TYPE_INFO_FACTORY_NAME, PropertyConfigurationConstants.TYPE_INFO_FACTORY_DEFAULT, TypeInfoFactory.class);
    }
 
-   /**
-    * Create the default joinpoint factory builder
-    * 
-    * @return the joinpoint factory builder
-    * @throws Throwable for any error
-    */
    protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
    {
       return (JoinpointFactoryBuilder) loadFromProperties(PropertyConfigurationConstants.JOIN_POINT_FACTORY_BUILDER_NAME, PropertyConfigurationConstants.JOIN_POINT_FACTORY_BUILDER_DEFAULT, JoinpointFactoryBuilder.class);
    }
 
-   /**
-    * Create the default metadata context factory
-    * 
-    * @return the metadata context factory
-    * @throws Throwable for any error
-    */
    protected MetaDataContextFactory createDefaultMetaDataContextFactory() throws Throwable
    {
       return (MetaDataContextFactory) loadFromProperties(PropertyConfigurationConstants.META_DATA_CONTEXT_FACTORY_BUILDER_NAME, PropertyConfigurationConstants.META_DATA_CONTEXT_FACTORY_BUILDER_DEFAULT, MetaDataContextFactory.class);
+   }
+
+   protected DependencyBuilder createDefaultDependencyBuilder() throws Throwable
+   {
+      return (DependencyBuilder) loadFromProperties(PropertyConfigurationConstants.DEPENDENCY_BUILDER_NAME, PropertyConfigurationConstants.DEPENDENCY_BUILDER_DEFAULT, DependencyBuilder.class);
    }
 
    /**
