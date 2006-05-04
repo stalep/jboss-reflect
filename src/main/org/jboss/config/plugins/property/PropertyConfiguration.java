@@ -22,8 +22,15 @@
 package org.jboss.config.plugins.property;
 
 import java.util.Properties;
+import java.util.StringTokenizer;
 
+import org.jboss.beans.info.spi.BeanInfoFactory;
+import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.config.plugins.AbstractConfiguration;
+import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
+import org.jboss.logging.Logger;
+import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.repository.spi.MetaDataContextFactory;
 
 /**
  * PropertyConfiguration.
@@ -33,6 +40,9 @@ import org.jboss.config.plugins.AbstractConfiguration;
  */
 public class PropertyConfiguration extends AbstractConfiguration
 {
+   /** The log */
+   private static final Logger log = Logger.getLogger(PropertyConfiguration.class);
+
    /** The properties */
    protected Properties properties;
 
@@ -64,5 +74,102 @@ public class PropertyConfiguration extends AbstractConfiguration
    public Properties getProperties()
    {
       return properties;
+   }
+   
+   /**
+    * Create the default bean info factory
+    * 
+    * @return the bean info factory
+    * @throws Throwable for any error
+    */
+   protected BeanInfoFactory createDefaultBeanInfoFactory() throws Throwable
+   {
+      return (BeanInfoFactory) loadFromProperties(PropertyConfigurationConstants.BEAN_INFO_FACTORY_NAME, PropertyConfigurationConstants.BEAN_INFO_FACTORY_DEFAULT, BeanInfoFactory.class);
+   }
+   
+   /**
+    * Create the default class adapter factory
+    * 
+    * @return the class adapter factory
+    * @throws Throwable for any error
+    */
+   protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable
+   {
+      ClassAdapterFactory result = (ClassAdapterFactory) loadFromProperties(PropertyConfigurationConstants.CLASS_ADAPTER_FACTORY_NAME, PropertyConfigurationConstants.CLASS_ADAPTER_FACTORY_DEFAULT, ClassAdapterFactory.class);
+      result.setConfiguration(this);
+      return result;
+   }
+
+   /**
+    * Create the default type info factory
+    * 
+    * @return the type info factory
+    * @throws Throwable for any error
+    */
+   protected TypeInfoFactory createDefaultTypeInfoFactory() throws Throwable
+   {
+      return (TypeInfoFactory) loadFromProperties(PropertyConfigurationConstants.TYPE_INFO_FACTORY_NAME, PropertyConfigurationConstants.TYPE_INFO_FACTORY_DEFAULT, TypeInfoFactory.class);
+   }
+
+   /**
+    * Create the default joinpoint factory builder
+    * 
+    * @return the joinpoint factory builder
+    * @throws Throwable for any error
+    */
+   protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
+   {
+      return (JoinpointFactoryBuilder) loadFromProperties(PropertyConfigurationConstants.JOIN_POINT_FACTORY_BUILDER_NAME, PropertyConfigurationConstants.JOIN_POINT_FACTORY_BUILDER_DEFAULT, JoinpointFactoryBuilder.class);
+   }
+
+   /**
+    * Create the default metadata context factory
+    * 
+    * @return the metadata context factory
+    * @throws Throwable for any error
+    */
+   protected MetaDataContextFactory createDefaultMetaDataContextFactory() throws Throwable
+   {
+      return (MetaDataContextFactory) loadFromProperties(PropertyConfigurationConstants.META_DATA_CONTEXT_FACTORY_BUILDER_NAME, PropertyConfigurationConstants.META_DATA_CONTEXT_FACTORY_BUILDER_DEFAULT, MetaDataContextFactory.class);
+   }
+
+   /**
+    * Load an object from the specified properties
+    * 
+    * @param propertyName the property name
+    * @param defaultValue the default value
+    * @param targetClass the target class
+    * @return the object
+    * @throws Throwable for any error
+    */
+   protected Object loadFromProperties(String propertyName, String defaultValue, Class targetClass) throws Throwable
+   {
+      String value = properties.getProperty(propertyName, defaultValue);
+      StringTokenizer tokenizer = new StringTokenizer(value, ":");
+      Class clazz = null;
+      ClassNotFoundException error = null;
+      while (tokenizer.hasMoreTokens())
+      {
+         String className = tokenizer.nextToken();
+         try
+         {
+            clazz = getClass().getClassLoader().loadClass(className);
+            break;
+         }
+         catch (ClassNotFoundException ignored)
+         {
+            log.trace(className + " not found: " + ignored.getMessage());
+            error = ignored;
+         }
+      }
+      if (clazz == null && error != null)
+         throw error;
+      if (clazz == null)
+         throw new RuntimeException("Invalid configuration for property " + propertyName + " expected a class name that implements " + targetClass.getName());
+      
+      if (targetClass.isAssignableFrom(clazz) == false)
+         throw new RuntimeException("Class " + clazz.getName() + " specified in property " + propertyName + " does not implement " + targetClass.getName());
+
+      return clazz.newInstance();
    }
 }

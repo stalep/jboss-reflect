@@ -21,21 +21,15 @@
 */
 package org.jboss.config.plugins;
 
-import org.jboss.beans.info.plugins.AbstractBeanInfoFactory;
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
-import org.jboss.classadapter.plugins.BasicClassAdapterFactory;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.config.spi.Configuration;
-import org.jboss.joinpoint.plugins.BasicJoinpointFactoryBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
-import org.jboss.logging.Logger;
-import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.repository.plugins.basic.BasicMetaDataContextFactory;
 import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.NestedRuntimeException;
 
@@ -47,9 +41,6 @@ import org.jboss.util.NestedRuntimeException;
  */
 public abstract class AbstractConfiguration implements Configuration
 {
-   /** The log */
-   private static final Logger log = Logger.getLogger(AbstractConfiguration.class);
-   
    /** The default bean info factory */
    private BeanInfoFactory beanInfoFactory;
    
@@ -206,10 +197,7 @@ public abstract class AbstractConfiguration implements Configuration
     * @return the bean info factory
     * @throws Throwable for any error
     */
-   protected BeanInfoFactory createDefaultBeanInfoFactory() throws Throwable
-   {
-      return new AbstractBeanInfoFactory();
-   }
+   protected abstract BeanInfoFactory createDefaultBeanInfoFactory() throws Throwable;
 
    /**
     * Create the default class adapter factory
@@ -217,25 +205,7 @@ public abstract class AbstractConfiguration implements Configuration
     * @return the class adapter factory
     * @throws Throwable for any error
     */
-   protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable
-   {
-      ClassAdapterFactory result = new BasicClassAdapterFactory();
-      
-      // FIXME This is a temporary hack while Adrian is refactoring :-)
-      try
-      {
-         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.integration.AOPClassAdapterFactory");
-         result = (ClassAdapterFactory) clazz.newInstance();
-      }
-      catch (ClassNotFoundException ignored)
-      {
-         log.trace("No AOP in classpath " + ignored.getMessage());
-      }
-      
-      
-      result.setConfiguration(this);
-      return result;
-   }
+   protected abstract ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable;
 
    /**
     * Create the default type info factory
@@ -243,10 +213,7 @@ public abstract class AbstractConfiguration implements Configuration
     * @return the type info factory
     * @throws Throwable for any error
     */
-   protected TypeInfoFactory createDefaultTypeInfoFactory() throws Throwable
-   {
-      return new IntrospectionTypeInfoFactory();
-   }
+   protected abstract TypeInfoFactory createDefaultTypeInfoFactory() throws Throwable;
 
    /**
     * Create the default joinpoint factory builder
@@ -254,22 +221,7 @@ public abstract class AbstractConfiguration implements Configuration
     * @return the joinpoint factory builder
     * @throws Throwable for any error
     */
-   protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
-   {
-      JoinpointFactoryBuilder result = new BasicJoinpointFactoryBuilder();
-      
-      // FIXME This is a temporary hack while I am refactoring
-      try
-      {
-         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.integration.AOPJoinpointFactoryBuilder");
-         result = (JoinpointFactoryBuilder) clazz.newInstance();
-      }
-      catch (ClassNotFoundException ignored)
-      {
-         log.trace("No AOP in classpath " + ignored.getMessage());
-      }
-      return result;
-   }
+   protected abstract JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable;
 
    /**
     * Create the default metadata context factory
@@ -277,18 +229,5 @@ public abstract class AbstractConfiguration implements Configuration
     * @return the metadata context factory
     * @throws Throwable for any error
     */
-   protected MetaDataContextFactory createDefaultMetaDataContextFactory() throws Throwable
-   {
-      // FIXME This is a temporary hack while I am refactoring
-      try
-      {
-         Class clazz = getClass().getClassLoader().loadClass("org.jboss.aop.microcontainer.integration.AOPMetaDataContextFactory");
-         return (MetaDataContextFactory) clazz.newInstance();
-      }
-      catch (ClassNotFoundException ignored)
-      {
-         log.trace("No AOP in classpath " + ignored.getMessage());
-      }
-      return new BasicMetaDataContextFactory();
-   }
+   protected abstract MetaDataContextFactory createDefaultMetaDataContextFactory() throws Throwable;
 }
