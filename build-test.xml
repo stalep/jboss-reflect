@@ -101,6 +101,8 @@
     <!-- ===== -->
 
    <property name="source.java" value="${module.source}/tests"/>
+   <property name="javac.target" value="1.5"/>
+   <property name="javac.source" value="1.5"/>
    <property name="build.classes" value="${module.output}/classes-tests"/>
    <property name="build.testlog" value="${module.output}/log"/>
    <property name="build-bypass.disabled" value="true"/>
@@ -125,32 +127,13 @@
      | different type of compile that needs to be performed, short of
      | documentation compiles.
    -->
-   <!-- Exclude the jdk5 based sources by default -->
-   <property name="javac.excludes" value="org/jboss/test/vfs/**" />
 
   <target name="compile"
 	  description="Compile all source files."
-	  depends="_default:compile-classes, compile-classes-jdk5"
+	  depends="_default:compile-classes"
   />
-
-   <target name="compile-classes-jdk5" if="HAVE_JDK_1.5">
-      <javac destdir="${build.classes}"
-        optimize="${javac.optimize}"
-        source="1.5"
-        target="1.5"
-        debug="${javac.debug}"
-        depend="${javac.depend}"
-        verbose="${javac.verbose}"
-        deprecation="${javac.deprecation}"
-        includeAntRuntime="${javac.include.ant.runtime}"
-        includeJavaRuntime="${javac.include.java.runtime}"
-        failonerror="${javac.fail.onerror}">
-        <src path="${source.java}"/>
-        <classpath refid="javac.classpath"/>
-      </javac>
-   </target>
    
-   <!-- ================================================================== -->
+  <!-- ================================================================== -->
   <!-- Archives                                                           -->
   <!-- ================================================================== -->
 
