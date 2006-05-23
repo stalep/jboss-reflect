@@ -44,6 +44,8 @@ import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.test.ContainerTest;
+import org.jboss.test.classinfo.support.AnotherBean;
+import org.jboss.test.classinfo.support.AnotherInterface;
 import org.jboss.test.classinfo.support.SimpleBean;
 import org.jboss.test.classinfo.support.SimpleInterface;
 
@@ -98,6 +100,13 @@ public abstract class ClassInfoTest extends ContainerTest
       checkMethods(getSimpleInterfaceMethods(), simpleInterfaceInfo.getDeclaredMethods());
    }
 
+   public void testAnotherInterfaceMethod() throws Throwable
+   {
+      InterfaceInfo anotherInterfaceInfo = getAnotherInterfaceInfo();
+      
+      compareMethod(getAnotherInterfaceSomeMethod(), anotherInterfaceInfo.getDeclaredMethod("someMethod", null));
+   }
+
    public void testSimpleBeanFields() throws Throwable
    {
       ClassInfo cinfo = getClassInfo(SimpleBean.class);
@@ -110,6 +119,13 @@ public abstract class ClassInfoTest extends ContainerTest
       ClassInfo cinfo = getClassInfo(SimpleBean.class);
       
       checkMethods(getSimpleBeanMethods(), cinfo.getDeclaredMethods());
+   }
+
+   public void testAnotherBeanMethod() throws Throwable
+   {
+      ClassInfo anotherBeanInfo = getClassInfo(AnotherBean.class);
+      
+      compareMethod(getAnotherBeanSomeMethod(), anotherBeanInfo.getDeclaredMethod("someMethod", null));
    }
 
    public void testSimpleBeanConstructors() throws Throwable
@@ -148,6 +164,26 @@ public abstract class ClassInfoTest extends ContainerTest
       getLog().debug(simpleInterfaceInfo);
 
       return simpleInterfaceInfo;
+   }
+   
+   protected InterfaceInfo getAnotherInterfaceInfo()
+   {
+      ClassInfo cinfo = getClassInfo(AnotherBean.class);
+      
+      InterfaceInfo anotherInterfaceInfo = null;
+      InterfaceInfo[] interfaces = cinfo.getInterfaces();
+      for (int i = 0; i < interfaces.length; ++i)
+      {
+         if (AnotherInterface.class.getName().equals(interfaces[i].getName()))
+         {
+            anotherInterfaceInfo = interfaces[i];
+            break;
+         }
+      }
+      assertNotNull(anotherInterfaceInfo);
+      getLog().debug(anotherInterfaceInfo);
+
+      return anotherInterfaceInfo;
    }
 
    protected void checkTypeSet(HashSet expected, TypeInfo[] typeInfos) throws Throwable
@@ -234,6 +270,7 @@ public abstract class ClassInfoTest extends ContainerTest
    {
       getLog().debug("MethodField expect=" + expect + " actual=" + actual);
 
+      assertNotNull("Null method info", actual);
       assertEquals("Name", expect.getName(), actual.getName());
       assertEquals("ReturnType", expect.getReturnType(), actual.getReturnType());
       assertEquals("ParameterTypes", expect.getParameterTypes(), actual.getParameterTypes());
@@ -355,6 +392,17 @@ public abstract class ClassInfoTest extends ContainerTest
       return result;
    }
    
+   protected MethodInfo getAnotherInterfaceSomeMethod()
+   {
+      TypeInfoFactory factory = getTypeInfoFactory();
+
+      TypeInfo voidType = PrimitiveInfo.VOID;
+
+      ClassInfo anotherInterface = (ClassInfo) factory.getTypeInfo(AnotherInterface.class);
+
+      return new MethodInfoImpl(null, "someMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC_ABSTRACT, anotherInterface);
+   }
+   
    protected Set getSimpleBeanFields()
    {
       TypeInfoFactory factory = getTypeInfoFactory();
@@ -444,6 +492,17 @@ public abstract class ClassInfoTest extends ContainerTest
       result.add(new MethodInfoImpl(null, "protectedMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PROTECTED, simpleBean));
       result.add(new MethodInfoImpl(null, "privateMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PRIVATE, simpleBean));
       return result;
+   }
+   
+   protected MethodInfo getAnotherBeanSomeMethod()
+   {
+      TypeInfoFactory factory = getTypeInfoFactory();
+
+      TypeInfo voidType = PrimitiveInfo.VOID;
+
+      ClassInfo anotherBean = (ClassInfo) factory.getTypeInfo(AnotherBean.class);
+
+      return new MethodInfoImpl(null, "someMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC, anotherBean);
    }
    
    protected Set getSimpleBeanConstructors()

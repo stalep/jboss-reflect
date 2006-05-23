@@ -270,6 +270,8 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    
    public MethodInfo getDeclaredMethod(String name, TypeInfo[] parameters)
    {
+      if (methods == UNKNOWN_METHODS)
+         setDeclaredMethods(classInfoHelper.getMethods(this));
       return findMethod(methods, name, parameters);
    }
 
