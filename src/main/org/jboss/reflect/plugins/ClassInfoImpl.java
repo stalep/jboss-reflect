@@ -104,10 +104,11 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       {
          if (methods[i].getName().equals(name))
          {
-            if (methods[i].getParameterTypes().length == parameters.length)
+            final int length = (parameters != null) ? parameters.length : 0;
+            if (methods[i].getParameterTypes().length == length)
             {
                boolean ok = true;
-               for (int j = 0; j < parameters.length; j++)
+               for (int j = 0; j < length; j++)
                {
                   if (!parameters[j].equals(methods[i].getParameterTypes()[j]))
                   {
