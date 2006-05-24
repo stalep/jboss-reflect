@@ -25,6 +25,7 @@ package org.jboss.profileservice.spi.management;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.jboss.profileservice.spi.NoSuchDeploymentException;
 import org.jboss.profileservice.spi.ProfileKey;
 import org.jboss.profileservice.spi.NoSuchProfileException;
 import org.jboss.annotation.management.ManagedObject;
@@ -48,9 +49,10 @@ public interface ManagementView
     * @param deploymentName - the name of deployment
     * @return the root management view
     * @throws NoSuchProfileException
+    * @throws NoSuchDeploymentException 
     */
    public ManagedObject getView(ProfileKey key, String deploymentName)
-      throws NoSuchProfileException;
+      throws NoSuchProfileException, NoSuchDeploymentException;
 
    /**
     * Obtain a map of the PropertyInfo objects corresponding to the
@@ -60,9 +62,10 @@ public interface ManagementView
     * @param deploymentName
     * @return
     * @throws NoSuchProfileException
+    * @throws NoSuchDeploymentException 
     */
    public HashMap<String, PropertyInfo> getViewProperties(ProfileKey key, String deploymentName)
-      throws NoSuchProfileException;
+      throws NoSuchProfileException, NoSuchDeploymentException;
 
    /**
     * Set/update the management view of a deployment. 
