@@ -35,10 +35,32 @@ public interface Profile
    /** The x.y.z version of the profile */
    public String getVersion();
 
-   public DeploymentTemplate getTemplate(String name);
+   /**
+    * Get a deployment template.
+    * 
+    * @param name - the deployment name to identify the template to retrieve
+    * @return the named DeploymentTemplate
+    * @throws NoSuchDeploymentException - if there is no such deployment
+    */
+   public DeploymentTemplate getTemplate(String name)
+      throws NoSuchDeploymentException;
    public void addDeployment(Deployment d);
    public void removeDeployment(String name);
 
+   /**
+    * Get a named deployment.
+    * 
+    * @param name - the deployment name to identify the template to retrieve
+    * @return the named Deployment
+    * @throws NoSuchDeploymentException - if there is no such deployment
+    */
+   public Deployment getDeployment(String name)
+      throws NoSuchDeploymentException;
+
+   /**
+    * Get all deployments defined in this profile
+    * @return Array of the Deployment instances in this profile.
+    */
    public Deployment[] getDeployments();
    public Map<String, Object> getConfig();
 }

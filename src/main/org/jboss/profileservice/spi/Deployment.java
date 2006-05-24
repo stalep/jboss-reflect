@@ -22,6 +22,7 @@
 
 package org.jboss.profileservice.spi;
 
+import org.jboss.annotation.management.ManagedObject;
 import org.jboss.vfs.spi.VirtualFile;
 
 /**
@@ -41,5 +42,15 @@ public interface Deployment
    public VirtualFile[] getFiles();
    /** The MC bean information for the deployment */
    public DeploymentBean[] getBeans();
+   /**
+    * Get the top-level managed object view for the deployment beans.
+    * 
+    * @return 
+    */
+   public ManagedObject getManagedObject();
+   /**
+    * Obtain the list of dependencies for this deployment.
+    * @return a possibly empty list of mc dependencies.
+    */
    public String[] getDependencies();
 }
