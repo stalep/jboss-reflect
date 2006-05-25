@@ -22,7 +22,7 @@
 
 package org.jboss.profileservice.spi;
 
-import org.jboss.annotation.management.ManagedObject;
+import org.jboss.profileservice.spi.management.ManagedObject;
 import org.jboss.vfs.spi.VirtualFile;
 
 /**

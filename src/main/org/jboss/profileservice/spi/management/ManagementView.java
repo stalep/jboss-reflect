@@ -22,14 +22,9 @@
 
 package org.jboss.profileservice.spi.management;
 
-import java.io.IOException;
-import java.util.HashMap;
-
 import org.jboss.profileservice.spi.NoSuchDeploymentException;
 import org.jboss.profileservice.spi.ProfileKey;
 import org.jboss.profileservice.spi.NoSuchProfileException;
-import org.jboss.annotation.management.ManagedObject;
-import org.jboss.beans.info.spi.PropertyInfo;
 
 /**
  * The management view plugin spi for querying profiles for the
@@ -54,27 +49,4 @@ public interface ManagementView
    public ManagedObject getView(ProfileKey key, String deploymentName)
       throws NoSuchProfileException, NoSuchDeploymentException;
 
-   /**
-    * Obtain a map of the PropertyInfo objects corresponding to the
-    * top-level ManagedObject for the indicated deployment. 
-    * 
-    * @param key
-    * @param deploymentName
-    * @return
-    * @throws NoSuchProfileException
-    * @throws NoSuchDeploymentException 
-    */
-   public HashMap<String, PropertyInfo> getViewProperties(ProfileKey key, String deploymentName)
-      throws NoSuchProfileException, NoSuchDeploymentException;
-
-   /**
-    * Set/update the management view of a deployment. 
-    * @param key - the profile containing the deployment
-    * @param deploymentName - the name of deployment
-    * @param view - the populated management view
-    * @throws NoSuchProfileException
-    * @throws IOException
-    */
-   public void setView(ProfileKey key, String deploymentName, HashMap<String, PropertyInfo> view)
-      throws NoSuchProfileException, IOException;
 }
