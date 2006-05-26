@@ -43,7 +43,7 @@ public interface Deployment
     * The root of the deployment contents
     * @return the root URL of the deployment contents.
     */
-   public URL rootURL();
+   public URL getRootURL();
    /** The deployment files, jars, resources paths relative to the rootURL */
    public String[] getFiles();
    /** The MC bean information for the deployment */
