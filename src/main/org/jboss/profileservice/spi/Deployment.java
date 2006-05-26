@@ -22,8 +22,9 @@
 
 package org.jboss.profileservice.spi;
 
+import java.net.URL;
+
 import org.jboss.profileservice.spi.management.ManagedObject;
-import org.jboss.vfs.spi.VirtualFile;
 
 /**
  * A deployment is an encapsulation of the deployment beans and resources.
@@ -38,8 +39,13 @@ public interface Deployment
    public String getType();
    /** The deployment name */
    public String getName();
-   /** The deployment virtual files, jars, resources */
-   public VirtualFile[] getFiles();
+   /**
+    * The root of the deployment contents
+    * @return the root URL of the deployment contents.
+    */
+   public URL rootURL();
+   /** The deployment files, jars, resources paths relative to the rootURL */
+   public String[] getFiles();
    /** The MC bean information for the deployment */
    public DeploymentBean[] getBeans();
    /**
