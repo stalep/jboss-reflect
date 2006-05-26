@@ -48,9 +48,5 @@ public interface Deployment
     * @return 
     */
    public ManagedObject getManagedObject();
-   /**
-    * Obtain the list of dependencies for this deployment.
-    * @return a possibly empty list of mc dependencies.
-    */
-   public String[] getDependencies();
+
 }

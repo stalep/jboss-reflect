@@ -40,6 +40,11 @@ public interface DeploymentBean
     * @return the name the bean is registered under.
     */
    public String getName();
+   /**
+    * Obtain the list of dependencies for this bean.
+    * @return a possibly empty list of mc dependencies.
+    */
+   public String[] getDependencies();
    /** */
    public Iterator<Policy> getPolcies();
    public Iterator<PropertyInfo> getProperties();
