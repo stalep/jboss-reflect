@@ -185,6 +185,22 @@
            <include name="org/jboss/test/vfs/support/*" />
         </zipfileset>
      </jar>
+
+  	<!-- Profile service test jars -->
+    <jar destfile="${build.lib}/p0.jar">
+      <manifest>
+         <attribute name="Specification-Title" value="profile0-jar" />
+         <attribute name="Specification-Version" value="1.0.0.GA" />
+         <attribute name="Specification-Vendor" value="JBoss Inc." />
+         <attribute name="Implementation-Title" value="p0-jar-test" />
+         <attribute name="Implementation-URL" value="www.jboss.org" />
+         <attribute name="Implementation-Version" value="1.0.0.GA-jboss" />
+         <attribute name="Implementation-Vendor" value="JBoss Inc." />
+      </manifest>
+       <zipfileset dir="${build.classes}">
+          <include name="org/jboss/test/profileservice/profiles/p0/**" />
+       </zipfileset>
+    </jar>
   </target>
 
   <!-- ================================================================== -->
