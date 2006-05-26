@@ -26,15 +26,19 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * A deployment bean representation. This maps to a kernel bean instance.
+ * 
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
-
 public interface DeploymentBean
 {
-   /** The type of the deployment */
-   public String getType();
-   /** The name of the deployment */
+   /** The fully qualified class name of the bean */
+   public String getBean();
+   /** The name the bean is registered under. This would be used in bean
+    * dependency statements.
+    * @return the name the bean is registered under.
+    */
    public String getName();
    /** */
    public Iterator<Policy> getPolcies();
