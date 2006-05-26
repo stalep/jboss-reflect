@@ -23,21 +23,37 @@
 package org.jboss.annotation.management;
 
 import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.ElementType;
 
 /**
- * A meta-annotation that identifies a management view. A management view
- * is a hierarchy of managed property names that defines a view which
- * can be used to create/update a deployment.
+ * An annotation for declaring a bean property as one which should be
+ * included in a management view.
  * 
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
 @Retention(value=RetentionPolicy.RUNTIME)
-@Target(value= ElementType.ANNOTATION_TYPE)
-public @interface ManagedObject
+public @interface ManagedPropertyRef
 {
-   ManagedPropertyRef[] properties() default {};
+   /**
+    * A namespace context that maps the managed property onto a managed view
+    * context (e.g., /, /DataSource, /DataSource/Pool).
+    * @return
+    */
+   String context() default "/";
+   /**
+    * The DeploymentBean name which sources the property
+    * @return
+    */
+   String beanName();
+   /**
+    * The DeploymentBean property name
+    * @return
+    */
+   String propertyName();
+   /**
+    * An option management view description of the property
+    * @return
+    */
+   String description() default "";
 }
