@@ -21,6 +21,12 @@
  */
 package org.jboss.profileservice.spi.management;
 
+/**
+ * A management view wrapper of a bean property.
+ * 
+ * @author Scott.Stark@jboss.org
+ * @version $Revision$
+ */
 public class ManagedPropertyRef
 {
    /**
