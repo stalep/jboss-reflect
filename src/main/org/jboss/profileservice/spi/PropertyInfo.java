@@ -38,6 +38,8 @@ public interface PropertyInfo
    public Comparable<?> getMaxValue();
    public boolean isValue(Object obj);
    public OpenType<?> getOpenType();
+   public Object getFieldValue(String fieldName);
+   public void setFields(String[] fieldNames, Object[] fieldValues);    
 
    /**
     * Get the current property value. Must interact with the

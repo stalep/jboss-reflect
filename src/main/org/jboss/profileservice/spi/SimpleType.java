@@ -32,6 +32,10 @@ public final class SimpleType<T>
 {
    public static final SimpleType<Void> VOID = new SimpleType<Void>(Void.class);
 
+   public static final SimpleType<String> STRING = new SimpleType<String>(String.class);
+
+   public static final SimpleType<Boolean> BOOLEAN = new SimpleType<Boolean>(Boolean.class);
+
    private SimpleType(Class<T> valueClass)
    {
       super(valueClass.getName(), valueClass.getName(), valueClass.getName());
