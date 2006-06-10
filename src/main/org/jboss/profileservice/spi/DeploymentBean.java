@@ -25,13 +25,14 @@ package org.jboss.profileservice.spi;
 import java.util.Iterator;
 import java.util.Map;
 
+
 /**
  * A deployment bean representation. This maps to a kernel bean instance.
  * 
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
-public interface DeploymentBean
+public interface DeploymentBean<TMetaData>
 {
    /** The fully qualified class name of the bean */
    public String getBean();
@@ -41,12 +42,18 @@ public interface DeploymentBean
     */
    public String getName();
    /**
-    * Obtain the list of dependencies for this bean.
-    * @return a possibly empty list of mc dependencies.
+    * Get the metadata needed to deploy the bean. An example TMetaData type
+    * would be the kernel BeanMetaData.
+    * 
+    * @return the TMetaData generic type for the bean metadata
     */
-   public String[] getDependencies();
+   public TMetaData getBeanMetaData();
    /** */
    public Iterator<Policy> getPolcies();
+   /**
+    * 
+    * @return
+    */
    public Iterator<PropertyInfo> getProperties();
    public Map<PropertyInfo, Object> getPropertyValues();
    public void setPropertyValues(Map<PropertyInfo, Object> values);

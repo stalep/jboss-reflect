@@ -33,7 +33,7 @@ import org.jboss.profileservice.spi.management.ManagedObject;
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
-public interface Deployment
+public interface Deployment<TMetaData>
 {
    /** The deployment type */
    public String getType();
@@ -47,7 +47,7 @@ public interface Deployment
    /** The deployment files, jars, resources paths relative to the rootURL */
    public String[] getFiles();
    /** The MC bean information for the deployment */
-   public DeploymentBean[] getBeans();
+   public DeploymentBean<TMetaData>[] getBeans();
    /**
     * Get the top-level managed object view for the deployment beans.
     * 

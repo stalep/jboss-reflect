@@ -30,7 +30,7 @@ import java.util.Map;
  * @author Scott.Stark@jboss.org
  * @version $Revision$
  */
-public interface Profile
+public interface Profile<TMetaData>
 {
    /** The x.y.z version of the profile */
    public String getVersion();
@@ -44,7 +44,7 @@ public interface Profile
     */
    public DeploymentTemplate getTemplate(String name)
       throws NoSuchDeploymentException;
-   public void addDeployment(Deployment d);
+   public void addDeployment(Deployment<TMetaData> d);
    public void removeDeployment(String name);
 
    /**
@@ -54,13 +54,13 @@ public interface Profile
     * @return the named Deployment
     * @throws NoSuchDeploymentException - if there is no such deployment
     */
-   public Deployment getDeployment(String name)
+   public Deployment<TMetaData> getDeployment(String name)
       throws NoSuchDeploymentException;
 
    /**
     * Get all deployments defined in this profile
     * @return Array of the Deployment instances in this profile.
     */
-   public Deployment[] getDeployments();
+   public Deployment<TMetaData>[] getDeployments();
    public Map<String, Object> getConfig();
 }
