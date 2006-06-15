@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
+import org.jboss.reflect.plugins.AnnotationHelper;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.TypeInfo;
@@ -42,9 +44,6 @@ public class JavassistFieldInfo extends JavassistAnnotatedInfo implements FieldI
    /** The reflection factory */
    private static final JavassistReflectionFactory reflectionFactory = new JavassistReflectionFactory(true);
 
-   /** The type info */
-   private JavassistTypeInfo typeInfo;
-   
    /** The field */
    private CtField ctField;
    
@@ -54,14 +53,18 @@ public class JavassistFieldInfo extends JavassistAnnotatedInfo implements FieldI
    /** The type */
    private transient TypeInfo fieldType;
    
+   /** The type info */
+   protected JavassistTypeInfo typeInfo;
+
    /**
     * Create a new JavassistFieldInfo.
     * 
     * @param typeInfo the type info
     * @param ctField the field
     */
-   public JavassistFieldInfo(JavassistTypeInfo typeInfo, CtField ctField)
+   public JavassistFieldInfo(AnnotationHelper annotationHelper, JavassistTypeInfo typeInfo, CtField ctField)
    {
+      super(annotationHelper);
       this.typeInfo = typeInfo;
       this.ctField = ctField;
    }
@@ -149,5 +152,10 @@ public class JavassistFieldInfo extends JavassistAnnotatedInfo implements FieldI
    {
       buffer.append("name=").append(getName());
       super.toString(buffer);
+   }
+   
+   public AnnotationValue[] getAnnotations()
+   {
+      return getAnnotations(ctField);
    }
 }

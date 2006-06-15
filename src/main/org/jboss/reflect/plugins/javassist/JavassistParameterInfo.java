@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
+import org.jboss.reflect.plugins.AnnotationHelper;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
@@ -34,7 +36,7 @@ import org.jboss.util.JBossStringBuilder;
 public class JavassistParameterInfo extends JavassistAnnotatedInfo implements ParameterInfo
 {
    /** The annotated info */
-   private JavassistAnnotatedInfo annotated;
+   private JavassistAnnotatedParameterInfo annotated;
    
    /** The name */
    private String name;
@@ -49,10 +51,11 @@ public class JavassistParameterInfo extends JavassistAnnotatedInfo implements Pa
     * @param name the name
     * @param parameterType the type
     */
-   public JavassistParameterInfo(JavassistAnnotatedInfo annotated, String name, TypeInfo parameterType)
+   public JavassistParameterInfo(AnnotationHelper annotationHelper, JavassistAnnotatedParameterInfo annotated, int index, TypeInfo parameterType)
    {
+      super(annotationHelper);
       this.annotated = annotated;
-      this.name = name;
+      this.name = "arg" + index;
       this.parameterType = parameterType;
    }
 
@@ -102,4 +105,20 @@ public class JavassistParameterInfo extends JavassistAnnotatedInfo implements Pa
       buffer.append("type=").append(getParameterType());
       super.toString(buffer);
    }
+   
+   public AnnotationValue[] getAnnotations()
+   {
+      if (annotationsArray == NOT_CONFIGURED)
+      {
+         annotated.createParameterAnnotations(); //Calls setAnnotations() so annotationsArray is created
+      }
+      return annotationsArray;
+   }
+   
+   public void setAnnotations(AnnotationValue[] annotations)
+   {
+      annotationsArray = annotations;
+      setupAnnotations(annotations);
+   }
+
 }

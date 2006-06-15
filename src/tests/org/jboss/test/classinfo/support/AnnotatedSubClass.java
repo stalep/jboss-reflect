@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2006, JBoss Inc., and individual contributors as indicated
+* Copyright 2005, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -18,32 +18,22 @@
 * License along with this software; if not, write to the Free
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
-*/
-package org.jboss.reflect.plugins;
-
-import org.jboss.reflect.spi.AnnotationInfo;
-import org.jboss.reflect.spi.AnnotationValue;
+*/ 
+package org.jboss.test.classinfo.support;
 
 /**
- * AnnotationHelper.
  * 
- * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  * @version $Revision$
  */
-public interface AnnotationHelper
+@AnotherAnnotation
+public class AnnotatedSubClass extends AnnotatedClass
 {
-   /**
-    * Get the annotations for the annotated object
-    * 
-    * @param object the annotated object
-    * @return the annotations
-    */
-   AnnotationValue[] getAnnotations(Object object);
 
-   /**
-    * Create an annotation from the underlying implementation and its info type
-    * @param The annotation info
-    * @param ann the underlying annotation
-    */
-   AnnotationValue createAnnotationValue(AnnotationInfo info, Object ann);
+   public AnnotatedSubClass(int i, String x)
+   {
+      // FIXME AnnotatedSubClass constructor
+      super(i, x);
+   }
+
 }

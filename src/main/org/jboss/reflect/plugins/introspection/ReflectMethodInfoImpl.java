@@ -61,9 +61,9 @@ public class ReflectMethodInfoImpl extends MethodInfoImpl
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public ReflectMethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, TypeInfo[] parameterTypes, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public ReflectMethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
    {
-      super(annotations, name, returnType, parameterTypes, exceptionTypes, modifiers, declaring);
+      super(annotations, name, returnType, parameterTypes, parameterAnnotations, exceptionTypes, modifiers, declaring);
    }
 
    /**

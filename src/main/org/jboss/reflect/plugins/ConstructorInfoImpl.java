@@ -78,7 +78,7 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public ConstructorInfoImpl(AnnotationValue[] annotations, TypeInfo[] parameterTypes, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public ConstructorInfoImpl(AnnotationValue[] annotations, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
    {
       super(annotations);
       if (parameterTypes == null)
@@ -91,7 +91,7 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
          this.parameterTypes = parameterTypes;
          this.parameters = new ParameterInfoImpl[parameterTypes.length];
          for (int i = 0; i < parameterTypes.length; ++i)
-            this.parameters[i] = new ParameterInfoImpl(null, null, parameterTypes[i]);
+            this.parameters[i] = new ParameterInfoImpl(parameterAnnotations[i], null, parameterTypes[i]);
       }
       if (exceptionTypes == null)
          this.exceptionTypes = MethodInfo.NO_EXCEPTIONS;

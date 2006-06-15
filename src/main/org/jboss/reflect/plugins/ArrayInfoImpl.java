@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins;
 
+import org.jboss.reflect.spi.AnnotatedInfo;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.TypeInfo;
 
@@ -69,6 +71,42 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
       return componentType.getName() + "[]";
    }
    
+   public AnnotationValue getAnnotation(String name)
+   {
+      if (componentType instanceof AnnotatedInfo)
+      {
+         return ((AnnotatedInfo)componentType).getAnnotation(name);
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   public AnnotationValue[] getAnnotations()
+   {
+      if (componentType instanceof AnnotatedInfo)
+      {
+         return ((AnnotatedInfo)componentType).getAnnotations();
+      }
+      else
+      {
+         return UNKNOWN_ANNOTATIONS;
+      }
+   }
+
+   public boolean isAnnotationPresent(String name)
+   {
+      if (componentType instanceof AnnotatedInfo)
+      {
+         return ((AnnotatedInfo)componentType).isAnnotationPresent(name);
+      }
+      else
+      {
+         return false;
+      }
+   }
+
    public boolean equals(Object o)
    {
       if (this == o) return true;

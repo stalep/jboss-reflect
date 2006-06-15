@@ -59,9 +59,9 @@ public class ReflectConstructorInfoImpl extends ConstructorInfoImpl
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public ReflectConstructorInfoImpl(AnnotationValue[] annotations, TypeInfo[] parameterTypes, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public ReflectConstructorInfoImpl(AnnotationValue[] annotations, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
    {
-      super(annotations, parameterTypes, exceptionTypes, modifiers, declaring);
+      super(annotations, parameterTypes, parameterAnnotations, exceptionTypes, modifiers, declaring);
    }
 
    /**

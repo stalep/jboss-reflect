@@ -85,7 +85,7 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public MethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, TypeInfo[] parameterTypes, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public MethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
    {
       super(annotations);
       this.name = name;
@@ -99,7 +99,7 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
          this.parameterTypes = parameterTypes;
          this.parameters = new ParameterInfoImpl[parameterTypes.length];
          for (int i = 0; i < parameterTypes.length; ++i)
-            this.parameters[i] = new ParameterInfoImpl(null, null, parameterTypes[i]);
+            this.parameters[i] = new ParameterInfoImpl(parameterAnnotations[i], null, parameterTypes[i]);
       }
       if (exceptionTypes == null)
          this.exceptionTypes = MethodInfo.NO_EXCEPTIONS;

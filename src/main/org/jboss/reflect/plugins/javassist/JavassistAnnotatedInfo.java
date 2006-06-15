@@ -21,7 +21,11 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
+import java.util.HashMap;
+
+import org.jboss.reflect.plugins.AnnotationHelper;
 import org.jboss.reflect.spi.AnnotatedInfo;
+import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.util.JBossObject;
 
@@ -31,23 +35,66 @@ import org.jboss.util.JBossObject;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class JavassistAnnotatedInfo extends JBossObject implements AnnotatedInfo
+public abstract class JavassistAnnotatedInfo extends JBossObject implements AnnotatedInfo
 {
-   public AnnotationValue getAnnotation(String name)
+   final static AnnotationValue[] NOT_CONFIGURED = new AnnotationValue[0];
+
+   /** The annotations */
+   protected AnnotationValue[] annotationsArray = NOT_CONFIGURED;
+
+   /** Annotations map Map<String, AnnotationValue> */
+   protected HashMap annotationMap;
+
+   protected AnnotationHelper annotationHelper;
+   
+   public JavassistAnnotatedInfo(AnnotationHelper annotationHelper)
    {
-      // @todo getAnnotation
-      throw new org.jboss.util.NotImplementedException("getAnnotation");
+      this.annotationHelper = annotationHelper;
    }
 
-   public AnnotationValue[] getAnnotations()
+   protected AnnotationValue[] getAnnotations(Object obj)
    {
-      // @todo getAnnotations
-      return null;
+      synchronized (this)
+      {
+         if (annotationsArray == NOT_CONFIGURED)
+         {
+            annotationsArray = annotationHelper.getAnnotations(obj);
+            setupAnnotations(annotationsArray);
+
+         }
+      }      
+      return annotationsArray;
+   }
+
+   public AnnotationValue getAnnotation(String name)
+   {
+      getAnnotations();
+      return (AnnotationValue) annotationMap.get(name);
    }
 
    public boolean isAnnotationPresent(String name)
    {
-      // @todo isAnnotationPresent
-      throw new org.jboss.util.NotImplementedException("isAnnotationPresent");
+      getAnnotations();
+      return annotationMap.containsKey(name);
    }
+   
+   /**
+    * Set up the annotations
+    * 
+    * @param annotations the annotations
+    */
+   protected void setupAnnotations(AnnotationValue[] annotations)
+   {
+      if (annotations != null && annotations.length > 0)
+      {
+         this.annotationsArray = annotations;
+         annotationMap = new HashMap();
+         for (int i = 0; i < annotations.length; i++)
+         {
+            AnnotationInfo type = annotations[i].getAnnotationType();
+            annotationMap.put(type.getName(), annotations[i]);
+         }
+      }
+   }
+   
 }

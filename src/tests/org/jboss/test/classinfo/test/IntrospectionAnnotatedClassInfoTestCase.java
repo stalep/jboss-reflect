@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2006, JBoss Inc., and individual contributors as indicated
+* Copyright 2005, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,31 +19,33 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.reflect.plugins;
+package org.jboss.test.classinfo.test;
 
-import org.jboss.reflect.spi.AnnotationInfo;
-import org.jboss.reflect.spi.AnnotationValue;
+import junit.framework.Test;
+
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
+import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
- * AnnotationHelper.
+ * Introspection ClassInfo Test Case.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public interface AnnotationHelper
+public class IntrospectionAnnotatedClassInfoTestCase extends AnnotatedClassInfoTest
 {
-   /**
-    * Get the annotations for the annotated object
-    * 
-    * @param object the annotated object
-    * @return the annotations
-    */
-   AnnotationValue[] getAnnotations(Object object);
+   public static Test suite()
+   {
+      return suite(IntrospectionAnnotatedClassInfoTestCase.class);
+   }
+   
+   public IntrospectionAnnotatedClassInfoTestCase(String name)
+   {
+      super(name);
+   }
 
-   /**
-    * Create an annotation from the underlying implementation and its info type
-    * @param The annotation info
-    * @param ann the underlying annotation
-    */
-   AnnotationValue createAnnotationValue(AnnotationInfo info, Object ann);
+   protected TypeInfoFactory getTypeInfoFactory()
+   {
+      return new IntrospectionTypeInfoFactory();
+   }
 }

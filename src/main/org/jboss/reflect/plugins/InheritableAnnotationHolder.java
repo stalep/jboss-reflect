@@ -128,12 +128,7 @@ public abstract class InheritableAnnotationHolder extends JBossObject implements
    public void setupAnnotations(AnnotationValue[] annotations)
    {
       InheritableAnnotationHolder superHolder = getSuperHolder();
-      if (superHolder == null)
-      {
-         return;
-      }
-      AnnotationValue[] superAllAnnotations = superHolder.getAnnotations();
-      
+      AnnotationValue[] superAllAnnotations = (superHolder != null) ? superHolder.getAnnotations() : null;
       
       if (annotations != null && annotations.length > 0)
       {
@@ -148,8 +143,10 @@ public abstract class InheritableAnnotationHolder extends JBossObject implements
             for (int i = 0; i < superAllAnnotations.length; i++)
             {
                AnnotationValue av = superAllAnnotations[i];
-               if (av.getAnnotationType().isAnnotationPresent("java.lang.annotation.Inherited"));
+               if (av.getAnnotationType().isAnnotationPresent("java.lang.annotation.Inherited"))
+               {
                   allAnnotations.put(av.getAnnotationType().getName(), av);
+               }
             }
          }
          else

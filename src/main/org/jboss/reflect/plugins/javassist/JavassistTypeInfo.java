@@ -33,6 +33,7 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 
 import org.jboss.reflect.plugins.ValueConvertor;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
@@ -48,13 +49,10 @@ import org.jboss.util.JBossStringBuilder;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassInfo, InterfaceInfo
+public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder implements ClassInfo, InterfaceInfo
 {
    /** The factory */
    private JavassistTypeInfoFactoryImpl factory;
-
-   /** The CtClass */
-   private CtClass ctClass;
 
    /** The class */
    private Class clazz;
@@ -86,14 +84,14 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
     */
    JavassistTypeInfo(JavassistTypeInfoFactoryImpl factory, CtClass ctClass, Class clazz)
    {
+      super(ctClass, factory);
       this.factory = factory;
-      this.ctClass = ctClass;
       this.clazz = clazz;
    }
 
    public String getName()
    {
-      return clazz.getName();
+      return ctClass.getName();
    }
 
    public boolean isInterface()
@@ -343,7 +341,7 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
          for (int i = 0; i < params.length; ++i)
             params[i] = parameterTypes[i].getName();
          SignatureKey key = new SignatureKey(null, params);
-         JavassistConstructorInfo info = new JavassistConstructorInfo(this, constructor);
+         JavassistConstructorInfo info = new JavassistConstructorInfo(factory, this, constructor);
          synchronized (constructors)
          {
             constructors.put(key, info);
@@ -364,7 +362,7 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
     */
    protected FieldInfo generateFieldInfo(CtField field)
    {
-      JavassistFieldInfo info = new JavassistFieldInfo(this, field);
+      JavassistFieldInfo info = new JavassistFieldInfo(factory, this, field);
       synchronized (fields)
       {
          fields.put(field.getName(), info);
@@ -424,7 +422,7 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
     */
    protected MethodInfo generateMethodInfo(SignatureKey key, CtMethod method)
    {
-      JavassistMethodInfo info = new JavassistMethodInfo(this, key, method);
+      JavassistMethodInfo info = new JavassistMethodInfo(factory, this, key, method);
       synchronized (methods)
       {
          methods.put(key, info);
@@ -449,4 +447,33 @@ public class JavassistTypeInfo extends JavassistAnnotatedInfo implements ClassIn
 
       return result;
    }
+
+   protected Object getAnnotatedTarget()
+   {
+      return ctClass;
+   }
+   
+   public AnnotationValue[] getAnnotations()
+   {
+      return getAnnotations(ctClass);
+   }
+
+   @Override
+   public JavassistInheritableAnnotationHolder getSuperHolder()
+   {
+      try
+      {
+         CtClass zuper = ctClass.getSuperclass();
+         if (zuper == null)
+         {
+            return null;
+         }
+         return (JavassistTypeInfo)factory.getTypeInfo(zuper);
+      }
+      catch (NotFoundException e)
+      {
+         throw new RuntimeException(e);
+      }
+   }
+
 }

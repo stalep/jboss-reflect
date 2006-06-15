@@ -21,14 +21,28 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtMember;
 import javassist.CtPrimitiveType;
 import javassist.NotFoundException;
+import javassist.bytecode.AccessFlag;
 
+import org.jboss.reflect.plugins.AnnotationHelper;
+import org.jboss.reflect.plugins.AnnotationValueImpl;
+import org.jboss.reflect.plugins.ArrayInfoImpl;
+import org.jboss.reflect.plugins.AnnotationValueFactory;
+import org.jboss.reflect.spi.AnnotationInfo;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.reflect.spi.Value;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.collection.WeakClassCache;
 
@@ -37,10 +51,11 @@ import org.jboss.util.collection.WeakClassCache;
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory
+public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory, AnnotationHelper
 {
    static final ClassPool pool = ClassPool.getDefault();
 
+   AnnotationValue[] NO_ANNOTATIONS = new AnnotationValue[0];
    /**
     * Raise NoClassDefFoundError for javassist not found
     * 
@@ -107,6 +122,25 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
    protected Object instantiate(Class clazz)
    {
       CtClass ctClass = getCtClass(clazz.getName());
+
+      if (clazz.isArray())
+      {
+         TypeInfo componentType = getTypeInfo(clazz.getComponentType());
+         return new ArrayInfoImpl(componentType);
+      }
+
+      //FIXME JBAOP-230 Use convenience methods added to javassist
+      int mod = ctClass.getModifiers();
+      if ((mod & AccessFlag.ANNOTATION) != 0)
+      {
+         return new JavassistAnnotationInfo(this, ctClass, clazz);
+      }
+      else if ((mod & AccessFlag.ENUM) != 0)
+      {
+         return new JavassistEnumInfo(this, ctClass, clazz);
+      }
+
+      
       return new JavassistTypeInfo(this, ctClass, clazz);
    }
 
@@ -218,4 +252,114 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       Class clazz = cl.loadClass(name);
       return getTypeInfo(clazz);
    }
+   
+   public AnnotationValue[] getAnnotations(Object obj)
+   {
+      try
+      {
+         Object[] annotations = null;
+         if (obj instanceof CtMember)
+         {
+            annotations = ((CtMember)obj).getAnnotations();
+         }
+         else if (obj instanceof CtClass)
+         {
+            annotations = ((CtClass)obj).getAnnotations();
+         }
+         else
+         {
+            throw new RuntimeException("Attempt was made to read annotations from unsupported type " + obj.getClass().getName() + ": " + obj);
+         }
+
+         if (annotations.length == 0)
+         {
+            return NO_ANNOTATIONS;
+         }
+
+         AnnotationValueImpl[] annotationValues = new AnnotationValueImpl[annotations.length];
+         for (int i = 0 ; i < annotations.length ; i++)
+         {
+            Class[] interfaces = annotations[i].getClass().getInterfaces();
+            if (interfaces.length != 1)
+            {
+               throw new RuntimeException("Annotation proxy implements more than one interface! " + Arrays.asList(interfaces));
+            }
+
+            Class clazz = interfaces[0];
+            
+            Method[] methods = clazz.getDeclaredMethods();
+          
+            HashMap attributes = new HashMap();
+          
+            for (int j = 0 ; j < methods.length ; j++)
+            {
+               try
+               {
+                  Class typeClass = methods[j].getReturnType();
+                  Object val = methods[j].invoke(annotations[i], new Object[0]);
+
+                  TypeInfo typeInfo = getTypeInfo(typeClass);
+
+                  Value value = AnnotationValueFactory.createValue(this, typeInfo, val);
+                  
+                  
+                  attributes.put(methods[j].getName(), value);
+                  
+               }
+               catch (Throwable e)
+               {
+                  throw new RuntimeException(e);
+               }
+            }
+            AnnotationInfo info = (AnnotationInfo)getTypeInfo(clazz);
+            annotationValues[i] = new AnnotationValueImpl(info, attributes);
+         }
+         return annotationValues;
+      }
+      catch (ClassNotFoundException e)
+      {
+         throw new RuntimeException(e);
+      }
+      catch (Throwable t)
+      {
+         throw new RuntimeException(t);
+      }
+   }
+
+   public AnnotationValue createAnnotationValue(AnnotationInfo info, Object ann)
+   {
+      Annotation annotation = (Annotation)ann;
+      //Class clazz = annotation.annotationType();//Throwa an execption: no default value: org.jboss.test.classinfo.support.ValueAnnotation.annotationType()
+      Class[] interfaces = annotation.getClass().getInterfaces();
+      if (interfaces.length != 1)
+      {
+         throw new RuntimeException("Annotation should implement exactly one interface " + annotation);
+      }
+      Class clazz = interfaces[0];
+      
+      Method[] methods = clazz.getDeclaredMethods();
+      
+      HashMap attributes = new HashMap();
+      
+      for (int j = 0 ; j < methods.length ; j++)
+      {
+         try
+         {
+            Class typeClass = methods[j].getReturnType();
+            Object val = methods[j].invoke(annotation, new Object[0]);
+
+            TypeInfo typeInfo = getTypeInfo(typeClass);
+
+            Value value = AnnotationValueFactory.createValue(this, typeInfo, val);
+            
+            attributes.put(methods[j].getName(), value);
+         }
+         catch (Throwable e)
+         {
+            throw new RuntimeException(e);
+         }
+      }
+      return new AnnotationValueImpl(info, attributes);
+   }
+   
 }
