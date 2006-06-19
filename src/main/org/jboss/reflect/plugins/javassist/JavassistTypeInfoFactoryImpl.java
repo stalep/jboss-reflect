@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 {
    static final ClassPool pool = ClassPool.getDefault();
 
-   AnnotationValue[] NO_ANNOTATIONS = new AnnotationValue[0];
+   static final AnnotationValue[] NO_ANNOTATIONS = new AnnotationValue[0];
    /**
     * Raise NoClassDefFoundError for javassist not found
     * 
@@ -287,7 +286,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
             Class clazz = interfaces[0];
             
-            Method[] methods = clazz.getDeclaredMethods();
+            Method[] methods = clazz.getMethods();
           
             HashMap attributes = new HashMap();
           
@@ -295,16 +294,18 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
             {
                try
                {
-                  Class typeClass = methods[j].getReturnType();
-                  Object val = methods[j].invoke(annotations[i], new Object[0]);
-
-                  TypeInfo typeInfo = getTypeInfo(typeClass);
-
-                  Value value = AnnotationValueFactory.createValue(this, typeInfo, val);
-                  
-                  
-                  attributes.put(methods[j].getName(), value);
-                  
+                  if (methods[j].getDeclaringClass().equals(clazz))
+                  {
+                     Class typeClass = methods[j].getReturnType();
+                     Object val = methods[j].invoke(annotations[i], new Object[0]);
+   
+                     TypeInfo typeInfo = getTypeInfo(typeClass);
+   
+                     Value value = AnnotationValueFactory.createValue(this, typeInfo, val);
+                     
+                     
+                     attributes.put(methods[j].getName(), value);
+                  }                  
                }
                catch (Throwable e)
                {

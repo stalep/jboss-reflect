@@ -59,7 +59,7 @@ import org.jboss.util.collection.WeakClassCache;
  */
 public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory, AnnotationHelper, ClassInfoHelper
 {
-   AnnotationValue[] NO_ANNOTATIONS = new AnnotationValue[0];
+   final static AnnotationValue[] NO_ANNOTATIONS = new AnnotationValue[0];
 
    /**
     * Generate the type info for a class

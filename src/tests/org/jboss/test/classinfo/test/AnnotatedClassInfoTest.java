@@ -44,7 +44,6 @@ import org.jboss.reflect.spi.StringValue;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.reflect.spi.Value;
-import org.jboss.test.AbstractTestDelegate;
 import org.jboss.test.ContainerTest;
 import org.jboss.test.classinfo.support.ComplexAnnotation;
 import org.jboss.test.classinfo.support.AnnotatedClass;
@@ -511,15 +510,6 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
    
    protected abstract TypeInfoFactory getTypeInfoFactory();
    
-   //FIXME Override from ContainerTest to set enableSecurity to false since AccessibleObject.getAnnotations() fails otherwise
-   public static AbstractTestDelegate getDelegate(Class clazz) throws Exception
-   {
-      AbstractTestDelegate delegate = new AbstractTestDelegate(clazz);
-      delegate.enableSecurity = false;
-      return delegate;
-   }
-
-
    private static class ExpectedComplexAnnotationData
    {
       String annotationValueAnnotationString = "annotation_";

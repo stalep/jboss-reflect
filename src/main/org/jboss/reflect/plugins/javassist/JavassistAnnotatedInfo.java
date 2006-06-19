@@ -58,9 +58,8 @@ public abstract class JavassistAnnotatedInfo extends JBossObject implements Anno
       {
          if (annotationsArray == NOT_CONFIGURED)
          {
-            annotationsArray = annotationHelper.getAnnotations(obj);
-            setupAnnotations(annotationsArray);
-
+            annotationsArray = null;
+            setupAnnotations(annotationHelper.getAnnotations(obj));
          }
       }      
       return annotationsArray;
