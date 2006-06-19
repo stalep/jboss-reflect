@@ -117,31 +117,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
 
    public AnnotationValue createAnnotationValue(AnnotationInfo info, Object ann)
    {
-      Annotation annotation = (Annotation)ann;
-      Class clazz = annotation.annotationType();
-      Method[] methods = clazz.getDeclaredMethods();
-
-      HashMap attributes = new HashMap();
-
-      for (int j = 0 ; j < methods.length ; j++)
-      {
-         try
-         {
-            Class typeClass = methods[j].getReturnType();
-            Object val = methods[j].invoke(annotation, new Object[0]);
-
-            TypeInfo typeInfo = getTypeInfo(typeClass);
-
-            Value value = AnnotationValueFactory.createValue(this, typeInfo, val);
-
-            attributes.put(methods[j].getName(), value);
-         }
-         catch (Throwable e)
-         {
-            throw new RuntimeException(e);
-         }
-      }
-      return new AnnotationValueImpl(info, attributes);
+      return AnnotationValueFactory.createAnnotationValue(this, this, info, ann);
    }
 
    public ConstructorInfoImpl[] getConstructors(ClassInfoImpl classInfo)

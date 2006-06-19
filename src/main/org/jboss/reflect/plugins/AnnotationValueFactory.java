@@ -21,13 +21,19 @@
 */ 
 package org.jboss.reflect.plugins;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+
 import org.jboss.reflect.spi.AnnotationInfo;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.EnumInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.PrimitiveValue;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.reflect.spi.Value;
 
 /**
@@ -75,6 +81,43 @@ public class AnnotationValueFactory
       return rtnValue;
    }
 
+   public static AnnotationValue createAnnotationValue(TypeInfoFactory typeInfoFactory, AnnotationHelper annotationHelper, AnnotationInfo info, Object ann)
+   {
+      Annotation annotation = (Annotation)ann;
+      //Class clazz = annotation.annotationType();//Throwa an execption: no default value: org.jboss.test.classinfo.support.ValueAnnotation.annotationType()
+      Class[] interfaces = annotation.getClass().getInterfaces();
+      if (interfaces.length != 1)
+      {
+         throw new RuntimeException("Annotation should implement exactly one interface " + annotation);
+      }
+      Class clazz = interfaces[0];
+      
+      Method[] methods = clazz.getDeclaredMethods();
+      
+      HashMap attributes = new HashMap();
+      
+      for (int j = 0 ; j < methods.length ; j++)
+      {
+         try
+         {
+            Class typeClass = methods[j].getReturnType();
+            Object val = methods[j].invoke(annotation, new Object[0]);
+
+            TypeInfo typeInfo = typeInfoFactory.getTypeInfo(typeClass);
+
+            Value value = createValue(annotationHelper, typeInfo, val);
+            
+            attributes.put(methods[j].getName(), value);
+         }
+         catch (Throwable e)
+         {
+            throw new RuntimeException(e);
+         }
+      }
+      return new AnnotationValueImpl(info, attributes);
+   }
+
+   
    private static Object[] getArray(ArrayInfo arrayInfo, Object value)
    {
       TypeInfo componentType = arrayInfo.getComponentType();

@@ -328,38 +328,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
    public AnnotationValue createAnnotationValue(AnnotationInfo info, Object ann)
    {
-      Annotation annotation = (Annotation)ann;
-      //Class clazz = annotation.annotationType();//Throwa an execption: no default value: org.jboss.test.classinfo.support.ValueAnnotation.annotationType()
-      Class[] interfaces = annotation.getClass().getInterfaces();
-      if (interfaces.length != 1)
-      {
-         throw new RuntimeException("Annotation should implement exactly one interface " + annotation);
-      }
-      Class clazz = interfaces[0];
-      
-      Method[] methods = clazz.getDeclaredMethods();
-      
-      HashMap attributes = new HashMap();
-      
-      for (int j = 0 ; j < methods.length ; j++)
-      {
-         try
-         {
-            Class typeClass = methods[j].getReturnType();
-            Object val = methods[j].invoke(annotation, new Object[0]);
-
-            TypeInfo typeInfo = getTypeInfo(typeClass);
-
-            Value value = AnnotationValueFactory.createValue(this, typeInfo, val);
-            
-            attributes.put(methods[j].getName(), value);
-         }
-         catch (Throwable e)
-         {
-            throw new RuntimeException(e);
-         }
-      }
-      return new AnnotationValueImpl(info, attributes);
+      return AnnotationValueFactory.createAnnotationValue(this, this, info, ann);
    }
    
 }
