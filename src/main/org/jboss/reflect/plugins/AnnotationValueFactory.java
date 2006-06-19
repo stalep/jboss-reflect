@@ -23,6 +23,8 @@ package org.jboss.reflect.plugins;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.HashMap;
 
 import org.jboss.reflect.spi.AnnotationInfo;
@@ -92,7 +94,7 @@ public class AnnotationValueFactory
       }
       Class clazz = interfaces[0];
       
-      Method[] methods = clazz.getDeclaredMethods();
+      Method[] methods = getDeclaredMethods(clazz);
       
       HashMap attributes = new HashMap();
       
@@ -204,6 +206,23 @@ public class AnnotationValueFactory
          }
           
          return ret;
+      }
+   }
+   
+   private static Method[] getDeclaredMethods(final Class clazz)
+   {
+      if (System.getSecurityManager() == null)
+         return clazz.getDeclaredMethods();
+      else
+      {
+         PrivilegedAction action = new PrivilegedAction()
+         {
+            public Object run()
+            {
+               return clazz.getDeclaredMethods();
+            }
+         };
+         return (Method[]) AccessController.doPrivileged(action);
       }
    }
 }

@@ -90,11 +90,11 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       Annotation[] annotations = null;
       if (obj instanceof AccessibleObject)
       {
-         annotations = ((AccessibleObject)obj).getAnnotations();
+         annotations = readAnnotations((AccessibleObject)obj);
       }
       else if (obj instanceof Class)
       {
-         annotations = ((Class)obj).getAnnotations();
+         annotations = readAnnotations((Class)obj);
       }
       else
       {
@@ -331,6 +331,41 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          return (Method[]) AccessController.doPrivileged(action);
       }
    }
+
+   private Annotation[] readAnnotations(final AccessibleObject ao)
+   {
+      if (System.getSecurityManager() == null)
+         return ao.getAnnotations();
+      else
+      {
+         PrivilegedAction action = new PrivilegedAction()
+         {
+            public Object run()
+            {
+               return ao.getAnnotations();
+            }
+         };
+         return (Annotation[]) AccessController.doPrivileged(action);
+      }
+   }
+   
+   private Annotation[] readAnnotations(final Class clazz)
+   {
+      if (System.getSecurityManager() == null)
+         return clazz.getAnnotations();
+      else
+      {
+         PrivilegedAction action = new PrivilegedAction()
+         {
+            public Object run()
+            {
+               return clazz.getAnnotations();
+            }
+         };
+         return (Annotation[]) AccessController.doPrivileged(action);
+      }
+   }
+   
 
    protected AnnotationValue[][] getParameterAnnotations(Annotation[][] annotations)
    {

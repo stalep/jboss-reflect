@@ -25,7 +25,6 @@ import junit.framework.Test;
 
 import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.test.AbstractTestDelegate;
 
 /**
  * Introspection ClassInfo Test Case.
@@ -50,12 +49,4 @@ public class IntrospectionAnnotatedClassInfoTestCase extends AnnotatedClassInfoT
       return new IntrospectionTypeInfoFactory();
    }
 
-   //FIXME Override from ContainerTest to set enableSecurity to false since AccessibleObject.getAnnotations() fails otherwise
-   public static AbstractTestDelegate getDelegate(Class clazz) throws Exception
-   {
-      System.out.println("DISABLING SECURITY");
-      AbstractTestDelegate delegate = new AbstractTestDelegate(clazz);
-      delegate.enableSecurity = false;
-      return delegate;
-   }
 }
