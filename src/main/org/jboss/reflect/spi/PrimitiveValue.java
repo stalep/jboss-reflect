@@ -92,7 +92,7 @@ public class PrimitiveValue extends JBossObject implements Serializable, Value
    public int hashCode()
    {
       int result;
-      result = value.hashCode();
+      result = (value != null) ? value.hashCode() : 0;
       result = 29 * result + type.hashCode();
       return result;
    }

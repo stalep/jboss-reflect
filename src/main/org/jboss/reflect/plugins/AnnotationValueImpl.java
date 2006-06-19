@@ -109,7 +109,7 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
    protected void calculateHash()
    {
       int result;
-      result = annotationType.hashCode();
+      result = (annotationType != null) ? annotationType.hashCode() : 0;
       result = 29 * result + attributeValues.hashCode();
       hash = result;
    }

@@ -98,7 +98,7 @@ public class ClassValueImpl extends JBossObject implements ClassValue, Serializa
    protected void calculateHash()
    {
       int result;
-      result = value.hashCode();
+      result = (value != null) ? value.hashCode() : 0;
       result = 29 * result + type.hashCode();
       hash = result;
    }
