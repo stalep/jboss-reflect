@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,37 +19,49 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.metadata.spi.retrieval.basic;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
+import org.jboss.metadata.spi.loader.MetaDataLoader;
+import org.jboss.metadata.spi.retrieval.Item;
 
 /**
- * All Test Suite.
+ * BasicItem.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public abstract class BasicItem<T> implements Item<T>
 {
-   public static void main(String[] args)
+   /** The loader */
+   private MetaDataLoader loader;
+
+   /** Whether this is valid */
+   private AtomicBoolean valid = new AtomicBoolean(true);
+
+   /**
+    * Create a new BasicItem.
+    * 
+    * @param loader the loader
+    */
+   public BasicItem(MetaDataLoader loader)
    {
-      TestRunner.run(suite());
+      this.loader = loader;
+   }
+   
+   public boolean isCachable()
+   {
+      return loader.isCachable(this);
    }
 
-   public static Test suite()
+   public boolean isValid()
    {
-      TestSuite suite = new TestSuite("All Tests");
-
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
-      
-      return suite;
+      return valid.get();
+   }
+   
+   public void invalidate()
+   {
+      this.valid.set(false);
    }
 }

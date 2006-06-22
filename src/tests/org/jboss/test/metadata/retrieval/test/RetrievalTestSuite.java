@@ -19,23 +19,19 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.test.metadata.retrieval.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
-
 /**
- * All Test Suite.
+ * RetrievalTestSuite.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public class RetrievalTestSuite extends TestSuite
 {
    public static void main(String[] args)
    {
@@ -44,11 +40,12 @@ public class ContainerAllTestSuite extends TestSuite
 
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("All Tests");
+      TestSuite suite = new TestSuite("Retrieval Tests");
 
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
+      suite.addTest(new TestSuite(HelpersUnitTestCase.class));
+      suite.addTest(new TestSuite(SimpleUnitTestCase.class));
+      suite.addTest(new TestSuite(BasicUnitTestCase.class));
+      suite.addTest(new TestSuite(CummulativeUnitTestCase.class));
       
       return suite;
    }

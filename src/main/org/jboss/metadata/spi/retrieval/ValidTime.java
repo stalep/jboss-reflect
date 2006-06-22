@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,37 +19,50 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.metadata.spi.retrieval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * All Test Suite.
+ * ValidTime.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public class ValidTime
 {
-   public static void main(String[] args)
+   /** The serialVersionUID */
+   private static final long serialVersionUID = 1075815265759870744L;
+
+   /** The next valid time */
+   private static final AtomicLong next = new AtomicLong(Long.MIN_VALUE);
+   
+   /** This valid time */
+   private volatile long value;
+   
+   /**
+    * Create a new ValidTime.
+    */
+   public ValidTime()
    {
-      TestRunner.run(suite());
+      value = next.get();
+   }
+   
+   /**
+    * Get the valid time
+    * 
+    * @return the valid time
+    */
+   public long getValidTime()
+   {
+      return value;
    }
 
-   public static Test suite()
+   /**
+    * Invalidate
+    */
+   public void invalidate()
    {
-      TestSuite suite = new TestSuite("All Tests");
-
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
-      
-      return suite;
+      value = next.incrementAndGet();
    }
 }

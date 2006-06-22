@@ -19,23 +19,19 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.test.metadata.context.cache.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
-
 /**
- * All Test Suite.
+ * CacheContextTestSuite.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public class CacheContextTestSuite extends TestSuite
 {
    public static void main(String[] args)
    {
@@ -44,11 +40,16 @@ public class ContainerAllTestSuite extends TestSuite
 
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("All Tests");
+      TestSuite suite = new TestSuite("Cache Context Tests");
 
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
+      suite.addTest(new TestSuite(CacheContextBasicAnnotationsUnitTestCase.class));
+      suite.addTest(new TestSuite(CacheParentContextBasicAnnotationsUnitTestCase.class));
+      suite.addTest(new TestSuite(CacheContextBasicMetaDataUnitTestCase.class));
+      suite.addTest(new TestSuite(CacheParentContextBasicMetaDataUnitTestCase.class));
+      suite.addTest(new TestSuite(CacheMetaDataContextAnnotationUnitTestCase.class));
+      suite.addTest(new TestSuite(CacheMetaDataContextMetaDataUnitTestCase.class));
+      suite.addTest(new TestSuite(SimpleCacheMetaDataContextUnitTestCase.class));
+      suite.addTest(new TestSuite(SimpleCacheParentMetaDataContextUnitTestCase.class));
       
       return suite;
    }

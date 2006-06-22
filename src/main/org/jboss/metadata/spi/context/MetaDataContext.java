@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,37 +19,45 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.metadata.spi.context;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import java.util.List;
 
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
+import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
 
 /**
- * All Test Suite.
+ * MetaDataContext.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public interface MetaDataContext extends MetaDataRetrieval
 {
-   public static void main(String[] args)
-   {
-      TestRunner.run(suite());
-   }
+   /**
+    * Get the retrievals
+    * 
+    * @return the retrievals
+    */
+   List<MetaDataRetrieval> getRetrievals();
+   
+   /**
+    * Append a meta data retrieval
+    * 
+    * @param retrieval the meta data retrieval
+    */
+   void append(MetaDataRetrieval retrieval);
 
-   public static Test suite()
-   {
-      TestSuite suite = new TestSuite("All Tests");
+   /**
+    * Prepend a meta data retrieval
+    * 
+    * @param retrieval the meta data retrieval
+    */
+   void prepend(MetaDataRetrieval retrieval);
 
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
-      
-      return suite;
-   }
+   /**
+    * Remove a meta data retrieval
+    * 
+    * @param retrieval the meta data retrieval
+    */
+   void remove(MetaDataRetrieval retrieval);
 }

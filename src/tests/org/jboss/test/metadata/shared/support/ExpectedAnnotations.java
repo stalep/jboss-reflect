@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,37 +19,50 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.test.metadata.shared.support;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
+import java.lang.annotation.Annotation;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * All Test Suite.
+ * ExpectedAnnotations.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public class ExpectedAnnotations
 {
-   public static void main(String[] args)
+   /** The annotations */
+   private Set<Class<? extends Annotation>> annotationTypes = new HashSet<Class<? extends Annotation>>();
+   
+   /**
+    * Add an annotation type
+    * 
+    * @param annotationType the annotation type
+    */
+   public void add(Class<? extends Annotation> annotationType)
    {
-      TestRunner.run(suite());
+      annotationTypes.add(annotationType);
    }
-
-   public static Test suite()
+   
+   /**
+    * Remove an annotation type
+    * 
+    * @param annotationType the annotation type
+    */
+   public void remove(Class<? extends Annotation> annotationType)
    {
-      TestSuite suite = new TestSuite("All Tests");
-
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
-      
-      return suite;
+      annotationTypes.remove(annotationType);
+   }
+   
+   /**
+    * Get the annotation types
+    * 
+    * @return the annotation types
+    */
+   public Set<Class<? extends Annotation>> get()
+   {
+      return annotationTypes;
    }
 }

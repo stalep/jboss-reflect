@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,37 +19,35 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.test.metadata.loader.threadlocal.test;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
+import org.jboss.metadata.plugins.loader.thread.ThreadLocalMetaDataLoader;
+import org.jboss.test.metadata.loader.MutableMetaDataTest;
+import org.jboss.test.metadata.shared.support.MutableMetaDataLoaderToMetaDataBridge;
 
 /**
- * All Test Suite.
+ * ThreadLocalLoaderMutableMetaDataUnitTestCase.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public class ThreadLocalLoaderMutableMetaDataUnitTestCase extends MutableMetaDataTest
 {
-   public static void main(String[] args)
+   ThreadLocalMetaDataLoader loader = ThreadLocalMetaDataLoader.INSTANCE;
+
+   public ThreadLocalLoaderMutableMetaDataUnitTestCase(String name)
    {
-      TestRunner.run(suite());
+      super(name);
    }
 
-   public static Test suite()
+   protected void tearDown() throws Exception
    {
-      TestSuite suite = new TestSuite("All Tests");
+      loader.clear();
+      super.tearDown();
+   }
 
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
-      
-      return suite;
+   protected MutableMetaDataLoaderToMetaDataBridge setupEmpty()
+   {
+      return new MutableMetaDataLoaderToMetaDataBridge(loader);
    }
 }

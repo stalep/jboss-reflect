@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,37 +19,43 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.metadata.spi.retrieval.simple;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import java.lang.annotation.Annotation;
 
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
+import org.jboss.metadata.spi.retrieval.AnnotationItem;
 
 /**
- * All Test Suite.
+ * SimpleAnnotationItem.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public class SimpleAnnotationItem<T extends Annotation> extends SimpleMetaDataItem<T> implements AnnotationItem<T>
 {
-   public static void main(String[] args)
+   /**
+    * Create a new SimpleAnnotationItem.
+    * 
+    * @param annotation the annotation
+    */
+   public SimpleAnnotationItem(T annotation)
    {
-      TestRunner.run(suite());
+      super(annotation.annotationType().getName(),annotation);
    }
 
-   public static Test suite()
+   public T getAnnotation()
    {
-      TestSuite suite = new TestSuite("All Tests");
-
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
+      return getValue();
+   }
+   
+   public boolean equals(Object object)
+   {
+      if (object == this)
+         return true;
+      if (object == null || object instanceof AnnotationItem == false)
+         return false;
       
-      return suite;
+      AnnotationItem other = (AnnotationItem) object;
+      return getAnnotation().annotationType().equals(other.getAnnotation().annotationType());
    }
 }
