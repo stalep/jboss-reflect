@@ -71,7 +71,7 @@ public abstract class ClassInfoTest extends ContainerTest
       assertNotNull(supercinfo);
       assertEquals(Object.class.getName(), supercinfo.getName());
       
-      HashSet expected = new HashSet();
+      HashSet<String> expected = new HashSet<String>();
       expected.add(Serializable.class.getName());
       expected.add(SimpleInterface.class.getName());
       checkTypeSet(expected, cinfo.getInterfaces());
@@ -186,14 +186,14 @@ public abstract class ClassInfoTest extends ContainerTest
       return anotherInterfaceInfo;
    }
 
-   protected void checkTypeSet(HashSet expected, TypeInfo[] typeInfos) throws Throwable
+   protected void checkTypeSet(HashSet<String> expected, TypeInfo[] typeInfos) throws Throwable
    {
-      HashSet actual = new HashSet();
+      HashSet<String> actual = new HashSet<String>();
       for (int i = 0; i < typeInfos.length; ++i)
          actual.add(typeInfos[i].getName());
       
-      HashSet expectClone = new HashSet(expected);
-      HashSet actualClone = new HashSet(actual);
+      HashSet<String> expectClone = new HashSet<String>(expected);
+      HashSet<String> actualClone = new HashSet<String>(actual);
       
       getLog().debug("checkTypeSet expect=" + expected);
       getLog().debug("checkTypeSet actual=" + actual);
@@ -205,10 +205,10 @@ public abstract class ClassInfoTest extends ContainerTest
       assertTrue("Did not expect " + actualClone, actualClone.isEmpty());
    }
 
-   protected void checkFields(Set expected, FieldInfo[] actually) throws Throwable
+   protected void checkFields(Set<FieldInfo> expected, FieldInfo[] actually) throws Throwable
    {
-      HashSet expectClone = new HashSet(expected);
-      ArrayList actualClone = new ArrayList(Arrays.asList(actually));
+      HashSet<FieldInfo> expectClone = new HashSet<FieldInfo>(expected);
+      ArrayList<FieldInfo> actualClone = new ArrayList<FieldInfo>(Arrays.asList(actually));
       
       getLog().debug("checkFields expect=" + expectClone);
       getLog().debug("checkFields actual=" + actualClone);
@@ -219,13 +219,13 @@ public abstract class ClassInfoTest extends ContainerTest
       actualClone.removeAll(expected);
       assertTrue("Did not expect " + actualClone, actualClone.isEmpty());
 
-      expectClone = new HashSet(expected);
-      actualClone = new ArrayList(Arrays.asList(actually));
+      expectClone = new HashSet<FieldInfo>(expected);
+      actualClone = new ArrayList<FieldInfo>(Arrays.asList(actually));
       for (Iterator i = expectClone.iterator(); i.hasNext();)
       {
          FieldInfo expect = (FieldInfo) i.next();
          int j = actualClone.indexOf(expect);
-         FieldInfo actual = (FieldInfo) actualClone.get(j);
+         FieldInfo actual = actualClone.get(j);
          compareField(expect, actual);
       }
    }
@@ -241,10 +241,10 @@ public abstract class ClassInfoTest extends ContainerTest
       assertEquals("Annotations", expect.getAnnotations(), actual.getAnnotations());
    }
    
-   protected void checkMethods(Set expected, MethodInfo[] actually) throws Throwable
+   protected void checkMethods(Set<MethodInfo> expected, MethodInfo[] actually) throws Throwable
    {
-      HashSet expectClone = new HashSet(expected);
-      ArrayList actualClone = new ArrayList(Arrays.asList(actually));
+      HashSet<MethodInfo> expectClone = new HashSet<MethodInfo>(expected);
+      ArrayList<MethodInfo> actualClone = new ArrayList<MethodInfo>(Arrays.asList(actually));
       
       getLog().debug("checkMethods expect=" + expectClone);
       getLog().debug("checkMethods actual=" + actualClone);
@@ -255,13 +255,13 @@ public abstract class ClassInfoTest extends ContainerTest
       actualClone.removeAll(expected);
       assertTrue("Did not expect " + actualClone, actualClone.isEmpty());
 
-      expectClone = new HashSet(expected);
-      actualClone = new ArrayList(Arrays.asList(actually));
+      expectClone = new HashSet<MethodInfo>(expected);
+      actualClone = new ArrayList<MethodInfo>(Arrays.asList(actually));
       for (Iterator i = expectClone.iterator(); i.hasNext();)
       {
          MethodInfo expect = (MethodInfo) i.next();
          int j = actualClone.indexOf(expect);
-         MethodInfo actual = (MethodInfo) actualClone.get(j);
+         MethodInfo actual = actualClone.get(j);
          compareMethod(expect, actual);
       }
    }
@@ -281,10 +281,10 @@ public abstract class ClassInfoTest extends ContainerTest
       assertEquals("Annotations", expect.getAnnotations(), actual.getAnnotations());
    }
 
-   protected void checkConstructors(Set expected, ConstructorInfo[] actually) throws Throwable
+   protected void checkConstructors(Set<ConstructorInfo> expected, ConstructorInfo[] actually) throws Throwable
    {
-      HashSet expectClone = new HashSet(expected);
-      ArrayList actualClone = new ArrayList(Arrays.asList(actually));
+      HashSet<ConstructorInfo> expectClone = new HashSet<ConstructorInfo>(expected);
+      ArrayList<ConstructorInfo> actualClone = new ArrayList<ConstructorInfo>(Arrays.asList(actually));
       
       getLog().debug("checkConstructors expect=" + expectClone);
       getLog().debug("checkConstructors actual=" + actualClone);
@@ -295,13 +295,13 @@ public abstract class ClassInfoTest extends ContainerTest
       actualClone.removeAll(expected);
       assertTrue("Did not expect " + actualClone, actualClone.isEmpty());
 
-      expectClone = new HashSet(expected);
-      actualClone = new ArrayList(Arrays.asList(actually));
+      expectClone = new HashSet<ConstructorInfo>(expected);
+      actualClone = new ArrayList<ConstructorInfo>(Arrays.asList(actually));
       for (Iterator i = expectClone.iterator(); i.hasNext();)
       {
          ConstructorInfo expect = (ConstructorInfo) i.next();
          int j = actualClone.indexOf(expect);
-         ConstructorInfo actual = (ConstructorInfo) actualClone.get(j);
+         ConstructorInfo actual = actualClone.get(j);
          compareConstructor(expect, actual);
       }
    }
@@ -318,7 +318,7 @@ public abstract class ClassInfoTest extends ContainerTest
       assertEquals("Annotations", expect.getAnnotations(), actual.getAnnotations());
    }
    
-   protected Set getSimpleInterfaceFields()
+   protected Set<FieldInfo> getSimpleInterfaceFields()
    {
       TypeInfoFactory factory = getTypeInfoFactory();
 
@@ -326,12 +326,12 @@ public abstract class ClassInfoTest extends ContainerTest
       
       TypeInfo objectType = factory.getTypeInfo(Object.class);
       
-      HashSet result = new HashSet();
+      HashSet<FieldInfo> result = new HashSet<FieldInfo>();
       result.add(new FieldInfoImpl(null, "A_CONSTANT", objectType, ModifierInfo.PUBLIC_CONSTANT, simpleInterface));
       return result;
    }
    
-   protected Set getSimpleInterfaceMethods()
+   protected Set<MethodInfo> getSimpleInterfaceMethods()
    {
       TypeInfoFactory factory = getTypeInfoFactory();
 
@@ -361,7 +361,7 @@ public abstract class ClassInfoTest extends ContainerTest
 
       TypeInfo voidType = PrimitiveInfo.VOID;
       
-      HashSet result = new HashSet();
+      HashSet<MethodInfo> result = new HashSet<MethodInfo>();
       result.add(new MethodInfoImpl(null, "getWithoutSetter", stringType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC_ABSTRACT, simpleInterface));
       result.add(new MethodInfoImpl(null, "getWithNoSetterOnInterface", stringType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC_ABSTRACT, simpleInterface));
       result.add(new MethodInfoImpl(null, "setWithNoGetterOnInterface", voidType, objectParameters, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC_ABSTRACT, simpleInterface));
@@ -403,7 +403,7 @@ public abstract class ClassInfoTest extends ContainerTest
       return new MethodInfoImpl(null, "someMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC_ABSTRACT, anotherInterface);
    }
    
-   protected Set getSimpleBeanFields()
+   protected Set<FieldInfo> getSimpleBeanFields()
    {
       TypeInfoFactory factory = getTypeInfoFactory();
 
@@ -413,7 +413,7 @@ public abstract class ClassInfoTest extends ContainerTest
       
       TypeInfo objectType = factory.getTypeInfo(Object.class);
       
-      HashSet result = new HashSet();
+      HashSet<FieldInfo> result = new HashSet<FieldInfo>();
       result.add(new FieldInfoImpl(null, "PUBLIC_CONSTANT", objectType, ModifierInfo.PUBLIC_CONSTANT, simpleBean));
       result.add(new FieldInfoImpl(null, "PACKAGE_PRIVATE_CONSTANT", objectType, ModifierInfo.PACKAGE_CONSTANT, simpleBean));
       result.add(new FieldInfoImpl(null, "PROTECTED_CONSTANT", objectType, ModifierInfo.PROTECTED_CONSTANT, simpleBean));
@@ -426,7 +426,7 @@ public abstract class ClassInfoTest extends ContainerTest
       return result;
    }
    
-   protected Set getSimpleBeanMethods()
+   protected Set<MethodInfo> getSimpleBeanMethods()
    {
       TypeInfoFactory factory = getTypeInfoFactory();
 
@@ -456,7 +456,7 @@ public abstract class ClassInfoTest extends ContainerTest
 
       TypeInfo voidType = PrimitiveInfo.VOID;
       
-      HashSet result = new HashSet();
+      HashSet<MethodInfo> result = new HashSet<MethodInfo>();
       result.add(new MethodInfoImpl(null, "getWithoutSetter", stringType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC, simpleBean));
       result.add(new MethodInfoImpl(null, "getWithNoSetterOnInterface", stringType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC, simpleBean));
       result.add(new MethodInfoImpl(null, "setWithNoGetterOnInterface", voidType, objectParameters, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC, simpleBean));
@@ -505,7 +505,7 @@ public abstract class ClassInfoTest extends ContainerTest
       return new MethodInfoImpl(null, "someMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC, anotherBean);
    }
    
-   protected Set getSimpleBeanConstructors()
+   protected Set<ConstructorInfo> getSimpleBeanConstructors()
    {
       TypeInfoFactory factory = getTypeInfoFactory();
 
@@ -527,7 +527,7 @@ public abstract class ClassInfoTest extends ContainerTest
       ParameterInfo objectParam = new ParameterInfoImpl(null, "arg0", objectType);
       ParameterInfo[] objectParameters = new ParameterInfo[] { objectParam };
 
-      HashSet result = new HashSet();
+      HashSet<ConstructorInfo> result = new HashSet<ConstructorInfo>();
       result.add(new ConstructorInfoImpl(null, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC, simpleBean));
       result.add(new ConstructorInfoImpl(null, stringParameters, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC, simpleBean));
       result.add(new ConstructorInfoImpl(null, objectParameters, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PACKAGE, simpleBean));

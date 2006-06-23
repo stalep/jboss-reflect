@@ -96,7 +96,7 @@ public class AnnotationValueFactory
       
       Method[] methods = getDeclaredMethods(clazz);
       
-      HashMap attributes = new HashMap();
+      HashMap<String, Value> attributes = new HashMap<String, Value>();
       
       for (int j = 0 ; j < methods.length ; j++)
       {
@@ -215,14 +215,14 @@ public class AnnotationValueFactory
          return clazz.getDeclaredMethods();
       else
       {
-         PrivilegedAction action = new PrivilegedAction()
+         PrivilegedAction<Method[]> action = new PrivilegedAction<Method[]>()
          {
-            public Object run()
+            public Method[] run()
             {
                return clazz.getDeclaredMethods();
             }
          };
-         return (Method[]) AccessController.doPrivileged(action);
+         return AccessController.doPrivileged(action);
       }
    }
 }

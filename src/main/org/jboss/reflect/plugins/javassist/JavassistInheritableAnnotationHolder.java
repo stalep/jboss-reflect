@@ -37,7 +37,7 @@ import org.jboss.reflect.spi.AnnotationValue;
 public abstract class JavassistInheritableAnnotationHolder extends JavassistAnnotatedInfo
 {
    /** All annotations Map<String, AnnotationValue> */
-   protected Map allAnnotations;
+   protected Map<String, AnnotationValue> allAnnotations;
 
    /** All annotations */
    protected AnnotationValue[] allAnnotationsArray = NOT_CONFIGURED;
@@ -74,7 +74,7 @@ public abstract class JavassistInheritableAnnotationHolder extends JavassistAnno
    public AnnotationValue getAnnotation(String name)
    {
       getAnnotations();
-      return (AnnotationValue) allAnnotations.get(name);
+      return allAnnotations.get(name);
    }
 
    public boolean isAnnotationPresent(String name)
@@ -96,13 +96,13 @@ public abstract class JavassistInheritableAnnotationHolder extends JavassistAnno
 
       if (annotations != null && annotations.length > 0)
       {
-         annotationMap = new HashMap();
+         annotationMap = new HashMap<String, AnnotationValue>();
          annotationsArray = annotations;
          for (int i = 0; i < annotations.length; i++)
          {
             annotationMap.put(annotations[i].getAnnotationType().getName(), annotations[i]);
          }
-         allAnnotations = new HashMap();
+         allAnnotations = new HashMap<String, AnnotationValue>();
 
          if (superHolder != null && superAllAnnotations != null && superAllAnnotations.length != 0)
          {
@@ -121,7 +121,7 @@ public abstract class JavassistInheritableAnnotationHolder extends JavassistAnno
          for (int i = 0; i < annotations.length; i++)
             allAnnotations.put(annotations[i].getAnnotationType().getName(), annotations[i]);
 
-         allAnnotationsArray = (AnnotationValue[])allAnnotations.values().toArray(new AnnotationValue[allAnnotations.size()]);
+         allAnnotationsArray = allAnnotations.values().toArray(new AnnotationValue[allAnnotations.size()]);
       }
       else
       {
@@ -138,7 +138,7 @@ public abstract class JavassistInheritableAnnotationHolder extends JavassistAnno
     *
     * @return the map
     */
-   protected Map getAllAnnotations()
+   protected Map<String, AnnotationValue> getAllAnnotations()
    {
       if (allAnnotations == null)
          setupAnnotations(annotationHelper.getAnnotations(ctClass));

@@ -27,9 +27,13 @@ import java.util.Set;
 
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
+import org.jboss.beans.info.spi.EventInfo;
+import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ConstructorInfo;
+import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.repository.spi.MetaDataContext;
 import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossObject;
@@ -50,16 +54,16 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    protected ClassAdapter classAdapter;
    
    /** The properties */
-   protected Set properties;
+   protected Set<PropertyInfo> properties;
    
    /** The constructors */
-   protected Set constructors;
+   protected Set<ConstructorInfo> constructors;
    
    /** The methods */
-   protected Set methods;
+   protected Set<MethodInfo> methods;
    
    /** The events */
-   protected Set events;
+   protected Set<EventInfo> events;
    
    /** The BeanInfoFactory */
    protected BeanInfoFactory beanInfoFactory;
@@ -75,8 +79,8 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
     * @param methods the methods
     * @param events the events
     */
-   public AbstractBeanInfo(BeanInfoFactory beanInfoFactory, ClassAdapter classAdapter, Set properties, Set constructors,
-         Set methods, Set events)
+   public AbstractBeanInfo(BeanInfoFactory beanInfoFactory, ClassAdapter classAdapter, Set<PropertyInfo> properties, Set<ConstructorInfo> constructors,
+         Set<MethodInfo> methods, Set<EventInfo> events)
    {
       this.beanInfoFactory = beanInfoFactory;
       this.name = classAdapter.getClassInfo().getName();
@@ -111,12 +115,12 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return name;
    }
    
-   public Set getProperties()
+   public Set<PropertyInfo> getProperties()
    {
       return properties;
    }
    
-   public void setProperties(Set properties)
+   public void setProperties(Set<PropertyInfo> properties)
    {
       this.properties = properties;
    }
@@ -141,32 +145,32 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return classAdapter.getMetaDataContextFactory();
    }
 
-   public Set getConstructors()
+   public Set<ConstructorInfo> getConstructors()
    {
       return constructors;
    }
 
-   public void setConstructors(Set constructors)
+   public void setConstructors(Set<ConstructorInfo> constructors)
    {
       this.constructors = constructors;
    }
    
-   public Set getEvents()
+   public Set<EventInfo> getEvents()
    {
       return events;
    }
 
-   public void setEvents(Set events)
+   public void setEvents(Set<EventInfo> events)
    {
       this.events = events;
    }
    
-   public Set getMethods()
+   public Set<MethodInfo> getMethods()
    {
       return methods;
    }
 
-   public void setMethods(Set methods)
+   public void setMethods(Set<MethodInfo> methods)
    {
       this.methods = methods;
    }

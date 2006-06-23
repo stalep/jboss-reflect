@@ -204,13 +204,13 @@ public class ReflectionUtils
       {
          if (target == null)
             throw new IllegalArgumentException("Null target for " + context);
-         ArrayList expected = new ArrayList();
+         ArrayList<String> expected = new ArrayList<String>();
          if (parameters != null)
          {
             for (int i = 0; i < parameters.length; ++i)
                expected.add(parameters[i].getName());
          }
-         ArrayList actual = new ArrayList();
+         ArrayList<String> actual = new ArrayList<String>();
          if (arguments != null)
          {
             for (int i = 0; i < arguments.length; ++i)

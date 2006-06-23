@@ -28,11 +28,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.HashMap;
 
 import org.jboss.reflect.plugins.AnnotationHelper;
 import org.jboss.reflect.plugins.AnnotationInfoImpl;
-import org.jboss.reflect.plugins.AnnotationValueImpl;
+import org.jboss.reflect.plugins.AnnotationValueFactory;
 import org.jboss.reflect.plugins.ArrayInfoImpl;
 import org.jboss.reflect.plugins.ClassInfoHelper;
 import org.jboss.reflect.plugins.ClassInfoImpl;
@@ -40,7 +39,6 @@ import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.EnumInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
-import org.jboss.reflect.plugins.AnnotationValueFactory;
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
@@ -48,7 +46,6 @@ import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.reflect.spi.Value;
 import org.jboss.util.collection.WeakClassCache;
 
 /**
@@ -287,14 +284,14 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          return clazz.getDeclaredConstructors();
       else
       {
-         PrivilegedAction action = new PrivilegedAction()
+         PrivilegedAction<Constructor[]> action = new PrivilegedAction<Constructor[]>()
          {
-            public Object run()
+            public Constructor[] run()
             {
                return clazz.getDeclaredConstructors();
             }
          };
-         return (Constructor[]) AccessController.doPrivileged(action);
+         return AccessController.doPrivileged(action);
       }
    }
 
@@ -304,14 +301,14 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          return clazz.getDeclaredFields();
       else
       {
-         PrivilegedAction action = new PrivilegedAction()
+         PrivilegedAction<Field[]> action = new PrivilegedAction<Field[]>()
          {
-            public Object run()
+            public Field[] run()
             {
                return clazz.getDeclaredFields();
             }
          };
-         return (Field[]) AccessController.doPrivileged(action);
+         return AccessController.doPrivileged(action);
       }
    }
 
@@ -321,14 +318,14 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          return clazz.getDeclaredMethods();
       else
       {
-         PrivilegedAction action = new PrivilegedAction()
+         PrivilegedAction<Method[]> action = new PrivilegedAction<Method[]>()
          {
-            public Object run()
+            public Method[] run()
             {
                return clazz.getDeclaredMethods();
             }
          };
-         return (Method[]) AccessController.doPrivileged(action);
+         return AccessController.doPrivileged(action);
       }
    }
 
@@ -338,14 +335,14 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          return ao.getAnnotations();
       else
       {
-         PrivilegedAction action = new PrivilegedAction()
+         PrivilegedAction<Annotation[]> action = new PrivilegedAction<Annotation[]>()
          {
-            public Object run()
+            public Annotation[] run()
             {
                return ao.getAnnotations();
             }
          };
-         return (Annotation[]) AccessController.doPrivileged(action);
+         return AccessController.doPrivileged(action);
       }
    }
    
@@ -355,14 +352,14 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          return clazz.getAnnotations();
       else
       {
-         PrivilegedAction action = new PrivilegedAction()
+         PrivilegedAction<Annotation[]> action = new PrivilegedAction<Annotation[]>()
          {
-            public Object run()
+            public Annotation[] run()
             {
                return clazz.getAnnotations();
             }
          };
-         return (Annotation[]) AccessController.doPrivileged(action);
+         return AccessController.doPrivileged(action);
       }
    }
    

@@ -64,14 +64,14 @@ public class ValueConvertor
     * @return the value or null if there is no editor
     * @throws Throwable for any error
     */
-   public static Object convertValue(Class clazz, Object value) throws Throwable
+   public static Object convertValue(Class<? extends Object> clazz, Object value) throws Throwable
    {
       if (clazz == null)
          throw new IllegalArgumentException("Null class");
       if (value == null)
          return null;
       
-      Class valueClass = value.getClass();
+      Class<? extends Object> valueClass = value.getClass();
       if (clazz.isAssignableFrom(valueClass))
          return value;
 

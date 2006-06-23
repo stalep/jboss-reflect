@@ -55,22 +55,22 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    private JavassistTypeInfoFactoryImpl factory;
 
    /** The class */
-   private Class clazz;
+   private Class<? extends Object> clazz;
 
    /** The constructors */
-   private Map constructors = CollectionsFactory.createLazyMap();
+   private Map<SignatureKey, JavassistConstructorInfo> constructors = CollectionsFactory.createLazyMap();
 
    /** The constructors */
    private ConstructorInfo[] constructorArray = null;
 
    /** The fields */
-   private Map fields = CollectionsFactory.createLazyMap();
+   private Map<String, JavassistFieldInfo> fields = CollectionsFactory.createLazyMap();
 
    /** The fields */
    private FieldInfo[] fieldArray = null;
 
    /** The methods */
-   private Map methods = CollectionsFactory.createLazyMap();
+   private Map<SignatureKey, JavassistMethodInfo> methods = CollectionsFactory.createLazyMap();
 
    /** The methods */
    private MethodInfo[] methodArray = null;
@@ -82,7 +82,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
     * @param ctClass the ctClass
     * @param clazz the class
     */
-   JavassistTypeInfo(JavassistTypeInfoFactoryImpl factory, CtClass ctClass, Class clazz)
+   JavassistTypeInfo(JavassistTypeInfoFactoryImpl factory, CtClass ctClass, Class<? extends Object> clazz)
    {
       super(ctClass, factory);
       this.factory = factory;
@@ -114,7 +114,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return Modifier.isStatic(getModifiers());
    }
 
-   public Class getType()
+   public Class<? extends Object> getType()
    {
       return clazz;
    }
@@ -165,8 +165,8 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
             {
                for (int i = 0; i < declaredConstructors.length; ++i)
                   generateConstructorInfo(declaredConstructors[i]);
-               Collection constructorCollection = constructors.values();
-               constructorArray = (ConstructorInfo[]) constructorCollection.toArray(new ConstructorInfo[constructorCollection.size()]);
+               Collection<JavassistConstructorInfo> constructorCollection = constructors.values();
+               constructorArray = constructorCollection.toArray(new ConstructorInfo[constructorCollection.size()]);
             }
          }
       }
@@ -177,7 +177,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    {
       synchronized (fields)
       {
-         FieldInfo field = (FieldInfo) fields.get(name);
+         FieldInfo field = fields.get(name);
          if (field != null)
             return field;
       }
@@ -209,8 +209,8 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
             {
                for (int i = 0; i < declaredFields.length; ++i)
                   generateFieldInfo(declaredFields[i]);
-               Collection fieldCollection = fields.values();
-               fieldArray = (FieldInfo[]) fieldCollection.toArray(new FieldInfo[fieldCollection.size()]);
+               Collection<JavassistFieldInfo> fieldCollection = fields.values();
+               fieldArray = fieldCollection.toArray(new FieldInfo[fieldCollection.size()]);
             }
          }
       }
@@ -222,7 +222,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       SignatureKey key = new SignatureKey(name, parameters);
       synchronized (methods)
       {
-         MethodInfo method = (MethodInfo) methods.get(key);
+         MethodInfo method = methods.get(key);
          if (method != null)
             return method;
       }
@@ -244,8 +244,8 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
             {
                for (int i = 0; i < declaredMethods.length; ++i)
                   generateMethodInfo(declaredMethods[i]);
-               Collection methodCollection = methods.values();
-               methodArray = (MethodInfo[]) methodCollection.toArray(new MethodInfo[methodCollection.size()]);
+               Collection<JavassistMethodInfo> methodCollection = methods.values();
+               methodArray = methodCollection.toArray(new MethodInfo[methodCollection.size()]);
             }
          }
       }

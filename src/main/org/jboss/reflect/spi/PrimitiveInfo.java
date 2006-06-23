@@ -81,10 +81,10 @@ public class PrimitiveInfo implements TypeInfo, Serializable
    protected final int ordinal;
    
    /** The type */
-   protected final transient Class type;
+   protected final transient Class<? extends Object> type;
 
    /** The primitives */
-   private static HashMap map = new HashMap();
+   private static HashMap<String, PrimitiveInfo> map = new HashMap<String, PrimitiveInfo>();
 
    static
    {
@@ -107,7 +107,7 @@ public class PrimitiveInfo implements TypeInfo, Serializable
     */
    public static PrimitiveInfo valueOf(String name)
    {
-      return (PrimitiveInfo) map.get(name);
+      return map.get(name);
    }
 
    /**
@@ -117,7 +117,7 @@ public class PrimitiveInfo implements TypeInfo, Serializable
     * @param ordinal the oridinal
     * @param type the class
     */
-   protected PrimitiveInfo(String name, int ordinal, Class type)
+   protected PrimitiveInfo(String name, int ordinal, Class<? extends Object> type)
    {
       this.name = name;
       this.ordinal = ordinal;

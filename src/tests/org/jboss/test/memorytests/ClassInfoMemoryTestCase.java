@@ -57,7 +57,7 @@ public class ClassInfoMemoryTestCase extends JBossMemoryTestCase
      ClassLoader oldloader = Thread.currentThread().getContextClassLoader();
      System.out.println("+++oldloader =" + oldloader.toString());
      ClassLoader loader = newClassLoader(ClassInfoMemoryTestCase.class);
-     weakReferenceOnLoader = new WeakReference(loader);
+     weakReferenceOnLoader = new WeakReference<ClassLoader>(loader);
      
      System.out.println("+++newloader =" + loader.toString());
      //step1
@@ -82,7 +82,7 @@ public class ClassInfoMemoryTestCase extends JBossMemoryTestCase
       assertNotNull(supercinfo);
       assertEquals(Object.class.getName(), supercinfo.getName());
       
-      HashSet expected = new HashSet();
+      HashSet<String> expected = new HashSet<String>();
       expected.add(Serializable.class.getName());
       expected.add(simpleBeanInterface.getName());
       checkTypeSet(expected, cinfo.getInterfaces());
@@ -117,14 +117,14 @@ public class ClassInfoMemoryTestCase extends JBossMemoryTestCase
       return cinfo;
    }
    
-   protected void checkTypeSet(HashSet expected, TypeInfo[] typeInfos) throws Throwable
+   protected void checkTypeSet(HashSet<String> expected, TypeInfo[] typeInfos) throws Throwable
    {
-      HashSet actual = new HashSet();
+      HashSet<String> actual = new HashSet<String>();
       for (int i = 0; i < typeInfos.length; ++i)
          actual.add(typeInfos[i].getName());
       
-      HashSet expectClone = new HashSet(expected);
-      HashSet actualClone = new HashSet(actual);
+      HashSet<String> expectClone = new HashSet<String>(expected);
+      HashSet<String> actualClone = new HashSet<String>(actual);
       
       //getLog().debug("checkTypeSet expect=" + expected);
       //getLog().debug("checkTypeSet actual=" + actual);

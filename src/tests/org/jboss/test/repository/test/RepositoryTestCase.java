@@ -46,38 +46,38 @@ public class RepositoryTestCase extends TestCase
    public void testBasictRegistry() throws Throwable
    {
       BasicKernelRepository bkp = new BasicKernelRepository();
-      HashMap baseAttrs = new HashMap();
+      HashMap<String, String> baseAttrs = new HashMap<String, String>();
       baseAttrs.put(CommonNames.DOMAIN, "domain0");
       // Keys from the bottom up (thread - domain)
       Key baseKey = new Key("permissions", baseAttrs);
       BasicMetaData baseData = new BasicMetaData(0, "domain0");
       bkp.addMetaData(baseKey, baseData);
 
-      HashMap clusterAttrs = new HashMap(baseAttrs);
+      HashMap<String, String> clusterAttrs = new HashMap<String, String>(baseAttrs);
       clusterAttrs.put(CommonNames.CLUSTER, "cluster0");
       BasicMetaData clusterData = new BasicMetaData(0, "cluster0");
       Key clusterKey = new Key("permissions", clusterAttrs);
       bkp.addMetaData(clusterKey, clusterData);
 
-      HashMap serverAttrs = new HashMap(clusterAttrs);
+      HashMap<String, String> serverAttrs = new HashMap<String, String>(clusterAttrs);
       serverAttrs.put(CommonNames.SERVER, "server0");
       BasicMetaData serverData = new BasicMetaData(0, "server0");
       Key serverKey = new Key("permissions", serverAttrs);
       bkp.addMetaData(serverKey, serverData);
 
-      HashMap appAttrs = new HashMap(serverAttrs);
+      HashMap<String, String> appAttrs = new HashMap<String, String>(serverAttrs);
       appAttrs.put(CommonNames.APPLICATION, "app0");
       BasicMetaData appData = new BasicMetaData(0, "app0");
       Key appKey = new Key("permissions", appAttrs);
       bkp.addMetaData(appKey, appData);
 
-      HashMap deployAttrs = new HashMap(appAttrs);
+      HashMap<String, String> deployAttrs = new HashMap<String, String>(appAttrs);
       deployAttrs.put(CommonNames.DEPLOYMENT, "deploy0");
       BasicMetaData deployData = new BasicMetaData(0, "deploy0");
       Key deployKey = new Key("permissions", deployAttrs);
       bkp.addMetaData(deployKey, deployData);
 
-      HashMap sessionAttrs = new HashMap(deployAttrs);
+      HashMap<String, String> sessionAttrs = new HashMap<String, String>(deployAttrs);
       sessionAttrs.put(CommonNames.SESSION, "session0");
       BasicMetaData sessionData = new BasicMetaData(0, "session0");
       Key sessionKey = new Key("permissions", sessionAttrs);
@@ -106,7 +106,7 @@ public class RepositoryTestCase extends TestCase
    {
       BasicKernelRepository bkp = new BasicKernelRepository();
 
-      HashMap attrs = new HashMap();
+      HashMap<String, String> attrs = new HashMap<String, String>();
       attrs.put(CommonNames.DOMAIN, "domain0");
       attrs.put(CommonNames.CLUSTER, "cluster0");
       attrs.put(CommonNames.SERVER, "server0");

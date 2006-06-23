@@ -26,6 +26,8 @@ import java.util.Set;
 
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ConstructorInfo;
+import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.repository.spi.MetaDataContext;
 import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossInterface;
@@ -86,56 +88,56 @@ public interface BeanInfo extends JBossInterface
     *
     * @return a Set<PropertyInfo> 
     */
-   Set getProperties();
+   Set<PropertyInfo> getProperties();
    
    /**
     * Set the property information.
     *
     * @param properties a Set<PropertyInfo> 
     */
-   void setProperties(Set properties);
+   void setProperties(Set<PropertyInfo> properties);
    
    /**
     * Get the constructor info.
     *
     * @return a Set<ConstructorInfo> 
     */
-   Set getConstructors();
+   Set<ConstructorInfo> getConstructors();
    
    /**
     * Set the constructor info.
     *
     * @param constructors a Set<ConstructorInfo> 
     */
-   void setConstructors(Set constructors);
+   void setConstructors(Set<ConstructorInfo> constructors);
    
    /**
     * Get the method information.
     *
     * @return a Set<MethodInfo> 
     */
-   Set getMethods();
+   Set<MethodInfo> getMethods();
    
    /**
     * Set the method information.
     *
     * @param methods a Set<MethodInfo> 
     */
-   void setMethods(Set methods);
+   void setMethods(Set<MethodInfo> methods);
    
    /**
     * Get the event information.
     *
     * @return a Set<EventInfo> 
     */
-   Set getEvents();
+   Set<EventInfo> getEvents();
    
    /**
     * set the event information.
     *
     * @param events a Set<EventInfo> 
     */
-   void setEvents(Set events);
+   void setEvents(Set<EventInfo> events);
    
    /**
     * Get the bean info factory

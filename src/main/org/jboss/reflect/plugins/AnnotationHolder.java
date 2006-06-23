@@ -44,7 +44,7 @@ public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Seri
    protected AnnotationValue[] annotationsArray;
 
    /** Annotations map Map<String, AnnotationValue> */
-   protected HashMap annotationMap;
+   protected HashMap<String, AnnotationValue> annotationMap;
 
    /**
     * Create a new annotation holder
@@ -70,7 +70,7 @@ public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Seri
 
    public AnnotationValue getAnnotation(String name)
    {
-      return (AnnotationValue) annotationMap.get(name);
+      return annotationMap.get(name);
    }
 
    public boolean isAnnotationPresent(String name)
@@ -88,7 +88,7 @@ public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Seri
       if (annotations != null && annotations.length > 0)
       {
          this.annotationsArray = annotations;
-         annotationMap = new HashMap();
+         annotationMap = new HashMap<String, AnnotationValue>();
          for (int i = 0; i < annotations.length; i++)
          {
             AnnotationInfo type = annotations[i].getAnnotationType();

@@ -152,7 +152,7 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       AnnotationValue anotherAnnotation = getAnnotationCheckTypeAndName(info, AnotherAnnotation.class.getName());
       AnnotationValue simpleAnnotation = getAnnotationCheckTypeAndName(info, SimpleAnnotation.class.getName());
       
-      HashSet set = new HashSet();
+      HashSet<AnnotationValue> set = new HashSet<AnnotationValue>();
       set.add(anotherAnnotation);
       set.add(simpleAnnotation);
       
@@ -187,7 +187,7 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       AnnotationValue anotherAnnotation = getAnnotationCheckTypeAndName(info, AnotherAnnotation.class.getName());
       AnnotationValue simpleAnnotation = getAnnotationCheckTypeAndName(info, SimpleAnnotation.class.getName());
       
-      HashSet set = new HashSet();
+      HashSet<AnnotationValue> set = new HashSet<AnnotationValue>();
       set.add(anotherAnnotation);
       set.add(simpleAnnotation);
       

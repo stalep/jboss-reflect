@@ -42,16 +42,16 @@ public abstract class InheritableAnnotationHolder extends JBossObject implements
    private static final long serialVersionUID = 3257290210164289843L;
    
    /** Unknown annotations map */
-   static final Map UNKNOWN_ANNOTATIONS_MAP = Collections.unmodifiableMap(new HashMap());
+   static final Map<String, AnnotationValue> UNKNOWN_ANNOTATIONS_MAP = Collections.unmodifiableMap(new HashMap<String, AnnotationValue>());
    
    /** Unknown annotations */
    static final AnnotationValue[] UNKNOWN_ANNOTATIONS = new AnnotationValue[0];
    
    /** Declared annotations Map<String, AnnotationValue> */
-   protected Map declaredAnnotations = UNKNOWN_ANNOTATIONS_MAP;
+   protected Map<String, AnnotationValue> declaredAnnotations = UNKNOWN_ANNOTATIONS_MAP;
    
    /** All annotations Map<String, AnnotationValue> */
-   protected Map allAnnotations = UNKNOWN_ANNOTATIONS_MAP;
+   protected Map<String, AnnotationValue> allAnnotations = UNKNOWN_ANNOTATIONS_MAP;
    
    /** All annotations */
    protected AnnotationValue[] allAnnotationsArray = UNKNOWN_ANNOTATIONS;
@@ -110,7 +110,7 @@ public abstract class InheritableAnnotationHolder extends JBossObject implements
    {
       if (allAnnotations == UNKNOWN_ANNOTATIONS_MAP)
          setupAnnotations(annotationHelper.getAnnotations(annotatedElement));
-      return (AnnotationValue) allAnnotations.get(name);
+      return allAnnotations.get(name);
    }
 
    public boolean isAnnotationPresent(String name)
@@ -132,11 +132,11 @@ public abstract class InheritableAnnotationHolder extends JBossObject implements
       
       if (annotations != null && annotations.length > 0)
       {
-         declaredAnnotations = new HashMap();
+         declaredAnnotations = new HashMap<String, AnnotationValue>();
          declaredAnnotationsArray = annotations;
          for (int i = 0; i < annotations.length; i++)
             declaredAnnotations.put(annotations[i].getAnnotationType().getName(), annotations[i]);
-         allAnnotations = new HashMap();
+         allAnnotations = new HashMap<String, AnnotationValue>();
          
          if (superHolder != null && superAllAnnotations != null && superAllAnnotations.length != 0)
          {
@@ -155,7 +155,7 @@ public abstract class InheritableAnnotationHolder extends JBossObject implements
          for (int i = 0; i < annotations.length; i++)
             allAnnotations.put(annotations[i].getAnnotationType().getName(), annotations[i]);
 
-         allAnnotationsArray = (AnnotationValue[])allAnnotations.values().toArray(new AnnotationValue[allAnnotations.size()]);
+         allAnnotationsArray = allAnnotations.values().toArray(new AnnotationValue[allAnnotations.size()]);
       }
       else
       {
@@ -172,7 +172,7 @@ public abstract class InheritableAnnotationHolder extends JBossObject implements
     * 
     * @return the map
     */
-   protected Map getAllAnnotations()
+   protected Map<String, AnnotationValue> getAllAnnotations()
    {
       if (allAnnotations == UNKNOWN_ANNOTATIONS_MAP)
          setupAnnotations(annotationHelper.getAnnotations(annotatedElement));

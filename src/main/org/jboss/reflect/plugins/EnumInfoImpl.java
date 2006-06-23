@@ -41,7 +41,7 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
    protected EnumConstantInfoImpl[] enumConstants;
    
    /** The constants */
-   protected HashMap constants = new HashMap();
+   protected HashMap<String, EnumConstantInfo> constants = new HashMap<String, EnumConstantInfo>();
 
    /**
     * Create a new EnumInfo.
@@ -79,6 +79,6 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
 
    public EnumConstantInfo getEnumConstant(String name)
    {
-      return (EnumConstantInfo) constants.get(name);
+      return constants.get(name);
    }
 }

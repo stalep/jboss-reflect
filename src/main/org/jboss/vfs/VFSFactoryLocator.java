@@ -96,7 +96,7 @@ public class VFSFactoryLocator
     */
    private static VFSFactory[] loadFactories(URL serviceURL, ClassLoader loader)
    {
-      ArrayList tmp = new ArrayList();
+      ArrayList<VFSFactory> tmp = new ArrayList<VFSFactory>();
       try
       {
          InputStream is = serviceURL.openStream();

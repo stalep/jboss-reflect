@@ -118,7 +118,7 @@ public class PropertyConfiguration extends AbstractConfiguration
     * @return the object
     * @throws Throwable for any error
     */
-   protected Object loadFromProperties(String propertyName, String defaultValue, Class targetClass) throws Throwable
+   protected Object loadFromProperties(String propertyName, String defaultValue, Class<? extends Object> targetClass) throws Throwable
    {
       String value = properties.getProperty(propertyName, defaultValue);
       StringTokenizer tokenizer = new StringTokenizer(value, ":");

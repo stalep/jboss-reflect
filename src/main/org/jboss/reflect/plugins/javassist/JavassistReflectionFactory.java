@@ -230,12 +230,12 @@ public class JavassistReflectionFactory
       // Create it
       try
       {
-         return (JavassistMethod) AccessController.doPrivileged(new PrivilegedExceptionAction()
+         return AccessController.doPrivileged(new PrivilegedExceptionAction<JavassistMethod>()
          {
-            public Object run() throws Exception
+            public JavassistMethod run() throws Exception
             {
                Class clazz = result.toClass();
-               return clazz.newInstance();
+               return (JavassistMethod) clazz.newInstance();
             }
          });
       }
@@ -355,12 +355,12 @@ public class JavassistReflectionFactory
       // Create it
       try
       {
-         return (JavassistConstructor) AccessController.doPrivileged(new PrivilegedExceptionAction()
+         return AccessController.doPrivileged(new PrivilegedExceptionAction<JavassistConstructor>()
          {
-            public Object run() throws Exception
+            public JavassistConstructor run() throws Exception
             {
                Class clazz = result.toClass();
-               return clazz.newInstance();
+               return (JavassistConstructor) clazz.newInstance();
             }
          });
       }
@@ -556,12 +556,12 @@ public class JavassistReflectionFactory
       // Create it
       try
       {
-         return (JavassistField) AccessController.doPrivileged(new PrivilegedExceptionAction()
+         return AccessController.doPrivileged(new PrivilegedExceptionAction<JavassistField>()
          {
-            public Object run() throws Exception
+            public JavassistField run() throws Exception
             {
                Class clazz = result.toClass();
-               return clazz.newInstance();
+               return (JavassistField) clazz.newInstance();
             }
          });
       }

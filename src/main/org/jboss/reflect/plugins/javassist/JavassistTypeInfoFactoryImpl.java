@@ -288,7 +288,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
             
             Method[] methods = clazz.getMethods();
           
-            HashMap attributes = new HashMap();
+            HashMap<String, Value> attributes = new HashMap<String, Value>();
           
             for (int j = 0 ; j < methods.length ; j++)
             {

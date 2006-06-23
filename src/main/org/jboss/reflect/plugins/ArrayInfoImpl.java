@@ -68,7 +68,7 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
 
    public String getName()
    {
-      return componentType.getName() + "[]";
+      return "[L" + componentType.getName() + ";";
    }
    
    public AnnotationValue getAnnotation(String name)

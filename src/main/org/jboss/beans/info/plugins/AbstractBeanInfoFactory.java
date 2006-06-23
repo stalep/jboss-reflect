@@ -25,12 +25,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
+import org.jboss.beans.info.spi.EventInfo;
+import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
@@ -48,7 +51,7 @@ import org.jboss.util.collection.WeakValueHashMap;
 public class AbstractBeanInfoFactory implements BeanInfoFactory
 {
    /** The cache */
-   protected Map cache = new WeakHashMap(); 
+   protected Map<ClassLoader, Map<String, BeanInfo>> cache = new WeakHashMap<ClassLoader, Map<String, BeanInfo>>(); 
    
    protected static boolean isGetter(MethodInfo minfo)
    {
@@ -108,10 +111,10 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          ClassLoader cl = classAdapter.getClassLoader();
          ClassInfo classInfo = classAdapter.getClassInfo();
          String className = classInfo.getName();
-         Map map = (Map) cache.get(cl);
+         Map<String, BeanInfo> map = cache.get(cl);
          if (map != null)
          {
-            BeanInfo info = (BeanInfo) map.get(className);
+            BeanInfo info = map.get(className);
             if (info != null)
                return info;
          }
@@ -119,10 +122,10 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          if (classInfo.isInterface())
             throw new IllegalArgumentException(classInfo.getName() + " is an interface");
 
-         Set constructors = getConstructors(classInfo);
-         Set methods = getMethods(classInfo);
-         Set properties = getProperties(methods);
-         Set events = getEvents(classInfo);
+         Set<ConstructorInfo> constructors = getConstructors(classInfo);
+         Set<MethodInfo> methods = getMethods(classInfo);
+         Set<PropertyInfo> properties = getProperties(methods);
+         Set<EventInfo> events = getEvents(classInfo);
          
          BeanInfo result = createBeanInfo(classAdapter, properties, constructors, methods, events);
          if (map == null)
@@ -144,7 +147,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
     * @param methods the methods
     * @param events the events
     */
-   protected BeanInfo createBeanInfo(ClassAdapter classAdapter, Set properties, Set constructors, Set methods, Set events)
+   protected BeanInfo createBeanInfo(ClassAdapter classAdapter, Set<PropertyInfo> properties, Set<ConstructorInfo> constructors, Set<MethodInfo> methods, Set<EventInfo> events)
    {
       return new AbstractBeanInfo(this, classAdapter, properties, constructors, methods, events);
    }
@@ -155,13 +158,13 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
     * @param classInfo the class info
     * @return the constructors
     */
-   protected Set getConstructors(ClassInfo classInfo)
+   protected Set<ConstructorInfo> getConstructors(ClassInfo classInfo)
    {
       ConstructorInfo[] cinfos = classInfo.getDeclaredConstructors();
       if (cinfos == null || cinfos.length == 0)
          return null;
 
-      HashSet result = new HashSet();
+      HashSet<ConstructorInfo> result = new HashSet<ConstructorInfo>();
       for (int i = 0; i < cinfos.length; ++i)
          result.add(cinfos[i]);
       return result;
@@ -173,9 +176,9 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
     * @param classInfo the class info
     * @return the methods
     */
-   protected Set getMethods(ClassInfo classInfo)
+   protected Set<MethodInfo> getMethods(ClassInfo classInfo)
    {
-      HashSet result = new HashSet();
+      HashSet<MethodInfo> result = new HashSet<MethodInfo>();
       while (classInfo != null)
       {
          MethodInfo[] minfos = classInfo.getDeclaredMethods();
@@ -199,10 +202,10 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
     * @param methods the methods
     * @return the properties
     */
-   protected Set getProperties(Set methods)
+   protected Set<PropertyInfo> getProperties(Set methods)
    {
-      HashMap getters = new HashMap();
-      HashMap setters = new HashMap();
+      HashMap<String, MethodInfo> getters = new HashMap<String, MethodInfo>();
+      HashMap<String, List<MethodInfo>> setters = new HashMap<String, List<MethodInfo>>();
       if (methods.isEmpty() == false)
       {
          for (Iterator i = methods.iterator(); i.hasNext();)
@@ -218,10 +221,10 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
                }
                else if (isSetter(methodInfo))
                {
-                  ArrayList list = (ArrayList) setters.get(upperName);
+                  ArrayList<MethodInfo> list = (ArrayList<MethodInfo>) setters.get(upperName);
                   if (list == null)
                   {
-                     list = new ArrayList();
+                     list = new ArrayList<MethodInfo>();
                      setters.put(upperName, list);
                   }
                   list.add(methodInfo);
@@ -230,7 +233,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          }
       }
 
-      HashSet properties = new HashSet();
+      HashSet<PropertyInfo> properties = new HashSet<PropertyInfo>();
       if (getters.isEmpty() == false)
       {
          for (Iterator i = getters.entrySet().iterator(); i.hasNext();)
@@ -283,7 +286,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
     * @param classInfo the class info
     * @return the events
     */
-   protected Set getEvents(ClassInfo classInfo)
+   protected Set<EventInfo> getEvents(ClassInfo classInfo)
    {
       return null;
    }

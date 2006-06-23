@@ -42,7 +42,7 @@ public class KeyOrderingTestCase extends TestCase
 
    public void testGotRegistry() throws Throwable
    {
-      TreeMap map = new TreeMap();
+      TreeMap<Key, String> map = new TreeMap<Key, String>();
       Key key0 = new Key("permissions:domain=d0,cluster=*,server=host0,app=ear0");
       map.put(key0, "#p0");
       Key key0a = new Key("permissions:domain=d0,cluster=*,server=host0,app=ear0,deployment=ejb0");

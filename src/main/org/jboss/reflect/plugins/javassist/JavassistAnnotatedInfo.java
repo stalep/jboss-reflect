@@ -43,7 +43,7 @@ public abstract class JavassistAnnotatedInfo extends JBossObject implements Anno
    protected AnnotationValue[] annotationsArray = NOT_CONFIGURED;
 
    /** Annotations map Map<String, AnnotationValue> */
-   protected HashMap annotationMap;
+   protected HashMap<String, AnnotationValue> annotationMap;
 
    protected AnnotationHelper annotationHelper;
    
@@ -68,7 +68,7 @@ public abstract class JavassistAnnotatedInfo extends JBossObject implements Anno
    public AnnotationValue getAnnotation(String name)
    {
       getAnnotations();
-      return (AnnotationValue) annotationMap.get(name);
+      return annotationMap.get(name);
    }
 
    public boolean isAnnotationPresent(String name)
@@ -87,7 +87,7 @@ public abstract class JavassistAnnotatedInfo extends JBossObject implements Anno
       if (annotations != null && annotations.length > 0)
       {
          this.annotationsArray = annotations;
-         annotationMap = new HashMap();
+         annotationMap = new HashMap<String, AnnotationValue>();
          for (int i = 0; i < annotations.length; i++)
          {
             AnnotationInfo type = annotations[i].getAnnotationType();

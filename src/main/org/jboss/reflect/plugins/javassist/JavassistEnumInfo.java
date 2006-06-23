@@ -43,11 +43,10 @@ public class JavassistEnumInfo extends JavassistTypeInfo implements EnumInfo
    protected EnumConstantInfoImpl[] enumConstants;
    
    /** The constants */
-   protected HashMap constants = new HashMap();
+   protected HashMap<String, EnumConstantInfo> constants = new HashMap<String, EnumConstantInfo>();
 
-   public JavassistEnumInfo(JavassistTypeInfoFactoryImpl factory, CtClass ctClass, Class clazz)
+   public JavassistEnumInfo(JavassistTypeInfoFactoryImpl factory, CtClass ctClass, Class<? extends Object> clazz)
    {
-      // FIXME JavassistAnnotationInfoImpl constructor
       super(factory, ctClass, clazz);
    }
    /**
@@ -68,7 +67,7 @@ public class JavassistEnumInfo extends JavassistTypeInfo implements EnumInfo
 
    public EnumConstantInfo getEnumConstant(String name)
    {
-      return (EnumConstantInfo) constants.get(name);
+      return constants.get(name);
    }
 
    public boolean equals(Object o)

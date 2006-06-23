@@ -330,9 +330,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return name;
    }
 
-   public Class getType()
+   public Class<? extends Object> getType()
    {
-      return (Class) annotatedElement;
+      return (Class<? extends Object>) annotatedElement;
    }
    
    public Object convertValue(Object value) throws Throwable
@@ -366,7 +366,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    
    protected void toString(JBossStringBuilder buffer)
    {
-      buffer.append("name=").append(name);
+      buffer.append("name=").append(getName());
    }
 
    public boolean equals(Object obj)

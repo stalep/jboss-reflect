@@ -44,11 +44,10 @@ public class JavassistAnnotationInfo extends JavassistTypeInfo implements Annota
    protected AnnotationAttribute[] attributes;
    
    /** Attribute Map<String, AnnotationAttribute> */
-   protected HashMap attributeMap;
+   protected HashMap<String, AnnotationAttribute> attributeMap;
 
-   public JavassistAnnotationInfo(JavassistTypeInfoFactoryImpl factory, CtClass ctClass, Class clazz)
+   public JavassistAnnotationInfo(JavassistTypeInfoFactoryImpl factory, CtClass ctClass, Class<? extends Object> clazz)
    {
-      // FIXME JavassistAnnotationInfoImpl constructor
       super(factory, ctClass, clazz);
    }
 
@@ -63,7 +62,7 @@ public class JavassistAnnotationInfo extends JavassistTypeInfo implements Annota
       if (attributes != null && attributes.length > 0)
       {
          this.attributes = attributes;
-         attributeMap = new HashMap();
+         attributeMap = new HashMap<String, AnnotationAttribute>();
          for (int i = 0; i < attributes.length; i++)
          {
             attributeMap.put(attributes[i].getName(), attributes[i]);
@@ -80,7 +79,7 @@ public class JavassistAnnotationInfo extends JavassistTypeInfo implements Annota
    {
       if (attributeMap == null)
          return null;
-      return (AnnotationAttribute) attributeMap.get(name);
+      return attributeMap.get(name);
    }
 
    public boolean equals(Object o)
