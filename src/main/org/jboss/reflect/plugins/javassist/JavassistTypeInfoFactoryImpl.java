@@ -128,13 +128,11 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          return new ArrayInfoImpl(componentType);
       }
 
-      //FIXME JBAOP-230 Use convenience methods added to javassist
-      int mod = ctClass.getModifiers();
-      if ((mod & AccessFlag.ANNOTATION) != 0)
+      if (ctClass.isAnnotation())
       {
          return new JavassistAnnotationInfo(this, ctClass, clazz);
       }
-      else if ((mod & AccessFlag.ENUM) != 0)
+      else if (ctClass.isEnum())
       {
          return new JavassistEnumInfo(this, ctClass, clazz);
       }
