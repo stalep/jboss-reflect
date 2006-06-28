@@ -3,7 +3,6 @@
 	<name>container</name>
 	<comment></comment>
 	<projects>
-		<project>common</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
