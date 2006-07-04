@@ -125,7 +125,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       if (clazz.isArray())
       {
          TypeInfo componentType = getTypeInfo(clazz.getComponentType());
-         return new ArrayInfoImpl(componentType);
+         return new JavassistArrayInfoImpl(componentType);
       }
 
       if (ctClass.isAnnotation())
