@@ -47,6 +47,8 @@ public interface MetaDataContext
 
    Object getAnnotation(Method m, Class ann);
    
+   List getAnnotationsForMethod(String methodName);
+   
    List getAnnotationsForMethods(String[] methodNames);
    
    boolean hasAnnotation(Method m, String ann);
