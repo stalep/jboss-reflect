@@ -37,6 +37,7 @@ import org.jboss.metadata.spi.retrieval.basic.BasicAnnotationItem;
 import org.jboss.metadata.spi.retrieval.basic.BasicAnnotationsItem;
 import org.jboss.metadata.spi.retrieval.basic.BasicMetaDataItem;
 import org.jboss.metadata.spi.retrieval.basic.BasicMetaDatasItem;
+import org.jboss.metadata.spi.scope.ScopeKey;
 
 /**
  * MemoryMetaDataLoader.
@@ -78,6 +79,29 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader
    public MemoryMetaDataLoader(boolean cachable, boolean restricted)
    {
       super(restricted);
+      this.cachable = cachable;
+   }
+   
+   /**
+    * Create a new MemoryMetaDataLoader.
+    * 
+    * @param key the scope key
+    */
+   public MemoryMetaDataLoader(ScopeKey scope)
+   {
+      this(scope, true, false);
+   }
+   
+   /**
+    * Create a new MemoryMetaDataLoader.
+    * 
+    * @param key the scope key
+    * @param cachable whether items produced should be cachable
+    * @param restricted whether restricted items are allowed
+    */
+   public MemoryMetaDataLoader(ScopeKey scope, boolean cachable, boolean restricted)
+   {
+      super(scope, restricted);
       this.cachable = cachable;
    }
    

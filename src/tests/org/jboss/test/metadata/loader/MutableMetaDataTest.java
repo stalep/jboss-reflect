@@ -23,7 +23,7 @@ package org.jboss.test.metadata.loader;
 
 import org.jboss.test.metadata.AbstractMetaDataTest;
 import org.jboss.test.metadata.shared.support.ExpectedMetaData;
-import org.jboss.test.metadata.shared.support.MutableMetaDataLoaderToMetaDataBridge;
+import org.jboss.test.metadata.shared.support.MetaDataAndMutableMetaData;
 import org.jboss.test.metadata.shared.support.NotPresentType;
 import org.jboss.test.metadata.shared.support.TestMetaData;
 import org.jboss.test.metadata.shared.support.TestMetaData1;
@@ -47,259 +47,259 @@ public abstract class MutableMetaDataTest extends AbstractMetaDataTest
    
    public void testEmpty() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
       
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
 
       assertValidTimeUnchanged(metaData, last);
    }
    
    public void testTestMetaData() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
       
       assertNoMetaData(metaData, TestMetaData.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       last = assertAddMetaDataNoPrevious(metaData, new TestMetaDataImpl(), TestMetaData.class, expected, last);
       assertMetaData(metaData, TestMetaData.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       assertRemoveMetaData(metaData, TestMetaData.class, expected, last);
       assertNoMetaData(metaData, TestMetaData.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
    
    public void testTestMetaData12() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
       
       assertNoMetaData(metaData, TestMetaData1.class);
       assertNoMetaData(metaData, TestMetaData2.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       last = assertAddMetaDataNoPrevious(metaData, new TestMetaData1Impl(), TestMetaData1.class, expected, last);
       assertMetaData(metaData, TestMetaData1.class);
       assertNoMetaData(metaData, TestMetaData2.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
 
       last = assertAddMetaDataNoPrevious(metaData, new TestMetaData2Impl(), TestMetaData2.class, expected, last);
       assertMetaData(metaData, TestMetaData1.class);
       assertMetaData(metaData, TestMetaData2.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       assertRemoveMetaData(metaData, TestMetaData1.class, expected, last);
       assertNoMetaData(metaData, TestMetaData1.class);
       assertMetaData(metaData, TestMetaData2.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
 
       assertRemoveMetaData(metaData, TestMetaData2.class, expected, last);
       assertNoMetaData(metaData, TestMetaData1.class);
       assertNoMetaData(metaData, TestMetaData2.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
    
    public void testAddTwice() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
       
       assertNoMetaData(metaData, TestMetaData.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       last = assertAddMetaDataNoPrevious(metaData, new TestMetaDataImpl(), TestMetaData.class, expected, last);
       assertMetaData(metaData, TestMetaData.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       last = assertAddMetaDataWithPrevious(metaData, new TestMetaDataImpl(), TestMetaData.class, last);
       assertMetaData(metaData, TestMetaData.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
    
    public void testAddTwiceSameObject() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
       
       assertNoMetaData(metaData, TestMetaData.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       TestMetaData object = new TestMetaDataImpl();
       last = assertAddMetaDataNoPrevious(metaData, object, TestMetaData.class, expected, last);
       assertMetaData(metaData, TestMetaData.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       assertAddMetaDataWithPreviousSameObject(metaData, object, TestMetaData.class, last);
       assertMetaData(metaData, TestMetaData.class);
       assertNoMetaData(metaData, NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
 
    public void testRemoveDoesNotExist() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
 
       assertNotRemovedMetaData(metaData, TestMetaData.class, last);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
    
    public void testRemoveTwice() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
 
       last = assertAddMetaDataNoPrevious(metaData, new TestMetaDataImpl(), TestMetaData.class, expected, last);
       assertRemoveMetaData(metaData, TestMetaData.class, expected, last);
       assertNotRemovedMetaData(metaData, TestMetaData.class, last);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
    
    public void testTestMetaDataByName() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
       
       assertNoMetaData(metaData, "Test", TestMetaData.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       last = assertAddMetaDataNoPrevious(metaData, new TestMetaDataImpl(), "Test", TestMetaData.class, expected, last);
       assertMetaData(metaData, "Test", TestMetaData.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       assertRemoveMetaData(metaData, "Test", TestMetaData.class, expected, last);
       assertNoMetaData(metaData, "Test", TestMetaData.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
    
    public void testTestMetaData12ByName() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
       
       assertNoMetaData(metaData, "Test1", TestMetaData1.class);
       assertNoMetaData(metaData, "Test2", TestMetaData2.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       last = assertAddMetaDataNoPrevious(metaData, new TestMetaData1Impl(), "Test1", TestMetaData1.class, expected, last);
       assertMetaData(metaData, "Test1", TestMetaData1.class);
       assertNoMetaData(metaData, "Test2", TestMetaData2.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
 
       last = assertAddMetaDataNoPrevious(metaData, new TestMetaData2Impl(), "Test2", TestMetaData2.class, expected, last);
       assertMetaData(metaData, "Test1", TestMetaData1.class);
       assertMetaData(metaData, "Test2", TestMetaData2.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       assertRemoveMetaData(metaData, "Test1", TestMetaData1.class, expected, last);
       assertNoMetaData(metaData, "Test1", TestMetaData1.class);
       assertMetaData(metaData, "Test2", TestMetaData2.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
 
       assertRemoveMetaData(metaData, "Test2", TestMetaData2.class, expected, last);
       assertNoMetaData(metaData, "Test1", TestMetaData1.class);
       assertNoMetaData(metaData, "Test2", TestMetaData2.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
    
    public void testAddTwiceByName() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
       
       assertNoMetaData(metaData, "Test", TestMetaData.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       last = assertAddMetaDataNoPrevious(metaData, new TestMetaDataImpl(), "Test", TestMetaData.class, expected, last);
       assertMetaData(metaData, "Test", TestMetaData.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       last = assertAddMetaDataWithPrevious(metaData, new TestMetaDataImpl(), "Test", TestMetaData.class, last);
       assertMetaData(metaData, "Test", TestMetaData.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
    
    public void testAddTwiceSameObjectByName() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
       
       assertNoMetaData(metaData, "Test", TestMetaData.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       TestMetaData object = new TestMetaDataImpl();
       last = assertAddMetaDataNoPrevious(metaData, object, "Test", TestMetaData.class, expected, last);
       assertMetaData(metaData, "Test", TestMetaData.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
       
       assertAddMetaDataWithPreviousSameObject(metaData, object, "Test", TestMetaData.class, last);
       assertMetaData(metaData, "Test", TestMetaData.class);
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
 
    public void testRemoveDoesNotExistByName() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
 
       assertNotRemovedMetaData(metaData, "Test", TestMetaData.class, last);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
    
    public void testRemoveTwiceByName() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedMetaData expected = emptyExpectedMetaData();
 
       last = assertAddMetaDataNoPrevious(metaData, new TestMetaDataImpl(), "Test", TestMetaData.class, expected, last);
       assertRemoveMetaData(metaData, "Test", TestMetaData.class, expected, last);
       assertNotRemovedMetaData(metaData, "Test", TestMetaData.class, last);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected);
    }
    
-   protected abstract MutableMetaDataLoaderToMetaDataBridge setupEmpty();
+   protected abstract MetaDataAndMutableMetaData setupEmpty();
 }

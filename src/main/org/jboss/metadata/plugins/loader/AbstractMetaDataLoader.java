@@ -32,6 +32,7 @@ import org.jboss.metadata.spi.retrieval.MetaDatasItem;
 import org.jboss.metadata.spi.retrieval.ValidTime;
 import org.jboss.metadata.spi.retrieval.helper.AnnotationToMetaDataBridge;
 import org.jboss.metadata.spi.retrieval.helper.AnnotationsToMetaDatasBridge;
+import org.jboss.metadata.spi.scope.ScopeKey;
 
 /**
  * AbstractMetaDataLoader.
@@ -48,12 +49,31 @@ public abstract class AbstractMetaDataLoader implements MetaDataLoader
    /** The valid time */
    private ValidTime validTime;
 
+   /** The scope key */
+   private ScopeKey scopeKey;
+   
    /**
     * Create a new AbstractMetaDataLoader.
     */
    public AbstractMetaDataLoader()
    {
+      this(ScopeKey.DEFAULT_SCOPE);
+   }
+
+   /**
+    * Create a new AbstractMetaDataLoader.
+    * 
+    * @param key the scope
+    */
+   public AbstractMetaDataLoader(ScopeKey key)
+   {
+      this.scopeKey = key;
       validTime = new ValidTime();
+   }
+   
+   public ScopeKey getScope()
+   {
+      return scopeKey;
    }
 
    public ValidTime getValidTime()
@@ -66,6 +86,11 @@ public abstract class AbstractMetaDataLoader implements MetaDataLoader
       return true;
    }
 
+   public AnnotationsItem retrieveLocalAnnotations()
+   {
+      return retrieveAnnotations();
+   }
+
    @SuppressWarnings("unchecked")
    public <T> MetaDataItem<T> retrieveMetaData(Class<T> type)
    {
@@ -75,6 +100,11 @@ public abstract class AbstractMetaDataLoader implements MetaDataLoader
       if (annotation == null)
          return null;
       return new AnnotationToMetaDataBridge<T>(annotation);
+   }
+
+   public MetaDatasItem retrieveLocalMetaData()
+   {
+      return retrieveMetaData();
    }
 
    public MetaDatasItem retrieveMetaData()

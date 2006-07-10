@@ -60,6 +60,13 @@ public interface MetaData
    Annotation[] getAnnotations();
 
    /**
+    * Get all the local annotations
+    * 
+    * @return the annotations
+    */
+   Annotation[] getLocalAnnotations();
+
+   /**
     * Is the annotation present?
     * 
     * @param annotationType the annotation type
@@ -81,6 +88,13 @@ public interface MetaData
     * @return the metadata
     */
    Object[] getMetaData();
+
+   /**
+    * Get all the local metadata
+    * 
+    * @return the metadata
+    */
+   Object[] getLocalMetaData();
 
    /**
     * Is the metadata present

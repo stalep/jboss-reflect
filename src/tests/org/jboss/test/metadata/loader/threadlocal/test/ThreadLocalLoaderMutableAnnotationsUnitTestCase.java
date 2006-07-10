@@ -23,6 +23,7 @@ package org.jboss.test.metadata.loader.threadlocal.test;
 
 import org.jboss.metadata.plugins.loader.thread.ThreadLocalMetaDataLoader;
 import org.jboss.test.metadata.loader.MutableAnnotationsTest;
+import org.jboss.test.metadata.shared.support.MetaDataAndMutableMetaData;
 import org.jboss.test.metadata.shared.support.MutableMetaDataLoaderToMetaDataBridge;
 
 /**
@@ -46,7 +47,7 @@ public class ThreadLocalLoaderMutableAnnotationsUnitTestCase extends MutableAnno
       super.tearDown();
    }
 
-   protected MutableMetaDataLoaderToMetaDataBridge setupEmpty()
+   protected MetaDataAndMutableMetaData setupEmpty()
    {
       return new MutableMetaDataLoaderToMetaDataBridge(loader);
    }

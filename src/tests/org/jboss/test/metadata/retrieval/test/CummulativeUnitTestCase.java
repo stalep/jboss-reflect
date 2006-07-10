@@ -24,7 +24,7 @@ package org.jboss.test.metadata.retrieval.test;
 import java.lang.annotation.Annotation;
 
 import org.jboss.metadata.plugins.context.AbstractMetaDataContext;
-import org.jboss.metadata.plugins.loader.memory.MemoryMetaDataLoader;
+import org.jboss.metadata.spi.loader.MutableMetaDataLoader;
 import org.jboss.metadata.spi.retrieval.AnnotationItem;
 import org.jboss.metadata.spi.retrieval.AnnotationsItem;
 import org.jboss.metadata.spi.retrieval.MetaDataItem;
@@ -50,10 +50,10 @@ public class CummulativeUnitTestCase extends AbstractMetaDataTest
 
    public void testCummulativeAnnotationsItem() throws Exception
    {
-      MemoryMetaDataLoader parentLoader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader parentLoader = createTestMutableMetaDataLoader();
       AbstractMetaDataContext parent = new AbstractMetaDataContext(parentLoader);
       
-      MemoryMetaDataLoader childLoader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader childLoader = createTestMutableMetaDataLoader();
       AbstractMetaDataContext child = new AbstractMetaDataContext(parent, childLoader);
 
       AnnotationsItem item = child.retrieveAnnotations();
@@ -112,10 +112,10 @@ public class CummulativeUnitTestCase extends AbstractMetaDataTest
 
    public void testCummulativeMetaDatasItem() throws Exception
    {
-      MemoryMetaDataLoader parentLoader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader parentLoader = createTestMutableMetaDataLoader();
       AbstractMetaDataContext parent = new AbstractMetaDataContext(parentLoader);
       
-      MemoryMetaDataLoader childLoader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader childLoader = createTestMutableMetaDataLoader();
       AbstractMetaDataContext child = new AbstractMetaDataContext(parent, childLoader);
 
       MetaDatasItem item = child.retrieveMetaData();
@@ -174,10 +174,10 @@ public class CummulativeUnitTestCase extends AbstractMetaDataTest
 
    public void testCummulativeMetaDatasItemByName() throws Exception
    {
-      MemoryMetaDataLoader parentLoader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader parentLoader = createTestMutableMetaDataLoader();
       AbstractMetaDataContext parent = new AbstractMetaDataContext(parentLoader);
       
-      MemoryMetaDataLoader childLoader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader childLoader = createTestMutableMetaDataLoader();
       AbstractMetaDataContext child = new AbstractMetaDataContext(parent, childLoader);
 
       MetaDatasItem item = child.retrieveMetaData();

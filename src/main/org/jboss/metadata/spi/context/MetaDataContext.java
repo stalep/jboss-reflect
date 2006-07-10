@@ -34,11 +34,23 @@ import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
 public interface MetaDataContext extends MetaDataRetrieval
 {
    /**
+    * Get the parent
+    */
+   MetaDataContext getParent();
+   
+   /**
     * Get the retrievals
     * 
     * @return the retrievals
     */
    List<MetaDataRetrieval> getRetrievals();
+
+   /**
+    * Get the local retrievals
+    * 
+    * @return the local retrievals
+    */
+   List<MetaDataRetrieval> getLocalRetrievals();
    
    /**
     * Append a meta data retrieval

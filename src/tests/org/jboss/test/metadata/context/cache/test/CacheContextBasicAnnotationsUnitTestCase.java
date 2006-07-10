@@ -22,8 +22,9 @@
 package org.jboss.test.metadata.context.cache.test;
 
 import org.jboss.metadata.plugins.context.CachingMetaDataContext;
-import org.jboss.metadata.plugins.loader.memory.MemoryMetaDataLoader;
 import org.jboss.metadata.spi.MetaData;
+import org.jboss.metadata.spi.loader.MetaDataLoader;
+import org.jboss.metadata.spi.loader.MutableMetaDataLoader;
 import org.jboss.metadata.spi.retrieval.MetaDataRetrievalToMetaDataBridge;
 import org.jboss.test.metadata.shared.BasicAnnotationsTest;
 import org.jboss.test.metadata.shared.support.TestAnnotation1Impl;
@@ -40,30 +41,33 @@ public class CacheContextBasicAnnotationsUnitTestCase extends BasicAnnotationsTe
 {
    public CacheContextBasicAnnotationsUnitTestCase(String name)
    {
-      super(name);
+      super(name, true);
+   }
+
+   protected MetaData setupMetaData(MetaDataLoader loader)
+   {
+      CachingMetaDataContext context = new CachingMetaDataContext(null, loader);
+      return new MetaDataRetrievalToMetaDataBridge(context);
    }
 
    protected MetaData setupEmpty()
    {
-      MemoryMetaDataLoader loader = new MemoryMetaDataLoader();
-      CachingMetaDataContext context = new CachingMetaDataContext(null, loader);
-      return new MetaDataRetrievalToMetaDataBridge(context);
+      MutableMetaDataLoader loader = createTestMutableMetaDataLoader();
+      return setupMetaData(loader);
    }
 
    protected MetaData setupTestAnnotation()
    {
-      MemoryMetaDataLoader loader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader loader = createTestMutableMetaDataLoader();
       loader.addAnnotation(new TestAnnotationImpl());
-      CachingMetaDataContext context = new CachingMetaDataContext(null, loader);
-      return new MetaDataRetrievalToMetaDataBridge(context);
+      return setupMetaData(loader);
    }
 
    protected MetaData setupTestAnnotation12()
    {
-      MemoryMetaDataLoader loader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader loader = createTestMutableMetaDataLoader();
       loader.addAnnotation(new TestAnnotation1Impl());
       loader.addAnnotation(new TestAnnotation2Impl());
-      CachingMetaDataContext context = new CachingMetaDataContext(null, loader);
-      return new MetaDataRetrievalToMetaDataBridge(context);
+      return setupMetaData(loader);
    }
 }

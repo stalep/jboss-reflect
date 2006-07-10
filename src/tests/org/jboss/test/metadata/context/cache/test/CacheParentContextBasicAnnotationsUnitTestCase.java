@@ -22,8 +22,9 @@
 package org.jboss.test.metadata.context.cache.test;
 
 import org.jboss.metadata.plugins.context.CachingMetaDataContext;
-import org.jboss.metadata.plugins.loader.memory.MemoryMetaDataLoader;
 import org.jboss.metadata.spi.MetaData;
+import org.jboss.metadata.spi.loader.MetaDataLoader;
+import org.jboss.metadata.spi.loader.MutableMetaDataLoader;
 import org.jboss.metadata.spi.retrieval.MetaDataRetrievalToMetaDataBridge;
 import org.jboss.test.metadata.shared.BasicAnnotationsTest;
 import org.jboss.test.metadata.shared.support.TestAnnotation1Impl;
@@ -40,36 +41,35 @@ public class CacheParentContextBasicAnnotationsUnitTestCase extends BasicAnnotat
 {
    public CacheParentContextBasicAnnotationsUnitTestCase(String name)
    {
-      super(name);
+      super(name, false);
+   }
+
+   protected MetaData setupMetaData(MetaDataLoader loader)
+   {
+      CachingMetaDataContext parent = new CachingMetaDataContext(null, loader);
+      MutableMetaDataLoader empty = createTestMutableMetaDataLoader();
+      CachingMetaDataContext context = new CachingMetaDataContext(parent, empty);
+      return new MetaDataRetrievalToMetaDataBridge(context);
    }
 
    protected MetaData setupEmpty()
    {
-      MemoryMetaDataLoader loader = new MemoryMetaDataLoader();
-      CachingMetaDataContext parent = new CachingMetaDataContext(null, loader);
-      MemoryMetaDataLoader empty = new MemoryMetaDataLoader();
-      CachingMetaDataContext context = new CachingMetaDataContext(parent, empty);
-      return new MetaDataRetrievalToMetaDataBridge(context);
+      MutableMetaDataLoader loader = createTestMutableMetaDataLoader();
+      return setupMetaData(loader);
    }
 
    protected MetaData setupTestAnnotation()
    {
-      MemoryMetaDataLoader loader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader loader = createTestMutableMetaDataLoader();
       loader.addAnnotation(new TestAnnotationImpl());
-      CachingMetaDataContext parent = new CachingMetaDataContext(null, loader);
-      MemoryMetaDataLoader empty = new MemoryMetaDataLoader();
-      CachingMetaDataContext context = new CachingMetaDataContext(parent, empty);
-      return new MetaDataRetrievalToMetaDataBridge(context);
+      return setupMetaData(loader);
    }
 
    protected MetaData setupTestAnnotation12()
    {
-      MemoryMetaDataLoader loader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader loader = createTestMutableMetaDataLoader();
       loader.addAnnotation(new TestAnnotation1Impl());
       loader.addAnnotation(new TestAnnotation2Impl());
-      CachingMetaDataContext parent = new CachingMetaDataContext(null, loader);
-      MemoryMetaDataLoader empty = new MemoryMetaDataLoader();
-      CachingMetaDataContext context = new CachingMetaDataContext(parent, empty);
-      return new MetaDataRetrievalToMetaDataBridge(context);
+      return setupMetaData(loader);
    }
 }

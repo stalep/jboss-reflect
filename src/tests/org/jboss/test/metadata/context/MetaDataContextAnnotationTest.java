@@ -44,7 +44,7 @@ public abstract class MetaDataContextAnnotationTest extends AbstractMetaDataCont
       super(name);
    }
    
-   protected void testAnnotation(MetaData metaData, MutableMetaDataLoader loader) throws Exception
+   protected void testAnnotation(MetaData metaData, MutableMetaDataLoader loader, boolean local) throws Exception
    {
       ExpectedAnnotations expected = emptyExpectedAnnotations();
       long last = metaData.getValidTime();
@@ -54,41 +54,39 @@ public abstract class MetaDataContextAnnotationTest extends AbstractMetaDataCont
       last = assertAddAnnotationNoPrevious(metaData, loader, annotation, expected, last);
       assertAnnotation(metaData, TestAnnotation.class);
       
-      assertAnnotations(metaData, expected);
-      assertAnnotationMetaDatas(metaData, expected);
+      assertAllAnnotations(metaData, expected, local);
       
       assertRemoveAnnotation(metaData, loader, TestAnnotation.class, expected, last, false);
       assertNoAnnotation(metaData, TestAnnotation.class);
       
-      assertAnnotations(metaData, expected);
-      assertAnnotationMetaDatas(metaData, expected);
+      assertAllAnnotations(metaData, expected, local);
    }
    
    public void testAnnotationFromFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation(metaData, getFirstChild());
+      testAnnotation(metaData, getFirstChild(), true);
    }
    
    public void testAnnotationFromSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation(metaData, getSecondChild());
+      testAnnotation(metaData, getSecondChild(), true);
    }
    
    public void testAnnotationFromFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation(metaData, getFirstParent());
+      testAnnotation(metaData, getFirstParent(), false);
    }
    
    public void testAnnotationFromSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation(metaData, getSecondParent());
+      testAnnotation(metaData, getSecondParent(), false);
    }
    
-   protected void testAnnotation12(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2) throws Exception
+   protected void testAnnotation12(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2, boolean local) throws Exception
    {
       ExpectedAnnotations expected = emptyExpectedAnnotations();
       long last = metaData.getValidTime();
@@ -100,129 +98,125 @@ public abstract class MetaDataContextAnnotationTest extends AbstractMetaDataCont
       assertAnnotation(metaData, TestAnnotation1.class);
       assertNoAnnotation(metaData, TestAnnotation2.class);
       
-      assertAnnotations(metaData, expected);
-      assertAnnotationMetaDatas(metaData, expected);
+      assertAllAnnotations(metaData, expected, local);
 
       TestAnnotation2 annotation2 = new TestAnnotation2Impl();
       last = assertAddAnnotationNoPrevious(metaData, loader2, annotation2, expected, last);
       assertAnnotation(metaData, TestAnnotation1.class);
       assertAnnotation(metaData, TestAnnotation2.class);
       
-      assertAnnotations(metaData, expected);
-      assertAnnotationMetaDatas(metaData, expected);
+      assertAllAnnotations(metaData, expected, local);
       
       assertRemoveAnnotation(metaData, loader1, TestAnnotation1.class, expected, last, false);
       assertNoAnnotation(metaData, TestAnnotation1.class);
       assertAnnotation(metaData, TestAnnotation2.class);
       
-      assertAnnotations(metaData, expected);
-      assertAnnotationMetaDatas(metaData, expected);
+      assertAllAnnotations(metaData, expected, local);
       
       assertRemoveAnnotation(metaData, loader2, TestAnnotation2.class, expected, last, false);
       assertNoAnnotation(metaData, TestAnnotation1.class);
       assertNoAnnotation(metaData, TestAnnotation2.class);
       
-      assertAnnotations(metaData, expected);
-      assertAnnotationMetaDatas(metaData, expected);
+      assertAllAnnotations(metaData, expected, local);
    }
    
    public void testAnnotation12FromFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getFirstChild(), getFirstChild());
+      testAnnotation12(metaData, getFirstChild(), getFirstChild(), true);
    }
    
    public void testAnnotation12FromFirstChildSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getFirstChild(), getSecondChild());
+      testAnnotation12(metaData, getFirstChild(), getSecondChild(), true);
    }
    
    public void testAnnotation12FromFirstChildFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getFirstChild(), getFirstParent());
+      testAnnotation12(metaData, getFirstChild(), getFirstParent(), false);
    }
    
    public void testAnnotation12FromFirstChildSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getFirstChild(), getSecondParent());
+      testAnnotation12(metaData, getFirstChild(), getSecondParent(), false);
    }
    
    public void testAnnotation12FromSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getSecondChild(), getSecondChild());
+      testAnnotation12(metaData, getSecondChild(), getSecondChild(), true);
    }
    
    public void testAnnotation12FromSecondChildFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getSecondChild(), getFirstChild());
+      testAnnotation12(metaData, getSecondChild(), getFirstChild(), true);
    }
    
    public void testAnnotation12FromSecondChildFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getSecondChild(), getFirstParent());
+      testAnnotation12(metaData, getSecondChild(), getFirstParent(), false);
    }
    
    public void testAnnotation12FromSecondChildSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getSecondChild(), getSecondParent());
+      testAnnotation12(metaData, getSecondChild(), getSecondParent(), false);
    }
    
    public void testAnnotation12FromFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getFirstParent(), getFirstParent());
+      testAnnotation12(metaData, getFirstParent(), getFirstParent(), false);
    }
    
    public void testAnnotation12FromFirstParentFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getFirstParent(), getFirstChild());
+      testAnnotation12(metaData, getFirstParent(), getFirstChild(), false);
    }
    
    public void testAnnotation12FromFirstParentSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getFirstParent(), getSecondChild());
+      testAnnotation12(metaData, getFirstParent(), getSecondChild(), false);
    }
    
    public void testAnnotation12FromFirstParentSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getFirstParent(), getSecondParent());
+      testAnnotation12(metaData, getFirstParent(), getSecondParent(), false);
    }
    
    public void testAnnotation12FromSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getSecondParent(), getSecondParent());
+      testAnnotation12(metaData, getSecondParent(), getSecondParent(), false);
    }
    
    public void testAnnotation12FromSecondParentFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getSecondParent(), getFirstChild());
+      testAnnotation12(metaData, getSecondParent(), getFirstChild(), false);
    }
    
    public void testAnnotation12FromSecondParentSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getSecondParent(), getSecondChild());
+      testAnnotation12(metaData, getSecondParent(), getSecondChild(), false);
    }
    
    public void testAnnotation12FromSecondParentFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotation12(metaData, getSecondParent(), getFirstParent());
+      testAnnotation12(metaData, getSecondParent(), getFirstParent(), false);
    }
    
-   protected void testAnnotationOverride(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2) throws Exception
+   protected void testAnnotationOverride(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2, boolean local) throws Exception
    {
       ExpectedAnnotations expected = emptyExpectedAnnotations();
       long last = metaData.getValidTime();
@@ -232,98 +226,94 @@ public abstract class MetaDataContextAnnotationTest extends AbstractMetaDataCont
       last = assertAddAnnotationNoPrevious(metaData, loader1, annotation1, expected, last);
       assertAnnotation(metaData, TestAnnotation.class);
       
-      assertAnnotations(metaData, expected);
-      assertAnnotationMetaDatas(metaData, expected);
+      assertAllAnnotations(metaData, expected, local);
 
       TestAnnotation annotation2 = new TestAnnotationImpl();
       last = assertAddAnnotationWithPrevious(metaData, loader2, annotation2, last);
       assertAnnotation(metaData, TestAnnotation.class);
       
-      assertAnnotations(metaData, expected);
-      assertAnnotationMetaDatas(metaData, expected);
+      assertAllAnnotations(metaData, expected, local);
       
       assertRemoveAnnotation(metaData, loader1, TestAnnotation.class, expected, last, true);
       assertAnnotation(metaData, TestAnnotation.class);
       
-      assertAnnotations(metaData, expected);
-      assertAnnotationMetaDatas(metaData, expected);
+      assertAllAnnotations(metaData, expected, local);
       
       assertRemoveAnnotation(metaData, loader2, TestAnnotation.class, expected, last, false);
       assertNoAnnotation(metaData, TestAnnotation.class);
       
-      assertAnnotations(metaData, expected);
-      assertAnnotationMetaDatas(metaData, expected);
+      assertAllAnnotations(metaData, expected, local);
    }
    
    public void testAnnotationOverrideFromFirstChildSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getFirstChild(), getSecondChild());
+      testAnnotationOverride(metaData, getFirstChild(), getSecondChild(), true);
    }
    
    public void testAnnotationOverrideFromFirstChildFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getFirstChild(), getFirstParent());
+      testAnnotationOverride(metaData, getFirstChild(), getFirstParent(), false);
    }
    
    public void testAnnotationOverrideFromFirstChildSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getFirstChild(), getSecondParent());
+      testAnnotationOverride(metaData, getFirstChild(), getSecondParent(), false);
    }
    
    public void testAnnotationOverrideFromSecondChildFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getSecondChild(), getFirstChild());
+      testAnnotationOverride(metaData, getSecondChild(), getFirstChild(), true);
    }
    
    public void testAnnotationOverrideFromSecondChildFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getSecondChild(), getFirstParent());
+      testAnnotationOverride(metaData, getSecondChild(), getFirstParent(), false);
    }
    
    public void testAnnotationOverrideFromSecondChildSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getSecondChild(), getSecondParent());
+      testAnnotationOverride(metaData, getSecondChild(), getSecondParent(), false);
    }
    
    public void testAnnotationOverrideFromFirstParentFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getFirstParent(), getFirstChild());
+      testAnnotationOverride(metaData, getFirstParent(), getFirstChild(), false);
    }
    
    public void testAnnotationOverrideFromFirstParentSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getFirstParent(), getSecondChild());
+      testAnnotationOverride(metaData, getFirstParent(), getSecondChild(), false);
    }
    
    public void testAnnotationOverrideFromFirstParentSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getFirstParent(), getSecondParent());
+      testAnnotationOverride(metaData, getFirstParent(), getSecondParent(), false);
    }
    
    public void testAnnotationOverrideFromSecondParentFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getSecondParent(), getFirstChild());
+      testAnnotationOverride(metaData, getSecondParent(), getFirstChild(), false);
    }
    
    public void testAnnotationOverrideFromSecondParentSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getSecondParent(), getSecondChild());
+      testAnnotationOverride(metaData, getSecondParent(), getSecondChild(), false);
    }
    
    public void testAnnotationOverrideFromSecondParentFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testAnnotationOverride(metaData, getSecondParent(), getFirstParent());
+      testAnnotationOverride(metaData, getSecondParent(), getFirstParent(), false);
    }
 }

@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.jboss.metadata.plugins.loader.memory.MemoryMetaDataLoader;
 import org.jboss.metadata.spi.MetaData;
 import org.jboss.metadata.spi.MutableMetaData;
 import org.jboss.metadata.spi.loader.MutableMetaDataLoader;
@@ -34,6 +35,7 @@ import org.jboss.metadata.spi.retrieval.AnnotationsItem;
 import org.jboss.metadata.spi.retrieval.MetaDataItem;
 import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
 import org.jboss.metadata.spi.retrieval.MetaDatasItem;
+import org.jboss.metadata.spi.scope.ScopeKey;
 import org.jboss.test.BaseTestCase;
 import org.jboss.test.metadata.shared.support.ExpectedAnnotations;
 import org.jboss.test.metadata.shared.support.ExpectedMetaData;
@@ -69,6 +71,27 @@ public class AbstractMetaDataTest extends BaseTestCase
 
       if (expectedList.containsAll(actualList) == false || actualList.containsAll(expectedList) == false)
          fail("Expected " + expectedList + " got " + actualList);
+   }
+   
+   /**
+    * Create a test mutable meta data loader
+    * 
+    * @return the implementation
+    */
+   public MutableMetaDataLoader createTestMutableMetaDataLoader()
+   {
+      return new MemoryMetaDataLoader();
+   }
+   
+   /**
+    * Create a test mutable meta data loader
+    *
+    * @param key the scope key
+    * @return the implementation
+    */
+   public MutableMetaDataLoader createTestMutableMetaDataLoader(ScopeKey key)
+   {
+      return new MemoryMetaDataLoader(key);
    }
    
    /**
@@ -1482,6 +1505,34 @@ public class AbstractMetaDataTest extends BaseTestCase
    {
       return new ExpectedMetaData();
    }
+
+   /**
+    * Check the annotations from all retrieval methods
+    * 
+    * @param metaData the meta data
+    * @param expected the expected annotation classes
+    */
+   protected void assertAllAnnotations(MetaData metaData, ExpectedAnnotations expected) throws Exception
+   {
+      assertAllAnnotations(metaData, expected, true);
+   }
+
+   /**
+    * Check the annotations from all retrieval methods
+    * 
+    * @param metaData the meta data
+    * @param expected the expected annotation classes
+    * @param local whether to test the local annotations
+    */
+   protected void assertAllAnnotations(MetaData metaData, ExpectedAnnotations expected, boolean local) throws Exception
+   {
+      assertAnnotations(metaData, expected);
+      if (local)
+         assertLocalAnnotations(metaData, expected);
+      assertAnnotationMetaDatas(metaData, expected);
+      if (local)
+         assertLocalAnnotationMetaDatas(metaData, expected);
+   }
    
    /**
     * Check the annotations
@@ -1504,6 +1555,57 @@ public class AbstractMetaDataTest extends BaseTestCase
       }
       
       assertExpectedAnnotations("Annotations", expected, actual);
+   }
+   
+   /**
+    * Check the local annotations
+    * 
+    * @param metaData the meta data
+    * @param expected the expected annotation classes
+    */
+   protected void assertLocalAnnotations(MetaData metaData, ExpectedAnnotations expected) throws Exception
+   {
+      assertNotNull(metaData);
+      assertNotNull(expected);
+      
+      Annotation[] result = metaData.getLocalAnnotations();
+      assertNotNull("Null result", result);
+      ExpectedAnnotations actual = emptyExpectedAnnotations();
+      for (Annotation annotation : result)
+      {
+         assertNotNull("Null annotation " + Arrays.asList(result), annotation);
+         actual.add(annotation.annotationType());
+      }
+      
+      assertExpectedAnnotations("Annotations", expected, actual);
+   }
+
+   /**
+    * Check the annotations from all retrieval methods
+    * 
+    * @param metaData the retrieval
+    * @param expected the expected annotation classes
+    */
+   protected void assertAllAnnotations(MetaDataRetrieval metaData, ExpectedAnnotations expected) throws Exception
+   {
+      assertAllAnnotations(metaData, expected, true);
+   }
+
+   /**
+    * Check the annotations from all retrieval methods
+    * 
+    * @param metaData the retrieval
+    * @param expected the expected annotation classes
+    * @param local whether to test the local annotations
+    */
+   protected void assertAllAnnotations(MetaDataRetrieval metaData, ExpectedAnnotations expected, boolean local) throws Exception
+   {
+      assertAnnotations(metaData, expected);
+      if (local)
+         assertLocalAnnotations(metaData, expected);
+      assertAnnotationMetaDatas(metaData, expected);
+      if (local)
+         assertLocalAnnotationMetaDatas(metaData, expected);
    }
    
    /**
@@ -1534,6 +1636,58 @@ public class AbstractMetaDataTest extends BaseTestCase
    }
    
    /**
+    * Check the local annotations
+    * 
+    * @param metaData the retrieval
+    * @param expected the expected annotation classes
+    */
+   protected void assertLocalAnnotations(MetaDataRetrieval metaData, ExpectedAnnotations expected) throws Exception
+   {
+      assertNotNull(metaData);
+      assertNotNull(expected);
+      
+      AnnotationsItem result = metaData.retrieveLocalAnnotations();
+      assertNotNull("Null result", result);
+      AnnotationItem[] items = result.getAnnotations();
+      assertNotNull("Null items", items);
+      ExpectedAnnotations actual = emptyExpectedAnnotations();
+      for (AnnotationItem item : items)
+      {
+         assertNotNull("Null annotation item " + Arrays.asList(items), item);
+         Annotation annotation = item.getAnnotation();
+         assertNotNull("Null annotation " + Arrays.asList(items), annotation);
+         actual.add(annotation.annotationType());
+      }
+      
+      assertExpectedAnnotations("Annotations", expected, actual);
+   }
+   
+   /**
+    * Check the meta data from all retrieval methods
+    * 
+    * @param metaData the meta data
+    * @param expected the expected types
+    */
+   protected void assertAllMetaData(MetaData metaData, ExpectedMetaData expected) throws Exception
+   {
+      assertAllMetaData(metaData, expected, true);
+   }
+   
+   /**
+    * Check the meta data from all retrieval methods
+    * 
+    * @param metaData the meta data
+    * @param expected the expected types
+    * @param local whether to include the local meta data
+    */
+   protected void assertAllMetaData(MetaData metaData, ExpectedMetaData expected, boolean local) throws Exception
+   {
+      assertMetaData(metaData, expected);
+      if (local)
+         assertLocalMetaData(metaData, expected);
+   }
+   
+   /**
     * Check the meta data
     * 
     * @param metaData the meta data
@@ -1557,6 +1711,54 @@ public class AbstractMetaDataTest extends BaseTestCase
    }
    
    /**
+    * Check the local meta data
+    * 
+    * @param metaData the meta data
+    * @param expected the expected types
+    */
+   protected void assertLocalMetaData(MetaData metaData, ExpectedMetaData expected) throws Exception
+   {
+      assertNotNull(metaData);
+      assertNotNull(expected);
+      
+      Object[] result = metaData.getLocalMetaData();
+      assertNotNull("Null result", result);
+      ExpectedMetaData actual = emptyExpectedMetaData();
+      for (Object object : result)
+      {
+         assertNotNull("Null object " + Arrays.asList(result), object);
+         actual.add(getType(object));
+      }
+      
+      assertExpectedMetaData("MetaData", expected, actual);
+   }
+   
+   /**
+    * Check the meta data from all retrieval methods
+    * 
+    * @param metaData the retrieval
+    * @param expected the expected types
+    */
+   protected void assertAllMetaData(MetaDataRetrieval metaData, ExpectedMetaData expected) throws Exception
+   {
+      assertAllMetaData(metaData, expected, true);
+   }
+   
+   /**
+    * Check the meta data from all retrieval methods
+    * 
+    * @param metaData the retrieval
+    * @param expected the expected types
+    * @param local whether to include the local meta data
+    */
+   protected void assertAllMetaData(MetaDataRetrieval metaData, ExpectedMetaData expected, boolean local) throws Exception
+   {
+      assertMetaData(metaData, expected);
+      if (local)
+         assertLocalMetaData(metaData, expected);
+   }
+   
+   /**
     * Check the meta data
     * 
     * @param metaData the retrieval
@@ -1568,6 +1770,33 @@ public class AbstractMetaDataTest extends BaseTestCase
       assertNotNull(expected);
       
       MetaDatasItem result = metaData.retrieveMetaData();
+      assertNotNull("Null result", result);
+      MetaDataItem[] items = result.getMetaDatas();
+      assertNotNull("Null items", items);
+      ExpectedMetaData actual = emptyExpectedMetaData();
+      for (MetaDataItem item : items)
+      {
+         assertNotNull("Null meta data item " + Arrays.asList(items), item);
+         Object object = item.getValue();
+         assertNotNull("Null object " + Arrays.asList(items), object);
+         actual.add(getType(object));
+      }
+      
+      assertExpectedMetaData("MetaData", expected, actual);
+   }
+   
+   /**
+    * Check the local meta data
+    * 
+    * @param metaData the retrieval
+    * @param expected the expected types
+    */
+   protected void assertLocalMetaData(MetaDataRetrieval metaData, ExpectedMetaData expected) throws Exception
+   {
+      assertNotNull(metaData);
+      assertNotNull(expected);
+      
+      MetaDatasItem result = metaData.retrieveLocalMetaData();
       assertNotNull("Null result", result);
       MetaDataItem[] items = result.getMetaDatas();
       assertNotNull("Null items", items);
@@ -1624,6 +1853,31 @@ public class AbstractMetaDataTest extends BaseTestCase
    }
    
    /**
+    * Check the local meta data
+    * 
+    * @param metaData the meta data
+    * @param expected the expected annotation classes
+    */
+   protected void assertLocalAnnotationMetaDatas(MetaData metaData, ExpectedAnnotations expected) throws Exception
+   {
+      assertNotNull(metaData);
+      assertNotNull(expected);
+      
+      Object[] result = metaData.getLocalMetaData();
+      assertNotNull("Null result", result);
+      ExpectedAnnotations actual = emptyExpectedAnnotations();
+      for (Object object : result)
+      {
+         assertNotNull("Null annotation " + Arrays.asList(result), object);
+         assertTrue("Not an annotation " + Arrays.asList(result), object instanceof Annotation);
+         Annotation annotation = (Annotation) object;
+         actual.add(annotation.annotationType());
+      }
+      
+      assertExpectedAnnotations("AnnotationMetaDatas", expected, actual);
+   }
+   
+   /**
     * Check the meta data
     * 
     * @param metaData the retrieval
@@ -1635,6 +1889,35 @@ public class AbstractMetaDataTest extends BaseTestCase
       assertNotNull(expected);
       
       MetaDatasItem result = metaData.retrieveMetaData();
+      assertNotNull("Null result", result);
+      MetaDataItem[] items = result.getMetaDatas();
+      assertNotNull("Null items", items);
+      ExpectedAnnotations actual = emptyExpectedAnnotations();
+      for (MetaDataItem item : items)
+      {
+         assertNotNull("Null item " + Arrays.asList(items), item);
+         Object object = item.getValue();
+         assertNotNull("Null object " + Arrays.asList(items), object);
+         assertTrue("Not an annotation " + Arrays.asList(items), object instanceof Annotation);
+         Annotation annotation = (Annotation) object;
+         actual.add(annotation.annotationType());
+      }
+      
+      assertExpectedAnnotations("AnnotationMetaDatas", expected, actual);
+   }
+   
+   /**
+    * Check the local meta data
+    * 
+    * @param metaData the retrieval
+    * @param expected the expected annotation classes
+    */
+   protected void assertLocalAnnotationMetaDatas(MetaDataRetrieval metaData, ExpectedAnnotations expected) throws Exception
+   {
+      assertNotNull(metaData);
+      assertNotNull(expected);
+      
+      MetaDatasItem result = metaData.retrieveLocalMetaData();
       assertNotNull("Null result", result);
       MetaDataItem[] items = result.getMetaDatas();
       assertNotNull("Null items", items);

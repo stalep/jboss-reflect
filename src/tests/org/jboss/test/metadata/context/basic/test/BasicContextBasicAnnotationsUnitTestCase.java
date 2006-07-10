@@ -22,8 +22,9 @@
 package org.jboss.test.metadata.context.basic.test;
 
 import org.jboss.metadata.plugins.context.AbstractMetaDataContext;
-import org.jboss.metadata.plugins.loader.memory.MemoryMetaDataLoader;
 import org.jboss.metadata.spi.MetaData;
+import org.jboss.metadata.spi.loader.MetaDataLoader;
+import org.jboss.metadata.spi.loader.MutableMetaDataLoader;
 import org.jboss.metadata.spi.retrieval.MetaDataRetrievalToMetaDataBridge;
 import org.jboss.test.metadata.shared.BasicAnnotationsTest;
 import org.jboss.test.metadata.shared.support.TestAnnotation1Impl;
@@ -40,30 +41,33 @@ public class BasicContextBasicAnnotationsUnitTestCase extends BasicAnnotationsTe
 {
    public BasicContextBasicAnnotationsUnitTestCase(String name)
    {
-      super(name);
+      super(name, true);
    }
 
-   protected MetaData setupEmpty()
+   protected MetaData setupMetaData(MetaDataLoader loader)
    {
-      MemoryMetaDataLoader loader = new MemoryMetaDataLoader();
       AbstractMetaDataContext context = new AbstractMetaDataContext(null, loader);
       return new MetaDataRetrievalToMetaDataBridge(context);
+   }
+   
+   protected MetaData setupEmpty()
+   {
+      MutableMetaDataLoader loader = createTestMutableMetaDataLoader();
+      return setupMetaData(loader);
    }
 
    protected MetaData setupTestAnnotation()
    {
-      MemoryMetaDataLoader loader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader loader = createTestMutableMetaDataLoader();
       loader.addAnnotation(new TestAnnotationImpl());
-      AbstractMetaDataContext context = new AbstractMetaDataContext(null, loader);
-      return new MetaDataRetrievalToMetaDataBridge(context);
+      return setupMetaData(loader);
    }
 
    protected MetaData setupTestAnnotation12()
    {
-      MemoryMetaDataLoader loader = new MemoryMetaDataLoader();
+      MutableMetaDataLoader loader = createTestMutableMetaDataLoader();
       loader.addAnnotation(new TestAnnotation1Impl());
       loader.addAnnotation(new TestAnnotation2Impl());
-      AbstractMetaDataContext context = new AbstractMetaDataContext(null, loader);
-      return new MetaDataRetrievalToMetaDataBridge(context);
+      return setupMetaData(loader);
    }
 }

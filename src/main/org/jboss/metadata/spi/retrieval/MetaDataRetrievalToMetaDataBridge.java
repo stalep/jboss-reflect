@@ -67,9 +67,25 @@ public class MetaDataRetrievalToMetaDataBridge implements MetaData
       return item.getValue();
    }
 
+   public Annotation[] getLocalAnnotations()
+   {
+      AnnotationsItem item = retrieval.retrieveLocalAnnotations();
+      if (item == null)
+         return NO_ANNOTATIONS;
+      return item.getValue();
+   }
+
    public Object[] getMetaData()
    {
       MetaDatasItem item = retrieval.retrieveMetaData();
+      if (item == null)
+         return NO_METADATA;
+      return item.getValue();
+   }
+
+   public Object[] getLocalMetaData()
+   {
+      MetaDatasItem item = retrieval.retrieveLocalMetaData();
       if (item == null)
          return NO_METADATA;
       return item.getValue();

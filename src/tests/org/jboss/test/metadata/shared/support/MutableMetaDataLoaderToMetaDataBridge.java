@@ -23,11 +23,10 @@ package org.jboss.test.metadata.shared.support;
 
 import java.lang.annotation.Annotation;
 
-import org.jboss.metadata.spi.MutableMetaData;
 import org.jboss.metadata.spi.loader.MutableMetaDataLoader;
 import org.jboss.metadata.spi.retrieval.MetaDataRetrievalToMetaDataBridge;
 
-public class MutableMetaDataLoaderToMetaDataBridge extends MetaDataRetrievalToMetaDataBridge implements MutableMetaData
+public class MutableMetaDataLoaderToMetaDataBridge extends MetaDataRetrievalToMetaDataBridge implements MetaDataAndMutableMetaData
 {
    /**
     * Create a new MutableMetaDataLoaderToMetaDataBridge.

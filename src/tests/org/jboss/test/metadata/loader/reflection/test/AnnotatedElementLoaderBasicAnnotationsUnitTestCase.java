@@ -39,7 +39,7 @@ public class AnnotatedElementLoaderBasicAnnotationsUnitTestCase extends BasicAnn
 {
    public AnnotatedElementLoaderBasicAnnotationsUnitTestCase(String name)
    {
-      super(name);
+      super(name, true);
    }
 
    protected MetaData setupEmpty()

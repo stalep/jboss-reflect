@@ -23,6 +23,7 @@ package org.jboss.test.metadata.loader.memory.test;
 
 import org.jboss.metadata.plugins.loader.memory.MemoryMetaDataLoader;
 import org.jboss.test.metadata.loader.MutableMetaDataTest;
+import org.jboss.test.metadata.shared.support.MetaDataAndMutableMetaData;
 import org.jboss.test.metadata.shared.support.MutableMetaDataLoaderToMetaDataBridge;
 
 /**
@@ -38,7 +39,7 @@ public class MemoryLoaderMutableMetaDataUnitTestCase extends MutableMetaDataTest
       super(name);
    }
 
-   protected MutableMetaDataLoaderToMetaDataBridge setupEmpty()
+   protected MetaDataAndMutableMetaData setupEmpty()
    {
       MemoryMetaDataLoader loader = new MemoryMetaDataLoader();
       return new MutableMetaDataLoaderToMetaDataBridge(loader);

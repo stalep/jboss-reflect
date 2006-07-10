@@ -41,7 +41,7 @@ public class ThreadLocalLoaderBasicAnnotationsUnitTestCase extends BasicAnnotati
 
    public ThreadLocalLoaderBasicAnnotationsUnitTestCase(String name)
    {
-      super(name);
+      super(name, true);
    }
 
    protected void tearDown() throws Exception

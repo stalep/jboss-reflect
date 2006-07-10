@@ -43,6 +43,9 @@ public class CummulativeAnnotationsItem extends SimpleAnnotationsItem
    /** The context */
    private MetaDataContext context;
    
+   /** Whether to include the parent */
+   private boolean includeParent;
+   
    /** The valid time */
    private long validTime;
    
@@ -50,13 +53,15 @@ public class CummulativeAnnotationsItem extends SimpleAnnotationsItem
     * Create a new CummulativeAnnotationsItem.
     * 
     * @param context the context
+    * @param includeParent whether to include the parent
     */
-   public CummulativeAnnotationsItem(MetaDataContext context)
+   public CummulativeAnnotationsItem(MetaDataContext context, boolean includeParent)
    {
       if (context == null)
          throw new IllegalArgumentException("Null context");
 
       this.context = context;
+      this.includeParent = includeParent;
       init(context.getValidTime().getValidTime());
    }
 
@@ -116,7 +121,13 @@ public class CummulativeAnnotationsItem extends SimpleAnnotationsItem
    {
       Set<AnnotationItem> temp = null;
 
-      List<MetaDataRetrieval> retrievals = context.getRetrievals();
+      List<MetaDataRetrieval> retrievals = null;
+      
+      if (includeParent)
+         retrievals = context.getRetrievals();
+      else
+         retrievals = context.getLocalRetrievals();
+      
       for (MetaDataRetrieval retrieval : retrievals)
       {
          AnnotationsItem item = retrieval.retrieveAnnotations();

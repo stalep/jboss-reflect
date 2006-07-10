@@ -39,7 +39,7 @@ public class MemoryLoaderBasicAnnotationsUnitTestCase extends BasicAnnotationsTe
 {
    public MemoryLoaderBasicAnnotationsUnitTestCase(String name)
    {
-      super(name);
+      super(name, true);
    }
 
    protected MetaData setupEmpty()

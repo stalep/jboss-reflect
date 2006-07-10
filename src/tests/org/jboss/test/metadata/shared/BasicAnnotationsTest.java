@@ -37,9 +37,12 @@ import org.jboss.test.metadata.shared.support.TestAnnotation2;
  */
 public abstract class BasicAnnotationsTest extends AbstractMetaDataTest
 {
-   public BasicAnnotationsTest(String name)
+   protected boolean local;
+   
+   public BasicAnnotationsTest(String name, boolean local)
    {
       super(name);
+      this.local = local;
    }
    
    public void testEmpty() throws Exception
@@ -49,8 +52,7 @@ public abstract class BasicAnnotationsTest extends AbstractMetaDataTest
 
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
       
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations, local);
    }
    
    protected abstract MetaData setupEmpty();
@@ -64,8 +66,7 @@ public abstract class BasicAnnotationsTest extends AbstractMetaDataTest
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
       
       expectedAnnotations.add(TestAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations, local);
    }
    
    protected abstract MetaData setupTestAnnotation();
@@ -81,8 +82,7 @@ public abstract class BasicAnnotationsTest extends AbstractMetaDataTest
       
       expectedAnnotations.add(TestAnnotation1.class);
       expectedAnnotations.add(TestAnnotation2.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations, local);
    }
    
    protected abstract MetaData setupTestAnnotation12();

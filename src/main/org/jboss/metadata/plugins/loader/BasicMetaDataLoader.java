@@ -27,6 +27,7 @@ import org.jboss.metadata.annotation.AnnotationMatcher;
 import org.jboss.metadata.generic.GenericMatcher;
 import org.jboss.metadata.spi.retrieval.AnnotationItem;
 import org.jboss.metadata.spi.retrieval.MetaDataItem;
+import org.jboss.metadata.spi.scope.ScopeKey;
 
 /**
  * BasicMetaDataLoader.
@@ -36,6 +37,23 @@ import org.jboss.metadata.spi.retrieval.MetaDataItem;
  */
 public abstract class BasicMetaDataLoader extends AbstractMetaDataLoader
 {
+   /**
+    * Create a new BasicMetaDataLoader.
+    */
+   public BasicMetaDataLoader()
+   {
+   }
+
+   /**
+    * Create a new BasicMetaDataLoader.
+    * 
+    * @param key the scope key
+    */
+   public BasicMetaDataLoader(ScopeKey key)
+   {
+      super(key);
+   }
+
    public <T extends Annotation> AnnotationItem<T> retrieveAnnotation(Class<T> annotationType)
    {
       AnnotationItem[] annotations = retrieveAnnotations().getAnnotations();

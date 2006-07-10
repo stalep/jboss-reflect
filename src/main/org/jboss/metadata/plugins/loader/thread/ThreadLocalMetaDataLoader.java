@@ -22,6 +22,7 @@
 package org.jboss.metadata.plugins.loader.thread;
 
 import java.lang.annotation.Annotation;
+import java.security.AccessController;
 
 import org.jboss.metadata.plugins.loader.AbstractMutableMetaDataLoader;
 import org.jboss.metadata.plugins.loader.memory.MemoryMetaDataLoader;
@@ -33,6 +34,9 @@ import org.jboss.metadata.spi.retrieval.MetaDatasItem;
 import org.jboss.metadata.spi.retrieval.ValidTime;
 import org.jboss.metadata.spi.retrieval.basic.BasicAnnotationsItem;
 import org.jboss.metadata.spi.retrieval.basic.BasicMetaDatasItem;
+import org.jboss.metadata.spi.scope.CommonLevels;
+import org.jboss.metadata.spi.scope.Scope;
+import org.jboss.metadata.spi.scope.ScopeKey;
 
 /**
  * ThreadLocalMetaDataLoader.
@@ -44,6 +48,8 @@ public class ThreadLocalMetaDataLoader extends AbstractMutableMetaDataLoader
 {
    /** The singleton instance */
    public static final ThreadLocalMetaDataLoader INSTANCE = new ThreadLocalMetaDataLoader();
+
+   private static final GetThreadName GET_THREAD_NAME = new GetThreadName();
    
    /** The thread local */
    private ThreadLocal<MemoryMetaDataLoader> threadLocal = new ThreadLocal<MemoryMetaDataLoader>();
@@ -53,7 +59,19 @@ public class ThreadLocalMetaDataLoader extends AbstractMutableMetaDataLoader
 
    /** No meta data */
    private final BasicMetaDatasItem NO_META_DATA = new BasicMetaDatasItem(this, BasicMetaDatasItem.NO_META_DATA_ITEMS);
-
+   
+   /**
+    * Get the thread scope key
+    * 
+    * @return the scope key
+    */
+   private static final ScopeKey getThreadScopeKey()
+   {
+      String name = AccessController.doPrivileged(GET_THREAD_NAME);
+      Scope scope = new Scope(CommonLevels.THREAD, name);
+      return new ScopeKey(scope);
+   }
+   
    /**
     * Singleton
     */
@@ -70,6 +88,15 @@ public class ThreadLocalMetaDataLoader extends AbstractMutableMetaDataLoader
       threadLocal.set(null);
    }
    
+   public ScopeKey getScope()
+   {
+      MemoryMetaDataLoader delegate = threadLocal.get();
+      if (delegate == null)
+         return getThreadScopeKey();
+      else
+         return delegate.getScope();
+   }
+
    // The only items we produce are the no annotations and no metadata
    // these should not be cached
    public <T> boolean isCachable(Item<T> item)
@@ -115,7 +142,7 @@ public class ThreadLocalMetaDataLoader extends AbstractMutableMetaDataLoader
       MemoryMetaDataLoader delegate = threadLocal.get();
       if (delegate == null)
       {
-         delegate = new MemoryMetaDataLoader(false, true);
+         delegate = new MemoryMetaDataLoader(getThreadScopeKey(), false, true);
          threadLocal.set(delegate);
       }
       return delegate.addAnnotation(annotation);
@@ -158,7 +185,7 @@ public class ThreadLocalMetaDataLoader extends AbstractMutableMetaDataLoader
       MemoryMetaDataLoader delegate = threadLocal.get();
       if (delegate == null)
       {
-         delegate = new MemoryMetaDataLoader(false, true);
+         delegate = new MemoryMetaDataLoader(getThreadScopeKey(), false, true);
          threadLocal.set(delegate);
       }
       return delegate.addMetaData(metaData, type);
@@ -177,7 +204,7 @@ public class ThreadLocalMetaDataLoader extends AbstractMutableMetaDataLoader
       MemoryMetaDataLoader delegate = threadLocal.get();
       if (delegate == null)
       {
-         delegate = new MemoryMetaDataLoader(false, true);
+         delegate = new MemoryMetaDataLoader(getThreadScopeKey(), false, true);
          threadLocal.set(delegate);
       }
       return delegate.addMetaData(name, metaData, type);

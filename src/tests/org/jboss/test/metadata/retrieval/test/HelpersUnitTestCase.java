@@ -83,8 +83,14 @@ public class HelpersUnitTestCase extends AbstractMetaDataTest
       metaData.getAnnotations();
       assertEquals("retrieveAnnotations", test.lastMethod);
 
+      metaData.getLocalAnnotations();
+      assertEquals("retrieveLocalAnnotations", test.lastMethod);
+
       metaData.getMetaData();
       assertEquals("retrieveMetaData", test.lastMethod);
+
+      metaData.getLocalMetaData();
+      assertEquals("retrieveLocalMetaData", test.lastMethod);
 
       metaData.getMetaData(Object.class);
       assertEquals("retrieveMetaData(Class)", test.lastMethod);

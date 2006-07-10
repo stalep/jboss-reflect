@@ -42,7 +42,7 @@ public class MemoryLoaderBasicMetaDataUnitTestCase extends BasicMetaDataTest
 {
    public MemoryLoaderBasicMetaDataUnitTestCase(String name)
    {
-      super(name);
+      super(name, true);
    }
 
    protected MetaData setupEmpty()

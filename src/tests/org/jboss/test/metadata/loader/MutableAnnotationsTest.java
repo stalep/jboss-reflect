@@ -23,7 +23,7 @@ package org.jboss.test.metadata.loader;
 
 import org.jboss.test.metadata.AbstractMetaDataTest;
 import org.jboss.test.metadata.shared.support.ExpectedAnnotations;
-import org.jboss.test.metadata.shared.support.MutableMetaDataLoaderToMetaDataBridge;
+import org.jboss.test.metadata.shared.support.MetaDataAndMutableMetaData;
 import org.jboss.test.metadata.shared.support.NotPresentAnnotation;
 import org.jboss.test.metadata.shared.support.TestAnnotation;
 import org.jboss.test.metadata.shared.support.TestAnnotation1;
@@ -47,154 +47,137 @@ public abstract class MutableAnnotationsTest extends AbstractMetaDataTest
    
    public void testEmpty() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedAnnotations expectedAnnotations = emptyExpectedAnnotations();
       
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
 
       assertValidTimeUnchanged(metaData, last);
    }
    
    public void testTestAnnotation() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedAnnotations expectedAnnotations = emptyExpectedAnnotations();
       
       assertNoAnnotation(metaData, TestAnnotation.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
       
       last = assertAddAnnotationNoPrevious(metaData, new TestAnnotationImpl(), expectedAnnotations, last);
       assertAnnotation(metaData, TestAnnotation.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
       
       assertRemoveAnnotation(metaData, TestAnnotation.class, expectedAnnotations, last);
       assertNoAnnotation(metaData, TestAnnotation.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
    }
    
    public void testTestAnnotation12() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedAnnotations expectedAnnotations = emptyExpectedAnnotations();
       
       assertNoAnnotation(metaData, TestAnnotation1.class);
       assertNoAnnotation(metaData, TestAnnotation2.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
       
       last = assertAddAnnotationNoPrevious(metaData, new TestAnnotation1Impl(), expectedAnnotations, last);
       assertAnnotation(metaData, TestAnnotation1.class);
       assertNoAnnotation(metaData, TestAnnotation2.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
 
       last = assertAddAnnotationNoPrevious(metaData, new TestAnnotation2Impl(), expectedAnnotations, last);
       assertAnnotation(metaData, TestAnnotation1.class);
       assertAnnotation(metaData, TestAnnotation2.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
       
       assertRemoveAnnotation(metaData, TestAnnotation1.class, expectedAnnotations, last);
       assertNoAnnotation(metaData, TestAnnotation1.class);
       assertAnnotation(metaData, TestAnnotation2.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
 
       assertRemoveAnnotation(metaData, TestAnnotation2.class, expectedAnnotations, last);
       assertNoAnnotation(metaData, TestAnnotation1.class);
       assertNoAnnotation(metaData, TestAnnotation2.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
    }
    
    public void testAddTwice() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedAnnotations expectedAnnotations = emptyExpectedAnnotations();
       
       assertNoAnnotation(metaData, TestAnnotation.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
       
       last = assertAddAnnotationNoPrevious(metaData, new TestAnnotationImpl(), expectedAnnotations, last);
       assertAnnotation(metaData, TestAnnotation.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
       
       last = assertAddAnnotationWithPrevious(metaData, new TestAnnotationImpl(), last);
       assertAnnotation(metaData, TestAnnotation.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
    }
    
    public void testAddTwiceSameObject() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedAnnotations expectedAnnotations = emptyExpectedAnnotations();
       
       assertNoAnnotation(metaData, TestAnnotation.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
       
       TestAnnotation annotation = new TestAnnotationImpl();
       last = assertAddAnnotationNoPrevious(metaData, annotation, expectedAnnotations, last);
       assertAnnotation(metaData, TestAnnotation.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
       
       assertAddAnnotationWithPreviousSameObject(metaData, annotation, last);
       assertAnnotation(metaData, TestAnnotation.class);
       assertNoAnnotation(metaData, NotPresentAnnotation.class);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
    }
 
    public void testRemoveDoesNotExist() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedAnnotations expectedAnnotations = emptyExpectedAnnotations();
 
       assertNotRemovedAnnotation(metaData, TestAnnotation.class, last);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
    }
    
    public void testRemoveTwice() throws Exception
    {
-      MutableMetaDataLoaderToMetaDataBridge metaData = setupEmpty();
+      MetaDataAndMutableMetaData metaData = setupEmpty();
       long last = metaData.getValidTime();
       ExpectedAnnotations expectedAnnotations = emptyExpectedAnnotations();
 
       last = assertAddAnnotationNoPrevious(metaData, new TestAnnotationImpl(), expectedAnnotations, last);
       assertRemoveAnnotation(metaData, TestAnnotation.class, expectedAnnotations, last);
       assertNotRemovedAnnotation(metaData, TestAnnotation.class, last);
-      assertAnnotations(metaData, expectedAnnotations);
-      assertAnnotationMetaDatas(metaData, expectedAnnotations);
+      assertAllAnnotations(metaData, expectedAnnotations);
    }
    
-   protected abstract MutableMetaDataLoaderToMetaDataBridge setupEmpty();
+   protected abstract MetaDataAndMutableMetaData setupEmpty();
 }

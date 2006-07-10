@@ -42,6 +42,9 @@ public class CummulativeMetaDatasItem extends SimpleMetaDatasItem
    /** The context */
    private MetaDataContext context;
    
+   /** Whether to include the parent */
+   private boolean includeParent;
+
    /** The valid time */
    private long validTime;
    
@@ -49,13 +52,15 @@ public class CummulativeMetaDatasItem extends SimpleMetaDatasItem
     * Create a new CummulativeMetaDatasItem.
     * 
     * @param context the context
+    * @param includeParent whether to include the parent
     */
-   public CummulativeMetaDatasItem(MetaDataContext context)
+   public CummulativeMetaDatasItem(MetaDataContext context, boolean includeParent)
    {
       if (context == null)
          throw new IllegalArgumentException("Null context");
 
       this.context = context;
+      this.includeParent = includeParent;
       init(context.getValidTime().getValidTime());
    }
 
@@ -115,7 +120,13 @@ public class CummulativeMetaDatasItem extends SimpleMetaDatasItem
    {
       Set<MetaDataItem> temp = null;
 
-      List<MetaDataRetrieval> retrievals = context.getRetrievals();
+      List<MetaDataRetrieval> retrievals = null;
+      
+      if (includeParent)
+         retrievals = context.getRetrievals();
+      else
+         retrievals = context.getLocalRetrievals();
+
       for (MetaDataRetrieval retrieval : retrievals)
       {
          MetaDatasItem item = retrieval.retrieveMetaData();

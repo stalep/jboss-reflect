@@ -44,7 +44,7 @@ public class ThreadLocalLoaderBasicMetaDataUnitTestCase extends BasicMetaDataTes
 
    public ThreadLocalLoaderBasicMetaDataUnitTestCase(String name)
    {
-      super(name);
+      super(name, true);
    }
 
    protected void tearDown() throws Exception

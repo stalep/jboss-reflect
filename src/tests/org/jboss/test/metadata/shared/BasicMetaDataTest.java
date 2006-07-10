@@ -37,9 +37,12 @@ import org.jboss.test.metadata.shared.support.TestMetaData2;
  */
 public abstract class BasicMetaDataTest extends AbstractMetaDataTest
 {
-   public BasicMetaDataTest(String name)
+   protected boolean local;
+   
+   public BasicMetaDataTest(String name, boolean local)
    {
       super(name);
+      this.local = local;
    }
    
    public void testEmpty() throws Exception
@@ -49,7 +52,7 @@ public abstract class BasicMetaDataTest extends AbstractMetaDataTest
 
       assertNoMetaData(metaData, NotPresentType.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    protected abstract MetaData setupEmpty();
@@ -63,7 +66,7 @@ public abstract class BasicMetaDataTest extends AbstractMetaDataTest
       assertNoMetaData(metaData, NotPresentType.class);
       
       expected.add(TestMetaData.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    protected abstract MetaData setupTestMetaData();
@@ -79,7 +82,7 @@ public abstract class BasicMetaDataTest extends AbstractMetaDataTest
       
       expected.add(TestMetaData1.class);
       expected.add(TestMetaData2.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    protected abstract MetaData setupTestMetaData12();
@@ -93,7 +96,7 @@ public abstract class BasicMetaDataTest extends AbstractMetaDataTest
       assertNoMetaData(metaData, "NotPresent", NotPresentType.class);
       
       expected.add(TestMetaData.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    protected abstract MetaData setupTestMetaDataByName();
@@ -109,7 +112,7 @@ public abstract class BasicMetaDataTest extends AbstractMetaDataTest
       
       expected.add(TestMetaData1.class);
       expected.add(TestMetaData2.class);
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    protected abstract MetaData setupTestMetaData12ByName();

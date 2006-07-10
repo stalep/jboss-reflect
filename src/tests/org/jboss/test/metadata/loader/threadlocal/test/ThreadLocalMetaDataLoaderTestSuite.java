@@ -50,6 +50,7 @@ public class ThreadLocalMetaDataLoaderTestSuite extends TestSuite
       suite.addTest(new TestSuite(ThreadLocalLoaderMutableMetaDataInvalidationUnitTestCase.class));
       suite.addTest(new TestSuite(ThreadLocalLoaderUnitTestCase.class));
       suite.addTest(new TestSuite(ThreadLocalLoaderRestrictedUnitTestCase.class));
+      suite.addTest(new TestSuite(ThreadLocalLoaderScopeUnitTestCase.class));
       
       return suite;
    }

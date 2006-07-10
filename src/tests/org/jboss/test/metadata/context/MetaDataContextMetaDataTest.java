@@ -44,7 +44,7 @@ public abstract class MetaDataContextMetaDataTest extends AbstractMetaDataContex
       super(name);
    }
    
-   protected void testMetaData(MetaData metaData, MutableMetaDataLoader loader) throws Exception
+   protected void testMetaData(MetaData metaData, MutableMetaDataLoader loader, boolean local) throws Exception
    {
       ExpectedMetaData expected = emptyExpectedMetaData();
       long last = metaData.getValidTime();
@@ -54,39 +54,39 @@ public abstract class MetaDataContextMetaDataTest extends AbstractMetaDataContex
       last = assertAddMetaDataNoPrevious(metaData, loader, object, TestMetaData.class, expected, last);
       assertMetaData(metaData, TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
       
       assertRemoveMetaData(metaData, loader, TestMetaData.class, expected, last, false);
       assertNoMetaData(metaData, TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    public void testMetaDataFromFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData(metaData, getFirstChild());
+      testMetaData(metaData, getFirstChild(), true);
    }
    
    public void testMetaDataFromSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData(metaData, getSecondChild());
+      testMetaData(metaData, getSecondChild(), true);
    }
    
    public void testMetaDataFromFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData(metaData, getFirstParent());
+      testMetaData(metaData, getFirstParent(), false);
    }
    
    public void testMetaDataFromSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData(metaData, getSecondParent());
+      testMetaData(metaData, getSecondParent(), false);
    }
    
-   protected void testMetaDataByName(MetaData metaData, MutableMetaDataLoader loader) throws Exception
+   protected void testMetaDataByName(MetaData metaData, MutableMetaDataLoader loader, boolean local) throws Exception
    {
       ExpectedMetaData expected = emptyExpectedMetaData();
       long last = metaData.getValidTime();
@@ -96,39 +96,39 @@ public abstract class MetaDataContextMetaDataTest extends AbstractMetaDataContex
       last = assertAddMetaDataNoPrevious(metaData, loader, object, "Test", TestMetaData.class, expected, last);
       assertMetaData(metaData, "Test", TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
       
       assertRemoveMetaData(metaData, loader, "Test", TestMetaData.class, expected, last, false);
       assertNoMetaData(metaData, TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    public void testMetaDataFromFirstChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataByName(metaData, getFirstChild());
+      testMetaDataByName(metaData, getFirstChild(), true);
    }
    
    public void testMetaDataFromSecondChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataByName(metaData, getSecondChild());
+      testMetaDataByName(metaData, getSecondChild(), true);
    }
    
    public void testMetaDataFromFirstParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataByName(metaData, getFirstParent());
+      testMetaDataByName(metaData, getFirstParent(), false);
    }
    
    public void testMetaDataFromSecondParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataByName(metaData, getSecondParent());
+      testMetaDataByName(metaData, getSecondParent(), false);
    }
    
-   protected void testMetaData12(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2) throws Exception
+   protected void testMetaData12(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2, boolean local) throws Exception
    {
       ExpectedMetaData expected = emptyExpectedMetaData();
       long last = metaData.getValidTime();
@@ -140,125 +140,125 @@ public abstract class MetaDataContextMetaDataTest extends AbstractMetaDataContex
       assertMetaData(metaData, TestMetaData1.class);
       assertNoMetaData(metaData, TestMetaData2.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
 
       TestMetaData2 object2 = new TestMetaData2Impl();
       last = assertAddMetaDataNoPrevious(metaData, loader2, object2, TestMetaData2.class, expected, last);
       assertMetaData(metaData, TestMetaData1.class);
       assertMetaData(metaData, TestMetaData2.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
       
       assertRemoveMetaData(metaData, loader1, TestMetaData1.class, expected, last, false);
       assertNoMetaData(metaData, TestMetaData1.class);
       assertMetaData(metaData, TestMetaData2.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
       
       assertRemoveMetaData(metaData, loader2, TestMetaData2.class, expected, last, false);
       assertNoMetaData(metaData, TestMetaData1.class);
       assertNoMetaData(metaData, TestMetaData2.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    public void testMetaData12FromFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getFirstChild(), getFirstChild());
+      testMetaData12(metaData, getFirstChild(), getFirstChild(), true);
    }
    
    public void testMetaData12FromFirstChildSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getFirstChild(), getSecondChild());
+      testMetaData12(metaData, getFirstChild(), getSecondChild(), true);
    }
    
    public void testMetaData12FromFirstChildFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getFirstChild(), getFirstParent());
+      testMetaData12(metaData, getFirstChild(), getFirstParent(), false);
    }
    
    public void testMetaData12FromFirstChildSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getFirstChild(), getSecondParent());
+      testMetaData12(metaData, getFirstChild(), getSecondParent(), false);
    }
    
    public void testMetaData12FromSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getSecondChild(), getSecondChild());
+      testMetaData12(metaData, getSecondChild(), getSecondChild(), true);
    }
    
    public void testMetaData12FromSecondChildFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getSecondChild(), getFirstChild());
+      testMetaData12(metaData, getSecondChild(), getFirstChild(), true);
    }
    
    public void testMetaData12FromSecondChildFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getSecondChild(), getFirstParent());
+      testMetaData12(metaData, getSecondChild(), getFirstParent(), false);
    }
    
    public void testMetaData12FromSecondChildSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getSecondChild(), getSecondParent());
+      testMetaData12(metaData, getSecondChild(), getSecondParent(), false);
    }
    
    public void testMetaData12FromFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getFirstParent(), getFirstParent());
+      testMetaData12(metaData, getFirstParent(), getFirstParent(), false);
    }
    
    public void testMetaData12FromFirstParentFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getFirstParent(), getFirstChild());
+      testMetaData12(metaData, getFirstParent(), getFirstChild(), false);
    }
    
    public void testMetaData12FromFirstParentSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getFirstParent(), getSecondChild());
+      testMetaData12(metaData, getFirstParent(), getSecondChild(), false);
    }
    
    public void testMetaData12FromFirstParentSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getFirstParent(), getSecondParent());
+      testMetaData12(metaData, getFirstParent(), getSecondParent(), false);
    }
    
    public void testMetaData12FromSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getSecondParent(), getSecondParent());
+      testMetaData12(metaData, getSecondParent(), getSecondParent(), false);
    }
    
    public void testMetaData12FromSecondParentFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getSecondParent(), getFirstChild());
+      testMetaData12(metaData, getSecondParent(), getFirstChild(), false);
    }
    
    public void testMetaData12FromSecondParentSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getSecondParent(), getSecondChild());
+      testMetaData12(metaData, getSecondParent(), getSecondChild(), false);
    }
    
    public void testMetaData12FromSecondParentFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12(metaData, getSecondParent(), getFirstParent());
+      testMetaData12(metaData, getSecondParent(), getFirstParent(), false);
    }
    
-   protected void testMetaData12ByName(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2) throws Exception
+   protected void testMetaData12ByName(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2, boolean local) throws Exception
    {
       ExpectedMetaData expected = emptyExpectedMetaData();
       long last = metaData.getValidTime();
@@ -270,125 +270,125 @@ public abstract class MetaDataContextMetaDataTest extends AbstractMetaDataContex
       assertMetaData(metaData, "Test1", TestMetaData1.class);
       assertNoMetaData(metaData, "Test2", TestMetaData2.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
 
       TestMetaData2 object2 = new TestMetaData2Impl();
       last = assertAddMetaDataNoPrevious(metaData, loader2, object2, "Test2", TestMetaData2.class, expected, last);
       assertMetaData(metaData, "Test1", TestMetaData1.class);
       assertMetaData(metaData, "Test2", TestMetaData2.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
       
       assertRemoveMetaData(metaData, loader1, "Test1", TestMetaData1.class, expected, last, false);
       assertNoMetaData(metaData, "Test1", TestMetaData1.class);
       assertMetaData(metaData, "Test2", TestMetaData2.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
       
       assertRemoveMetaData(metaData, loader2, "Test2", TestMetaData2.class, expected, last, false);
       assertNoMetaData(metaData, "Test1", TestMetaData1.class);
       assertNoMetaData(metaData, "Test2", TestMetaData2.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    public void testMetaData12FromFirstChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getFirstChild(), getFirstChild());
+      testMetaData12ByName(metaData, getFirstChild(), getFirstChild(), true);
    }
    
    public void testMetaData12FromFirstChildSecondChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getFirstChild(), getSecondChild());
+      testMetaData12ByName(metaData, getFirstChild(), getSecondChild(), true);
    }
    
    public void testMetaData12FromFirstChildFirstParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getFirstChild(), getFirstParent());
+      testMetaData12ByName(metaData, getFirstChild(), getFirstParent(), false);
    }
    
    public void testMetaData12FromFirstChildSecondParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getFirstChild(), getSecondParent());
+      testMetaData12ByName(metaData, getFirstChild(), getSecondParent(), false);
    }
    
    public void testMetaData12FromSecondChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getSecondChild(), getSecondChild());
+      testMetaData12ByName(metaData, getSecondChild(), getSecondChild(), true);
    }
    
    public void testMetaData12FromSecondChildFirstChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getSecondChild(), getFirstChild());
+      testMetaData12ByName(metaData, getSecondChild(), getFirstChild(), true);
    }
    
    public void testMetaData12FromSecondChildFirstParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getSecondChild(), getFirstParent());
+      testMetaData12ByName(metaData, getSecondChild(), getFirstParent(), false);
    }
    
    public void testMetaData12FromSecondChildSecondParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getSecondChild(), getSecondParent());
+      testMetaData12ByName(metaData, getSecondChild(), getSecondParent(), false);
    }
    
    public void testMetaData12FromFirstParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getFirstParent(), getFirstParent());
+      testMetaData12ByName(metaData, getFirstParent(), getFirstParent(), false);
    }
    
    public void testMetaData12FromFirstParentFirstChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getFirstParent(), getFirstChild());
+      testMetaData12ByName(metaData, getFirstParent(), getFirstChild(), false);
    }
    
    public void testMetaData12FromFirstParentSecondChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getFirstParent(), getSecondChild());
+      testMetaData12ByName(metaData, getFirstParent(), getSecondChild(), false);
    }
    
    public void testMetaData12FromFirstParentSecondParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getFirstParent(), getSecondParent());
+      testMetaData12ByName(metaData, getFirstParent(), getSecondParent(), false);
    }
    
    public void testMetaData12FromSecondParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getSecondParent(), getSecondParent());
+      testMetaData12ByName(metaData, getSecondParent(), getSecondParent(), false);
    }
    
    public void testMetaData12FromSecondParentFirstChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getSecondParent(), getFirstChild());
+      testMetaData12ByName(metaData, getSecondParent(), getFirstChild(), false);
    }
    
    public void testMetaData12FromSecondParentSecondChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getSecondParent(), getSecondChild());
+      testMetaData12ByName(metaData, getSecondParent(), getSecondChild(), false);
    }
    
    public void testMetaData12FromSecondParentFirstParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaData12ByName(metaData, getSecondParent(), getFirstParent());
+      testMetaData12ByName(metaData, getSecondParent(), getFirstParent(), false);
    }
    
-   protected void testMetaDataOverride(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2) throws Exception
+   protected void testMetaDataOverride(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2, boolean local) throws Exception
    {
       ExpectedMetaData expected = emptyExpectedMetaData();
       long last = metaData.getValidTime();
@@ -398,98 +398,98 @@ public abstract class MetaDataContextMetaDataTest extends AbstractMetaDataContex
       last = assertAddMetaDataNoPrevious(metaData, loader1, object1, TestMetaData.class, expected, last);
       assertMetaData(metaData, TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
 
       TestMetaData object2 = new TestMetaDataImpl();
       last = assertAddMetaDataWithPrevious(metaData, loader2, object2, TestMetaData.class, last);
       assertMetaData(metaData, TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
       
       assertRemoveMetaData(metaData, loader1, TestMetaData.class, expected, last, true);
       assertMetaData(metaData, TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
       
       assertRemoveMetaData(metaData, loader2, TestMetaData.class, expected, last, false);
       assertNoMetaData(metaData, TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    public void testMetaDataOverrideFromFirstChildSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getFirstChild(), getSecondChild());
+      testMetaDataOverride(metaData, getFirstChild(), getSecondChild(), true);
    }
    
    public void testMetaDataOverrideFromFirstChildFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getFirstChild(), getFirstParent());
+      testMetaDataOverride(metaData, getFirstChild(), getFirstParent(), false);
    }
    
    public void testMetaDataOverrideFromFirstChildSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getFirstChild(), getSecondParent());
+      testMetaDataOverride(metaData, getFirstChild(), getSecondParent(), false);
    }
    
    public void testMetaDataOverrideFromSecondChildFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getSecondChild(), getFirstChild());
+      testMetaDataOverride(metaData, getSecondChild(), getFirstChild(), true);
    }
    
    public void testMetaDataOverrideFromSecondChildFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getSecondChild(), getFirstParent());
+      testMetaDataOverride(metaData, getSecondChild(), getFirstParent(), false);
    }
    
    public void testMetaDataOverrideFromSecondChildSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getSecondChild(), getSecondParent());
+      testMetaDataOverride(metaData, getSecondChild(), getSecondParent(), false);
    }
    
    public void testMetaDataOverrideFromFirstParentFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getFirstParent(), getFirstChild());
+      testMetaDataOverride(metaData, getFirstParent(), getFirstChild(), false);
    }
    
    public void testMetaDataOverrideFromFirstParentSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getFirstParent(), getSecondChild());
+      testMetaDataOverride(metaData, getFirstParent(), getSecondChild(), false);
    }
    
    public void testMetaDataOverrideFromFirstParentSecondParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getFirstParent(), getSecondParent());
+      testMetaDataOverride(metaData, getFirstParent(), getSecondParent(), false);
    }
    
    public void testMetaDataOverrideFromSecondParentFirstChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getSecondParent(), getFirstChild());
+      testMetaDataOverride(metaData, getSecondParent(), getFirstChild(), false);
    }
    
    public void testMetaDataOverrideFromSecondParentSecondChild() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getSecondParent(), getSecondChild());
+      testMetaDataOverride(metaData, getSecondParent(), getSecondChild(), false);
    }
    
    public void testMetaDataOverrideFromSecondParentFirstParent() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverride(metaData, getSecondParent(), getFirstParent());
+      testMetaDataOverride(metaData, getSecondParent(), getFirstParent(), false);
    }
    
-   protected void testMetaDataOverrideByName(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2) throws Exception
+   protected void testMetaDataOverrideByName(MetaData metaData, MutableMetaDataLoader loader1, MutableMetaDataLoader loader2, boolean local) throws Exception
    {
       ExpectedMetaData expected = emptyExpectedMetaData();
       long last = metaData.getValidTime();
@@ -499,94 +499,94 @@ public abstract class MetaDataContextMetaDataTest extends AbstractMetaDataContex
       last = assertAddMetaDataNoPrevious(metaData, loader1, object1, "Test", TestMetaData.class, expected, last);
       assertMetaData(metaData, "Test", TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
 
       TestMetaData object2 = new TestMetaDataImpl();
       last = assertAddMetaDataWithPrevious(metaData, loader2, object2, "Test", TestMetaData.class, last);
       assertMetaData(metaData, "Test", TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
       
       assertRemoveMetaData(metaData, loader1, "Test", TestMetaData.class, expected, last, true);
       assertMetaData(metaData, "Test", TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
       
       assertRemoveMetaData(metaData, loader2, "Test", TestMetaData.class, expected, last, false);
       assertNoMetaData(metaData, "Test", TestMetaData.class);
       
-      assertMetaData(metaData, expected);
+      assertAllMetaData(metaData, expected, local);
    }
    
    public void testMetaDataOverrideFromFirstChildSecondChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getFirstChild(), getSecondChild());
+      testMetaDataOverrideByName(metaData, getFirstChild(), getSecondChild(), true);
    }
    
    public void testMetaDataOverrideFromFirstChildFirstParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getFirstChild(), getFirstParent());
+      testMetaDataOverrideByName(metaData, getFirstChild(), getFirstParent(), false);
    }
    
    public void testMetaDataOverrideFromFirstChildSecondParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getFirstChild(), getSecondParent());
+      testMetaDataOverrideByName(metaData, getFirstChild(), getSecondParent(), false);
    }
    
    public void testMetaDataOverrideFromSecondChildFirstChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getSecondChild(), getFirstChild());
+      testMetaDataOverrideByName(metaData, getSecondChild(), getFirstChild(), true);
    }
    
    public void testMetaDataOverrideFromSecondChildFirstParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getSecondChild(), getFirstParent());
+      testMetaDataOverrideByName(metaData, getSecondChild(), getFirstParent(), false);
    }
    
    public void testMetaDataOverrideFromSecondChildSecondParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getSecondChild(), getSecondParent());
+      testMetaDataOverrideByName(metaData, getSecondChild(), getSecondParent(), false);
    }
    
    public void testMetaDataOverrideFromFirstParentFirstChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getFirstParent(), getFirstChild());
+      testMetaDataOverrideByName(metaData, getFirstParent(), getFirstChild(), false);
    }
    
    public void testMetaDataOverrideFromFirstParentSecondChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getFirstParent(), getSecondChild());
+      testMetaDataOverrideByName(metaData, getFirstParent(), getSecondChild(), false);
    }
    
    public void testMetaDataOverrideFromFirstParentSecondParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getFirstParent(), getSecondParent());
+      testMetaDataOverrideByName(metaData, getFirstParent(), getSecondParent(), false);
    }
    
    public void testMetaDataOverrideFromSecondParentFirstChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getSecondParent(), getFirstChild());
+      testMetaDataOverrideByName(metaData, getSecondParent(), getFirstChild(), false);
    }
    
    public void testMetaDataOverrideFromSecondParentSecondChildByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getSecondParent(), getSecondChild());
+      testMetaDataOverrideByName(metaData, getSecondParent(), getSecondChild(), false);
    }
    
    public void testMetaDataOverrideFromSecondParentFirstParentByName() throws Exception
    {
       MetaData metaData = createTestContext();
-      testMetaDataOverrideByName(metaData, getSecondParent(), getFirstParent());
+      testMetaDataOverrideByName(metaData, getSecondParent(), getFirstParent(), false);
    }
 }

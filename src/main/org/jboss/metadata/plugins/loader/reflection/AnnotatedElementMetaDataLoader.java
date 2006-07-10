@@ -23,12 +23,16 @@ package org.jboss.metadata.plugins.loader.reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Member;
 
 import org.jboss.metadata.plugins.loader.BasicMetaDataLoader;
 import org.jboss.metadata.spi.retrieval.AnnotationItem;
 import org.jboss.metadata.spi.retrieval.AnnotationsItem;
 import org.jboss.metadata.spi.retrieval.simple.SimpleAnnotationItem;
 import org.jboss.metadata.spi.retrieval.simple.SimpleAnnotationsItem;
+import org.jboss.metadata.spi.scope.CommonLevels;
+import org.jboss.metadata.spi.scope.Scope;
+import org.jboss.metadata.spi.scope.ScopeKey;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.Strings;
 
@@ -43,6 +47,26 @@ public class AnnotatedElementMetaDataLoader extends BasicMetaDataLoader
    /** The annotated element */
    private AnnotatedElement annotated;
    
+   private static final ScopeKey getScopeKey(AnnotatedElement annotated)
+   {
+      Scope scope = null;
+      if (annotated instanceof Class)
+      {
+         Class clazz = (Class) annotated;
+         scope = new Scope(CommonLevels.CLASS, clazz.getName());
+      }
+      else if (annotated instanceof Member)
+      {
+         Member member = (Member) annotated;
+         scope = new Scope(CommonLevels.JOINPOINT, member.getName());
+      }
+      else
+      {
+         return ScopeKey.DEFAULT_SCOPE;
+      }
+      return new ScopeKey(scope);
+   }
+   
    /**
     * Create a new AnnotatedElementMetaDataContext.
     * 
@@ -50,6 +74,7 @@ public class AnnotatedElementMetaDataLoader extends BasicMetaDataLoader
     */
    public AnnotatedElementMetaDataLoader(AnnotatedElement annotated)
    {
+      super(getScopeKey(annotated));
       if (annotated == null)
          throw new IllegalArgumentException("Null annotated element");
       this.annotated = annotated;

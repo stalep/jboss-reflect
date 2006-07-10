@@ -23,6 +23,7 @@ package org.jboss.metadata.plugins.context;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -36,6 +37,8 @@ import org.jboss.metadata.spi.retrieval.MetaDatasItem;
 import org.jboss.metadata.spi.retrieval.ValidTime;
 import org.jboss.metadata.spi.retrieval.cummulative.CummulativeAnnotationsItem;
 import org.jboss.metadata.spi.retrieval.cummulative.CummulativeMetaDatasItem;
+import org.jboss.metadata.spi.scope.Scope;
+import org.jboss.metadata.spi.scope.ScopeKey;
 
 /**
  * AbstractMetaDataContext.
@@ -50,6 +53,9 @@ public class AbstractMetaDataContext implements MetaDataContext
 
    /** The parent context */
    private MetaDataContext parent;
+   
+   /** The scope */
+   private volatile ScopeKey scopeKey;
    
    /**
     * Create a new AbstractMetaDataContext.
@@ -94,6 +100,23 @@ public class AbstractMetaDataContext implements MetaDataContext
       this.retrievals = retrievals;
    }
    
+   public ScopeKey getScope()
+   {
+      if (scopeKey == null)
+      {
+         ScopeKey key = new ScopeKey();
+         for (MetaDataRetrieval retrieval : getRetrievals())
+         {
+            ScopeKey retrievalKey = retrieval.getScope();
+            Collection<Scope> scopes = retrievalKey.getScopes();
+            for (Scope scope : scopes)
+               key.addScope(scope);
+         }
+         scopeKey = key;
+      }
+      return scopeKey;
+   }
+
    public ValidTime getValidTime()
    {
       ValidTime result = null;
@@ -120,6 +143,11 @@ public class AbstractMetaDataContext implements MetaDataContext
       return result;
    }
 
+   public MetaDataContext getParent()
+   {
+      return parent;
+   }
+   
    public List<MetaDataRetrieval> getRetrievals()
    {
       if (parent == null)
@@ -128,6 +156,11 @@ public class AbstractMetaDataContext implements MetaDataContext
       List<MetaDataRetrieval> result = new ArrayList<MetaDataRetrieval>(retrievals);
       result.add(parent);
       return result;
+   }
+
+   public List<MetaDataRetrieval> getLocalRetrievals()
+   {
+      return retrievals;
    }
    
    public void append(MetaDataRetrieval retrieval)
@@ -139,6 +172,7 @@ public class AbstractMetaDataContext implements MetaDataContext
          retrievals = new CopyOnWriteArrayList<MetaDataRetrieval>(retrievals);
       
       retrievals.add(retrieval);
+      scopeKey = null;
    }
 
    public void prepend(MetaDataRetrieval retrieval)
@@ -150,6 +184,7 @@ public class AbstractMetaDataContext implements MetaDataContext
          retrievals = new CopyOnWriteArrayList<MetaDataRetrieval>(retrievals);
       
       retrievals.add(0, retrieval);
+      scopeKey = null;
    }
 
    public void remove(MetaDataRetrieval retrieval)
@@ -161,11 +196,17 @@ public class AbstractMetaDataContext implements MetaDataContext
          throw new IllegalStateException("Must have at least one retrieval");
       
       retrievals.remove(retrieval);
+      scopeKey = null;
    }
 
    public AnnotationsItem retrieveAnnotations()
    {
-      return new CummulativeAnnotationsItem(this);
+      return new CummulativeAnnotationsItem(this, true);
+   }
+
+   public AnnotationsItem retrieveLocalAnnotations()
+   {
+      return new CummulativeAnnotationsItem(this, false);
    }
 
    public <T extends Annotation> AnnotationItem<T> retrieveAnnotation(Class<T> annotationType)
@@ -186,7 +227,12 @@ public class AbstractMetaDataContext implements MetaDataContext
 
    public MetaDatasItem retrieveMetaData()
    {
-      return new CummulativeMetaDatasItem(this);
+      return new CummulativeMetaDatasItem(this, true);
+   }
+
+   public MetaDatasItem retrieveLocalMetaData()
+   {
+      return new CummulativeMetaDatasItem(this, false);
    }
 
    public <T> MetaDataItem<T> retrieveMetaData(Class<T> type)

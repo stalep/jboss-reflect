@@ -29,6 +29,9 @@ import org.jboss.metadata.spi.retrieval.MetaDataItem;
 import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
 import org.jboss.metadata.spi.retrieval.MetaDatasItem;
 import org.jboss.metadata.spi.retrieval.ValidTime;
+import org.jboss.metadata.spi.scope.Scope;
+import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.scope.ScopeLevel;
 
 /**
  * TestMetaDataRetrieval.
@@ -38,8 +41,16 @@ import org.jboss.metadata.spi.retrieval.ValidTime;
  */
 public class TestMetaDataRetrieval implements MetaDataRetrieval
 {
+   private static final ScopeLevel testLevel = new ScopeLevel(1, "TEST");
+   private static final ScopeKey testScopeKey = new ScopeKey(new Scope(testLevel, "TEST"));
+   
    public String lastMethod;
    
+   public ScopeKey getScope()
+   {
+      return testScopeKey;
+   }
+
    public ValidTime getValidTime()
    {
       lastMethod = "getValidTime";
@@ -58,9 +69,21 @@ public class TestMetaDataRetrieval implements MetaDataRetrieval
       return null;
    }
 
+   public AnnotationsItem retrieveLocalAnnotations()
+   {
+      lastMethod = "retrieveLocalAnnotations";
+      return null;
+   }
+
    public MetaDatasItem retrieveMetaData()
    {
       lastMethod = "retrieveMetaData";
+      return null;
+   }
+
+   public MetaDatasItem retrieveLocalMetaData()
+   {
+      lastMethod = "retrieveLocalMetaData";
       return null;
    }
 

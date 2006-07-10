@@ -25,6 +25,7 @@ import java.lang.annotation.Annotation;
 
 import org.jboss.metadata.spi.Restricted;
 import org.jboss.metadata.spi.loader.MutableMetaDataLoader;
+import org.jboss.metadata.spi.scope.ScopeKey;
 
 /**
  * AbstractMutableMetaDataLoader.
@@ -59,6 +60,28 @@ public abstract class AbstractMutableMetaDataLoader extends BasicMetaDataLoader 
       this.restricted = restricted;
    }
    
+   /**
+    * Create a new AbstractMutableMetaDataLoader.
+    * 
+    * @param key the scope key
+    */
+   public AbstractMutableMetaDataLoader(ScopeKey key)
+   {
+      this(key, false);
+   }
+   
+   /**
+    * Create a new AbstractMutableMetaDataLoader.
+    * 
+    * @param key the scope key
+    * @param restricted whether the context is restricted
+    */
+   public AbstractMutableMetaDataLoader(ScopeKey key, boolean restricted)
+   {
+      super(key);
+      this.restricted = restricted;
+   }
+
    /**
     * Check whether an annotation is retricted
     * 

@@ -23,6 +23,7 @@ package org.jboss.metadata.spi.retrieval;
 
 import java.lang.annotation.Annotation;
 
+import org.jboss.metadata.spi.scope.ScopeKey;
 
 /**
  * MetaDataRetrieval.
@@ -32,6 +33,13 @@ import java.lang.annotation.Annotation;
  */
 public interface MetaDataRetrieval
 {
+   /**
+    * Return the scope key
+    * 
+    * @return the scope key
+    */
+   ScopeKey getScope();
+   
    /**
     * The valid time
     * 
@@ -45,6 +53,13 @@ public interface MetaDataRetrieval
     * @return the annotations
     */
    AnnotationsItem retrieveAnnotations();
+   
+   /**
+    * Get all the local annotations
+    * 
+    * @return the annotations
+    */
+   AnnotationsItem retrieveLocalAnnotations();
 
    /**
     * Get annotation
@@ -60,6 +75,13 @@ public interface MetaDataRetrieval
     * @return the metadata
     */
    MetaDatasItem retrieveMetaData();
+
+   /**
+    * Get all the local metadata
+    * 
+    * @return the metadata
+    */
+   MetaDatasItem retrieveLocalMetaData();
 
    /**
     * Get metadata
