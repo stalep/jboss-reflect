@@ -40,6 +40,7 @@ import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.collection.WeakValueHashMap;
 
 /**
@@ -90,7 +91,15 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
    
    protected static String getLowerPropertyName(String name)
    {
-      StringBuffer buffer = new StringBuffer(name.length());
+      // If the second character is upper case then we don't make
+      // the first character lower case
+      if (name.length() > 1)
+      {
+         if (Character.isUpperCase(name.charAt(1)))
+            return name;
+      }
+
+      JBossStringBuilder buffer = new JBossStringBuilder(name.length());
       buffer.append(Character.toLowerCase(name.charAt(0)));
       if (name.length() > 1)
          buffer.append(name.substring(1));
