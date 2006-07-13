@@ -7,7 +7,11 @@
 package org.jboss.test.vfs;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.net.URL;
@@ -157,7 +161,7 @@ public class TestFileVFS extends BaseTestCase
    }
 
    /**
-    * Test vile resolution with nested jars
+    * Test file resolution with nested jars
     * @throws Exception
     */
    public void testInnerJar()
@@ -220,5 +224,45 @@ public class TestFileVFS extends BaseTestCase
          }
       }
       assertEquals("There were 3 classes", 3, count);
+   }
+
+   /**
+    * Test the serialization of VirtualFiles
+    * @throws Exception
+    */
+   public void testVFSerialization()
+      throws Exception
+   {
+      File tmpRoot = File.createTempFile("vfs", ".root");
+      tmpRoot.delete();
+      tmpRoot.mkdir();
+      tmpRoot.deleteOnExit();
+      File tmp = new File(tmpRoot, "vfs.ser");
+      tmp.deleteOnExit();
+      log.info("+++ testVFSerialization, tmp="+tmp.getCanonicalPath());
+      URL rootURL = tmpRoot.toURL();
+      VFSFactory factory = VFSFactoryLocator.getFactory(rootURL);
+      ReadOnlyVFS vfs = factory.getVFS(rootURL);
+      VirtualFile tmpVF = vfs.resolveFile("vfs.ser");
+      FileOutputStream fos = new FileOutputStream(tmp);
+      ObjectOutputStream oos = new ObjectOutputStream(fos);
+      oos.writeObject(tmpVF);
+      oos.close();
+
+      FileInputStream fis = new FileInputStream(tmp);
+      ObjectInputStream ois = new ObjectInputStream(fis);
+      VirtualFile tmpVF2 = (VirtualFile) ois.readObject();
+      ois.close();
+      long lastModified = tmpVF.getLastModified();
+      long size = tmpVF.getSize();
+      String name = tmpVF.getName();
+      String pathName = tmpVF.getPathName();
+      URL url = tmpVF.toURL();
+
+      assertEquals("name", name, tmpVF2.getName());
+      assertEquals("pathName", pathName, tmpVF2.getPathName());
+      assertEquals("lastModified", lastModified, tmpVF2.getLastModified());
+      assertEquals("size", size, tmpVF2.getSize());
+      assertEquals("url", url, tmpVF2.toURL());
    }
 }

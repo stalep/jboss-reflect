@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Iterator;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,11 +32,60 @@ import java.util.logging.Logger;
 public class FileSystemVFS
    implements ReadOnlyVFS
 {
+   // TODO: jboss logger
    private static Logger log = Logger.getLogger("org.jboss.vfs.file.FileSystemVFS");
+   /** */
+   private static WeakHashMap<URL, FileSystemVFS> fileSystems =
+      new WeakHashMap<URL, FileSystemVFS>();
+   /** The VFS root URL */
    private URL rootURL;
+   /** The VirtualFile corresponding to the rootURL */
    private VirtualFile vfsRoot;
    /** Cache of rootURL absolute paths to previously resolved files */
    private ConcurrentHashMap<String, VirtualFile> fileCache;
+
+   /**
+    * get VirtualFile from filesystem path
+    *
+    * @param fp path, i.e. "/home/wburke/foo.jar"
+    * @return the VirtualFiel for fileSystemPath
+    * @throws RuntimeException wrapper for any error  
+    */
+   public static VirtualFile getVirtualFile(String fileSystemPath)
+   {
+      try
+      {
+         File fp = new File(fileSystemPath);
+         URL parent = fp.getParentFile().toURL();
+         VFSFactory factory = VFSFactoryLocator.getFactory(parent);
+         ReadOnlyVFS vfs = factory.getVFS(parent);
+         return (vfs.resolveFile(fp.getName()));
+      }
+      catch (Exception e)
+      {
+         throw new RuntimeException(e);
+      }
+
+   }
+
+   /**
+    * Get the FileSystemVFS for the rootURL.
+    * 
+    * @param rootURL
+    * @return
+    * @throws IOException
+    */
+   public static synchronized FileSystemVFS getFileSystemVFS(URL rootURL)
+      throws IOException
+   {
+      FileSystemVFS vfs = fileSystems.get(rootURL);
+      if( vfs == null )
+      {
+         vfs = new FileSystemVFS(rootURL);
+         fileSystems.put(rootURL, vfs);
+      }
+      return vfs;
+   }
 
    FileSystemVFS(URL rootURL)
       throws IOException
@@ -105,6 +155,11 @@ public class FileSystemVFS
    {
       FileScanner scanner = new FileScanner(vfsRoot, acceptVisitor);
       return scanner;
+   }
+
+   public URL getRootURL()
+   {
+      return rootURL;
    }
 
    /**
@@ -221,29 +276,6 @@ public class FileSystemVFS
          }
       }
       return childVF;
-   }
-
-   /**
-    * get VirtualFile from filesystem path
-    *
-    * @param fp path, i.e. "/home/wburke/foo.jar"
-    * @return
-    */
-   public static VirtualFile getVirtualFile(String fileSystemPath)
-   {
-      try
-      {
-         File fp = new File(fileSystemPath);
-         URL parent = fp.getParentFile().toURL();
-         VFSFactory factory = VFSFactoryLocator.getFactory(parent);
-         ReadOnlyVFS vfs = factory.getVFS(parent);
-         return (vfs.resolveFile(fp.getName()));
-      }
-      catch (Exception e)
-      {
-         throw new RuntimeException(e);
-      }
-
    }
 
 }
