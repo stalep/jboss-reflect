@@ -5,9 +5,9 @@ package org.jboss.test.vfs;
 
 import java.net.URL;
 import junit.framework.TestCase;
-import org.jboss.vfs.VFSClassLoader;
 import org.jboss.vfs.VFSFactory;
 import org.jboss.vfs.VFSFactoryLocator;
+import org.jboss.vfs.classloading.VFSClassLoader;
 import org.jboss.vfs.spi.ReadOnlyVFS;
 
 /**

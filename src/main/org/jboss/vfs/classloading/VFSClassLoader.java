@@ -4,7 +4,7 @@
 * Distributable under LGPL license.
 * See terms of license at gnu.org.
 */
-package org.jboss.vfs;
+package org.jboss.vfs.classloading;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
