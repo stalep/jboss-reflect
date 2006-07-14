@@ -273,7 +273,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
             return NO_ANNOTATIONS;
          }
 
-         AnnotationValueImpl[] annotationValues = new AnnotationValueImpl[annotations.length];
+         AnnotationValue[] annotationValues = new AnnotationValueImpl[annotations.length];
          for (int i = 0 ; i < annotations.length ; i++)
          {
             Class[] interfaces = annotations[i].getClass().getInterfaces();
@@ -284,34 +284,8 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
             Class clazz = interfaces[0];
             
-            Method[] methods = clazz.getMethods();
-          
-            HashMap<String, Value> attributes = new HashMap<String, Value>();
-          
-            for (int j = 0 ; j < methods.length ; j++)
-            {
-               try
-               {
-                  if (methods[j].getDeclaringClass().equals(clazz))
-                  {
-                     Class typeClass = methods[j].getReturnType();
-                     Object val = methods[j].invoke(annotations[i], new Object[0]);
-   
-                     TypeInfo typeInfo = getTypeInfo(typeClass);
-   
-                     Value value = AnnotationValueFactory.createValue(this, typeInfo, val);
-                     
-                     
-                     attributes.put(methods[j].getName(), value);
-                  }                  
-               }
-               catch (Throwable e)
-               {
-                  throw new RuntimeException(e);
-               }
-            }
             AnnotationInfo info = (AnnotationInfo)getTypeInfo(clazz);
-            annotationValues[i] = new AnnotationValueImpl(info, attributes);
+            annotationValues[i] = AnnotationValueFactory.createAnnotationValue(this, this, info, annotations[i]);
          }
          return annotationValues;
       }
