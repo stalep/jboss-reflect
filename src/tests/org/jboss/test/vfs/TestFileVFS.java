@@ -153,6 +153,7 @@ public class TestFileVFS extends BaseTestCase
       // Check resolving the root file
       VirtualFile root = vfs.resolveFile("");
       assertEquals("root name", "lib", root.getName());
+      assertEquals("root path", "", root.getPathName());
       assertTrue("root isDirectory", root.isDirectory());
 
       // Find the outer.jar
@@ -163,7 +164,15 @@ public class TestFileVFS extends BaseTestCase
       
       VirtualFile outerJarMF = vfs.resolveFile("outer.jar/META-INF/MANIFEST.MF");
       assertNotNull("outer.jar/META-INF/MANIFEST.MF", outerJarMF);
-      
+
+      // Test a non-canonical path
+      outerJarFile = new File("output/resources/../lib/outer.jar");
+      rootURL = outerJarFile.getParentFile().toURL();
+      // Check resolving the root file
+      root = vfs.resolveFile("");
+      assertEquals("root name", "lib", root.getName());
+      assertEquals("root path", "", root.getPathName());
+      assertTrue("root isDirectory", root.isDirectory());
    }
 
    /**
