@@ -143,17 +143,23 @@ public class TestFileVFS extends BaseTestCase
    public void testResolveFile()
       throws Exception
    {
+      log.info("+++ testResolveFile, cwd="+(new File(".").getCanonicalPath()));
       // this expects to be run with a working dir of the container root
       File outerJarFile = new File("output/lib/outer.jar");
       URL rootURL = outerJarFile.getParentFile().toURL();
       VFSFactory factory = VFSFactoryLocator.getFactory(rootURL);
       ReadOnlyVFS vfs = factory.getVFS(rootURL);
 
+      // Check resolving the root file
+      VirtualFile root = vfs.resolveFile("");
+      assertEquals("root name", "lib", root.getName());
+      assertTrue("root isDirectory", root.isDirectory());
+
       // Find the outer.jar
       VirtualFile outerJar = vfs.resolveFile("outer.jar");
       assertNotNull("outer.jar", outerJar);
       assertEquals("outer.jar name", "outer.jar", outerJar.getName());
-      assertEquals("outer.jar path", "output/lib/outer.jar", outerJar.getPathName());
+      assertEquals("outer.jar path", "outer.jar", outerJar.getPathName());
       
       VirtualFile outerJarMF = vfs.resolveFile("outer.jar/META-INF/MANIFEST.MF");
       assertNotNull("outer.jar/META-INF/MANIFEST.MF", outerJarMF);
