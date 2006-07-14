@@ -182,6 +182,24 @@ public class FileImpl
       return path;
    }
 
+   public String toString()
+   {
+      StringBuilder tmp = new StringBuilder(super.toString());
+      tmp.append('[');
+      tmp.append("path=");
+      tmp.append(path);
+      tmp.append(",vfsPath=");
+      tmp.append(vfsPath);
+      tmp.append(",isFile=");
+      tmp.append(isFile());
+      tmp.append(",isDirectory=");
+      tmp.append(isDirectory());
+      tmp.append(",isArchive=");
+      tmp.append(isArchive());
+      tmp.append(']');
+      return tmp.toString();
+   }
+
    private VirtualFile getChild(String name)
       throws IOException
    {
