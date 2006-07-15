@@ -49,17 +49,23 @@ public class FileImpl
    private transient InputStream contentIS;
 
    public FileImpl(URL path, String vfsPath, FileSystemVFS vfs)
+      throws IOException
    {
       this.path = path;
       this.vfsPath = vfsPath;
       this.file = new File(path.getPath());
+      if( file.exists() == false )
+         throw new FileNotFoundException(file.getCanonicalPath());
       this.vfs = vfs;
    }
-   public FileImpl(File file, String vfsPath, FileSystemVFS vfs) throws MalformedURLException
+   public FileImpl(File file, String vfsPath, FileSystemVFS vfs)
+      throws IOException
    {
       this.path = file.toURL();
       this.vfsPath = vfsPath;
       this.file = file;
+      if( file.exists() == false )
+         throw new FileNotFoundException(file.getCanonicalPath());
       this.vfs = vfs;
    }
 
