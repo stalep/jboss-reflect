@@ -21,8 +21,9 @@
  */
 package org.jboss.vfs.classloading;
 
-import java.security.PrivilegedAction;
 import java.security.AccessController;
+import java.security.Policy;
+import java.security.PrivilegedAction;
 
 import org.jboss.vfs.spi.ReadOnlyVFS;
 
@@ -31,8 +32,16 @@ import org.jboss.vfs.spi.ReadOnlyVFS;
  @author Scott.Stark@jboss.org
  @version $Revision$
  */
-public class SecurityActions
+class SecurityActions
 {
+   static PrivilegedAction<Policy> getPolicyAction = new PrivilegedAction<Policy>()
+   {
+      public Policy run()
+      {
+         return Policy.getPolicy();
+      }
+   };
+
    interface ClassLoaderActions
    {
       ClassLoaderActions PRIVILEGED = new ClassLoaderActions()
@@ -48,6 +57,10 @@ public class SecurityActions
             };
             return AccessController.doPrivileged(action);
          }
+         public Policy getPolicy()
+         {
+            return AccessController.doPrivileged(getPolicyAction);
+         }
       };
 
       ClassLoaderActions NON_PRIVILEGED = new ClassLoaderActions()
@@ -56,9 +69,14 @@ public class SecurityActions
          {
             return new VFSClassLoader(paths, vfs);
          }
+         public Policy getPolicy()
+         {
+            return Policy.getPolicy();
+         }
       };
 
       VFSClassLoader newClassLoader(final String[] paths, final ReadOnlyVFS vfs);
+      Policy getPolicy();
    }
 
    static VFSClassLoader newClassLoader(final String[] paths, final ReadOnlyVFS vfs)
@@ -71,6 +89,17 @@ public class SecurityActions
       {
          return ClassLoaderActions.PRIVILEGED.newClassLoader(paths, vfs);
       }
+   }
+   static Policy getPolicy()
+   {
+      if(System.getSecurityManager() == null)
+      {
+         return ClassLoaderActions.NON_PRIVILEGED.getPolicy();
+      }
+      else
+      {
+         return ClassLoaderActions.PRIVILEGED.getPolicy();
+      }      
    }
 
 }
