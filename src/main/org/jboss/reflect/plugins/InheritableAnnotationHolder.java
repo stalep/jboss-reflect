@@ -22,6 +22,7 @@
 package org.jboss.reflect.plugins;
 
 import java.io.Serializable;
+import java.lang.annotation.Inherited;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,9 @@ public abstract class InheritableAnnotationHolder extends JBossObject implements
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3257290210164289843L;
+   
+   /** The classname of the <code>@Inherited</code> annotation, this needs retroing to work on JDK 1.4 */
+   private static final String INHERITED_NAME = Inherited.class.getName();//This 
    
    /** Unknown annotations map */
    static final Map<String, AnnotationValue> UNKNOWN_ANNOTATIONS_MAP = Collections.unmodifiableMap(new HashMap<String, AnnotationValue>());
@@ -143,7 +147,7 @@ public abstract class InheritableAnnotationHolder extends JBossObject implements
             for (int i = 0; i < superAllAnnotations.length; i++)
             {
                AnnotationValue av = superAllAnnotations[i];
-               if (av.getAnnotationType().isAnnotationPresent("java.lang.annotation.Inherited"))
+               if (av.getAnnotationType().isAnnotationPresent(INHERITED_NAME))
                {
                   allAnnotations.put(av.getAnnotationType().getName(), av);
                }

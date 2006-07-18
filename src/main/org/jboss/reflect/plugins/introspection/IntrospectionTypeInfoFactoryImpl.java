@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
+import org.jboss.reflect.plugins.AnnotationAttributeImpl;
 import org.jboss.reflect.plugins.AnnotationHelper;
 import org.jboss.reflect.plugins.AnnotationInfoImpl;
 import org.jboss.reflect.plugins.AnnotationValueFactory;
@@ -39,6 +40,7 @@ import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.EnumInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
+import org.jboss.reflect.spi.AnnotationAttribute;
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
@@ -258,6 +260,14 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       else if (clazz.isAnnotation())
       {
          result = new AnnotationInfoImpl(clazz.getName(), clazz.getModifiers());
+         Method[] methods = getDeclaredMethods(clazz);
+         AnnotationAttributeImpl[] atttributes = new AnnotationAttributeImpl[methods.length];
+         for (int i = 0 ; i < methods.length ; i++)
+         {
+            AnnotationAttributeImpl impl = new AnnotationAttributeImpl(methods[i].getName(), getTypeInfo(methods[i].getReturnType()), null);
+            atttributes[i] = impl;
+         }
+         ((AnnotationInfoImpl)result).setAttributes(atttributes);
       }
       else if (clazz.isInterface())
       {
@@ -342,6 +352,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
                return ao.getAnnotations();
             }
          };
+         
          return AccessController.doPrivileged(action);
       }
    }
@@ -356,7 +367,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          {
             public Annotation[] run()
             {
-               return clazz.getAnnotations();
+               Annotation[] annotations =  clazz.getAnnotations();
+               return annotations;
             }
          };
          return AccessController.doPrivileged(action);

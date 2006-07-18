@@ -21,6 +21,7 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
+import java.lang.annotation.Inherited;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,9 @@ import org.jboss.reflect.spi.AnnotationValue;
  */
 public abstract class JavassistInheritableAnnotationHolder extends JavassistAnnotatedInfo
 {
+   /** The classname of the <code>@Inherited</code> annotation, this needs retroing to work on JDK 1.4 */
+   private static final String INHERITED_NAME = Inherited.class.getName();//This 
+
    /** All annotations Map<String, AnnotationValue> */
    protected Map<String, AnnotationValue> allAnnotations;
 
@@ -109,7 +113,7 @@ public abstract class JavassistInheritableAnnotationHolder extends JavassistAnno
             for (int i = 0; i < superAllAnnotations.length; i++)
             {
                AnnotationValue av = superAllAnnotations[i];
-               if (av.getAnnotationType().isAnnotationPresent("java.lang.annotation.Inherited"))
+               if (av.getAnnotationType().isAnnotationPresent(INHERITED_NAME))
                {
                   allAnnotations.put(av.getAnnotationType().getName(), av);
                }
@@ -129,6 +133,10 @@ public abstract class JavassistInheritableAnnotationHolder extends JavassistAnno
          {
             allAnnotations = superHolder.getAllAnnotations();
             allAnnotationsArray = superAllAnnotations;
+         }
+         else
+         {
+            allAnnotations = new HashMap<String, AnnotationValue>();
          }
       }
    }

@@ -21,9 +21,6 @@
 */ 
 package org.jboss.test.classinfo.test;
 
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import java.util.HashSet;
 
 import org.jboss.reflect.spi.AnnotatedInfo;
@@ -60,11 +57,35 @@ import org.jboss.test.classinfo.support.ValueAnnotation;
  */
 public abstract class AnnotatedClassInfoTest extends ContainerTest
 {
-   final static Class[] EXPECTED_ANNOTATIONS = {SimpleAnnotation.class, ComplexAnnotation.class};
-   final static Class[] ANNOTATION_EXPECTED_ANNOTATIONS = {Target.class, Retention.class, Inherited.class};   
-   final static Class[] COMPLEXANNOTATION_EXPECTED_ANNOTATIONS = {Target.class, Retention.class, SimpleAnnotation.class, ValueAnnotation.class};
-   final static Class[] FIRST_PARAM_EXPECTED_ANNOTATIONS = {ValueAnnotation.class, ComplexAnnotation.class};
-   final static Class[] SECOND_PARAM_EXPECTED_ANNOTATIONS = {ValueAnnotation.class, SimpleAnnotation.class};
+   /** <code>@Retention</code> and <code>@Target</code> are ignored for JDK 1.4 */
+   final static ExpectedAnnotations expected;
+   static
+   {
+      boolean haveJDK5 = false;
+      try
+      {
+         Class.forName("java.lang.annotation.Target");
+         haveJDK5 = true;
+      }
+      catch(Exception e)
+      {
+      }
+      
+      if (haveJDK5)
+      {
+         expected = new JDK50ExpectedAnnotations();
+      }
+      else
+      {
+         expected = new JDK14ExpectedAnnotations();
+      }
+   }
+   final static Class[] EXPECTED_ANNOTATIONS = expected.getEspectedAnnotations();
+   final static Class[] ANNOTATION_EXPECTED_ANNOTATIONS = expected.getAnnotationExpectedAnnotations();   
+   final static Class[] COMPLEXANNOTATION_EXPECTED_ANNOTATIONS = expected.getComplexExpectedAnnotations();
+   final static Class[] FIRST_PARAM_EXPECTED_ANNOTATIONS = expected.getFirstParamExpectedAnnotations();
+   final static Class[] SECOND_PARAM_EXPECTED_ANNOTATIONS = expected.getSecondParamExpectedAnnotations();
+   
    
    final static ExpectedComplexAnnotationData CLASS_DATA = 
       new ExpectedComplexAnnotationData(
@@ -147,6 +168,7 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
    {
       ClassInfo info = getClassInfo(AnnotatedSubClass.class);
 
+      System.out.println("---> Getting annotations");
       AnnotationValue[] annotations = info.getAnnotations();
       assertEquals(2, annotations.length);
       AnnotationValue anotherAnnotation = getAnnotationCheckTypeAndName(info, AnotherAnnotation.class.getName());

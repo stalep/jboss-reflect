@@ -21,6 +21,7 @@
 */ 
 package org.jboss.reflect.plugins.javassist;
 
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
 import org.jboss.reflect.plugins.AnnotationHelper;
@@ -62,13 +63,7 @@ public abstract class JavassistAnnotatedParameterInfo extends JavassistAnnotated
          AnnotationValue[] annotationValues = new AnnotationValue[annotations[param].length];
          for (int ann = 0 ; ann < annotations.length ; ann++)
          {
-            Class[] interfaces = annotations[param][ann].getClass().getInterfaces();
-            if (interfaces.length != 1)
-            {
-               throw new RuntimeException("Annotation proxy implements more than one interface! " + Arrays.asList(interfaces));
-            }
-
-            Class clazz = interfaces[0];
+            Class clazz = ((Annotation)annotations[param][ann]).annotationType();
 
             AnnotationInfo info = (AnnotationInfo)((JavassistTypeInfoFactoryImpl)annotationHelper).getTypeInfo(clazz);
             annotationValues[ann] = annotationHelper.createAnnotationValue(info, annotations[param][ann]);

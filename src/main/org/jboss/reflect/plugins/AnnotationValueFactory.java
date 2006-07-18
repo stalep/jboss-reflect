@@ -86,13 +86,7 @@ public class AnnotationValueFactory
    public static AnnotationValue createAnnotationValue(TypeInfoFactory typeInfoFactory, AnnotationHelper annotationHelper, AnnotationInfo info, Object ann)
    {
       Annotation annotation = (Annotation)ann;
-      //Class clazz = annotation.annotationType();//Throwa an execption: no default value: org.jboss.test.classinfo.support.ValueAnnotation.annotationType()
-      Class[] interfaces = annotation.getClass().getInterfaces();
-      if (interfaces.length != 1)
-      {
-         throw new RuntimeException("Annotation should implement exactly one interface " + annotation);
-      }
-      Class clazz = interfaces[0];
+      Class clazz = annotation.annotationType();
       
       Method[] methods = getDeclaredMethods(clazz);
       

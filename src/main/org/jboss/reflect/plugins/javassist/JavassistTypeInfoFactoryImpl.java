@@ -21,27 +21,25 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
-import java.lang.reflect.Method;
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMember;
+import javassist.CtMethod;
 import javassist.CtPrimitiveType;
 import javassist.NotFoundException;
-import javassist.bytecode.AccessFlag;
 
+import org.jboss.reflect.plugins.AnnotationAttributeImpl;
 import org.jboss.reflect.plugins.AnnotationHelper;
 import org.jboss.reflect.plugins.AnnotationValueImpl;
-import org.jboss.reflect.plugins.ArrayInfoImpl;
 import org.jboss.reflect.plugins.AnnotationValueFactory;
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.reflect.spi.Value;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.collection.WeakClassCache;
 
@@ -120,25 +118,42 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
    protected Object instantiate(Class clazz)
    {
-      CtClass ctClass = getCtClass(clazz.getName());
-
-      if (clazz.isArray())
+      try
       {
-         TypeInfo componentType = getTypeInfo(clazz.getComponentType());
-         return new JavassistArrayInfoImpl(componentType);
-      }
+         CtClass ctClass = getCtClass(clazz.getName());
 
-      if (ctClass.isAnnotation())
-      {
-         return new JavassistAnnotationInfo(this, ctClass, clazz);
-      }
-      else if (ctClass.isEnum())
-      {
-         return new JavassistEnumInfo(this, ctClass, clazz);
-      }
+         if (clazz.isArray())
+         {
+            TypeInfo componentType = getTypeInfo(clazz.getComponentType());
+            return new JavassistArrayInfoImpl(componentType);
+         }
 
-      
-      return new JavassistTypeInfo(this, ctClass, clazz);
+         if (ctClass.isAnnotation())
+         {
+            JavassistAnnotationInfo result = new JavassistAnnotationInfo(this, ctClass, clazz);
+            CtMethod[] methods = ctClass.getDeclaredMethods();
+            AnnotationAttributeImpl[] atttributes = new AnnotationAttributeImpl[methods.length];
+            for (int i = 0 ; i < methods.length ; i++)
+            {
+               AnnotationAttributeImpl impl = new AnnotationAttributeImpl(methods[i].getName(), getTypeInfo(methods[i].getReturnType()), null);
+               atttributes[i] = impl;
+            }
+            result.setAttributes(atttributes);
+            return result;
+
+         }
+         else if (ctClass.isEnum())
+         {
+            return new JavassistEnumInfo(this, ctClass, clazz);
+         }
+
+         
+         return new JavassistTypeInfo(this, ctClass, clazz);
+      }
+      catch (NotFoundException e)
+      {
+         throw new RuntimeException(e);
+      }
    }
 
    /**
@@ -257,11 +272,11 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          Object[] annotations = null;
          if (obj instanceof CtMember)
          {
-            annotations = ((CtMember)obj).getAnnotations();
+            annotations = ((CtMember)obj).getAvailableAnnotations();
          }
          else if (obj instanceof CtClass)
          {
-            annotations = ((CtClass)obj).getAnnotations();
+            annotations = ((CtClass)obj).getAvailableAnnotations();
          }
          else
          {
@@ -276,13 +291,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          AnnotationValue[] annotationValues = new AnnotationValueImpl[annotations.length];
          for (int i = 0 ; i < annotations.length ; i++)
          {
-            Class[] interfaces = annotations[i].getClass().getInterfaces();
-            if (interfaces.length != 1)
-            {
-               throw new RuntimeException("Annotation proxy implements more than one interface! " + Arrays.asList(interfaces));
-            }
-
-            Class clazz = interfaces[0];
+            Class clazz = ((Annotation)annotations[i]).annotationType();
             
             AnnotationInfo info = (AnnotationInfo)getTypeInfo(clazz);
             annotationValues[i] = AnnotationValueFactory.createAnnotationValue(this, this, info, annotations[i]);
