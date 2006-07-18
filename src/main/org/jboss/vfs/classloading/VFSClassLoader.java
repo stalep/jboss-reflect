@@ -9,8 +9,14 @@ package org.jboss.vfs.classloading;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.CodeSource;
+import java.security.PermissionCollection;
+import java.security.Policy;
+import java.security.ProtectionDomain;
 import java.security.SecureClassLoader;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -18,6 +24,7 @@ import java.util.Vector;
 
 import org.jboss.classloading.spi.ClassLoadingDomain;
 import org.jboss.classloading.spi.DomainClassLoader;
+import org.jboss.logging.Logger;
 import org.jboss.vfs.spi.ReadOnlyVFS;
 import org.jboss.vfs.spi.VirtualFile;
 
@@ -29,6 +36,8 @@ import org.jboss.vfs.spi.VirtualFile;
 public class VFSClassLoader extends SecureClassLoader
    implements DomainClassLoader
 {
+   private static Logger log = Logger.getLogger(VFSClassLoader.class);
+
    protected static class ClassPathVFS
    {
       private ArrayList<String> searchCtxs = new ArrayList<String>();
@@ -63,14 +72,14 @@ public class VFSClassLoader extends SecureClassLoader
    protected Class<?> findClass(String name) throws ClassNotFoundException
    {
       String resName = name.replace('.', '/');
-      URL classRes = findResource(resName+".class");
-      if( classRes == null )
+      VirtualFile classFile = findResourceFile(resName+".class");
+      if( classFile == null )
          throw new ClassNotFoundException(name);
       try
       {
          byte[] tmp = new byte[128];
          ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         InputStream is = classRes.openStream();
+         InputStream is = classFile.openStream();
          int length;
          while ((length = is.read(tmp)) > 0)
          {
@@ -78,7 +87,8 @@ public class VFSClassLoader extends SecureClassLoader
          }
          is.close();
          tmp = baos.toByteArray();
-         Class c = super.defineClass(name, tmp, 0, tmp.length);
+         ProtectionDomain pd = getProtectionDomain(classFile);
+         Class c = super.defineClass(name, tmp, 0, tmp.length, pd);
          return c;
       }
       catch (IOException e)
@@ -96,21 +106,18 @@ public class VFSClassLoader extends SecureClassLoader
    public URL findResource(String name)
    {
       URL res = null;
-      try
+      VirtualFile vf = findResourceFile(name);
+      if( vf != null )
       {
-         for(ClassPathVFS cp : classpath)
+         try
          {
-            VirtualFile vf = cp.vfs.resolveFile(name, cp.searchCtxs);
-            if( vf != null )
-            {
-               res = vf.toURL();
-               break;
-            }
+            res = vf.toURL();
          }
-      }
-      catch (IOException e)
-      {
-         e.printStackTrace();
+         catch(IOException e)
+         {
+            if( log.isTraceEnabled() )
+               log.trace("Failed to obtain vf URL: "+vf, e);
+         }
       }
       return res;
    }
@@ -174,5 +181,47 @@ public class VFSClassLoader extends SecureClassLoader
    public Package getPackage(String name)
    {
       return super.getPackage(name);
+   }
+
+   protected VirtualFile findResourceFile(String name)
+   {
+      VirtualFile vf = null;
+      try
+      {
+         for(ClassPathVFS cp : classpath)
+         {
+            vf = cp.vfs.resolveFile(name, cp.searchCtxs);
+            if( vf != null )
+            {
+               break;
+            }
+         }
+      }
+      catch (IOException e)
+      {
+         if( log.isTraceEnabled() )
+            log.trace("Failed to find resource: "+name, e);
+      }
+      return vf;
+   }
+
+   /**
+    * Determine the protection domain. If we are a copy of the original
+    * deployment, use the original url as the codebase.
+    * @return the protection domain
+    * @throws MalformedURLException 
+    * @todo certificates and principles?
+    */
+   protected ProtectionDomain getProtectionDomain(VirtualFile classFile)
+      throws MalformedURLException
+   {
+      Certificate certs[] = null;
+      URL codesourceUrl = classFile.toURL();
+      CodeSource cs = new CodeSource(codesourceUrl, certs);
+      PermissionCollection permissions = SecurityActions.getPolicy().getPermissions(cs);
+      if (log.isTraceEnabled())
+         log.trace("getProtectionDomain, url=" + codesourceUrl +
+                   " codeSource=" + cs + " permissions=" + permissions);
+      return new ProtectionDomain(cs, permissions);
    }
 }
