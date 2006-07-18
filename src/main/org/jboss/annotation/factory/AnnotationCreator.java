@@ -37,7 +37,6 @@ import org.jboss.annotation.factory.ast.SimpleNode;
 import org.jboss.annotation.factory.javassist.DefaultValueAnnotationValidator;
 
 import java.io.StringReader;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
