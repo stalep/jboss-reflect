@@ -311,9 +311,37 @@ public class AnnotationCreator implements AnnotationParserVisitor
       throw new RuntimeException("unable to determine member type for annotation: " + annotation.getName() + "." + member);
    }
    
-   public static Object createAnnotation(ASTAnnotation node, Class annotation) throws Exception
+   private static ASTAnnotation getRootExpr(final String annotationExpr) throws Exception
+   {
+      try
+      {
+         ASTAnnotation node = (ASTAnnotation)AccessController.doPrivileged(new PrivilegedExceptionAction() {
+           public Object run() throws Exception{
+              AnnotationParser parser = new AnnotationParser(new StringReader(annotationExpr));
+              org.jboss.annotation.factory.ast.ASTStart start = parser.Start();
+              ASTAnnotation node = (ASTAnnotation) start.jjtGetChild(0);
+              
+              return node;
+           }
+         });
+         
+         return node;
+      }
+      catch (PrivilegedActionException e)
+      {
+         throw new RuntimeException(e.getException());
+      }
+   }
+   
+   
+   public static Object createAnnotation(ASTAnnotation node, Class annotation, ClassLoader cl) throws Exception
    {
       HashMap map = new HashMap();
+      if (annotation == null)
+      {
+         ClassLoader loader = (cl != null) ? cl : Thread.currentThread().getContextClassLoader();
+         annotation = loader.loadClass(node.getIdentifier());
+      }
       
       if (node.jjtGetNumChildren() > 0)
       {
@@ -343,26 +371,20 @@ public class AnnotationCreator implements AnnotationParserVisitor
       return AnnotationProxy.createProxy(map, annotation);
    }
 
+   public static Object createAnnotation(ASTAnnotation node, Class annotation) throws Exception
+   {
+      return createAnnotation(node, annotation, null);
+   }
+   
    public static Object createAnnotation(final String annotationExpr, final Class annotation) throws Exception
    {
-      try
-      {
-         Object proxy = AccessController.doPrivileged(new PrivilegedExceptionAction() {
-           public Object run() throws Exception{
-              AnnotationParser parser = new AnnotationParser(new StringReader(annotationExpr));
-              org.jboss.annotation.factory.ast.ASTStart start = parser.Start();
-              ASTAnnotation node = (ASTAnnotation) start.jjtGetChild(0);
-              
-              return createAnnotation(node, annotation);
-           }
-         });
-         
-         return proxy;
-      }
-      catch (PrivilegedActionException e)
-      {
-         throw new RuntimeException(e.getException());
-      }
+      return createAnnotation(getRootExpr(annotationExpr), annotation, null);
    }
 
+   public static Object createAnnotation(String annotationExpr, ClassLoader cl) throws Exception
+   {
+      return createAnnotation(getRootExpr(annotationExpr), null, cl);
+   }
+
+   
 }
