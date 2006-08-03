@@ -2,7 +2,6 @@
 <!DOCTYPE project [
    <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
    <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
-   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
    <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
 ]>
 
@@ -76,8 +75,6 @@
     <!-- ======= -->
     <!-- Modules -->
     <!-- ======= -->
-
-    &modules;
 
     <!-- The combined dependant module classpath -->
     <path id="dependentmodule.classpath">
