@@ -70,8 +70,17 @@ public class JarImpl
       throws IOException
    {
       file = new File(path);
-      jar = new JarFile(file);
       this.vfsPath = vfsPath;
+      try
+      {
+         jar = new JarFile(file);
+      }
+      catch(IOException e)
+      {
+         IOException ioe = new IOException("Error on jar: "+path);
+         ioe.initCause(e);
+         throw ioe;
+      }
    }
 
    public String getName()
