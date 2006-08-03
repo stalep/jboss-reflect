@@ -47,7 +47,7 @@ public class FileSystemVFS
    /**
     * get VirtualFile from filesystem path
     *
-    * @param fp path, i.e. "/home/wburke/foo.jar"
+    * @param fileSystemPath path, i.e. "/home/wburke/foo.jar"
     * @return the VirtualFiel for fileSystemPath
     * @throws RuntimeException wrapper for any error  
     */
@@ -254,18 +254,25 @@ public class FileSystemVFS
             {
                atomVF = childVF.findChild(atom);
             }
-            else if( JarImpl.isJar(atom) )
-            {
-               atomVF = new JarImpl(absPath, atomPath);
-               inJar = true;
-            }
             else
             {
-               URL atomParentURL = childVF == null ? parentURL : childVF.toURL();
-               String parentString = atomParentURL.toString();
-               if (!parentString.endsWith("/")) atomParentURL = new URL(parentString + "/");
-               URL filePath = new URL(atomParentURL, atom);
-               atomVF = new FileImpl(filePath, atomPath, this);
+               // Need to validate that the jar is not unpacked dir
+               StringBuilder tmp = new StringBuilder(atomPath);
+               File test = new File(tmp.toString());
+               if( test.isFile() && JarImpl.isJar(atom) )
+               {
+                  atomVF = new JarImpl(absPath, atomPath);
+                  inJar = true;
+               }
+               else
+               {
+                  URL atomParentURL = childVF == null ? parentURL : childVF.toURL();
+                  String parentString = atomParentURL.toString();
+                  if (!parentString.endsWith("/"))
+                     atomParentURL = new URL(parentString + "/");
+                  URL filePath = new URL(atomParentURL, atom);
+                  atomVF = new FileImpl(filePath, atomPath, this);
+               }
             }
             fileCache.put(atomPath, atomVF);
             childVF = atomVF;
