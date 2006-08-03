@@ -7,8 +7,8 @@
 	<classpathentry kind="lib" path="/thirdparty/apache-log4j/lib/log4j.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/oswego-concurrent/lib/concurrent.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar"/>
-	<classpathentry kind="src" path="/test"/>
 	<classpathentry sourcepath="/javassist" kind="lib" path="/thirdparty/javassist/lib/javassist.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/jboss/profiler/jvmti/lib/jboss-profiler-jvmti.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/test/lib/jboss-test.jar"/>
 	<classpathentry kind="output" path="output/eclipse-classes"/>
 </classpath>
