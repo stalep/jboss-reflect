@@ -136,6 +136,30 @@ public class TestFileVFS extends BaseTestCase
       mfIS.close();
    }
 
+   public void testFindResourceUnpackedJar()
+      throws Exception
+   {
+      // this expects to be run with a working dir of the container root
+      File outerJar = new File("output/lib/unpacked-outer.jar");
+      URL rootURL = outerJar.getParentFile().toURL();
+      VFSFactory factory = VFSFactoryLocator.getFactory(rootURL);
+      ReadOnlyVFS vfs = factory.getVFS(rootURL);
+      VirtualFile jar = vfs.resolveFile("unpacked-outer.jar");
+      assertTrue("unpacked-outer.jar != null", jar != null);
+
+      ArrayList<String> searchCtx = new ArrayList<String>();
+      searchCtx.add("unpacked-outer.jar");
+      VirtualFile metaInf = vfs.resolveFile("META-INF/MANIFEST.MF", searchCtx);
+      assertTrue("META-INF/MANIFEST.MF != null", metaInf != null);
+      InputStream mfIS = metaInf.openStream();
+      assertTrue("META-INF/MANIFEST.MF.openStream != null", mfIS != null);
+      Manifest mf = new Manifest(mfIS);
+      Attributes mainAttrs = mf.getMainAttributes();
+      String version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_VERSION);
+      assertEquals("1.0.0.GA", version);
+      mfIS.close();
+   }
+
    /**
     * Test simple file resolution without search contexts
     * @throws Exception
@@ -167,6 +191,41 @@ public class TestFileVFS extends BaseTestCase
 
       // Test a non-canonical path
       outerJarFile = new File("output/resources/../lib/outer.jar");
+      rootURL = outerJarFile.getParentFile().toURL();
+      // Check resolving the root file
+      root = vfs.resolveFile("");
+      assertEquals("root name", "lib", root.getName());
+      assertEquals("root path", "", root.getPathName());
+      assertTrue("root isDirectory", root.isDirectory());
+   }
+
+   public void testResolveFileInUnpackedJar()
+      throws Exception
+   {
+      log.info("+++ testResolveFileInUnpackedJar, cwd="+(new File(".").getCanonicalPath()));
+      // this expects to be run with a working dir of the container root
+      File outerJarFile = new File("output/lib/unpacked-outer.jar");
+      URL rootURL = outerJarFile.getParentFile().toURL();
+      VFSFactory factory = VFSFactoryLocator.getFactory(rootURL);
+      ReadOnlyVFS vfs = factory.getVFS(rootURL);
+
+      // Check resolving the root file
+      VirtualFile root = vfs.resolveFile("");
+      assertEquals("root name", "lib", root.getName());
+      assertEquals("root path", "", root.getPathName());
+      assertTrue("root isDirectory", root.isDirectory());
+
+      // Find the outer.jar
+      VirtualFile outerJar = vfs.resolveFile("unpacked-outer.jar");
+      assertNotNull("unpacked-outer.jar", outerJar);
+      assertEquals("unpacked-outer.jar name", "unpacked-outer.jar", outerJar.getName());
+      assertEquals("unpacked-outer.jar path", "unpacked-outer.jar", outerJar.getPathName());
+      
+      VirtualFile outerJarMF = vfs.resolveFile("unpacked-outer.jar/META-INF/MANIFEST.MF");
+      assertNotNull("unpacked-outer.jar/META-INF/MANIFEST.MF", outerJarMF);
+
+      // Test a non-canonical path
+      outerJarFile = new File("output/resources/../lib/unpacked-outer.jar");
       rootURL = outerJarFile.getParentFile().toURL();
       // Check resolving the root file
       root = vfs.resolveFile("");
