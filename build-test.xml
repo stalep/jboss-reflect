@@ -2,7 +2,6 @@
 <!DOCTYPE project [
    <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
    <!ENTITY libraries  SYSTEM "../thirdparty/libraries.ent">
-   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
    <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
 ]>
 
@@ -71,14 +70,11 @@
       <path refid="javassist.classpath"/>
       <path refid="apache.log4j.classpath"/>
       <path refid="oswego.concurrent.classpath"/>
+      <path refid="jboss.common.classpath"/>
+      <path refid="jboss.test.classpath"/>
       <path refid="jboss.profiler.jvmti.classpath"/>
     </path>
 
-    <!-- ======= -->
-    <!-- Modules -->
-    <!-- ======= -->
-
-    &modules;
 <!-- this -->
 <property name="jboss.this.root" value="${module.root}/output"/>
 <property name="jboss.this.lib" value="${jboss.this.root}/lib"/>
@@ -92,8 +88,6 @@
     <!-- The combined dependant module classpath -->
     <path id="dependentmodule.classpath">
       <path refid="jboss.this.classpath"/>
-      <path refid="jboss.common.classpath"/>
-      <path refid="jboss.test.classpath"/>
     </path>
 
     <!-- ===== -->
@@ -150,11 +144,11 @@
     -->
   <target name="module-jars" depends="init">
     
-    <!-- Build jboss-kernel.jar -->
     <jar jarfile="${build.lib}/jboss-container-test.jar" manifest="${build.etc}/default.mf">
       <fileset dir="${build.classes}"/>
     </jar>
 
+     <!--  vfs test jars -->
      <jar destfile="${build.lib}/jar1.jar">
         <manifest>
            <attribute name="Specification-Title" value="jar1" />
@@ -193,8 +187,12 @@
            <include name="org/jboss/test/vfs/support/*" />
         </zipfileset>
      </jar>
+     <!--  unpacked versions of vfs test jars -->
+      <unzip dest="${build.lib}/unpacked-outer.jar" src="${build.lib}/outer.jar">
+         
+      </unzip>
 
-  	<!-- Profile service test jars -->
+     <!-- Profile service test jars -->
     <jar destfile="${build.lib}/p0.jar">
       <manifest>
          <attribute name="Specification-Title" value="profile0-jar" />
