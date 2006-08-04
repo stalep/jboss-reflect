@@ -2,7 +2,6 @@
 <!DOCTYPE project [
    <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
    <!ENTITY libraries  SYSTEM "../thirdparty/libraries.ent">
-   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
    <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
 ]>
 
@@ -72,13 +71,13 @@
       <path refid="apache.log4j.classpath"/>
       <path refid="oswego.concurrent.classpath"/>
       <path refid="jboss.profiler.jvmti.classpath"/>
+      <path refid="jboss.test.classpath"/>
     </path>
 
     <!-- ======= -->
     <!-- Modules -->
     <!-- ======= -->
 
-    &modules;
 <!-- this -->
 <property name="jboss.this.root" value="${module.root}/output"/>
 <property name="jboss.this.lib" value="${jboss.this.root}/lib"/>
@@ -86,6 +85,7 @@
    <fileset dir="${jboss.this.lib}">
       <include name="*.jar"/>
       <include name="*14.jar"/>
+      <exclude name="*-test.jar"/>
       <exclude name="${jar.prefix}14.jar"/>
    </fileset>
 </path>
@@ -94,7 +94,6 @@
     <path id="dependentmodule.classpath">
       <path refid="jboss.this.classpath"/>
       <path refid="jboss.common.classpath"/>
-      <path refid="jboss.test.classpath"/>
     </path>
 
     <!-- ===== -->
@@ -110,17 +109,9 @@
     <property name="build-bypass.disabled" value="true"/>
 
     <call target="_default:task-init"/>
-  	
+
     <path id="thirdparty.classpath">
       <path refid="library.classpath"/>
-      <path refid="dependentmodule.classpath"/>
-    </path>
-    
-    <path id="no.javassist.classpath">
-      <path refid="junit.junit.classpath"/>
-      <path refid="apache.log4j.classpath"/>
-      <path refid="oswego.concurrent.classpath"/>
-      <path refid="jboss.profiler.jvmti.classpath"/>
       <path refid="dependentmodule.classpath"/>
     </path>
 
@@ -166,8 +157,7 @@
 
   <target name="compile"
 	  description="Compile all source files."
-	  depends="_default:compile-classes,
-	  			  retro"
+	  depends="retro"
   />
 
   <target name="retro">
@@ -181,19 +171,19 @@
            <pathelement path="${build.classes}"/>
         </classpath>
         <src path="${build.classes}"/>
-     </retro>      
-  </target> 
+     </retro>
+  </target>
 
-   
+
   <!-- ================================================================== -->
   <!-- Archives                                                           -->
   <!-- ================================================================== -->
 
-  <!-- 
+  <!--
      |  Build all jar files.
     -->
   <target name="module-jars" depends="init">
-    
+
     <!-- Build jboss-kernel.jar -->
     <jar jarfile="${build.lib.retro}/jboss-container-test14.jar" manifest="${build.etc}/default.mf">
       <fileset dir="${build.classes.retro}"/>
@@ -267,7 +257,7 @@
          <equals arg1="${ant.java.version}" arg2="1.4" />
       </condition>
       <fail message="jdk1.4.x must be used for the tests" unless="jdk14x"/>
-      
+
       <mkdir dir="${build.reports}"/>
       <mkdir dir="${build.testlog}"/>
       <!-- Remove the test.log so each run has a fresh log -->
@@ -305,11 +295,11 @@
       </junit>
 
    </target>
-   
+
    <target name="memory-test" depends="most" description="Execute MemoryLeakTestCase">
       <mkdir dir="${build.reports}"/>
       <mkdir dir="${build.testlog}"/>
-   	
+
 	      <junit printsummary="yes" fork="yes" haltonfailure="no">
          <classpath>
             <pathelement location="${build.classes}"/>

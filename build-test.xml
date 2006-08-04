@@ -114,6 +114,8 @@
       <path refid="apache.log4j.classpath"/>
       <path refid="oswego.concurrent.classpath"/>
       <path refid="jboss.profiler.jvmti.classpath"/>
+      <path refid="jboss.test.classpath"/>
+      <path refid="jboss.common.classpath"/>
     </path>
 
   </target>
