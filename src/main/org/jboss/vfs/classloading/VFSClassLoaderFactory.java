@@ -40,4 +40,8 @@ public class VFSClassLoaderFactory
    {
       return SecurityActions.newClassLoader(paths, vfs);
    }
+   public static VFSClassLoader newClassLoader(String[] paths, ReadOnlyVFS vfs, ClassLoader parent)
+   {
+      return SecurityActions.newClassLoader(paths, vfs, parent);
+   }
 }

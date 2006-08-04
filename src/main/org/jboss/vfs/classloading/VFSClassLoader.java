@@ -51,13 +51,27 @@ public class VFSClassLoader extends SecureClassLoader
    protected ArrayList<ClassPathVFS> classpath = new ArrayList<ClassPathVFS>();
 
    /**
-    * Create a class loader given a search path and VFS
+    * Create a class loader given a search path VFS, and default parent class
+    * loader.
     * @param searchCtxs - the paths from the VFS that make up the class loader path
     * @param vfs - the VFS used to resolve and load classes and resources
     */
    public VFSClassLoader(String[] searchCtxs, ReadOnlyVFS vfs)
    {
-     ClassPathVFS cp  = new ClassPathVFS(searchCtxs, vfs);
+      ClassPathVFS cp  = new ClassPathVFS(searchCtxs, vfs);
+      classpath.add(cp);
+   }
+   /**
+    * Create a class loader given a search path VFS, and given parent class
+    * loader.
+    * @param searchCtxs - the paths from the VFS that make up the class loader path
+    * @param vfs - the VFS used to resolve and load classes and resources
+    * @param parent - the parent class loader to use
+    */
+   public VFSClassLoader(String[] searchCtxs, ReadOnlyVFS vfs, ClassLoader parent)
+   {
+      super(parent);
+      ClassPathVFS cp  = new ClassPathVFS(searchCtxs, vfs);
       classpath.add(cp);
    }
 

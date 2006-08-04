@@ -28,14 +28,14 @@ import java.security.PrivilegedAction;
 import org.jboss.vfs.spi.ReadOnlyVFS;
 
 /**
- Package priviledged actions
- @author Scott.Stark@jboss.org
- @version $Revision$
+ * Package priviledged actions
+ * 
+ * @author Scott.Stark@jboss.org
+ * @version $Revision$
  */
 class SecurityActions
 {
-   static PrivilegedAction<Policy> getPolicyAction = new PrivilegedAction<Policy>()
-   {
+   static PrivilegedAction<Policy> getPolicyAction = new PrivilegedAction<Policy>() {
       public Policy run()
       {
          return Policy.getPolicy();
@@ -44,62 +44,87 @@ class SecurityActions
 
    interface ClassLoaderActions
    {
-      ClassLoaderActions PRIVILEGED = new ClassLoaderActions()
-      {
-         public VFSClassLoader newClassLoader(final String[] paths, final ReadOnlyVFS vfs)
+      ClassLoaderActions PRIVILEGED = new ClassLoaderActions() {
+         public VFSClassLoader newClassLoader(final String[] paths,
+               final ReadOnlyVFS vfs, final ClassLoader parent)
          {
-            PrivilegedAction<VFSClassLoader> action = new PrivilegedAction<VFSClassLoader>()
-            {
+            PrivilegedAction<VFSClassLoader> action = new PrivilegedAction<VFSClassLoader>() {
                public VFSClassLoader run()
                {
-                  return new VFSClassLoader(paths, vfs);
+                  ClassLoader theParent = parent;
+                  if (parent == null)
+                     theParent = Thread.currentThread().getContextClassLoader();
+                  return new VFSClassLoader(paths, vfs, theParent);
                }
             };
             return AccessController.doPrivileged(action);
          }
+
          public Policy getPolicy()
          {
             return AccessController.doPrivileged(getPolicyAction);
          }
       };
 
-      ClassLoaderActions NON_PRIVILEGED = new ClassLoaderActions()
-      {
-         public VFSClassLoader newClassLoader(final String[] paths, final ReadOnlyVFS vfs)
+      ClassLoaderActions NON_PRIVILEGED = new ClassLoaderActions() {
+         public VFSClassLoader newClassLoader(final String[] paths,
+               final ReadOnlyVFS vfs, final ClassLoader parent)
          {
-            return new VFSClassLoader(paths, vfs);
+            ClassLoader theParent = parent;
+            if (parent == null)
+               theParent = Thread.currentThread().getContextClassLoader();
+            return new VFSClassLoader(paths, vfs, theParent);
          }
+
          public Policy getPolicy()
          {
             return Policy.getPolicy();
          }
       };
 
-      VFSClassLoader newClassLoader(final String[] paths, final ReadOnlyVFS vfs);
+      VFSClassLoader newClassLoader(final String[] paths, final ReadOnlyVFS vfs, ClassLoader parent);
+
       Policy getPolicy();
    }
 
-   static VFSClassLoader newClassLoader(final String[] paths, final ReadOnlyVFS vfs)
+   static VFSClassLoader newClassLoader(final String[] paths,
+         final ReadOnlyVFS vfs)
    {
-      if(System.getSecurityManager() == null)
+      if (System.getSecurityManager() == null)
       {
-         return ClassLoaderActions.NON_PRIVILEGED.newClassLoader(paths, vfs);
+         return ClassLoaderActions.NON_PRIVILEGED.newClassLoader(paths, vfs, null);
       }
       else
       {
-         return ClassLoaderActions.PRIVILEGED.newClassLoader(paths, vfs);
+         return ClassLoaderActions.PRIVILEGED.newClassLoader(paths, vfs, null);
       }
    }
+
+   static VFSClassLoader newClassLoader(final String[] paths,
+         final ReadOnlyVFS vfs, ClassLoader parent)
+   {
+      if (System.getSecurityManager() == null)
+      {
+         return ClassLoaderActions.NON_PRIVILEGED.newClassLoader(paths, vfs,
+               parent);
+      }
+      else
+      {
+         return ClassLoaderActions.PRIVILEGED
+               .newClassLoader(paths, vfs, parent);
+      }
+   }
+
    static Policy getPolicy()
    {
-      if(System.getSecurityManager() == null)
+      if (System.getSecurityManager() == null)
       {
          return ClassLoaderActions.NON_PRIVILEGED.getPolicy();
       }
       else
       {
          return ClassLoaderActions.PRIVILEGED.getPolicy();
-      }      
+      }
    }
 
 }
