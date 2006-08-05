@@ -66,6 +66,7 @@
 
     <!-- The combined library classpath -->
     <path id="library.classpath">
+      <path refid="jboss.common.classpath"/>
       <path refid="junit.junit.classpath"/>
       <path refid="javassist.classpath"/>
       <path refid="apache.log4j.classpath"/>
@@ -93,7 +94,6 @@
     <!-- The combined dependant module classpath -->
     <path id="dependentmodule.classpath">
       <path refid="jboss.this.classpath"/>
-      <path refid="jboss.common.classpath"/>
     </path>
 
     <!-- ===== -->

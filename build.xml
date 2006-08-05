@@ -70,6 +70,8 @@
       <path refid="javassist.classpath"/>
       <path refid="apache.log4j.classpath"/>
       <path refid="oswego.concurrent.classpath"/>
+      <path refid="jboss.common.classpath"/>
+      <path refid="jboss.test.classpath"/>
     </path>
 
     <!-- ======= -->
@@ -78,8 +80,6 @@
 
     <!-- The combined dependant module classpath -->
     <path id="dependentmodule.classpath">
-      <path refid="jboss.common.classpath"/>
-      <path refid="jboss.test.classpath"/>
     </path>
 
     <!-- ============================= -->
