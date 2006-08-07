@@ -84,10 +84,7 @@
 <property name="jboss.this.lib" value="${jboss.this.root}/lib"/>
 <path id="jboss.this.classpath">
    <fileset dir="${jboss.this.lib}">
-      <include name="*.jar"/>
-      <include name="*14.jar"/>
-      <exclude name="*-test.jar"/>
-      <exclude name="${jar.prefix}14.jar"/>
+      <include name="jboss-container.jar"/>
    </fileset>
 </path>
 
