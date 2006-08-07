@@ -199,6 +199,41 @@ public class TestFileVFS extends BaseTestCase
       assertTrue("root isDirectory", root.isDirectory());
    }
 
+   /**
+    * Validate resolving a .class file given a set of search contexts in the
+    * vfs that make up a classpath.
+    * 
+    * @throws Exception
+    */
+   public void testResolveClassFileInClassPath()
+      throws Exception
+   {
+      log.info("+++ testResolveFile, cwd="+(new File(".").getCanonicalPath()));
+      // this expects to be run with a working dir of the container root
+      File libFile = new File("output/lib");
+      URL rootURL = libFile.toURL();
+      VFSFactory factory = VFSFactoryLocator.getFactory(rootURL);
+      ReadOnlyVFS vfs = factory.getVFS(rootURL);
+
+      // Find ClassInJar1.class
+      ArrayList<String> cp = new ArrayList<String>();
+      cp.add("jar1.jar");
+      VirtualFile c1 = vfs.resolveFile("org/jboss/test/vfs/support/jar1/ClassInJar1.class", cp);
+      assertNotNull("ClassInJar1.class VF", c1);
+      log.debug("Found ClassInJar1.class: "+c1);
+
+      // Find ClassInJar1$InnerClass.class
+      VirtualFile c1i = vfs.resolveFile("org/jboss/test/vfs/support/jar1/ClassInJar1$InnerClass.class", cp);
+      assertNotNull("ClassInJar1$InnerClass.class VF", c1i);
+      log.debug("Found ClassInJar1$InnerClass.class: "+c1i);
+
+      // Find ClassInJar2.class
+      cp.add("jar2.jar");
+      VirtualFile c2 = vfs.resolveFile("org/jboss/test/vfs/support/jar2/ClassInJar2.class", cp);
+      assertNotNull("ClassInJar2.class VF", c2);
+      log.debug("Found ClassInJar2.class: "+c2);
+   }
+
    public void testResolveFileInUnpackedJar()
       throws Exception
    {
