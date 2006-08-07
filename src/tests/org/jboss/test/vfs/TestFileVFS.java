@@ -282,6 +282,7 @@ public class TestFileVFS extends BaseTestCase
 
       HashSet<String> expectedClasses = new HashSet<String>();
       expectedClasses.add("jar1.jar/org/jboss/test/vfs/support/jar1/ClassInJar1.class");
+      expectedClasses.add("jar1.jar/org/jboss/test/vfs/support/jar1/ClassInJar1$InnerClass.class");
       expectedClasses.add("jar2.jar/org/jboss/test/vfs/support/jar2/ClassInJar2.class");
       expectedClasses.add("org/jboss/test/vfs/support/CommonClass.class");
       SuffixMatchVisitor classVisitor = new SuffixMatchVisitor(".class");
@@ -297,7 +298,7 @@ public class TestFileVFS extends BaseTestCase
             count ++;
          }
       }
-      assertEquals("There were 3 classes", 3, count);
+      assertEquals("There were 4 classes", 4, count);
    }
 
    /**
