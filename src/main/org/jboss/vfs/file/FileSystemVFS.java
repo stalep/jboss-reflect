@@ -132,6 +132,8 @@ public class FileSystemVFS
             // See if we can create a virtual file from the context
             match = resolveFile(path, ctx);
          }
+         if( match != null )
+            break;
       }
       return match;
    }
@@ -141,11 +143,17 @@ public class FileSystemVFS
       return null;
    }
 
+   /**
+    * TODO
+    */
    public List<VirtualFile> resolveFiles(String path, List<URL> searchContexts)
    {
       return null;
    }
 
+   /**
+    * Clear the Map<String, VirtualFile> of name to VF hits
+    */
    public void clear()
    {
       fileCache.clear();
@@ -157,6 +165,10 @@ public class FileSystemVFS
       return scanner;
    }
 
+   /**
+    * Get the rootURL for the VFS
+    * @return rootURL for the VFS
+    */
    public URL getRootURL()
    {
       return rootURL;
