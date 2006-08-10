@@ -39,6 +39,12 @@ import java.io.IOException;
 public interface ReadOnlyVFS
 {
    /**
+    * Get the root URL of the VFS.
+    * @return root URL of the VFS.
+    */
+   public URL getRootURL();
+
+   /**
     * Locate a file in the VFS given its URL path.
     * 
     * @param path - the absolute path to the virtual file (file:/root/deploy/x.ear)
