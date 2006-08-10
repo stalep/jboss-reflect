@@ -23,25 +23,38 @@ package org.jboss.vfs.classloading;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Arrays;
 
+import org.jboss.logging.Logger;
 import org.jboss.vfs.VFSFactory;
 import org.jboss.vfs.spi.ReadOnlyVFS;
 
+/**
+ * A factory for creating VFSClassLoader instances.
+ * 
+ * @author Scott.Stark@jboss.org
+ * @version $Revision$
+ */
 public class VFSClassLoaderFactory
 {
+   private static Logger log = Logger.getLogger(VFSClassLoaderFactory.class);
+
    public static VFSClassLoader newClassLoader(URL rootURL, String[] paths, VFSFactory factory)
       throws IOException
    {
+      log.debug("newClassLoader, rootURL="+rootURL+", paths="+Arrays.asList(paths));
       ReadOnlyVFS vfs = factory.getVFS(rootURL);
       return SecurityActions.newClassLoader(paths, vfs);
    }
    public static VFSClassLoader newClassLoader(String[] paths, ReadOnlyVFS vfs)
    {
+      log.debug("newClassLoader, vfs.rootURL="+vfs.getRootURL()+", paths="+Arrays.asList(paths));
       return SecurityActions.newClassLoader(paths, vfs);
    }
    public static VFSClassLoader newClassLoader(String[] paths, ReadOnlyVFS vfs, ClassLoader parent)
    {
+      log.debug("newClassLoader, vfs.rootURL="+vfs.getRootURL()+", paths="+Arrays.asList(paths)
+         +", parent="+parent);
       return SecurityActions.newClassLoader(paths, vfs, parent);
    }
 }
