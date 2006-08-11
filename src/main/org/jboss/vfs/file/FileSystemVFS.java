@@ -218,9 +218,12 @@ public class FileSystemVFS
                }
                else
                {
-                  URL atomParentURL = prevVF == null ? rootURL : prevVF.toURL();
-                  URL filePath = new URL(atomParentURL, atom);
-                  atomVF = new FileImpl(filePath, atomPath, this);
+                  /* The file needs to be created with a valid URL that ends in '/'
+                     if the file is a directory. Creating a FileImpl from a File
+                     handles this.
+                  */
+                  File atomFile = new File(absPath, atom);
+                  atomVF = new FileImpl(atomFile, atomPath, this);
                }
                fileCache.put(atomPath, atomVF);
                prevVF = atomVF;

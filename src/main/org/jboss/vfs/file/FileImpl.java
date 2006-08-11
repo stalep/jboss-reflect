@@ -48,6 +48,13 @@ public class FileImpl
    private transient List<VirtualFile> recursiveChildren;
    private transient InputStream contentIS;
 
+   /**
+    * Create a FileImpl from a File.
+    * @param file - the File instance
+    * @param vfsPath - the path relative to the vfs root for this file
+    * @param vfs - the VFS containing file
+    * @throws IOException - thrown if file.exists() == false
+    */
    public FileImpl(URL path, String vfsPath, FileSystemVFS vfs)
       throws IOException
    {
@@ -56,8 +63,21 @@ public class FileImpl
       this.file = new File(path.getPath());
       if( file.exists() == false )
          throw new FileNotFoundException(file.getCanonicalPath());
+      // If this is a directory and vfsPath does not end in '/', rebuild path, vfsPath
+      if( file.isDirectory() && vfsPath.endsWith("/") == false )
+      {
+         this.vfsPath += '/';
+         this.path = new URL(vfs.getRootURL(), this.vfsPath);
+      }
       this.vfs = vfs;
    }
+   /**
+    * Create a FileImpl from a File.
+    * @param file - the File instance
+    * @param vfsPath - the path relative to the vfs root for this file
+    * @param vfs - the VFS containing file
+    * @throws IOException - thrown if file.exists() == false
+    */
    public FileImpl(File file, String vfsPath, FileSystemVFS vfs)
       throws IOException
    {
