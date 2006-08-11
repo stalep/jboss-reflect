@@ -58,7 +58,16 @@ public class VFSClassLoader extends SecureClassLoader
     */
    public VFSClassLoader(String[] searchCtxs, ReadOnlyVFS vfs)
    {
-      ClassPathVFS cp  = new ClassPathVFS(searchCtxs, vfs);
+      String[] resolvedCtxs = searchCtxs;
+      try
+      {
+         resolvedCtxs = resolveSearchCtxs(searchCtxs, vfs);
+      }
+      catch(IOException e)
+      {
+         log.warn("Failed to resolve searchCtxs", e);
+      }
+      ClassPathVFS cp  = new ClassPathVFS(resolvedCtxs, vfs);         
       classpath.add(cp);
    }
    /**
@@ -71,7 +80,16 @@ public class VFSClassLoader extends SecureClassLoader
    public VFSClassLoader(String[] searchCtxs, ReadOnlyVFS vfs, ClassLoader parent)
    {
       super(parent);
-      ClassPathVFS cp  = new ClassPathVFS(searchCtxs, vfs);
+      String[] resolvedCtxs = searchCtxs;
+      try
+      {
+         resolvedCtxs = resolveSearchCtxs(searchCtxs, vfs);
+      }
+      catch(IOException e)
+      {
+         log.warn("Failed to resolve searchCtxs", e);
+      }
+      ClassPathVFS cp  = new ClassPathVFS(resolvedCtxs, vfs);         
       classpath.add(cp);
    }
 
@@ -224,7 +242,7 @@ public class VFSClassLoader extends SecureClassLoader
     * deployment, use the original url as the codebase.
     * @return the protection domain
     * @throws MalformedURLException 
-    * @todo certificates and principles?
+    * TODO certificates and principles?
     */
    protected ProtectionDomain getProtectionDomain(VirtualFile classFile)
       throws MalformedURLException
@@ -237,5 +255,53 @@ public class VFSClassLoader extends SecureClassLoader
          log.trace("getProtectionDomain, url=" + codesourceUrl +
                    " codeSource=" + cs + " permissions=" + permissions);
       return new ProtectionDomain(cs, permissions);
+   }
+
+   /**
+    * Iterate through the searchCtxs and look for wildcard expressions. Currently only '*.jar' indicating
+    * every jar in a directory is supported.
+    * 
+    * @param searchCtxs - input array of vfs paths relative to vfs
+    * @param vfs - the vfs to resolve the searchCtxs against
+    */
+   protected String[] resolveSearchCtxs(String[] searchCtxs, ReadOnlyVFS vfs)
+      throws IOException
+   {
+      ArrayList<String> tmp = new ArrayList<String>(searchCtxs.length);
+      for(String ctx : searchCtxs)
+      {
+         if( ctx.endsWith("*.jar") )
+         {
+            // Obtain the parent directory name
+            int slash = ctx.lastIndexOf('/');
+            String dir = "";
+            if( slash > 0 )
+               dir = ctx.substring(0, slash);
+            VirtualFile dirFile = vfs.resolveFile(dir);
+            VirtualFile[] children = dirFile.getChildren();
+            StringBuilder sb = new StringBuilder(dir);
+            sb.append('/');
+            int dirLength = sb.length();
+            for(VirtualFile child : children)
+            {
+               String name = child.getName();
+               if( name.endsWith(".jar") )
+               {
+                  sb.append(name);
+                  String path = sb.toString();
+                  tmp.add(path);
+                  sb.setLength(dirLength);
+               }
+            }
+         }
+         else
+         {
+            tmp.add(ctx);
+         }
+      }
+      log.debug("Resolved searchCtxs to: "+tmp);
+      String[] newCtxs = new String[tmp.size()];
+      tmp.toArray(newCtxs);
+      return newCtxs;
    }
 }
