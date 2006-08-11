@@ -375,4 +375,33 @@ public class TestFileVFS extends BaseTestCase
       assertEquals("size", size, tmpVF2.getSize());
       assertEquals("url", url, tmpVF2.toURL());
    }
+
+   /**
+    * Test that the URL of a VFS corresponding to a directory ends in '/' so that
+    * URLs created relative to it are under the directory.
+    * 
+    * @throws Exception
+    */
+   public void testDirURLs()
+      throws Exception
+   {
+      // this expects to be run with a working dir of the container root
+      File libFile = new File("output/lib");
+      URL rootURL = libFile.toURL();
+      VFSFactory factory = VFSFactoryLocator.getFactory(rootURL);
+      ReadOnlyVFS vfs = factory.getVFS(rootURL);
+
+      // Use the unpacked-outer.jar in output/lib
+      VirtualFile outerJar = vfs.resolveFile("unpacked-outer.jar");
+      URL outerURL = outerJar.toURL();
+      log.debug("outerURL: "+outerURL);
+      assertTrue(outerURL+" ends in '/'", outerURL.getPath().endsWith("/"));
+      // Validate that jar1 is under unpacked-outer.jar
+      URL jar1URL = new URL(outerURL, "jar1.jar");
+      log.debug("jar1URL: "+jar1URL+", path="+jar1URL.getPath());
+      assertTrue("jar1URL path ends in unpacked-outer.jar/jar1.jar",
+            jar1URL.getPath().endsWith("unpacked-outer.jar/jar1.jar"));
+      VirtualFile jar1 = outerJar.findChild("jar1.jar");
+      assertEquals("jar1URL == VF.toURL()", jar1URL, jar1.toURL());
+   }
 }
