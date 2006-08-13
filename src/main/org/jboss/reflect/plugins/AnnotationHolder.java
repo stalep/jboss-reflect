@@ -70,11 +70,13 @@ public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Seri
 
    public AnnotationValue getAnnotation(String name)
    {
+      if (annotationMap == null) return null;
       return annotationMap.get(name);
    }
 
    public boolean isAnnotationPresent(String name)
    {
+      if (annotationMap == null) return false;
       return annotationMap.containsKey(name);
    }
 
