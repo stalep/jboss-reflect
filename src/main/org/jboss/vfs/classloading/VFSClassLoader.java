@@ -189,6 +189,10 @@ public class VFSClassLoader extends SecureClassLoader
       }*/
       return resources.elements();
    }
+   public Enumeration<URL> findResourcesLocally(String name) throws IOException
+   {
+      return findResources(name);
+   }
 
    public ClassLoadingDomain getDomain()
    {
