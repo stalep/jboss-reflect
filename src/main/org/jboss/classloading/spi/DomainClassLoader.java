@@ -6,7 +6,9 @@
  */
 package org.jboss.classloading.spi;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
 
 /**
  * A classloader that can be put in a domain
@@ -33,6 +35,8 @@ public interface DomainClassLoader
     */
    void setDomain(ClassLoadingDomain domain);
    
+   Class loadClass(String name) throws ClassNotFoundException;
+
    /**
     * Load a class
     * 
@@ -50,6 +54,7 @@ public interface DomainClassLoader
     * @return the resource or null if not found
     */
    URL loadResourceLocally(String name);
+   Enumeration<URL> findResourcesLocally(String name) throws IOException;
 
    /**
     * Get the packages defined by the classloader

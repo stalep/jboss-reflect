@@ -7,6 +7,9 @@
 package org.jboss.classloading.spi;
 
 import java.net.URL;
+import java.util.Enumeration;
+
+import org.jboss.util.loading.Translator;
 
 /**
  * A ClassLoadingDomain holds a number of classloaders.
@@ -19,13 +22,6 @@ public interface ClassLoadingDomain
    // Constants -----------------------------------------------------
 
    // Public --------------------------------------------------------
-   
-   /**
-    * Whether we implement java2 classloading compliance
-    * 
-    * @return true when delegate first to parent
-    */
-   boolean getJava2ClassLoadingCompliance();
    
    /**
     * Get the parent classloading domain
@@ -52,7 +48,10 @@ public interface ClassLoadingDomain
     * @param classLoader the requesting classloader
     * @return the resource or null if not found
     */
-   URL loadResource(String name, DomainClassLoader classLoader);
-   
+   URL getResource(String name, DomainClassLoader classLoader);
+
+   Enumeration<URL> findResources(String name);
+
+   Translator getTranslator();
    // Inner classes -------------------------------------------------
 }
