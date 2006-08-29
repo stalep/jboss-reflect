@@ -34,7 +34,15 @@ public interface DomainClassLoader
     * 
     */
    void setDomain(ClassLoadingDomain domain);
-   
+
+   public URL[] getClasspath();
+
+   /**
+    * 
+    * @param name
+    * @return
+    * @throws ClassNotFoundException
+    */
    Class loadClass(String name) throws ClassNotFoundException;
 
    /**
@@ -56,6 +64,13 @@ public interface DomainClassLoader
    URL loadResourceLocally(String name);
    Enumeration<URL> findResourcesLocally(String name) throws IOException;
 
+   /**
+    * Get the possible package names associated with the class loader. This
+    * may be a superset of the currently defined Packages.
+    * 
+    * @return unique package names of classes available to the class loader.
+    */
+   public String[] getPackagNames();
    /**
     * Get the packages defined by the classloader
     * 

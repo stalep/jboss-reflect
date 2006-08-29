@@ -28,7 +28,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.PermissionCollection;
-import java.security.Policy;
 import java.security.ProtectionDomain;
 import java.security.SecureClassLoader;
 import java.security.cert.Certificate;
@@ -106,6 +105,43 @@ public class VFSClassLoader extends SecureClassLoader
       }
       ClassPathVFS cp  = new ClassPathVFS(resolvedCtxs, vfs);         
       classpath.add(cp);
+   }
+
+   
+   /* (non-Javadoc)
+    * @see org.jboss.classloading.spi.DomainClassLoader#getClasspath()
+    */
+   public URL[] getClasspath()
+   {
+      ArrayList<URL> cp = new ArrayList<URL>(classpath.size());
+      for(ClassPathVFS entry : classpath)
+      {
+         URL baseURL = entry.vfs.getRootURL();
+         for(String path : entry.searchCtxs)
+         {
+            try
+            {
+               URL entryURL = new URL(baseURL, path);
+               cp.add(entryURL);
+            }
+            catch(MalformedURLException e)
+            {               
+            }
+         }
+      }
+      URL[] theClasspath = new URL[cp.size()];
+      cp.toArray(theClasspath);
+      return theClasspath;
+   }
+
+   /**
+    * TODO
+    * @see org.jboss.classloading.spi.DomainClassLoader#getPackagNames()
+    */
+   public String[] getPackagNames()
+   {
+      // TODO Auto-generated method stub
+      return null;
    }
 
    /**
