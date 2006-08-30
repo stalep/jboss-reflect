@@ -85,7 +85,7 @@ public interface DomainClassLoader
     * 
     * @return unique package names of classes available to the class loader.
     */
-   public String[] getPackagNames();
+   public String[] getPackageNames();
    /**
     * Get the packages defined by the classloader
     * 

@@ -136,9 +136,9 @@ public class VFSClassLoader extends SecureClassLoader
 
    /**
     * TODO
-    * @see org.jboss.classloading.spi.DomainClassLoader#getPackagNames()
+    * @see org.jboss.classloading.spi.DomainClassLoader#getPackageNames()
     */
-   public String[] getPackagNames()
+   public String[] getPackageNames()
    {
       // TODO Auto-generated method stub
       return null;
