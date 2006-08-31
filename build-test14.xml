@@ -270,7 +270,7 @@
 
          <classpath>
             <pathelement location="${build.classes.retro}"/>
-            <pathelement location="${build.resources}"/>
+            <pathelement location="${build.resources}/tests"/>
             <path refid="tests.classpath"/>
             <path refid="apache.xerces.classpath"/>
          </classpath>
@@ -300,7 +300,7 @@
 	      <junit printsummary="yes" fork="yes" haltonfailure="no">
          <classpath>
             <pathelement location="${build.classes}"/>
-            <pathelement location="${build.resources}"/>
+            <pathelement location="${build.resources}/tests"/>
 	         <path refid="thirdparty.classpath"/>
             <path refid="javac.classpath"/>
             <path refid="apache.xerces.classpath"/>

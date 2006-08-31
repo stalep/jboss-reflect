@@ -123,6 +123,7 @@
 	  description="Compile all source files."
 	  depends="_default:compile-classes,
               _default:compile-etc,
+              _default:compile-resources,
               retro"
   />
 
