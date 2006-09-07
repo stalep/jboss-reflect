@@ -40,6 +40,7 @@ public class JarUtils
    // Initialise known suffixes
    static
    {
+      jarSuffixes.add(".zip");
       jarSuffixes.add(".ear");
       jarSuffixes.add(".jar");
       jarSuffixes.add(".rar");
