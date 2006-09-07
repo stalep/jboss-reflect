@@ -23,6 +23,10 @@ package org.jboss.virtual;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
@@ -40,6 +44,86 @@ public class VFSUtils
    private static final Logger log = Logger.getLogger(VFSUtils.class);
    
    /**
+    * Get the paths string for a collection of virtual files
+    * 
+    * @param paths the paths
+    * @return the string
+    * @throws IllegalArgumentException for null paths
+    */
+   public static String getPathsString(Collection<VirtualFile> paths)
+   {
+      StringBuilder buffer = new StringBuilder();
+      boolean first = true;
+      for (VirtualFile path : paths)
+      {
+         if (path == null)
+            throw new IllegalArgumentException("Null path in " + paths);
+         if (first == false)
+            buffer.append(':');
+         else
+            first = false;
+         buffer.append(path.getPathName());
+      }
+      
+      if (first == true)
+         buffer.append("<empty>");
+      
+      return buffer.toString();
+   }
+   
+   /**
+    * Add manifest paths
+    * 
+    * @param file the file
+    * @param paths the paths to add to
+    * @throws IOException if there is an error reading the manifest or the
+    *         virtual file is closed
+    * @throws IllegalStateException if the file has no parent
+    * @throws IllegalArgumentException for a null file or paths
+    */
+   public static void addManifestLocations(VirtualFile file, List<VirtualFile> paths) throws IOException
+   {
+      if (file == null)
+         throw new IllegalArgumentException("Null file");
+      if (paths == null)
+         throw new IllegalArgumentException("Null paths");
+      
+      Manifest manifest = getManifest(file);
+      if (manifest == null)
+         return;
+
+      Attributes mainAttributes = manifest.getMainAttributes();
+      String classPath = mainAttributes.getValue(Attributes.Name.CLASS_PATH);
+      
+      if (classPath == null)
+      {
+         if (log.isTraceEnabled())
+            log.trace("Manifest has no Class-Path for " + file.getPathName());
+         return;
+      }
+      
+      VirtualFile parent = file.getParent();
+      if (parent == null)
+         throw new IllegalStateException(file + " has no parent.");
+
+      StringTokenizer tokenizer = new StringTokenizer(classPath);
+      while (tokenizer.hasMoreTokens())
+      {
+         String path = tokenizer.nextToken();
+
+         try
+         {
+            VirtualFile vf = parent.findChild(path);
+            paths.add(vf);
+         }
+         catch (IOException e)
+         {
+            log.debug("Manifest Class-Path entry " + path + " ignored for " + file.getPathName() + " reason=" + e);
+         }
+      }
+   }
+
+   /**
     * Get a manifest from a virtual file,
     * assuming the virtual file is the root of an archive
     * 
@@ -47,14 +131,12 @@ public class VFSUtils
     * @return the manifest or null if not found
     * @throws IOException if there is an error reading the manifest or the
     *         virtual file is closed
-    * @throws IllegalArgumentException for a null archive or it is not an archive
+    * @throws IllegalArgumentException for a null archive
     */
-   public Manifest getManifest(VirtualFile archive) throws IOException
+   public static Manifest getManifest(VirtualFile archive) throws IOException
    {
       if (archive == null)
          throw new IllegalArgumentException("Null archive");
-      if (archive.isArchive() == false)
-         throw new IllegalArgumentException("Not an archive: " + archive);
       
       VirtualFile manifest;
       try
@@ -63,7 +145,7 @@ public class VFSUtils
       }
       catch (IOException ignored)
       {
-         log.debug("Can't find manifest for " + archive);
+         log.debug("Can't find manifest for " + archive.getPathName());
          return null;
       }
 
@@ -93,7 +175,7 @@ public class VFSUtils
     * @throws IOException if there is an error reading the manifest
     * @throws IllegalArgumentException for a null archive
     */
-   public Manifest getManifest(VFS archive) throws IOException
+   public static Manifest getManifest(VFS archive) throws IOException
    {
       VirtualFile root = archive.getRoot();
       return getManifest(root);
