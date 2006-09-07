@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.plugins.context.AbstractVFSContext;
 import org.jboss.virtual.plugins.context.jar.JarHandler;
@@ -73,7 +74,10 @@ public class FileSystemContext extends AbstractVFSContext
    {
       if (file == null)
          throw new IllegalArgumentException("Null file");
-      return file.toURL();
+      URL url = file.toURL();
+      String path = url.getPath();
+      path = VFSUtils.fixName(path);
+      return new URL("file", null, path);
    }
    
    /**
@@ -137,7 +141,14 @@ public class FileSystemContext extends AbstractVFSContext
       {
          URL url = JarUtils.createJarURL(fileURL);
          String name = file.getName();
-         return new JarHandler(this, parent, url, name);
+         try
+         {
+            return new JarHandler(this, parent, url, name);
+         }
+         catch (IOException e)
+         {
+            log.debug(e.getMessage());
+         }
       }
       return createVirtualFileHandler(parent, file, fileURL);
    }
