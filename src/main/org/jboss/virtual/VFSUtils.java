@@ -23,8 +23,11 @@ package org.jboss.virtual;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -195,5 +198,27 @@ public class VFSUtils
       if (name.charAt(length-1) == '/')
          return name.substring(0, length-1);
       return name;
+   }
+
+   /**
+    * Take a URL.getQuery string and parse it into name=value pairs
+    * 
+    * @param query Possibly empty/null url query string
+    * @return String[] for the name/value pairs in the query. May be empty but never null.
+    */
+   public static Map<String, String> parseURLQuery(String query)
+   {
+	   HashMap<String, String> pairsMap = new HashMap<String, String>();
+      if( query != null )
+      {
+   	   StringTokenizer tokenizer = new StringTokenizer(query, "=&");
+   	   while( tokenizer.hasMoreTokens() )
+   	   {
+   		   String name = tokenizer.nextToken();
+   		   String value = tokenizer.nextToken();
+   		   pairsMap.put(name, value);
+   	   }
+      }
+	   return pairsMap;
    }
 }

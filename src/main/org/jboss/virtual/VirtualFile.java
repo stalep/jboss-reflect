@@ -23,6 +23,7 @@ package org.jboss.virtual ;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
@@ -44,7 +45,10 @@ import org.jboss.virtual .spi.VirtualFileHandler;
  * @version $Revision: 44334 $
  */
 public class VirtualFile
+   implements Serializable
 {
+   private static final long serialVersionUID = 1L;
+
    /** The virtual file handler */
    private final VirtualFileHandler handler;
 
@@ -52,7 +56,7 @@ public class VirtualFile
    private AtomicBoolean closed = new AtomicBoolean(false); 
    
    /** The open streams */
-   private final Set<InputStream> streams = Collections.synchronizedSet(new WeakSet());
+   private transient final Set<InputStream> streams = Collections.synchronizedSet(new WeakSet());
    
    /**
     * Create a new VirtualFile.

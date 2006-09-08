@@ -23,6 +23,7 @@ package org.jboss.virtual.plugins.context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -36,7 +37,10 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  * @version $Revision: 1.1 $
  */
 public abstract class AbstractURLHandler extends AbstractVirtualFileHandler
+   implements Serializable
 {
+   private static final long serialVersionUID = 1L;
+
    /** The url */
    private final URL url;
    

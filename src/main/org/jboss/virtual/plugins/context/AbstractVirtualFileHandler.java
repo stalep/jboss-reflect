@@ -22,7 +22,13 @@
 package org.jboss.virtual.plugins.context;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamField;
+import java.io.ObjectInputStream.GetField;
+import java.io.ObjectOutputStream.PutField;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,21 +37,31 @@ import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.plugins.vfs.helpers.PathTokenizer;
 import org.jboss.virtual.spi.VFSContext;
+import org.jboss.virtual.spi.VFSContextFactory;
+import org.jboss.virtual.spi.VFSContextFactoryLocator;
 import org.jboss.virtual.spi.VirtualFileHandler;
 
 /**
  * AbstractVirtualFileHandler.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
 public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
 {
    /** The log */
    protected final Logger log = Logger.getLogger(getClass());
-   
+   private static final long serialVersionUID = 1L;
+   /** The class serial fields */
+   private static final ObjectStreamField[] serialPersistentFields = {
+      new ObjectStreamField("rootURL", URL.class),
+      new ObjectStreamField("url", URL.class),
+      new ObjectStreamField("name", String.class)
+   };
+
    /** The VFS context */
-   private final VFSContext context;
+   private transient VFSContext context;
    
    /** The parent */
    private final VirtualFileHandler parent;
@@ -54,7 +70,7 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
    private final String name;
    
    /** The vfsPath */
-   private String vfsPath;
+   private transient String vfsPath;
 
    /** The reference count */
    private AtomicInteger references = new AtomicInteger(0);
@@ -305,5 +321,30 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
       {
          return "<unknown>";
       }
+   }
+
+   private void writeObject(ObjectOutputStream out)
+      throws IOException
+   {
+      /*
+      // Write out the serialPersistentFields
+      PutField fields = out.putFields();
+      fields.put("rootURL", this.getVFSContext().getRootURL());
+      fields.put("vfsPath", this.getPathName());
+      out.writeFields();
+      */
+      out.defaultWriteObject();
+   }
+   private void readObject(ObjectInputStream in)
+      throws IOException, ClassNotFoundException
+   {
+      /*
+      // Read in the serialPersistentFields
+      GetField fields = in.readFields();
+      URL rootURL = (URL) fields.get("rootURL", null);
+      this.vfsPath = (String) fields.get("vfsPath", null);
+         VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURL);
+         this.context = factory.getVFS(rootURL);
+      */
    }
 }

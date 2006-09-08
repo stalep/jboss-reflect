@@ -24,6 +24,7 @@ package org.jboss.virtual.plugins.context.file;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,12 +39,15 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  * FileHandler.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
-public class FileHandler extends AbstractURLHandler implements StructuredVirtualFileHandler
+public class FileHandler extends AbstractURLHandler
+   implements StructuredVirtualFileHandler
 {
+   private static final long serialVersionUID = 1;
    /** The file */
-   private final File file;
+   private transient File file;
    
    /**
     * Create a new FileHandler.
@@ -157,4 +161,13 @@ public class FileHandler extends AbstractURLHandler implements StructuredVirtual
       File child = new File(parentFile, name);
       return context.createVirtualFileHandler(this, child);
    }
+
+   private void readObject(ObjectInputStream in)
+      throws IOException, ClassNotFoundException
+   {
+      in.defaultReadObject();
+      // Initialize the transient values
+      this.file = new File(super.getURL().getPath());
+   }
+
 }
