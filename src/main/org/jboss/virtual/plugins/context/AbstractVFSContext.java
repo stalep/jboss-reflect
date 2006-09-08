@@ -24,9 +24,11 @@ package org.jboss.virtual.plugins.context;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.logging.Logger;
 import org.jboss.virtual.VFS;
+import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.VisitorAttributes;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VirtualFileHandler;
@@ -48,7 +50,9 @@ public abstract class AbstractVFSContext implements VFSContext
    
    /** The root url */
    private final URL rootURL;
-   
+   /** Options associated with the root URL */
+   private Map<String, String> rootOptions;
+
    /**
     * Create a new AbstractVFSContext.
     * 
@@ -60,6 +64,8 @@ public abstract class AbstractVFSContext implements VFSContext
       if (rootURL == null)
          throw new IllegalArgumentException("Null rootURL");
       this.rootURL = rootURL;
+      String query = rootURL.getQuery();
+      rootOptions = VFSUtils.parseURLQuery(query);
    }
 
    public VFS getVFS()
@@ -72,6 +78,11 @@ public abstract class AbstractVFSContext implements VFSContext
    public URL getRootURL()
    {
       return rootURL;
+   }
+
+   public Map<String, String> getOptions()
+   {
+      return rootOptions;
    }
 
    public List<VirtualFileHandler> getChildren(VirtualFileHandler parent, boolean ignoreErrors) throws IOException

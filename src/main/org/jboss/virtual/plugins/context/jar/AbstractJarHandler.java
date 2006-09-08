@@ -201,9 +201,22 @@ public class AbstractJarHandler extends AbstractURLHandler
       URL url = new URL(buffer.toString());
 
       VFSContext context = parent.getVFSContext();
-      
+
+      VirtualFileHandler vfh;
       if (JarUtils.isArchive(entry.getName()))
-         return new NestedJarHandler(context, parent, jar, entry, url);
-      return new JarEntryHandler(context, parent, jar, entry, url);
+      {
+         String flag = context.getOptions().get("useNoCopyJarHandler");
+         boolean useNoCopyJarHandler = Boolean.valueOf(flag);
+
+         if( useNoCopyJarHandler )
+            vfh = new NoCopyNestedJarHandler(context, parent, jar, entry, url);
+         else
+            vfh = new NestedJarHandler(context, parent, jar, entry, url);
+      }
+      else
+      {
+         vfh = new JarEntryHandler(context, parent, jar, entry, url);         
+      }
+      return vfh;
    }
 }

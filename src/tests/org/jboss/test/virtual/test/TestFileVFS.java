@@ -7,17 +7,26 @@
 package org.jboss.test.virtual.test;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import java.util.zip.ZipInputStream;
 
 import org.jboss.test.BaseTestCase;
 import org.jboss.virtual.VFS;
 import org.jboss.virtual.VirtualFile;
+import org.jboss.virtual.plugins.context.jar.NestedJarFromStream;
 import org.jboss.virtual.plugins.vfs.helpers.SuffixMatchFilter;
+import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VFSContextFactory;
 import org.jboss.virtual.spi.VFSContextFactoryLocator;
 
@@ -51,22 +60,23 @@ public class TestFileVFS extends BaseTestCase
     * Test that NestedJarFromStream can provide access to nested jar content
     * @throws Exception
     */
-   /*
    public void testInnerJarFile()
       throws Exception
    {
-      MemoryMXBean mem = ManagementFactory.getMemoryMXBean();
-      log.info("Starting heap usage: "+mem.getHeapMemoryUsage());
-
       // this expects to be run with a working dir of the container root
       File outerJar = new File("output/lib/outer.jar");
       assertTrue(outerJar.getAbsolutePath()+" exists", outerJar.exists());
       JarFile jf = new JarFile(outerJar);
 
+      URL rootURL = outerJar.getParentFile().toURL();
+      VFS vfs = VFS.getVFS(rootURL);
+      VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURL);
+      VFSContext context = factory.getVFS(rootURL);
+
       JarEntry jar1 = jf.getJarEntry("jar1.jar");
       URL jar1URL = new URL(outerJar.toURL(), "jar1.jar");
       ZipInputStream jis1 = new ZipInputStream(jf.getInputStream(jar1));
-      NestedJarFromStream njfs = new NestedJarFromStream(jis1, jar1URL, "/jar1.jar", jar1);
+      NestedJarFromStream njfs = new NestedJarFromStream(context, null, jis1, jar1URL, jar1);
       NestedJarFromStream.JarEntryContents e1 = njfs.getEntry("org/jboss/test/vfs/support/jar1/ClassInJar1.class");
       assertNotNull(e1);
       log.info("org/jboss/test/vfs/support/CommonClass.class: "+e1);
@@ -83,7 +93,7 @@ public class TestFileVFS extends BaseTestCase
       JarEntry jar2 = jf.getJarEntry("jar2.jar");
       URL jar2URL = new URL(outerJar.toURL(), "jar2.jar");
       ZipInputStream jis2 = new ZipInputStream(jf.getInputStream(jar2));
-      NestedJarFromStream njfs2 = new NestedJarFromStream(jis2, jar2URL, "/jar2.jar", jar2);
+      NestedJarFromStream njfs2 = new NestedJarFromStream(context, null, jis2, jar2URL, jar2);
       NestedJarFromStream.JarEntryContents e2 = njfs2.getEntry("org/jboss/test/vfs/support/jar2/ClassInJar2.class");
       assertNotNull(e2);
       log.info("org/jboss/test/vfs/support/CommonClass.class: "+e2);
@@ -96,9 +106,7 @@ public class TestFileVFS extends BaseTestCase
       assertEquals("jar2", version2);
       mf2IS.close();
       njfs2.close();
-      log.info("Ending heap usage: "+mem.getHeapMemoryUsage());
    }
-   */
 
    /**
     * Basic tests of accessing resources in a jar
@@ -328,7 +336,6 @@ public class TestFileVFS extends BaseTestCase
     * Test the serialization of VirtualFiles
     * @throws Exception
     */
-   /*
    public void testVFSerialization()
       throws Exception
    {
@@ -337,12 +344,12 @@ public class TestFileVFS extends BaseTestCase
       tmpRoot.mkdir();
       tmpRoot.deleteOnExit();
       File tmp = new File(tmpRoot, "vfs.ser");
+      tmp.createNewFile();
       tmp.deleteOnExit();
       log.info("+++ testVFSerialization, tmp="+tmp.getCanonicalPath());
       URL rootURL = tmpRoot.toURL();
-      VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURL);
-      ReadOnlyVFS vfs = factory.getVFS(rootURL);
-      VirtualFile tmpVF = vfs.resolveFile("vfs.ser");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile tmpVF = vfs.findChildFromRoot("vfs.ser");
       FileOutputStream fos = new FileOutputStream(tmp);
       ObjectOutputStream oos = new ObjectOutputStream(fos);
       oos.writeObject(tmpVF);
@@ -364,7 +371,6 @@ public class TestFileVFS extends BaseTestCase
       assertEquals("size", size, tmpVF2.getSize());
       assertEquals("url", url, tmpVF2.toURL());
    }
-   */
 
    /**
     * Test that the URL of a VFS corresponding to a directory ends in '/' so that

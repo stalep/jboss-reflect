@@ -24,6 +24,7 @@ package org.jboss.virtual.spi;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.virtual.VFS;
 
@@ -58,7 +59,9 @@ public interface VFSContext
     * @throws IOException for any problem accessing the VFS
     */
    VirtualFileHandler getRoot() throws IOException;
-   
+
+   Map<String, String> getOptions();
+
    /**
     * Get the children
     * 
