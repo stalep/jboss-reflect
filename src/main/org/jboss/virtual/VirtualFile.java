@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -111,11 +113,23 @@ public class VirtualFile
     * 
     * @return the full URL to the VF in the VFS.
     * @throws MalformedURLException if a url cannot be parsed
+    * @throws URISyntaxException if a uri cannot be parsed
     * @throws IllegalStateException if the file is closed
     */
-   public URL toURL() throws MalformedURLException
+   public URL toURL() throws MalformedURLException, URISyntaxException
    {
-      return getHandler().toURL();
+      return getHandler().toURI().toURL();
+   }
+   /**
+    * Get the VF URI (file://root/org/jboss/X.java)
+    * 
+    * @return the full URI to the VF in the VFS.
+    * @throws URISyntaxException if a uri cannot be parsed
+    * @throws IllegalStateException if the file is closed
+    */
+   public URI toURI() throws URISyntaxException
+   {
+      return getHandler().toURI();
    }
 
    /**

@@ -22,7 +22,7 @@
 package org.jboss.virtual.spi;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -38,13 +38,12 @@ import org.jboss.virtual.VFS;
 public interface VFSContext
 {
    /**
-    * Get the root url
+    * Get the root uri
     * 
-    * @return the root url
+    * @return the root uri
     */
-   URL getRootURL();
-   
-   
+   URI getRootURI();
+
    /**
     * Get the VFS for this context
     * 
@@ -60,6 +59,11 @@ public interface VFSContext
     */
    VirtualFileHandler getRoot() throws IOException;
 
+   /**
+    * Get the context option settings
+    * 
+    * @return a map of the context options
+    */
    Map<String, String> getOptions();
 
    /**

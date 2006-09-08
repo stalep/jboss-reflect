@@ -22,6 +22,8 @@
 package org.jboss.virtual.plugins.context.jar;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -194,7 +196,15 @@ public class AbstractJarHandler extends AbstractURLHandler
       // Question: Why doesn't this work properly?
       // URL url = new URL(parent.toURL(), entry.getName());
       StringBuilder buffer = new StringBuilder();
-      buffer.append(parent.toURL());
+      try
+      {
+         buffer.append(parent.toURI());
+      }
+      catch(URISyntaxException e)
+      {
+         // Should not happen
+         throw new MalformedURLException(e.getMessage());
+      }
       if (buffer.charAt(buffer.length()-1) != '/')
          buffer.append('/');
       buffer.append(entry.getName());

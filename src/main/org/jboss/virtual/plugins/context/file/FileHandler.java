@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,7 +59,7 @@ public class FileHandler extends AbstractURLHandler
     * @param file the file
     * @param url the url
     * @throws IOException for an error accessing the file system
-    * @throws IllegalArgumentException for a null context, url or vfsPath
+    * @throws IllegalArgumentException for a null context, url
     */
    public FileHandler(FileSystemContext context, VirtualFileHandler parent, File file, URL url) throws IOException
    {
@@ -66,6 +68,20 @@ public class FileHandler extends AbstractURLHandler
       this.file = file;
       if (file.exists() == false)
          throw new FileNotFoundException("File does not exist: " + file.getCanonicalPath());
+   }
+   /**
+    * Create a new FileHandler
+    *  
+    * @param context the context
+    * @param parent the parent
+    * @param file the file
+    * @param url the url
+    * @throws IOException for an error accessing the file system
+    * @throws IllegalArgumentException for a null context, uri
+    */
+   public FileHandler(FileSystemContext context, VirtualFileHandler parent, File file, URI uri) throws IOException
+   {
+      this(context, parent, file, uri.toURL());
    }
 
    @Override

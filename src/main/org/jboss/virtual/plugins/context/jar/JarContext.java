@@ -22,6 +22,7 @@
 package org.jboss.virtual.plugins.context.jar;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.jboss.virtual.VirtualFile;
@@ -49,7 +50,7 @@ public class JarContext extends AbstractVFSContext
     * @param rootURL the root url
     * @throws IOException for an error accessing the file system
     */
-   public JarContext(URL rootURL) throws IOException
+   public JarContext(URL rootURL) throws IOException, URISyntaxException
    {
       super(rootURL);
       root = createVirtualFileHandler(null, rootURL);

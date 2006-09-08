@@ -23,8 +23,10 @@ package org.jboss.virtual.spi;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.jboss.virtual.VirtualFile;
@@ -33,10 +35,10 @@ import org.jboss.virtual.VirtualFile;
  * A virtual file handler
  * 
  * @author Scott.Stark@jboss.org
- * @author
+ * @author Adrian.Brock
  * @version $Revision: 44334 $
  */
-public interface VirtualFileHandler
+public interface VirtualFileHandler extends Serializable
 {
    /**
     * Get the simple VF name (X.java)
@@ -57,8 +59,9 @@ public interface VirtualFileHandler
     * 
     * @return the full URL to the VF in the VFS.
     * @throws MalformedURLException if a url cannot be parsed
+    * @throws URISyntaxException 
     */
-   URL toURL() throws MalformedURLException;
+   URI toURI() throws URISyntaxException;
 
    /**
     * When the file was last modified

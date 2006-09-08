@@ -22,6 +22,8 @@
 package org.jboss.virtual;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -35,6 +37,7 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  * Virtual File System
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
 public class VFS
@@ -48,12 +51,27 @@ public class VFS
     * @param rootURL the root url
     * @return the virtual file system
     * @throws IOException if there is a problem accessing the VFS
+    * @throws URISyntaxException if the URL is not a valid URI
     * @throws IllegalArgumentException if the rootURL is null
     */
    public static VFS getVFS(URL rootURL) throws IOException
    {
       VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURL);
       VFSContext context = factory.getVFS(rootURL);
+      return context.getVFS();
+   }
+   /**
+    * Get the virtual file system for a root uri
+    * 
+    * @param rootURI the root URI
+    * @return the virtual file system
+    * @throws IOException if there is a problem accessing the VFS
+    * @throws IllegalArgumentException if the rootURL is null
+    */
+   public static VFS getVFS(URI rootURI) throws IOException
+   {
+      VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURI);
+      VFSContext context = factory.getVFS(rootURI);
       return context.getVFS();
    }
 

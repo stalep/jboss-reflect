@@ -21,9 +21,13 @@
  */
 package org.jboss.virtual.plugins.context.jar;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.io.IOException;
 
+import org.jboss.virtual.plugins.context.file.FileSystemContext;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VFSContextFactory;
 
@@ -46,6 +50,28 @@ public class JarContextFactory implements VFSContextFactory
 
    public VFSContext getVFS(URL root) throws IOException
    {
-      return new JarContext(root);
+      try
+      {
+         return new JarContext(root);
+      }
+      catch(URISyntaxException e)
+      {
+         MalformedURLException ex = new MalformedURLException("non-URI compliant URL");
+         ex.initCause(e);
+         throw ex;
+      }
+   }
+   public VFSContext getVFS(URI root) throws IOException
+   {
+      try
+      {
+         return new JarContext(root.toURL());
+      }
+      catch(URISyntaxException e)
+      {
+         MalformedURLException ex = new MalformedURLException("non-URI compliant URL");
+         ex.initCause(e);
+         throw ex;
+      }
    }
 }

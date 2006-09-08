@@ -23,6 +23,8 @@ package org.jboss.virtual.plugins.context.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.jboss.virtual.VFSUtils;
@@ -54,12 +56,12 @@ public class FileSystemContext extends AbstractVFSContext
     * @throws IOException for any error accessing the file system
     * @throws IllegalArgumentException for a null url
     */
-   private static File getFile(URL url) throws IOException
+   private static File getFile(URI uri) throws IOException
    {
-      if (url == null)
-         throw new IllegalArgumentException("Null url");
+      if (uri == null)
+         throw new IllegalArgumentException("Null uri");
       
-      return new File(url.getPath());
+      return new File(uri);
    }
    
    /**
@@ -70,14 +72,22 @@ public class FileSystemContext extends AbstractVFSContext
     * @throws IOException for any error accessing the file system
     * @throws IllegalArgumentException for a null file
     */
-   private static URL getFileURL(File file) throws IOException
+   private static URI getFileURI(File file) throws IOException
    {
       if (file == null)
          throw new IllegalArgumentException("Null file");
-      URL url = file.toURL();
+      URI url = file.toURI();
       String path = url.getPath();
       path = VFSUtils.fixName(path);
-      return new URL("file", null, path);
+      try
+      {
+         return new URI("file", null, path, null);
+      }
+      catch(URISyntaxException e)
+      {
+         // Should not be possible
+         throw new IllegalStateException("Failed to convert file.toURI", e);
+      }
    }
    
    /**
@@ -86,9 +96,19 @@ public class FileSystemContext extends AbstractVFSContext
     * @param rootURL the root url
     * @throws IOException for an error accessing the file system
     */
-   public FileSystemContext(URL rootURL) throws IOException
+   public FileSystemContext(URL rootURL) throws IOException, URISyntaxException
    {
-      this(rootURL, getFile(rootURL));
+      this(rootURL.toURI());
+   }
+
+   /**
+    * 
+    * @param rootURI
+    * @throws IOException
+    */
+   public FileSystemContext(URI rootURI) throws IOException
+   {
+      this(rootURI, getFile(rootURI));
    }
    
    /**
@@ -98,11 +118,11 @@ public class FileSystemContext extends AbstractVFSContext
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null file
     */
-   public FileSystemContext(File file) throws IOException
+   public FileSystemContext(File file) throws IOException, URISyntaxException
    {
-      this(getFileURL(file), file);
+      this(getFileURI(file), file);
    }
-   
+
    /**
     * Create a new FileSystemContext.
     * 
@@ -110,7 +130,7 @@ public class FileSystemContext extends AbstractVFSContext
     * @param file the file
     * @throws IOException for an error accessing the file system
     */
-   private FileSystemContext(URL rootURL, File file) throws IOException
+   private FileSystemContext(URI rootURL, File file) throws IOException
    {
       super(rootURL);
       root = createVirtualFileHandler(null, file);
@@ -136,10 +156,10 @@ public class FileSystemContext extends AbstractVFSContext
       if (file == null)
          throw new IllegalArgumentException("Null file");
       
-      URL fileURL = getFileURL(file);
+      URI fileURL = getFileURI(file);
       if (file.isFile() && JarUtils.isArchive(file.getName()))
       {
-         URL url = JarUtils.createJarURL(fileURL);
+         URL url = JarUtils.createJarURL(file.toURL());
          String name = file.getName();
          try
          {
@@ -163,14 +183,14 @@ public class FileSystemContext extends AbstractVFSContext
     * @throws IOException for any error accessing the file system
     * @throws IllegalArgumentException for a null file
     */
-   public VirtualFileHandler createVirtualFileHandler(VirtualFileHandler parent, File file, URL url) throws IOException
+   public VirtualFileHandler createVirtualFileHandler(VirtualFileHandler parent, File file, URI uri) throws IOException
    {
       if (file == null)
          throw new IllegalArgumentException("Null file");
-      if (url == null)
-         throw new IllegalArgumentException("Null url");
+      if (uri == null)
+         throw new IllegalArgumentException("Null uri");
       
-      return new FileHandler(this, parent, file, url);
+      return new FileHandler(this, parent, file, uri);
    }
    
    @Override

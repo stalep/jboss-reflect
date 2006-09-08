@@ -13,6 +13,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
@@ -173,11 +175,18 @@ public class NestedJarFromStream
       }
    }
 
-   public URL toURL() throws MalformedURLException
+   public URI toURI() throws URISyntaxException
    {
-      if( entryURL == null )
-         entryURL = new URL(jarURL, getName());
-      return entryURL;
+      try
+      {
+         if( entryURL == null )
+            entryURL = new URL(jarURL, getName());
+      }
+      catch(MalformedURLException e)
+      {
+         throw new URISyntaxException("Failed to create relative jarURL", e.getMessage());
+      }
+      return entryURL.toURI();
    }
 
    public String toString()
@@ -190,12 +199,12 @@ public class NestedJarFromStream
       tmp.append(getSize());
       tmp.append(",lastModified=");
       tmp.append(lastModified);
-      tmp.append(",URL=");
+      tmp.append(",URI=");
       try
       {
-         tmp.append(toURL());
+         tmp.append(toURI());
       }
-      catch(MalformedURLException e)
+      catch(URISyntaxException e)
       {
       }
       tmp.append(']');
@@ -211,13 +220,13 @@ public class NestedJarFromStream
       {
          try
          {
-            String url = toURL().toExternalForm() + "!/" +  entry.getName();
+            String url = toURI().toASCIIString() + "!/" +  entry.getName();
             URL jecURL = new URL(url);
             JarEntryContents jec = new JarEntryContents(getVFSContext(), this, entry, jecURL, zis, getPathName());
             entries.put(entry.getName(), jec);
             entry = zis.getNextEntry();
          }
-         catch(MalformedURLException e)
+         catch(URISyntaxException e)
          {
             e.printStackTrace();
          }
@@ -363,9 +372,9 @@ public class NestedJarFromStream
          }
       }
 
-      public URL toURL() throws MalformedURLException
+      public URI toURI() throws URISyntaxException
       {
-         return entryURL;
+         return entryURL.toURI();
       }
 
       public String toString()
@@ -378,12 +387,12 @@ public class NestedJarFromStream
          tmp.append(entry.getSize());
          tmp.append(",time=");
          tmp.append(entry.getTime());
-         tmp.append(",URL=");
+         tmp.append(",URI=");
          try
          {
-            tmp.append(toURL());
+            tmp.append(toURI());
          }
-         catch(MalformedURLException e)
+         catch(URISyntaxException e)
          {
          }
          tmp.append(']');

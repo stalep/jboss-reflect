@@ -21,11 +21,12 @@
  */
 package org.jboss.virtual.spi;
 
+import java.net.URI;
 import java.net.URL;
 import java.io.IOException;
 
 /**
- * The entry point to obtaining a VFSContext for a given URL root mount point
+ * The entry point to obtaining a VFSContext for a given URL/URI root mount point
  *
  * @author Scott.Stark@jboss.org
  * @author adrian@jboss.org
@@ -34,7 +35,7 @@ import java.io.IOException;
 public interface VFSContextFactory
 {
    /**
-    * Get the URL protocols this factory supports
+    * Get the URL protocols/URI schemes this factory supports
     * 
     * @return list of supported protocols.
     */
@@ -46,6 +47,15 @@ public interface VFSContextFactory
     * @param rootURL - the URL for the root of the virtual context
     * @return the vfs context
     * @throws IOException - thrown if the root cannot be opened/accessed
+    * @throws URISyntaxException - thrown if the URL cannot be converted to a URI
     */
    VFSContext getVFS(URL rootURL) throws IOException;
+   /**
+    * Obtain a vfs context for the given root uri.
+    * 
+    * @param rootURI - the URI for the root of the virtual context
+    * @return the vfs context
+    * @throws IOException - thrown if the root cannot be opened/accessed
+    */
+   VFSContext getVFS(URI rootURI) throws IOException;
 }

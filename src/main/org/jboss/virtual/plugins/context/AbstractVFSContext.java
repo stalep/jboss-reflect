@@ -22,6 +22,8 @@
 package org.jboss.virtual.plugins.context;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -49,23 +51,35 @@ public abstract class AbstractVFSContext implements VFSContext
    private VFS vfs;
    
    /** The root url */
-   private final URL rootURL;
+   private final URI rootURI;
    /** Options associated with the root URL */
    private Map<String, String> rootOptions;
 
    /**
     * Create a new AbstractVFSContext.
     * 
-    * @param rootURL the root url
-    * @throws IllegalArgumentException if rootURL is null
+    * @param rootURI the root url
+    * @throws IllegalArgumentException if rootURI is null
+    */
+   protected AbstractVFSContext(URI rootURI)
+   {
+      if (rootURI == null)
+         throw new IllegalArgumentException("Null rootURI");
+      this.rootURI = rootURI;
+      String query = rootURI.getQuery();
+      rootOptions = VFSUtils.parseURLQuery(query);
+   }
+   /**
+    * Create a new AbstractVFSContext.
+    * 
+    * @param rootURI the root url
+    * @throws URISyntaxException 
+    * @throws IllegalArgumentException if rootURI is null
     */
    protected AbstractVFSContext(URL rootURL)
+      throws URISyntaxException
    {
-      if (rootURL == null)
-         throw new IllegalArgumentException("Null rootURL");
-      this.rootURL = rootURL;
-      String query = rootURL.getQuery();
-      rootOptions = VFSUtils.parseURLQuery(query);
+      this(rootURL.toURI());
    }
 
    public VFS getVFS()
@@ -75,9 +89,9 @@ public abstract class AbstractVFSContext implements VFSContext
       return vfs;
    }
 
-   public URL getRootURL()
+   public URI getRootURI()
    {
-      return rootURL;
+      return rootURI;
    }
 
    public Map<String, String> getOptions()
@@ -187,7 +201,7 @@ public abstract class AbstractVFSContext implements VFSContext
       buffer.append('@');
       buffer.append(System.identityHashCode(this));
       buffer.append('[');
-      buffer.append(rootURL);
+      buffer.append(rootURI);
       buffer.append(']');
       return buffer.toString();
    }
@@ -195,7 +209,7 @@ public abstract class AbstractVFSContext implements VFSContext
    @Override
    public int hashCode()
    {
-      return rootURL.hashCode();
+      return rootURI.hashCode();
    }
 
    @Override
@@ -206,6 +220,6 @@ public abstract class AbstractVFSContext implements VFSContext
       if (obj == null || obj instanceof VFSContext == false)
          return false;
       VFSContext other = (VFSContext) obj;
-      return rootURL.equals(other.getRootURL());
+      return rootURI.equals(other.getRootURI());
    }
 }

@@ -25,26 +25,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
 
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VirtualFileHandler;
 
 /**
- * URLHandler.
+ * URIHandler stub.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public abstract class AbstractURLHandler extends AbstractVirtualFileHandler
+public abstract class AbstractURIHandler extends AbstractVirtualFileHandler
    implements Serializable
 {
    private static final long serialVersionUID = 1L;
 
-   /** The url */
-   private final URL url;
+   /** The uri */
+   private final URI uri;
    
    /**
     * Create a newURLHandler.
@@ -55,36 +52,34 @@ public abstract class AbstractURLHandler extends AbstractVirtualFileHandler
     * @param name the name
     * @throws IllegalArgumentException for a null context, vfsPath or url
     */
-   public AbstractURLHandler(VFSContext context, VirtualFileHandler parent, URL url, String name)
+   public AbstractURIHandler(VFSContext context, VirtualFileHandler parent, URI uri, String name)
    {
       super(context, parent, name);
-      if (url == null)
-         throw new IllegalArgumentException("Null url");
-      this.url = url;
+      if (uri == null)
+         throw new IllegalArgumentException("Null uri");
+      this.uri = uri;
    }
    
    /**
-    * Get the url
+    * Get the uri
     * 
-    * @return the url
+    * @return the uri
     */
-   public URL getURL()
+   public URI getURI()
    {
-      return url;
+      return uri;
    }
 
    public long getLastModified() throws IOException
    {
       checkClosed();
-      URLConnection c = url.openConnection();
-      return c.getLastModified();
+      return 0;
    }
 
    public long getSize() throws IOException
    {
       checkClosed();
-      URLConnection c = url.openConnection();
-      return c.getContentLength();
+      return 0;
    }
 
    public boolean isArchive() throws IOException
@@ -108,11 +103,11 @@ public abstract class AbstractURLHandler extends AbstractVirtualFileHandler
    public InputStream openStream() throws IOException
    {
       checkClosed();
-      return url.openStream();
+      return null;
    }
 
-   public URI toURI() throws URISyntaxException
+   public URI toURI()
    {
-      return url.toURI();
+      return uri;
    }
 }

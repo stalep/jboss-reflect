@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -40,7 +41,7 @@ import org.jboss.virtual.plugins.context.file.FileSystemContextFactory;
 import org.jboss.virtual.plugins.context.jar.JarContextFactory;
 
 /**
- * A singleton factory for locating VFSContextFactory instances given VFS root URLs.
+ * A singleton factory for locating VFSContextFactory instances given VFS root URIs.
  * 
  * @author Scott.Stark@jboss.org
  * @author adrian@jboss.org
@@ -144,6 +145,23 @@ public class VFSContextFactoryLocator
       init();
       String protocol = rootURL.getProtocol();
       return factoryByProtocol.get(protocol);
+   }
+   /**
+    * Return the VFSContextFactory for the VFS mount point specified by the rootURI.
+    *  
+    * @param rootURI - the URI to a VFS root
+    * @return the VFSContextFactory capable of handling the rootURI. This will be null
+    * if there is no factory registered for the rootURI scheme.
+    * @throws IllegalArgumentException if the rootURI is null
+    */
+   public static VFSContextFactory getFactory(URI rootURI)
+   {
+      if (rootURI == null)
+         throw new IllegalArgumentException("Null rootURI");
+      
+      init();
+      String scheme = rootURI.getScheme();
+      return factoryByProtocol.get(scheme);
    }
 
    /**
