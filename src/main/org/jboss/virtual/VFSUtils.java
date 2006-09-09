@@ -23,17 +23,22 @@ package org.jboss.virtual;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.jboss.logging.Logger;
+import org.jboss.virtual.spi.LinkInfo;
 
 /**
  * VFS Utilities
@@ -45,7 +50,8 @@ public class VFSUtils
 {
    /** The log */
    private static final Logger log = Logger.getLogger(VFSUtils.class);
-   
+   public static final String VFS_LINK_PREFIX = ".vfslink";
+
    /**
     * Get the paths string for a collection of virtual files
     * 
@@ -201,6 +207,24 @@ public class VFSUtils
    }
 
    /**
+    * 
+    * @param uri
+    * @return
+    */
+   public static String getName(URI uri)
+   {
+      String name = uri.getPath();
+      if( name != null )
+      {
+         // TODO: Not correct for certain uris like jar:...!/ 
+         int lastSlash = name.lastIndexOf('/');
+         if( lastSlash > 0 )
+            name = name.substring(lastSlash+1);
+      }
+      return name;
+   }
+
+   /**
     * Take a URL.getQuery string and parse it into name=value pairs
     * 
     * @param query Possibly empty/null url query string
@@ -220,5 +244,61 @@ public class VFSUtils
    	   }
       }
 	   return pairsMap;
+   }
+
+   /**
+    * Does a vf name match the VFS link prefix
+    * @param name - the name portion of a virtual file
+    * @return true if the name starts with VFS_LINK_PREFIX, false otherwise
+    */
+   public static boolean isLink(String name)
+   {
+      boolean isLink = name.startsWith(VFS_LINK_PREFIX);
+      return isLink;
+   }
+
+   /**
+    * Read the link information from the stream based on the type as determined
+    * from the name suffix.
+    * 
+    * @param is - input stream to the link file contents
+    * @param name - the name of the virtual file representing the link 
+    * @return a list of the links read from the stream
+    * @throws IOException on failure to read/parse the stream
+    */
+   public static List<LinkInfo> readLinkInfo(InputStream is, String name)
+      throws IOException, URISyntaxException
+   {
+      ArrayList<LinkInfo> info = new ArrayList<LinkInfo>();
+      if( name.endsWith(".properties") )
+         parseLinkProperties(is, info);
+      else
+         throw new UnsupportedEncodingException("Unknown link format: "+name);
+      return info;
+   }
+
+   /**
+    * Parse a properties link file
+    * 
+    * @param is
+    * @param info
+    * @throws IOException
+    * @throws URISyntaxException 
+    */
+   public static void parseLinkProperties(InputStream is, List<LinkInfo> info)
+      throws IOException, URISyntaxException
+   {
+      Properties props = new Properties();
+      props.load(is);
+      // Iterate over the property tuples
+      for(int n = 0; ; n ++)
+      {
+         String nameKey = "link.name." + n;
+         String name = props.getProperty(nameKey);
+         String uriKey = "link.uri." + n;
+         String uri = props.getProperty(uriKey);
+         LinkInfo link = new LinkInfo(name, new URI(uri));
+         info.add(link);
+      }
    }
 }

@@ -189,8 +189,13 @@ public class FileSystemContext extends AbstractVFSContext
          throw new IllegalArgumentException("Null file");
       if (uri == null)
          throw new IllegalArgumentException("Null uri");
-      
-      return new FileHandler(this, parent, file, uri);
+
+      VirtualFileHandler handler;
+      if( VFSUtils.isLink(file.getName()) )
+         handler = new LinkHandler(this, parent, file, uri);
+      else
+         handler = new FileHandler(this, parent, file, uri);
+      return handler;
    }
    
    @Override

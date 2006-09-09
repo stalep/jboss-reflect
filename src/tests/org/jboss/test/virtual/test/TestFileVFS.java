@@ -522,6 +522,33 @@ public class TestFileVFS extends BaseTestCase
       mfIS.close();
    }
 
+   public void testMountPoint()
+      throws Exception
+   {
+      File mpProps = new File("output/mp.properties");
+      URI mp = new URI("mount:" + mpProps.toURL() + "?x=y");
+      log.debug("getScheme: "+mp.getScheme());
+      log.debug("isAbsolute: "+mp.isAbsolute());
+      log.debug("isOpaque: "+mp.isOpaque());
+      log.debug("getHost: "+mp.getHost());
+      log.debug("getQuery: "+mp.getQuery());
+      log.debug("getPath: "+mp.getPath());
+      log.debug("getHost: "+mp.getHost());
+      log.debug("getSchemeSpecificPart: "+mp.getSchemeSpecificPart());
+
+      String locationInfo = mp.getSchemeSpecificPart();
+      URL locationURL = new URL(locationInfo);
+      log.debug("locationURL.getFile(): "+locationURL.getFile());
+      log.debug("locationURL.getPath(): "+locationURL.getPath());
+      log.debug("locationURL.getQuery(): "+locationURL.getQuery());
+      // Drop the query portion of the file
+      URL testURL = new URL(locationURL.getProtocol(), locationURL.getHost(),
+            locationURL.getPath());
+      assertEquals("mpProps.toURL", mpProps.toURL(), testURL);
+
+      
+   }
+
   /**
     * Test that the URL of a VFS corresponding to a directory ends in '/' so that
     * URLs created relative to it are under the directory.
