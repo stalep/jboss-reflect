@@ -41,13 +41,14 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  */
 public class JarEntryHandler extends AbstractURLHandler
 {
+   /** serialVersionUID */
+   private static final long serialVersionUID = 1L;
+
    /** The jar file */
    private final JarFile jar;
    
    /** The jar entry */
    private final JarEntry entry;
-
-   
    
    /**
     * Create a new JarHandler.

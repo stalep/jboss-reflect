@@ -40,8 +40,11 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  */
 public class NestedJarHandler extends AbstractJarHandler
 {
+   /** serialVersionUID */
+   private static final long serialVersionUID = 1L;
+
    /** The jar entry */
-   private JarEntry entry;
+   private transient JarEntry entry;
    
    /**
     * Create a temporary jar

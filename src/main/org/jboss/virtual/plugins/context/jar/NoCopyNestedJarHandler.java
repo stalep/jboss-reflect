@@ -21,8 +21,6 @@
 */
 package org.jboss.virtual.plugins.context.jar;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -42,10 +40,12 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  */
 public class NoCopyNestedJarHandler extends AbstractJarHandler
 {
+   /** serialVersionUID */
+   private static final long serialVersionUID = 1L;
+
    /** The jar entry */
    private JarEntry entry;
    private NestedJarFromStream njar;
-
       
    /**
     * Create a new NestedJarHandler.

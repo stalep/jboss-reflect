@@ -36,6 +36,9 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  */
 public class JarHandler extends AbstractJarHandler
 {
+   /** serialVersionUID */
+   private static final long serialVersionUID = 1L;
+
    /**
     * Create a new JarHandler.
     * 

@@ -27,9 +27,8 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectStreamField;
 import java.io.ObjectInputStream.GetField;
 import java.io.ObjectOutputStream.PutField;
-import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,6 +37,8 @@ import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.plugins.vfs.helpers.PathTokenizer;
 import org.jboss.virtual.spi.VFSContext;
+import org.jboss.virtual.spi.VFSContextFactory;
+import org.jboss.virtual.spi.VFSContextFactoryLocator;
 import org.jboss.virtual.spi.VirtualFileHandler;
 
 /**
@@ -51,29 +52,36 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
 {
    /** The log */
    protected final Logger log = Logger.getLogger(getClass());
+   /** serialVersionUID */
    private static final long serialVersionUID = 1L;
    /** The class serial fields */
    private static final ObjectStreamField[] serialPersistentFields = {
-      new ObjectStreamField("rootURL", URL.class),
-      new ObjectStreamField("url", URL.class),
+      new ObjectStreamField("rootURI", URI.class),
+      new ObjectStreamField("parent", VirtualFileHandler.class),
       new ObjectStreamField("name", String.class)
    };
 
-   /** The VFS context */
-   private transient VFSContext context;
+   /** The VFS context
+    * @serialField rootURI URI the VFS context rootURI
+    */
+   private VFSContext context;
    
-   /** The parent */
-   private final VirtualFileHandler parent;
+   /** The parent
+    * @serialField parent VirtualFileHandler the virtual file parent
+    */
+   private VirtualFileHandler parent;
 
-   /** The name */
-   private final String name;
-   
+   /** The name
+    * @serialField name String the virtual file name
+    */
+   private String name;
+
    /** The vfsPath */
    private transient String vfsPath;
 
    /** The reference count */
-   private AtomicInteger references = new AtomicInteger(0);
-   
+   private transient AtomicInteger references = new AtomicInteger(0);
+
    /**
     * Create a new handler
     * 
@@ -325,25 +333,22 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
    private void writeObject(ObjectOutputStream out)
       throws IOException
    {
-      /*
-      // Write out the serialPersistentFields
       PutField fields = out.putFields();
-      fields.put("rootURL", this.getVFSContext().getRootURL());
-      fields.put("vfsPath", this.getPathName());
+      fields.put("rootURI", this.getVFSContext().getRootURI());
+      fields.put("parent", parent);
+      fields.put("name", name);
       out.writeFields();
-      */
-      out.defaultWriteObject();
    }
    private void readObject(ObjectInputStream in)
       throws IOException, ClassNotFoundException
    {
-      /*
       // Read in the serialPersistentFields
       GetField fields = in.readFields();
-      URL rootURL = (URL) fields.get("rootURL", null);
-      this.vfsPath = (String) fields.get("vfsPath", null);
-         VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURL);
-         this.context = factory.getVFS(rootURL);
-      */
+      URI rootURI = (URI) fields.get("rootURI", null);
+      this.parent = (VirtualFileHandler) fields.get("parent", null);
+      this.name = (String) fields.get("name", null);
+      VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURI);
+      this.context = factory.getVFS(rootURI);
+      this.references = new AtomicInteger(0);
    }
 }

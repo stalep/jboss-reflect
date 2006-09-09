@@ -26,7 +26,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -183,7 +182,7 @@ public class FileHandler extends AbstractURLHandler
    {
       in.defaultReadObject();
       // Initialize the transient values
-      this.file = new File(super.getURL().getPath());
+      this.file = new File(getURL().getPath());
    }
 
 }

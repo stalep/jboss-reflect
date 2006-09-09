@@ -22,9 +22,12 @@
 package org.jboss.virtual.plugins.context.jar;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -40,16 +43,20 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  * AbstractJarHandler.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
 public class AbstractJarHandler extends AbstractURLHandler
 {
+   /** serialVersionUID */
+   private static final long serialVersionUID = 1;
+
    /** The jar file */
-   private JarFile jar;
+   private transient JarFile jar;
 
    /** The jar entries */
-   private List<VirtualFileHandler> entries;
-   
+   private transient List<VirtualFileHandler> entries;
+
    /**
     * Get a jar entry name
     * 
@@ -118,7 +125,7 @@ public class AbstractJarHandler extends AbstractURLHandler
          entries.add(handler);
       }
    }
-   
+
    protected void doClose()
    {
       /* TODO Figure out why this breaks things randomly
@@ -229,4 +236,31 @@ public class AbstractJarHandler extends AbstractURLHandler
       }
       return vfh;
    }
+
+   /**
+    * Restore the jar file from the jar URL
+    * 
+    * @param in
+    * @throws IOException
+    * @throws ClassNotFoundException
+    */
+   private void readObject(ObjectInputStream in)
+      throws IOException, ClassNotFoundException
+   {
+      in.defaultReadObject();
+      // Initialize the transient values
+      URL jarURL = super.getURL();
+      URLConnection conn = jarURL.openConnection();
+      if( conn instanceof JarURLConnection )
+      {
+         JarURLConnection jconn = (JarURLConnection) conn;
+         JarFile jarFile = jconn.getJarFile();
+         initJarFile(jarFile);
+      }
+      else
+      {
+         throw new IOException("Cannot restore from non-JarURLConnection, url: "+jarURL);
+      }
+   }
+
 }

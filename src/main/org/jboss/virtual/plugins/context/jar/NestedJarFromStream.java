@@ -16,7 +16,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +32,9 @@ import java.util.zip.ZipInputStream;
 public class NestedJarFromStream
    extends AbstractVirtualFileHandler
 {
+   /** serialVersionUID */
+   private static final long serialVersionUID = 1L;
+
    private ZipInputStream zis;
    private HashMap<String, JarEntryContents> entries = new HashMap<String, JarEntryContents>();
    private URL jarURL;
@@ -100,7 +102,7 @@ public class NestedJarFromStream
 
    public long getSize()
    {
-      return entries.size();
+      return size;
    }
 
    public long getLastModified() throws IOException
@@ -238,6 +240,8 @@ public class NestedJarFromStream
    public static class JarEntryContents
       extends AbstractVirtualFileHandler
    {
+      /** serialVersionUID */
+      private static final long serialVersionUID = 1L;
       private ZipEntry entry;
       private URL entryURL;
       private String vfsPath;
