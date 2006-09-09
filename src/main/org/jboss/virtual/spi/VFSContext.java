@@ -22,7 +22,6 @@
 package org.jboss.virtual.spi;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ import org.jboss.virtual.VFS;
  * @author adrian@jboss.org
  * @version $Revision: 55466 $
  */
-public interface VFSContext extends Serializable
+public interface VFSContext
 {
    /**
     * Get the root uri
