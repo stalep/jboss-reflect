@@ -23,21 +23,15 @@ package org.jboss.virtual.plugins.context.file;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import org.jboss.virtual.VFSUtils;
-import org.jboss.virtual.plugins.context.AbstractURLHandler;
 import org.jboss.virtual.plugins.context.StructuredVirtualFileHandler;
-import org.jboss.virtual.plugins.context.jar.JarUtils;
 import org.jboss.virtual.spi.LinkInfo;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VFSContextFactory;
@@ -136,6 +130,7 @@ public class LinkHandler extends FileHandler
       return result;
    }
 
+   @Override
    public VirtualFileHandler createChildHandler(String name) throws IOException
    {
       VirtualFileHandler handler = linkTargets.get(name);
