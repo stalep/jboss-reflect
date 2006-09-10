@@ -297,8 +297,8 @@ public class VFSUtils
          String name = props.getProperty(nameKey);
          String uriKey = "link.uri." + n;
          String uri = props.getProperty(uriKey);
-         // fixme - should break this 'for loop'
-         if (name == null || uri == null)
+         // End when the value is null since a link may not have a name
+         if (uri == null)
          {
             break;
          }
