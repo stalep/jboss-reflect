@@ -79,6 +79,10 @@ public class LinkHandler extends FileHandler
          ex.initCause(e);
          throw ex;
       }
+      finally
+      {
+          fis.close();
+      }
    }
 
    @Override

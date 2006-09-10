@@ -209,7 +209,7 @@ public class VFSUtils
    /**
     * 
     * @param uri
-    * @return
+    * @return name from uri's path
     */
    public static String getName(URI uri)
    {
@@ -297,6 +297,11 @@ public class VFSUtils
          String name = props.getProperty(nameKey);
          String uriKey = "link.uri." + n;
          String uri = props.getProperty(uriKey);
+         // fixme - should break this 'for loop'
+         if (name == null || uri == null)
+         {
+            break;
+         }
          LinkInfo link = new LinkInfo(name, new URI(uri));
          info.add(link);
       }
