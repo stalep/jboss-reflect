@@ -59,7 +59,7 @@ public class LinkHandler extends FileHandler
     * @param context the context
     * @param parent the parent
     * @param file the file
-    * @param url the url
+    * @param uri the uri
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url
     */
@@ -81,7 +81,14 @@ public class LinkHandler extends FileHandler
       }
       finally
       {
-          fis.close();
+         try
+         {
+            fis.close();
+         }
+         catch(IOException e)
+         {
+            log.warn("Exception closing file input stream: " + fis, e);
+         }
       }
    }
 
