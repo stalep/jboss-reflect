@@ -23,7 +23,6 @@ package org.jboss.virtual;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -51,7 +50,6 @@ public class VFS
     * @param rootURL the root url
     * @return the virtual file system
     * @throws IOException if there is a problem accessing the VFS
-    * @throws URISyntaxException if the URL is not a valid URI
     * @throws IllegalArgumentException if the rootURL is null
     */
    public static VFS getVFS(URL rootURL) throws IOException

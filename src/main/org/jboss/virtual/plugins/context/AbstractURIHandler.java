@@ -48,7 +48,7 @@ public abstract class AbstractURIHandler extends AbstractVirtualFileHandler
     * 
     * @param context the context
     * @param parent the parent
-    * @param url the url
+    * @param uri the uri
     * @param name the name
     * @throws IllegalArgumentException for a null context, vfsPath or url
     */

@@ -47,7 +47,6 @@ public interface VFSContextFactory
     * @param rootURL - the URL for the root of the virtual context
     * @return the vfs context
     * @throws IOException - thrown if the root cannot be opened/accessed
-    * @throws URISyntaxException - thrown if the URL cannot be converted to a URI
     */
    VFSContext getVFS(URL rootURL) throws IOException;
    /**

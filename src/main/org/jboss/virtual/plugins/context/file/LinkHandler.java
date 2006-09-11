@@ -56,8 +56,9 @@ public class LinkHandler extends AbstractURLHandler
     * 
     * @param context the context
     * @param parent the parent
-    * @param file the file
     * @param uri the uri
+    * @param name the name
+    * @param links the links
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url
     */

@@ -24,7 +24,6 @@ package org.jboss.virtual.spi;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -58,8 +57,7 @@ public interface VirtualFileHandler extends Serializable
     * Get the VF URL (file://root/org/jboss/X.java)
     * 
     * @return the full URL to the VF in the VFS.
-    * @throws MalformedURLException if a url cannot be parsed
-    * @throws URISyntaxException 
+    * @throws URISyntaxException for an error parsing the URI 
     */
    URI toURI() throws URISyntaxException;
 

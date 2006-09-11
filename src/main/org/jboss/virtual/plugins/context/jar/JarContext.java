@@ -49,6 +49,7 @@ public class JarContext extends AbstractVFSContext
     * 
     * @param rootURL the root url
     * @throws IOException for an error accessing the file system
+    * @throws URISyntaxException for an error parsing the URI
     */
    public JarContext(URL rootURL) throws IOException, URISyntaxException
    {

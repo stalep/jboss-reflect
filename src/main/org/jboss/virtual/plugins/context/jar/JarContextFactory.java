@@ -21,13 +21,12 @@
  */
 package org.jboss.virtual.plugins.context.jar;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.io.IOException;
 
-import org.jboss.virtual.plugins.context.file.FileSystemContext;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VFSContextFactory;
 

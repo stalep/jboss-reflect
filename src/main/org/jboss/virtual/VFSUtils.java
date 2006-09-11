@@ -266,9 +266,11 @@ public class VFSUtils
     * from the name suffix.
     * 
     * @param is - input stream to the link file contents
-    * @param name - the name of the virtual file representing the link 
+    * @param name - the name of the virtual file representing the link
+    * @param props the propertes 
     * @return a list of the links read from the stream
     * @throws IOException on failure to read/parse the stream
+    * @throws URISyntaxException for an error parsing a URI
     */
    public static List<LinkInfo> readLinkInfo(InputStream is, String name, Properties props)
       throws IOException, URISyntaxException
@@ -284,10 +286,11 @@ public class VFSUtils
    /**
     * Parse a properties link file
     * 
-    * @param is
-    * @param info
-    * @throws IOException
-    * @throws URISyntaxException 
+    * @param is - input stream to the link file contents
+    * @param info the link infos
+    * @param props the propertes 
+    * @throws IOException on failure to read/parse the stream
+    * @throws URISyntaxException for an error parsing a URI
     */
    public static void parseLinkProperties(InputStream is, List<LinkInfo> info, Properties props)
       throws IOException, URISyntaxException

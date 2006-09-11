@@ -74,7 +74,7 @@ public class FileHandler extends AbstractURLHandler
     * @param context the context
     * @param parent the parent
     * @param file the file
-    * @param url the url
+    * @param uri the uri
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, uri
     */

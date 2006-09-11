@@ -99,6 +99,7 @@ public class FileSystemContext extends AbstractVFSContext
     * 
     * @param rootURL the root url
     * @throws IOException for an error accessing the file system
+    * @throws URISyntaxException for an error parsing the uri
     */
    public FileSystemContext(URL rootURL) throws IOException, URISyntaxException
    {
@@ -106,9 +107,10 @@ public class FileSystemContext extends AbstractVFSContext
    }
 
    /**
+    * Create a new FileSystemContext.
     * 
-    * @param rootURI
-    * @throws IOException
+    * @param rootURI the root uri
+    * @throws IOException for an error accessing the file system
     */
    public FileSystemContext(URI rootURI) throws IOException
    {
@@ -121,6 +123,7 @@ public class FileSystemContext extends AbstractVFSContext
     * @param file the root file
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null file
+    * @throws URISyntaxException for an error parsing the uri
     */
    public FileSystemContext(File file) throws IOException, URISyntaxException
    {
@@ -182,7 +185,7 @@ public class FileSystemContext extends AbstractVFSContext
     * 
     * @param parent the parent
     * @param file the file
-    * @param url the url
+    * @param uri the uri
     * @return the handler
     * @throws IOException for any error accessing the file system
     * @throws IllegalArgumentException for a null file

@@ -72,7 +72,7 @@ public abstract class AbstractVFSContext implements VFSContext
    /**
     * Create a new AbstractVFSContext.
     * 
-    * @param rootURI the root url
+    * @param rootURL the root url
     * @throws URISyntaxException 
     * @throws IllegalArgumentException if rootURI is null
     */
