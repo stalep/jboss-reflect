@@ -22,16 +22,20 @@
 package org.jboss.virtual.plugins.context.file;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
+import java.util.Properties;
 
 import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.plugins.context.AbstractVFSContext;
 import org.jboss.virtual.plugins.context.jar.JarHandler;
 import org.jboss.virtual.plugins.context.jar.JarUtils;
+import org.jboss.virtual.spi.LinkInfo;
 import org.jboss.virtual.spi.VirtualFileHandler;
 
 /**
@@ -183,7 +187,8 @@ public class FileSystemContext extends AbstractVFSContext
     * @throws IOException for any error accessing the file system
     * @throws IllegalArgumentException for a null file
     */
-   public VirtualFileHandler createVirtualFileHandler(VirtualFileHandler parent, File file, URI uri) throws IOException
+   public VirtualFileHandler createVirtualFileHandler(VirtualFileHandler parent, File file, URI uri)
+      throws IOException
    {
       if (file == null)
          throw new IllegalArgumentException("Null file");
@@ -192,7 +197,33 @@ public class FileSystemContext extends AbstractVFSContext
 
       VirtualFileHandler handler;
       if( VFSUtils.isLink(file.getName()) )
-         handler = new LinkHandler(this, parent, file, uri);
+      {
+         Properties props = new Properties();
+         FileInputStream fis = new FileInputStream(file);
+         try
+         {
+            List<LinkInfo> links = VFSUtils.readLinkInfo(fis, file.getName(), props);
+            String name = props.getProperty(VFSUtils.VFS_LINK_NAME, "link");
+            handler = new LinkHandler(this, parent, uri, name, links);            
+         }
+         catch(URISyntaxException e)
+         {
+            IOException ex = new IOException("Failed to parse link URIs");
+            ex.initCause(e);
+            throw ex;
+         }
+         finally
+         {
+            try
+            {
+               fis.close();
+            }
+            catch(IOException e)
+            {
+               log.debug("Exception closing file input stream: " + fis, e);
+            }
+         }
+      }
       else
          handler = new FileHandler(this, parent, file, uri);
       return handler;

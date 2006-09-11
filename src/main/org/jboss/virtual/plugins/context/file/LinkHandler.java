@@ -21,16 +21,14 @@
 */
 package org.jboss.virtual.plugins.context.file;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.jboss.virtual.VFSUtils;
+import org.jboss.virtual.plugins.context.AbstractURLHandler;
 import org.jboss.virtual.plugins.context.StructuredVirtualFileHandler;
 import org.jboss.virtual.spi.LinkInfo;
 import org.jboss.virtual.spi.VFSContext;
@@ -44,7 +42,7 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
-public class LinkHandler extends FileHandler
+public class LinkHandler extends AbstractURLHandler
    implements StructuredVirtualFileHandler
 {
    private static final long serialVersionUID = 1;
@@ -63,33 +61,12 @@ public class LinkHandler extends FileHandler
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url
     */
-   public LinkHandler(FileSystemContext context, VirtualFileHandler parent, File file, URI uri)
+   public LinkHandler(FileSystemContext context, VirtualFileHandler parent, URI uri, String name,
+         List<LinkInfo> links)
       throws IOException
    {
-      super(context, parent, file, uri);
-      // Read the link info from the file
-      FileInputStream fis = new FileInputStream(file);
-      try
-      {
-          links = VFSUtils.readLinkInfo(fis, file.getName());
-      }
-      catch (URISyntaxException e)
-      {
-         IOException ex = new IOException();
-         ex.initCause(e);
-         throw ex;
-      }
-      finally
-      {
-         try
-         {
-            fis.close();
-         }
-         catch(IOException e)
-         {
-            log.warn("Exception closing file input stream: " + fis, e);
-         }
-      }
+      super(context, parent, uri.toURL(), name);
+      this.links = links;
    }
 
    @Override
@@ -98,7 +75,6 @@ public class LinkHandler extends FileHandler
       return false;
    }
 
-   @Override
    public boolean isDirectory()
    {
       return true;
@@ -110,7 +86,6 @@ public class LinkHandler extends FileHandler
       return false;
    }
 
-   @Override
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
    {
       List<VirtualFileHandler> result = new ArrayList<VirtualFileHandler>();
@@ -141,7 +116,10 @@ public class LinkHandler extends FileHandler
       return result;
    }
 
-   @Override
+   public VirtualFileHandler findChild(String path) throws IOException
+   {
+      return structuredFindChild(path);
+   }
    public VirtualFileHandler createChildHandler(String name) throws IOException
    {
       VirtualFileHandler handler = linkTargets.get(name);

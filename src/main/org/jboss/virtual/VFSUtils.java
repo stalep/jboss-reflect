@@ -50,7 +50,11 @@ public class VFSUtils
 {
    /** The log */
    private static final Logger log = Logger.getLogger(VFSUtils.class);
+   /** */
    public static final String VFS_LINK_PREFIX = ".vfslink";
+   /** */
+   public static final String VFS_LINK_NAME = "vfs.link.name";
+   public static final String VFS_LINK_TARGET = "vfs.link.target";
 
    /**
     * Get the paths string for a collection of virtual files
@@ -247,13 +251,13 @@ public class VFSUtils
    }
 
    /**
-    * Does a vf name match the VFS link prefix
+    * Does a vf name contain the VFS link prefix
     * @param name - the name portion of a virtual file
     * @return true if the name starts with VFS_LINK_PREFIX, false otherwise
     */
    public static boolean isLink(String name)
    {
-      boolean isLink = name.startsWith(VFS_LINK_PREFIX);
+      boolean isLink = name.indexOf(VFS_LINK_PREFIX) >= 0;
       return isLink;
    }
 
@@ -266,12 +270,12 @@ public class VFSUtils
     * @return a list of the links read from the stream
     * @throws IOException on failure to read/parse the stream
     */
-   public static List<LinkInfo> readLinkInfo(InputStream is, String name)
+   public static List<LinkInfo> readLinkInfo(InputStream is, String name, Properties props)
       throws IOException, URISyntaxException
    {
       ArrayList<LinkInfo> info = new ArrayList<LinkInfo>();
       if( name.endsWith(".properties") )
-         parseLinkProperties(is, info);
+         parseLinkProperties(is, info, props);
       else
          throw new UnsupportedEncodingException("Unknown link format: "+name);
       return info;
@@ -285,17 +289,16 @@ public class VFSUtils
     * @throws IOException
     * @throws URISyntaxException 
     */
-   public static void parseLinkProperties(InputStream is, List<LinkInfo> info)
+   public static void parseLinkProperties(InputStream is, List<LinkInfo> info, Properties props)
       throws IOException, URISyntaxException
    {
-      Properties props = new Properties();
       props.load(is);
       // Iterate over the property tuples
       for(int n = 0; ; n ++)
       {
-         String nameKey = "link.name." + n;
+         String nameKey = VFS_LINK_NAME + "." + n;
          String name = props.getProperty(nameKey);
-         String uriKey = "link.uri." + n;
+         String uriKey = VFS_LINK_TARGET + "." + n;
          String uri = props.getProperty(uriKey);
          // End when the value is null since a link may not have a name
          if (uri == null)
