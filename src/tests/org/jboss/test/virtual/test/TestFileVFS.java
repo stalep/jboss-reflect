@@ -16,6 +16,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -25,10 +26,12 @@ import java.util.zip.ZipInputStream;
 
 import org.jboss.test.BaseTestCase;
 import org.jboss.virtual.VFS;
+import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.plugins.context.jar.JarUtils;
 import org.jboss.virtual.plugins.context.jar.NestedJarFromStream;
 import org.jboss.virtual.plugins.vfs.helpers.SuffixMatchFilter;
+import org.jboss.virtual.spi.LinkInfo;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VFSContextFactory;
 import org.jboss.virtual.spi.VFSContextFactoryLocator;
@@ -522,11 +525,47 @@ public class TestFileVFS extends BaseTestCase
       mfIS.close();
    }
 
-   public void testMountPoint()
+   /**
+    * Test parsing of a vfs link properties file
+    * @throws Exception
+    */
+   public void testVfsLinkProperties()
       throws Exception
    {
-      File mpProps = new File("output/mp.properties");
-      URI mp = new URI("mount:" + mpProps.toURL() + "?x=y");
+      URL linkURL = super.getResource("/vfs/links/war1.vfslink.properties");
+      assertNotNull("vfs/links/war1.vfslink.properties", linkURL);
+      // Find resources to use as the WEB-INF/{classes,lib} link targets
+      URL classesURL = getClass().getProtectionDomain().getCodeSource().getLocation();
+      assertNotNull("classesURL", classesURL);
+      System.setProperty("test.classes.url", classesURL.toString());
+      URL libURL = super.getResource("/vfs/sundry/jar/archive.jar");
+      assertNotNull("libURL", libURL);      
+      System.setProperty("test.lib.url", libURL.toString());
+
+      assertTrue("isLink", VFSUtils.isLink(linkURL.getPath()));
+      Properties props = new Properties();
+      InputStream linkIS = linkURL.openStream();
+      List<LinkInfo> infos = VFSUtils.readLinkInfo(linkIS, linkURL.getPath(), props);
+      assertEquals("LinkInfo count", 2, infos.size());
+      LinkInfo classesInfo = null;
+      LinkInfo libInfo = null;
+      for(LinkInfo info :infos)
+      {
+         if( info.getName().equals("WEB-INF/classes") )
+            classesInfo = info;
+         else if(info.getName().equals("WEB-INF/lib") )
+            libInfo = info;
+      }
+      assertNotNull("classesInfo", classesInfo);
+      assertEquals("classesInfo.target", classesURL.toURI(), classesInfo.getLinkTarget());
+      assertNotNull("libInfo", libInfo);
+      assertEquals("libInfo.target", libURL.toURI(), libInfo.getLinkTarget());
+   }
+
+   public void testURIBehavior()
+      throws Exception
+   {
+      URI mp = new URI("mount:...?x=y");
       log.debug("getScheme: "+mp.getScheme());
       log.debug("isAbsolute: "+mp.isAbsolute());
       log.debug("isOpaque: "+mp.isOpaque());
@@ -544,9 +583,6 @@ public class TestFileVFS extends BaseTestCase
       // Drop the query portion of the file
       URL testURL = new URL(locationURL.getProtocol(), locationURL.getHost(),
             locationURL.getPath());
-      assertEquals("mpProps.toURL", mpProps.toURL(), testURL);
-
-      
    }
 
   /**
