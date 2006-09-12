@@ -38,6 +38,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.jboss.logging.Logger;
+import org.jboss.util.StringPropertyReplacer;
 import org.jboss.virtual.spi.LinkInfo;
 
 /**
@@ -308,6 +309,8 @@ public class VFSUtils
          {
             break;
          }
+         // Replace any system property references
+         uri = StringPropertyReplacer.replaceProperties(uri);
          LinkInfo link = new LinkInfo(name, new URI(uri));
          info.add(link);
       }
