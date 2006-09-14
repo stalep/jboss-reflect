@@ -23,6 +23,7 @@ package org.jboss.virtual.plugins.context.file;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -198,7 +199,7 @@ public class FileSystemContext extends AbstractVFSContext
       if (uri == null)
          throw new IllegalArgumentException("Null uri");
 
-      VirtualFileHandler handler;
+      VirtualFileHandler handler = null;
       if( VFSUtils.isLink(file.getName()) )
       {
          Properties props = new Properties();
@@ -227,8 +228,25 @@ public class FileSystemContext extends AbstractVFSContext
             }
          }
       }
+      else if( file.exists() == false )
+      {
+         // See if we can resolve this to a link in the parent
+         List<VirtualFileHandler> children = parent.getChildren(true);
+         for(VirtualFileHandler vfh : children)
+         {
+            if( vfh.getName().equals(file.getName()) )
+            {
+               handler = vfh;
+               break;
+            }
+         }
+         if( handler == null )
+            throw new FileNotFoundException("File does not exist: " + file.getCanonicalPath());
+      }
       else
+      {
          handler = new FileHandler(this, parent, file, uri);
+      }
       return handler;
    }
    

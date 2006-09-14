@@ -21,15 +21,20 @@
 */
 package org.jboss.virtual.plugins.context.file;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.plugins.context.AbstractURLHandler;
+import org.jboss.virtual.plugins.context.DelegatingHandler;
 import org.jboss.virtual.plugins.context.StructuredVirtualFileHandler;
+import org.jboss.virtual.plugins.vfs.helpers.PathTokenizer;
 import org.jboss.virtual.spi.LinkInfo;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VFSContextFactory;
@@ -49,8 +54,46 @@ public class LinkHandler extends AbstractURLHandler
    /** The link information */
    private List<LinkInfo> links;
    private HashMap<String, VirtualFileHandler> linkTargets =
-      new HashMap<String, VirtualFileHandler>();
-   
+      new HashMap<String, VirtualFileHandler>(3);
+
+   class ParentOfLink extends AbstractURLHandler
+      implements StructuredVirtualFileHandler
+   {
+      private static final long serialVersionUID = 1;
+      private HashMap<String, VirtualFileHandler> children = 
+         new HashMap<String, VirtualFileHandler>(1);
+
+      public ParentOfLink(VFSContext context, VirtualFileHandler parent, URL url, String name)
+      {
+         super(context, parent, url, name);
+      }
+      void addChild(VirtualFileHandler child, String name)
+      {
+         children.put(name, child);
+      }
+      public VirtualFileHandler findChild(String path) throws IOException
+      {
+         return structuredFindChild(path);
+      }
+
+      public VirtualFileHandler createChildHandler(String name) throws IOException
+      {
+         VirtualFileHandler child = children.get(name);
+         return child;
+      }
+
+      public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
+      {
+         // TODO Auto-generated method stub
+         return null;
+      }
+
+      public boolean isDirectory() throws IOException
+      {
+         return true;
+      }
+   }
+
    /**
     * Create a new LinkHandler.
     * 
@@ -64,10 +107,68 @@ public class LinkHandler extends AbstractURLHandler
     */
    public LinkHandler(FileSystemContext context, VirtualFileHandler parent, URI uri, String name,
          List<LinkInfo> links)
-      throws IOException
+      throws IOException, URISyntaxException
    {
+      // TODO: This URL is not consistent with the getName, but does point to the raw link file
       super(context, parent, uri.toURL(), name);
       this.links = links;
+      // Create handlers for the links and add 
+      for(LinkInfo link : links)
+      {
+         String linkName = link.getName();
+         if( linkName == null )
+            linkName = VFSUtils.getName(link.getLinkTarget());
+         if( linkName != null )
+         {
+            String[] paths = PathTokenizer.getTokens(linkName);
+            int n = 0;
+            VirtualFileHandler linkParent = this;
+            String atom = null;
+            // Look for an existing parent           
+            for(; n < paths.length-1; n ++)
+            {
+               atom = paths[n];
+               try
+               {
+                  linkParent = linkParent.findChild(atom);
+               }
+               catch(IOException e)
+               {
+                  break;
+               }
+            }
+            // Create any missing parents
+            for(; n < paths.length-1; n ++)
+            {
+               atom = paths[n];
+               URL polURL = new URL(linkParent.toURI().toURL(), atom);
+               ParentOfLink pol = new ParentOfLink(this.getVFSContext(), linkParent, polURL, atom);
+               if( linkParent == this )
+               {
+                  linkTargets.put(atom, pol);
+               }
+               else
+               {
+                  ParentOfLink prevPOL = (ParentOfLink) linkParent;
+                  prevPOL.addChild(pol, atom);
+               }
+               linkParent = pol;
+            }
+               
+            // Create the link handler
+            atom = paths[n];
+            VirtualFileHandler linkHandler = createLinkHandler(linkParent, atom, link.getLinkTarget());
+            if( linkParent == this )
+            {
+               linkTargets.put(atom, linkHandler);
+            }
+            else
+            {
+               ParentOfLink prevPOL = (ParentOfLink) linkParent;
+               prevPOL.addChild(linkHandler, atom);
+            }            
+         }
+      }
    }
 
    @Override
@@ -89,31 +190,7 @@ public class LinkHandler extends AbstractURLHandler
 
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
    {
-      List<VirtualFileHandler> result = new ArrayList<VirtualFileHandler>();
-      for (LinkInfo link : links)
-      {
-         try
-         {
-            String name = link.getName();
-            URI linkURI = link.getLinkTarget();
-            if( name == null )
-               name = VFSUtils.getName(linkURI);
-            VirtualFileHandler handler = linkTargets.get(name);
-            if( handler == null )
-            {
-               handler = createLinkHandler(link);
-               linkTargets.put(name, handler);
-            }
-            result.add(handler);
-         }
-         catch (IOException e)
-         {
-            if (ignoreErrors)
-               log.trace("Ignored: " + e);
-            else
-               throw e;
-         }
-      }
+      List<VirtualFileHandler> result = new ArrayList<VirtualFileHandler>(linkTargets.values());
       return result;
    }
 
@@ -126,20 +203,7 @@ public class LinkHandler extends AbstractURLHandler
       VirtualFileHandler handler = linkTargets.get(name);
       if( handler == null )
       {
-         for (LinkInfo link : links)
-         {
-            String infoName = link.getName();
-            if( infoName == null )
-            {
-               infoName = VFSUtils.getName(link.getLinkTarget());
-            }
-            
-            if( name.equals(infoName) )
-            {
-               handler = createLinkHandler(link);
-               linkTargets.put(name, handler);
-            }
-         }
+         throw new FileNotFoundException("Failed to find link for: "+name+", parent: "+this);
       }
       return handler;
    }
@@ -151,13 +215,14 @@ public class LinkHandler extends AbstractURLHandler
       links.clear();
    }
    
-   protected VirtualFileHandler createLinkHandler(LinkInfo info)
+   protected VirtualFileHandler createLinkHandler(VirtualFileHandler parent, String name, URI linkURI)
       throws IOException
    {
-      URI linkURI = info.getLinkTarget();
       VFSContextFactory factory = VFSContextFactoryLocator.getFactory(linkURI);
       VFSContext context = factory.getVFS(linkURI);
-      VirtualFileHandler handler = context.getRoot();
+      VirtualFileHandler rootHandler = context.getRoot();
+      // Wrap the handler in a delegate so we can change the parent and name
+      DelegatingHandler handler = new DelegatingHandler(this.getVFSContext(), parent, name, rootHandler);
       // TODO: if the factory caches contexts the root handler may not point to the link
       return handler;
    }

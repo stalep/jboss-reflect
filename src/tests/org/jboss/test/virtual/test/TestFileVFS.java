@@ -526,7 +526,11 @@ public class TestFileVFS extends BaseTestCase
    }
 
    /**
-    * Test parsing of a vfs link properties file
+    * Test parsing of a vfs link properties file. It contains test.classes.url
+    * and test.lib.url system property references that are configured to
+    * point to the CodeSource location of this class and /vfs/sundry/jar/
+    * respectively.
+    * 
     * @throws Exception
     */
    public void testVfsLinkProperties()
@@ -538,7 +542,7 @@ public class TestFileVFS extends BaseTestCase
       URL classesURL = getClass().getProtectionDomain().getCodeSource().getLocation();
       assertNotNull("classesURL", classesURL);
       System.setProperty("test.classes.url", classesURL.toString());
-      URL libURL = super.getResource("/vfs/sundry/jar/archive.jar");
+      URL libURL = super.getResource("/vfs/sundry/jar");
       assertNotNull("libURL", libURL);      
       System.setProperty("test.lib.url", libURL.toString());
 
@@ -560,6 +564,57 @@ public class TestFileVFS extends BaseTestCase
       assertEquals("classesInfo.target", classesURL.toURI(), classesInfo.getLinkTarget());
       assertNotNull("libInfo", libInfo);
       assertEquals("libInfo.target", libURL.toURI(), libInfo.getLinkTarget());
+   }
+
+   /**
+    * Test the test-link.war link
+    * @throws Exception
+    */
+   public void testWarLink()
+      throws Exception
+   {
+      // Find resources to use as the WEB-INF/{classes,lib} link targets
+      URL classesURL = getClass().getProtectionDomain().getCodeSource().getLocation();
+      assertNotNull("classesURL", classesURL);
+      System.setProperty("test.classes.url", classesURL.toString());
+      URL libURL = super.getResource("/vfs/sundry/jar");
+      assertNotNull("libURL", libURL);      
+      System.setProperty("test.lib.url", libURL.toString());
+
+      // Root the vfs at the link file parent directory
+      URL linkURL = super.getResource("/vfs/links/war1.vfslink.properties");
+      File linkFile = new File(linkURL.toURI());
+      File vfsRoot = linkFile.getParentFile();
+      assertNotNull("vfs/links/war1.vfslink.properties", linkURL);
+      VFS vfs = VFS.getVFS(vfsRoot.toURI());
+
+      // We should find the test-link.war the link represents
+      VirtualFile war = vfs.findChildFromRoot("test-link.war");
+      assertNotNull("war", war);
+
+      // Validate the WEB-INF/classes child link
+      VirtualFile classes = war.findChild("WEB-INF/classes");
+      String classesName = classes.getName();
+      String classesPathName = classes.getPathName();
+      boolean classesIsDirectory = classes.isDirectory();
+      assertEquals("classes.name", "classes", classesName);
+      assertEquals("classes.pathName", "test-link.war/WEB-INF/classes", classesPathName);
+      assertEquals("classes.isDirectory", true, classesIsDirectory);
+      // Should be able to find this class since classes points to out codesource
+      VirtualFile thisClass = classes.findChild("org/jboss/test/virtual/test/TestFileVFS.class");
+      assertEquals("TestFileVFS.class", thisClass.getName());
+
+      // Validate the WEB-INF/lib child link
+      VirtualFile lib = war.findChild("WEB-INF/lib");
+      String libName = lib.getName();
+      String libPathName = lib.getPathName();
+      boolean libIsDirectory = lib.isDirectory();
+      assertEquals("lib.name", "lib", libName);
+      assertEquals("lib.pathName", "test-link.war/WEB-INF/lib", libPathName);
+      assertEquals("lib.isDirectory", true, libIsDirectory);
+      // Should be able to find archive.jar under lib
+      VirtualFile archiveJar = lib.findChild("archive.jar");
+      assertEquals("archive.jar", archiveJar.getName());
    }
 
    public void testURIBehavior()
