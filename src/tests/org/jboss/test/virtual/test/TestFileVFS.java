@@ -617,57 +617,30 @@ public class TestFileVFS extends BaseTestCase
       assertEquals("archive.jar", archiveJar.getName());
    }
 
-   public void testURIBehavior()
-      throws Exception
-   {
-      URI mp = new URI("mount:...?x=y");
-      log.debug("getScheme: "+mp.getScheme());
-      log.debug("isAbsolute: "+mp.isAbsolute());
-      log.debug("isOpaque: "+mp.isOpaque());
-      log.debug("getHost: "+mp.getHost());
-      log.debug("getQuery: "+mp.getQuery());
-      log.debug("getPath: "+mp.getPath());
-      log.debug("getHost: "+mp.getHost());
-      log.debug("getSchemeSpecificPart: "+mp.getSchemeSpecificPart());
-
-      String locationInfo = mp.getSchemeSpecificPart();
-      URL locationURL = new URL(locationInfo);
-      log.debug("locationURL.getFile(): "+locationURL.getFile());
-      log.debug("locationURL.getPath(): "+locationURL.getPath());
-      log.debug("locationURL.getQuery(): "+locationURL.getQuery());
-      // Drop the query portion of the file
-      URL testURL = new URL(locationURL.getProtocol(), locationURL.getHost(),
-            locationURL.getPath());
-   }
-
   /**
     * Test that the URL of a VFS corresponding to a directory ends in '/' so that
     * URLs created relative to it are under the directory.
     * 
     * @throws Exception
     */
-   /*
-   public void testDirURLs()
-      throws Exception
+   public void testDirURLs() throws Exception
    {
       // this expects to be run with a working dir of the container root
       File libFile = new File("output/lib");
       URL rootURL = libFile.toURL();
-      VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURL);
-      ReadOnlyVFS vfs = factory.getVFS(rootURL);
+      VFS vfs = VFS.getVFS(rootURL);
 
       // Use the unpacked-outer.jar in output/lib
-      VirtualFile outerJar = vfs.resolveFile("unpacked-outer.jar");
+      VirtualFile outerJar = vfs.findChildFromRoot("unpacked-outer.jar");
       URL outerURL = outerJar.toURL();
       log.debug("outerURL: "+outerURL);
       assertTrue(outerURL+" ends in '/'", outerURL.getPath().endsWith("/"));
       // Validate that jar1 is under unpacked-outer.jar
-      URL jar1URL = new URL(outerURL, "jar1.jar");
+      URL jar1URL = JarUtils.createJarURL(new URL(outerURL, "jar1.jar"));
       log.debug("jar1URL: "+jar1URL+", path="+jar1URL.getPath());
-      assertTrue("jar1URL path ends in unpacked-outer.jar/jar1.jar",
-            jar1URL.getPath().endsWith("unpacked-outer.jar/jar1.jar"));
+      assertTrue("jar1URL path ends in unpacked-outer.jar/jar1.jar!/",
+            jar1URL.getPath().endsWith("unpacked-outer.jar/jar1.jar!/"));
       VirtualFile jar1 = outerJar.findChild("jar1.jar");
-      assertEquals("jar1URL == VF.toURL()", jar1URL, jar1.toURL());
+      assertEquals(jar1URL, jar1.toURL());
    }
-   */
 }
