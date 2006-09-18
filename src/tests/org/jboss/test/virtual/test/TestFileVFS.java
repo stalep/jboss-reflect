@@ -619,7 +619,8 @@ public class TestFileVFS extends BaseTestCase
 
   /**
     * Test that the URL of a VFS corresponding to a directory ends in '/' so that
-    * URLs created relative to it are under the directory.
+    * URLs created relative to it are under the directory. This requires that
+    * build-test.xml artifacts exist.
     * 
     * @throws Exception
     */
