@@ -185,61 +185,6 @@
     <jar jarfile="${build.lib.retro}/jboss-container-test14.jar" manifest="${build.etc}/default.mf">
       <fileset dir="${build.classes.retro}"/>
     </jar>
-
-     <jar destfile="${build.lib.retro}/jar1.jar">
-        <manifest>
-           <attribute name="Specification-Title" value="jar1" />
-           <attribute name="Specification-Version" value="1.0.0.GA-jar1" />
-           <attribute name="Specification-Vendor" value="JBoss Inc." />
-        </manifest>
-        <zipfileset dir="${build.classes.retro}">
-           <include name="org/jboss/test/vfs/support/jar1/**" />
-        </zipfileset>
-     </jar>
-     <jar destfile="${build.lib.retro}/jar2.jar">
-        <manifest>
-           <attribute name="Specification-Title" value="jar2" />
-           <attribute name="Specification-Version" value="1.0.0.GA-jar2" />
-           <attribute name="Specification-Vendor" value="JBoss Inc." />
-        </manifest>
-        <zipfileset dir="${build.classes.retro}">
-           <include name="org/jboss/test/vfs/support/jar2/**" />
-        </zipfileset>
-     </jar>
-     <jar destfile="${build.lib.retro}/outer.jar">
-       <manifest>
-          <attribute name="Specification-Title" value="outer-jar" />
-          <attribute name="Specification-Version" value="1.0.0.GA" />
-          <attribute name="Specification-Vendor" value="JBoss Inc." />
-          <attribute name="Implementation-Title" value="outer-jar-test" />
-          <attribute name="Implementation-URL" value="www.jboss.org" />
-          <attribute name="Implementation-Version" value="1.0.0.GA-jboss" />
-          <attribute name="Implementation-Vendor" value="JBoss Inc." />
-       </manifest>
-        <zipfileset dir="${build.lib.retro}">
-           <include name="jar1.jar" />
-           <include name="jar2.jar" />
-        </zipfileset>
-        <zipfileset dir="${build.classes.retro}">
-           <include name="org/jboss/test/vfs/support/*" />
-        </zipfileset>
-     </jar>
-
-  	<!-- Profile service test jars -->
-    <jar destfile="${build.lib.retro}/p0.jar">
-      <manifest>
-         <attribute name="Specification-Title" value="profile0-jar" />
-         <attribute name="Specification-Version" value="1.0.0.GA" />
-         <attribute name="Specification-Vendor" value="JBoss Inc." />
-         <attribute name="Implementation-Title" value="p0-jar-test" />
-         <attribute name="Implementation-URL" value="www.jboss.org" />
-         <attribute name="Implementation-Version" value="1.0.0.GA-jboss" />
-         <attribute name="Implementation-Vendor" value="JBoss Inc." />
-      </manifest>
-       <zipfileset dir="${build.classes.retro}">
-          <include name="org/jboss/test/profileservice/profiles/p0/**" />
-       </zipfileset>
-    </jar>
   </target>
 
   <!-- ================================================================== -->

@@ -43,9 +43,9 @@ import org.jboss.virtual.spi.VFSContextFactoryLocator;
  * @author adrian@jboss.org
  * @version $Revision: 55523 $
  */
-public class TestFileVFS extends BaseTestCase
+public class FileVFSUnitTestCase extends BaseTestCase
 {
-   public TestFileVFS(String name)
+   public FileVFSUnitTestCase(String name)
    {
       super(name);
    }
@@ -69,8 +69,9 @@ public class TestFileVFS extends BaseTestCase
    public void testInnerJarFile()
       throws Exception
    {
-      // this expects to be run with a working dir of the container root
-      File outerJar = new File("output/lib/outer.jar");
+      URL outer = getResource("/vfs/test/outer.jar");
+      String path = outer.getPath();
+      File outerJar = new File(path);
       assertTrue(outerJar.getAbsolutePath()+" exists", outerJar.exists());
       JarFile jf = new JarFile(outerJar);
 
@@ -120,9 +121,7 @@ public class TestFileVFS extends BaseTestCase
    public void testFindResource()
       throws Exception
    {
-      // this expects to be run with a working dir of the container root
-      File outerJar = new File("output/lib/outer.jar");
-      URL rootURL = outerJar.getParentFile().toURL();
+      URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
       VirtualFile jar = vfs.findChildFromRoot("outer.jar");
       assertTrue("outer.jar != null", jar != null);
@@ -146,9 +145,7 @@ public class TestFileVFS extends BaseTestCase
    public void testFindResourceUnpackedJar()
       throws Exception
    {
-      // this expects to be run with a working dir of the container root
-      File outerJar = new File("output/lib/unpacked-outer.jar");
-      URL rootURL = outerJar.getParentFile().toURL();
+      URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
       VirtualFile jar = vfs.findChildFromRoot("unpacked-outer.jar");
       assertTrue("unpacked-outer.jar != null", jar != null);
@@ -177,14 +174,12 @@ public class TestFileVFS extends BaseTestCase
       throws Exception
    {
       log.info("+++ testResolveFile, cwd="+(new File(".").getCanonicalPath()));
-      // this expects to be run with a working dir of the container root
-      File outerJarFile = new File("output/lib/outer.jar");
-      URL rootURL = outerJarFile.getParentFile().toURL();
+      URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
 
       // Check resolving the root file
       VirtualFile root = vfs.findChildFromRoot("");
-      assertEquals("root name", "lib", root.getName());
+      assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
       assertTrue("root isDirectory", root.isDirectory());
 
@@ -198,11 +193,10 @@ public class TestFileVFS extends BaseTestCase
       assertNotNull("outer.jar/META-INF/MANIFEST.MF", outerJarMF);
 
       // Test a non-canonical path
-      outerJarFile = new File("output/resources/../lib/outer.jar");
-      rootURL = outerJarFile.getParentFile().toURL();
+      rootURL = getResource("/vfs/sundry/../test");
       // Check resolving the root file
       root = vfs.findChildFromRoot("");
-      assertEquals("root name", "lib", root.getName());
+      assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
       assertTrue("root isDirectory", root.isDirectory());
    }
@@ -217,9 +211,7 @@ public class TestFileVFS extends BaseTestCase
       throws Exception
    {
       log.info("+++ testResolveFile, cwd="+(new File(".").getCanonicalPath()));
-      // this expects to be run with a working dir of the container root
-      File libFile = new File("output/lib");
-      URL rootURL = libFile.toURL();
+      URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
       
       // Find ClassInJar1.class
@@ -244,14 +236,12 @@ public class TestFileVFS extends BaseTestCase
       throws Exception
    {
       log.info("+++ testResolveFileInUnpackedJar, cwd="+(new File(".").getCanonicalPath()));
-      // this expects to be run with a working dir of the container root
-      File outerJarFile = new File("output/lib/unpacked-outer.jar");
-      URL rootURL = outerJarFile.getParentFile().toURL();
+      URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
 
       // Check resolving the root file
       VirtualFile root = vfs.findChildFromRoot("");
-      assertEquals("root name", "lib", root.getName());
+      assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
       assertTrue("root isDirectory", root.isDirectory());
 
@@ -265,11 +255,10 @@ public class TestFileVFS extends BaseTestCase
       assertNotNull("unpacked-outer.jar/META-INF/MANIFEST.MF", outerJarMF);
 
       // Test a non-canonical path
-      outerJarFile = new File("output/resources/../lib/unpacked-outer.jar");
-      rootURL = outerJarFile.getParentFile().toURL();
+      rootURL = getResource("/test/sundry/../test");
       // Check resolving the root file
       root = vfs.findChildFromRoot("");
-      assertEquals("root name", "lib", root.getName());
+      assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
       assertTrue("root isDirectory", root.isDirectory());
    }
@@ -281,9 +270,7 @@ public class TestFileVFS extends BaseTestCase
    public void testInnerJar()
       throws Exception
    {
-      // this expects to be run with a working dir of the container root
-      File outerJar = new File("output/lib/outer.jar");
-      URL rootURL = outerJar.getParentFile().toURL();
+      URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
       VirtualFile inner = vfs.findChildFromRoot("outer.jar/jar1.jar");
       log.info("IsFile: "+inner.isFile());
@@ -312,9 +299,7 @@ public class TestFileVFS extends BaseTestCase
    public void testClassScan()
       throws Exception
    {
-      // this expects to be run with a working dir of the container root
-      File outerJarFile = new File("output/lib/outer.jar");
-      URL rootURL = outerJarFile.toURL();
+      URL rootURL = getResource("/vfs/test/outer.jar");
       VFS vfs = VFS.getVFS(rootURL);
 
       HashSet<String> expectedClasses = new HashSet<String>();
@@ -487,14 +472,11 @@ public class TestFileVFS extends BaseTestCase
       throws Exception
    {
       // this expects to be run with a working dir of the container root
-      File outerJar = new File("output/lib/outer.jar");
-      File lib = outerJar.getParentFile();
-      URI rootURI = lib.toURI();
-      VFS vfs = VFS.getVFS(rootURI);
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
       VirtualFile inner = vfs.findChildFromRoot("outer.jar/jar1.jar");
 
-      File vfsSer = new File(lib, "testVFNestedJarSerialization.ser");
-      vfsSer.createNewFile();
+      File vfsSer = File.createTempFile("testVFNestedJarSerialization", ".ser");
       vfsSer.deleteOnExit();
       // Write out the vfs inner jar file
       FileOutputStream fos = new FileOutputStream(vfsSer);
@@ -601,8 +583,8 @@ public class TestFileVFS extends BaseTestCase
       assertEquals("classes.pathName", "test-link.war/WEB-INF/classes", classesPathName);
       assertEquals("classes.isDirectory", true, classesIsDirectory);
       // Should be able to find this class since classes points to out codesource
-      VirtualFile thisClass = classes.findChild("org/jboss/test/virtual/test/TestFileVFS.class");
-      assertEquals("TestFileVFS.class", thisClass.getName());
+      VirtualFile thisClass = classes.findChild("org/jboss/test/virtual/test/FileVFSUnitTestCase.class");
+      assertEquals("FileVFSUnitTestCase.class", thisClass.getName());
 
       // Validate the WEB-INF/lib child link
       VirtualFile lib = war.findChild("WEB-INF/lib");
@@ -626,12 +608,9 @@ public class TestFileVFS extends BaseTestCase
     */
    public void testDirURLs() throws Exception
    {
-      // this expects to be run with a working dir of the container root
-      File libFile = new File("output/lib");
-      URL rootURL = libFile.toURL();
+      URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
 
-      // Use the unpacked-outer.jar in output/lib
       VirtualFile outerJar = vfs.findChildFromRoot("unpacked-outer.jar");
       URL outerURL = outerJar.toURL();
       log.debug("outerURL: "+outerURL);

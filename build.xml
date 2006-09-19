@@ -103,6 +103,15 @@
     <property name="javac.source" value="1.5"/>
     <property name="jar.prefix" value="jboss-container"/>
 
+    <patternset id="compile-resources.filter.pattern">
+       <include name="**/*"/>
+       <exclude name="tests/**"/>
+    </patternset>
+
+    <patternset id="compile-resources.pattern">
+       <include name="tests/**"/>
+    </patternset>
+
     <call target="_default:task-init"/>
 
   </target>

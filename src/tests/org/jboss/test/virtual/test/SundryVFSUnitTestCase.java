@@ -34,9 +34,9 @@ import org.jboss.virtual.plugins.context.jar.JarUtils;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public class SundryVFSTests extends BaseTestCase
+public class SundryVFSUnitTestCase extends BaseTestCase
 {
-   public SundryVFSTests(String name)
+   public SundryVFSUnitTestCase(String name)
    {
       super(name);
    }

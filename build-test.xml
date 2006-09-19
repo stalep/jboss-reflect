@@ -149,66 +149,6 @@
     <jar jarfile="${build.lib}/jboss-container-test.jar" manifest="${build.etc}/default.mf">
       <fileset dir="${build.classes}"/>
     </jar>
-
-     <!--  vfs test jars -->
-     <jar destfile="${build.lib}/jar1.jar">
-        <manifest>
-           <attribute name="Specification-Title" value="jar1" />
-           <attribute name="Specification-Version" value="1.0.0.GA-jar1" />
-           <attribute name="Specification-Vendor" value="JBoss Inc." />
-        </manifest>
-        <zipfileset dir="${build.classes}">
-           <include name="org/jboss/test/vfs/support/jar1/**" />
-        </zipfileset>
-     </jar>
-     <jar destfile="${build.lib}/jar2.jar">
-        <manifest>
-           <attribute name="Specification-Title" value="jar2" />
-           <attribute name="Specification-Version" value="1.0.0.GA-jar2" />
-           <attribute name="Specification-Vendor" value="JBoss Inc." />
-        </manifest>
-        <zipfileset dir="${build.classes}">
-           <include name="org/jboss/test/vfs/support/jar2/**" />
-        </zipfileset>
-     </jar>
-     <jar destfile="${build.lib}/outer.jar">
-       <manifest>
-          <attribute name="Specification-Title" value="outer-jar" />
-          <attribute name="Specification-Version" value="1.0.0.GA" />
-          <attribute name="Specification-Vendor" value="JBoss Inc." />
-          <attribute name="Implementation-Title" value="outer-jar-test" />
-          <attribute name="Implementation-URL" value="www.jboss.org" />
-          <attribute name="Implementation-Version" value="1.0.0.GA-jboss" />
-          <attribute name="Implementation-Vendor" value="JBoss Inc." />
-       </manifest>
-        <zipfileset dir="${build.lib}">
-           <include name="jar1.jar" />
-           <include name="jar2.jar" />
-        </zipfileset>
-        <zipfileset dir="${build.classes}">
-           <include name="org/jboss/test/vfs/support/*" />
-        </zipfileset>
-     </jar>
-     <!--  unpacked versions of vfs test jars -->
-      <unzip dest="${build.lib}/unpacked-outer.jar" src="${build.lib}/outer.jar">
-         
-      </unzip>
-
-     <!-- Profile service test jars -->
-    <jar destfile="${build.lib}/p0.jar">
-      <manifest>
-         <attribute name="Specification-Title" value="profile0-jar" />
-         <attribute name="Specification-Version" value="1.0.0.GA" />
-         <attribute name="Specification-Vendor" value="JBoss Inc." />
-         <attribute name="Implementation-Title" value="p0-jar-test" />
-         <attribute name="Implementation-URL" value="www.jboss.org" />
-         <attribute name="Implementation-Version" value="1.0.0.GA-jboss" />
-         <attribute name="Implementation-Vendor" value="JBoss Inc." />
-      </manifest>
-       <zipfileset dir="${build.classes}">
-          <include name="org/jboss/test/profileservice/profiles/p0/**" />
-       </zipfileset>
-    </jar>
   </target>
 
   <!-- ================================================================== -->
