@@ -24,6 +24,9 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipInputStream;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.jboss.test.BaseTestCase;
 import org.jboss.virtual.VFS;
 import org.jboss.virtual.VFSUtils;
@@ -48,6 +51,11 @@ public class FileVFSUnitTestCase extends BaseTestCase
    public FileVFSUnitTestCase(String name)
    {
       super(name);
+   }
+   
+   public static Test suite()
+   {
+      return new TestSuite(FileVFSUnitTestCase.class);
    }
 
    /**

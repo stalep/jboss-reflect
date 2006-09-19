@@ -19,24 +19,19 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.test.virtual.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
-import org.jboss.test.virtual.test.VFSAllTestSuite;
-
 /**
- * All Test Suite.
+ * VFS All Test Suite.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision$
+ * @version $Revision: 46146 $
  */
-public class ContainerAllTestSuite extends TestSuite
+public class VFSAllTestSuite extends TestSuite
 {
    public static void main(String[] args)
    {
@@ -45,12 +40,10 @@ public class ContainerAllTestSuite extends TestSuite
 
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("All Tests");
+      TestSuite suite = new TestSuite("VFS Tests");
 
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
-      suite.addTest(VFSAllTestSuite.suite());
+      suite.addTest(FileVFSUnitTestCase.suite());
+      suite.addTest(SundryVFSUnitTestCase.suite());
       
       return suite;
    }

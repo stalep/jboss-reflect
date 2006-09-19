@@ -23,6 +23,9 @@ package org.jboss.test.virtual.test;
 
 import java.net.URL;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.jboss.test.BaseTestCase;
 import org.jboss.virtual.VFS;
 import org.jboss.virtual.VirtualFile;
@@ -39,6 +42,11 @@ public class SundryVFSUnitTestCase extends BaseTestCase
    public SundryVFSUnitTestCase(String name)
    {
       super(name);
+   }
+
+   public static Test suite()
+   {
+      return new TestSuite(SundryVFSUnitTestCase.class);
    }
 
    protected VirtualFile getVirtualFile(String root, String path) throws Exception
