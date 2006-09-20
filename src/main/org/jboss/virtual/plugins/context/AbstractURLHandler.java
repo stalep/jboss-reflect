@@ -23,6 +23,7 @@ package org.jboss.virtual.plugins.context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -67,9 +68,14 @@ public abstract class AbstractURLHandler extends AbstractVirtualFileHandler
     * 
     * @return the url
     */
-   public URL getURL()
+   public URL getURL() 
    {
       return url;
+   }
+
+   public URL toURL() throws MalformedURLException, URISyntaxException
+   {
+      return getURL();
    }
 
    public long getLastModified() throws IOException

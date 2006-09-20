@@ -24,8 +24,10 @@ package org.jboss.virtual.spi;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import org.jboss.virtual.VirtualFile;
@@ -54,12 +56,21 @@ public interface VirtualFileHandler extends Serializable
    String getPathName();
 
    /**
+    * Get the VF URI (file://root/org/jboss/X.java)
+    * 
+    * @return the full URI to the VF in the VFS.
+    * @throws URISyntaxException for an error parsing the URI 
+    */
+   URI toURI() throws URISyntaxException;
+
+   /**
     * Get the VF URL (file://root/org/jboss/X.java)
     * 
     * @return the full URL to the VF in the VFS.
     * @throws URISyntaxException for an error parsing the URI 
+    * @throws MalformedURLException for any error
     */
-   URI toURI() throws URISyntaxException;
+   URL toURL() throws MalformedURLException, URISyntaxException;
 
    /**
     * When the file was last modified

@@ -118,7 +118,7 @@ public class VirtualFile
     */
    public URL toURL() throws MalformedURLException, URISyntaxException
    {
-      return getHandler().toURI().toURL();
+      return getHandler().toURL();
    }
    /**
     * Get the VF URI (file://root/org/jboss/X.java)

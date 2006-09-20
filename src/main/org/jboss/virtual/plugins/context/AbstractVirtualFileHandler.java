@@ -27,8 +27,10 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectStreamField;
 import java.io.ObjectInputStream.GetField;
 import java.io.ObjectOutputStream.PutField;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -115,6 +117,11 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
          vfsPath = pathName.toString();
       }
       return vfsPath;
+   }
+
+   public URL toURL() throws MalformedURLException, URISyntaxException
+   {
+      return toURI().toURL();
    }
 
    /**

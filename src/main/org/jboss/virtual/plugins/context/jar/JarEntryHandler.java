@@ -131,6 +131,10 @@ public class JarEntryHandler extends AbstractURLHandler
    public VirtualFileHandler findChild(String path) throws IOException
    {
       checkClosed();
-      throw new IOException("A JarEntry has no children: " + path + " for " + this);
+      VirtualFileHandler handler = getParent();
+      if (handler == null)
+         throw new IOException("A JarEntry has no children: " + path + " for " + this);
+      else
+         return handler.findChild(getName() +"/" + path);
    }
 }

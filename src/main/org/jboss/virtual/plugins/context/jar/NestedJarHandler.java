@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -46,19 +48,20 @@ public class NestedJarHandler extends AbstractJarHandler
    /** The jar entry */
    private transient JarEntry entry;
    
+   /** The temporary file */
+   private transient File temp;
+   
    /**
     * Create a temporary jar
     * 
+    * @param temp the temporary file
     * @param parentJar the jar
     * @param entry the jar entry
     * @return the jar file
     * @throws IOException for any error
     */
-   private static JarFile createTempJar(JarFile parentJar, JarEntry entry) throws IOException
+   private static JarFile createTempJar(File temp, JarFile parentJar, JarEntry entry) throws IOException
    {
-      File temp = File.createTempFile("nestedjar", null);
-      temp.deleteOnExit();
-
       InputStream inputStream = parentJar.getInputStream(entry);
       try
       {
@@ -110,7 +113,10 @@ public class NestedJarHandler extends AbstractJarHandler
       
       try
       {
-         initJarFile(createTempJar(parentJar, entry));
+         temp = File.createTempFile("nestedjar", null);
+         temp.deleteOnExit();
+
+         initJarFile(createTempJar(temp, parentJar, entry));
       }
       catch (IOException original)
       {
@@ -150,5 +156,11 @@ public class NestedJarHandler extends AbstractJarHandler
    public InputStream openStream() throws IOException
    {
       return getJar().getInputStream(getEntry());
+   }
+
+   @Override
+   public URL toURL() throws MalformedURLException, URISyntaxException
+   {
+      return temp.toURL();
    }
 }
