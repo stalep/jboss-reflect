@@ -234,7 +234,7 @@ public class FileSystemContext extends AbstractVFSContext
             }
          }
       }
-      else if( file.exists() == false )
+      else if (file.exists() == false && parent != null)
       {
          // See if we can resolve this to a link in the parent
          List<VirtualFileHandler> children = parent.getChildren(true);
