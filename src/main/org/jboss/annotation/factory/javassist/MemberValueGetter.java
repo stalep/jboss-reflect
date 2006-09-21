@@ -19,12 +19,10 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */ 
-package org.jboss.annotation.factory.javassist;
+package org.jboss.aop.annotation.factory.duplicate.javassist;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-
-import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactoryImpl;
 
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.AnnotationMemberValue;
@@ -52,7 +50,6 @@ public class MemberValueGetter implements MemberValueVisitor
 {
    Object value;
    Method method;
-   static IntrospectionTypeInfoFactoryImpl typeFactory = new IntrospectionTypeInfoFactoryImpl();
 
    public MemberValueGetter(Method method)
    {

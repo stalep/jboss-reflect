@@ -19,7 +19,7 @@
   * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   */
-package org.jboss.annotation.factory.javassist;
+package org.jboss.aop.annotation.factory.duplicate.javassist;
 
 import java.lang.reflect.InvocationHandler;
 import java.util.Map;
@@ -31,7 +31,7 @@ import java.util.Map;
  * @author <a href="mailto:kabir.khan@jboss.org">Kabir Khan</a>
  * @version $Revision$
  */
-public class AnnotationProxy extends org.jboss.annotation.factory.AnnotationProxy implements InvocationHandler
+public class AnnotationProxy extends org.jboss.aop.annotation.factory.duplicate.AnnotationProxy implements InvocationHandler
 {
    public AnnotationProxy(Class annotationType, Map valueMap)
    {
