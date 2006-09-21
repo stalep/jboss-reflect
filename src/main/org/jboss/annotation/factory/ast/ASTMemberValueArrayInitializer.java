@@ -20,7 +20,7 @@
   * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   */
 
-package org.jboss.aop.annotation.factory.duplicate.ast;
+package org.jboss.annotation.factory.ast;
 
 public class ASTMemberValueArrayInitializer extends ASTMemberValue {
   public ASTMemberValueArrayInitializer(int id) {

@@ -19,7 +19,7 @@
   * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   */
-package org.jboss.aop.annotation.factory.duplicate.ast;
+package org.jboss.annotation.factory.ast;
 
 /**
  * An implementation of interface CharStream, where the stream is assumed to
