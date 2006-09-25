@@ -24,6 +24,7 @@ package org.jboss.metadata.spi.retrieval;
 /**
  * Retrieval Item.
  * 
+ * @param <T> the item type
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */

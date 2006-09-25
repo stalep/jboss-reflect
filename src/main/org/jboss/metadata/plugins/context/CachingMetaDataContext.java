@@ -118,7 +118,7 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
       
       if (annotations != null)
       {
-         AnnotationItem<T> result = (AnnotationItem<T>) annotations.get(annotationName);
+         AnnotationItem<T> result = annotations.get(annotationName);
          if (result != null)
          {
             if (result.isValid())
@@ -165,7 +165,7 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
 
       if (metaDataByName != null)
       {
-         MetaDataItem<T> result = (MetaDataItem<T>) metaDataByName.get(name);
+         MetaDataItem<T> result = metaDataByName.get(name);
          if (result != null)
          {
             if (result.isValid())

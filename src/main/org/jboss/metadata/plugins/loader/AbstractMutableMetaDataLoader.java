@@ -99,6 +99,8 @@ public abstract class AbstractMutableMetaDataLoader extends BasicMetaDataLoader 
    
    /**
     * Check whether an object is retricted
+    * 
+    * @param type the type
     */
    public void checkRestricted(Class<?> type)
    {

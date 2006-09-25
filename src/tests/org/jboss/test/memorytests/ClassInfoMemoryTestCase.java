@@ -98,8 +98,6 @@ public class ClassInfoMemoryTestCase extends JBossMemoryTestCase
       simpleBeanInterface = null;
       checkUnload( weakReferenceOnLoader,"org.jboss.test.classinfo.support.SimpleBean","./leak-report.html");          
    }
-
-   /**clebert end**/
    
    protected ClassInfo getClassInfo(ClassLoader loader,Class clazz)
    {

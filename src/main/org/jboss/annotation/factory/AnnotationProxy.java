@@ -80,6 +80,7 @@ public class AnnotationProxy implements InvocationHandler
       return map.get(name);
    }
    
+   @SuppressWarnings("unchecked")
    private Object doEquals(Object proxy, Object obj)
    {
       if (obj == proxy) return Boolean.TRUE;

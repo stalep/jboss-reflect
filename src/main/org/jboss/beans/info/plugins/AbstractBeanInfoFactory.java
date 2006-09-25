@@ -155,6 +155,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
     * @param constructors the constructors
     * @param methods the methods
     * @param events the events
+    * @return the bean info
     */
    protected BeanInfo createBeanInfo(ClassAdapter classAdapter, Set<PropertyInfo> properties, Set<ConstructorInfo> constructors, Set<MethodInfo> methods, Set<EventInfo> events)
    {

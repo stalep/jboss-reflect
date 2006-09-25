@@ -56,6 +56,7 @@ public class JavassistConstructorInfo extends JavassistAnnotatedParameterInfo im
    /**
     * Create a new JavassistConstructor.
     * 
+    * @param annotationHelper the annotation helper
     * @param typeInfo the type ifo
     * @param ctConstructor the constructor
     */

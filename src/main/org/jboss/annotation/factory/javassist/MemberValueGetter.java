@@ -112,6 +112,7 @@ public class MemberValueGetter implements MemberValueVisitor
       value = new Double(node.getValue());
    }
 
+   @SuppressWarnings("unchecked")
    public void visitEnumMemberValue(EnumMemberValue node)
    {
       value = Enum.valueOf(getAttributeType(), node.getValue());

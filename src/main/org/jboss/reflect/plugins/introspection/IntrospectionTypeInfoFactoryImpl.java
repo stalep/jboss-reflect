@@ -40,7 +40,6 @@ import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.plugins.EnumInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
-import org.jboss.reflect.spi.AnnotationAttribute;
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;

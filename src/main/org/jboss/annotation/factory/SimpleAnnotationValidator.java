@@ -39,7 +39,7 @@ public class SimpleAnnotationValidator implements AnnotationValidator
 
    public void validate(Map map, Class annotation)
    {
-      ArrayList notAssignedAttributes = null;
+      ArrayList<String> notAssignedAttributes = null;
       Method[] methods = getDeclaredMethods(annotation);
       for (int i = 0 ; i < methods.length ; i++)
       {
@@ -47,7 +47,7 @@ public class SimpleAnnotationValidator implements AnnotationValidator
          {
             if (notAssignedAttributes == null)
             {
-               notAssignedAttributes = new ArrayList();
+               notAssignedAttributes = new ArrayList<String>();
             }
             notAssignedAttributes.add(methods[i].getName());
          }
@@ -61,8 +61,9 @@ public class SimpleAnnotationValidator implements AnnotationValidator
    
    private Method[] getDeclaredMethods(final Class clazz)
    {
-      return (Method[])AccessController.doPrivileged(new PrivilegedAction() {
-         public Object run() 
+      return AccessController.doPrivileged(new PrivilegedAction<Method[]>()
+      {
+         public Method[] run() 
          {
             return clazz.getDeclaredMethods();
          };  

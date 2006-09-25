@@ -35,6 +35,7 @@ public interface DependencyBuilder
     * Get the dependencies for this instance
     *
     * @param classAdapter the class adapter
+    * @return the dependencies
     */
-   List getDependencies(ClassAdapter classAdapter);
+   List<Object> getDependencies(ClassAdapter classAdapter);
 }

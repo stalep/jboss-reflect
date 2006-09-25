@@ -83,7 +83,7 @@ public abstract class AnnotationCreatorTest extends ContainerTest
       try
       {
          String expr = "@org.jboss.test.annotation.factory.support.SimpleValue";
-         Annotation annotation = (Annotation)AnnotationCreator.createAnnotation(expr, SimpleValue.class);
+         AnnotationCreator.createAnnotation(expr, SimpleValue.class);
          fail("Should have picked up on missing attribute");
       }
       catch (AnnotationValidationException expected)

@@ -22,7 +22,6 @@
 package org.jboss.reflect.plugins.javassist;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -33,8 +32,8 @@ import javassist.NotFoundException;
 
 import org.jboss.reflect.plugins.AnnotationAttributeImpl;
 import org.jboss.reflect.plugins.AnnotationHelper;
-import org.jboss.reflect.plugins.AnnotationValueImpl;
 import org.jboss.reflect.plugins.AnnotationValueFactory;
+import org.jboss.reflect.plugins.AnnotationValueImpl;
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.PrimitiveInfo;
@@ -85,12 +84,12 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
    }
 
    /**
-    * Raise NoSuchMethodError for javassist not found
+    * Raise NoClassDefFoundError for javassist not found
     * 
     * @param name the name
     * @param e the not found error
     * @return never
-    * @throws NoSuchMethodError always 
+    * @throws NoClassDefFoundError always 
     */
    public static NoClassDefFoundError raiseMethodNotFound(String name, NotFoundException e) throws NoClassDefFoundError
    {
@@ -101,12 +100,12 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
    }
 
    /**
-    * Raise NoSuchFieldError for javassist not found
+    * Raise NoClassDefFoundError for javassist not found
     * 
     * @param name the name
     * @param e the not found error
     * @return never
-    * @throws NoSuchFieldError always 
+    * @throws NoClassDefFoundError always 
     */
    public static NoClassDefFoundError raiseFieldNotFound(String name, NotFoundException e) throws NoClassDefFoundError
    {
@@ -116,6 +115,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       throw ex;
    }
 
+   @SuppressWarnings("unchecked")
    protected Object instantiate(Class clazz)
    {
       try

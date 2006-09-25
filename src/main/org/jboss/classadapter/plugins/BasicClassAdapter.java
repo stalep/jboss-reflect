@@ -73,7 +73,7 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
       return clone;
    }
 
-   public List getDependencies()
+   public List<Object> getDependencies()
    {
       DependencyBuilder builder = classAdapterFactory.getConfiguration().getDependencyBuilder();
       return builder.getDependencies(this);

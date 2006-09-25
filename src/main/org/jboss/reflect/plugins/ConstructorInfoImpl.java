@@ -74,6 +74,7 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
     * 
     * @param annotations the annotations
     * @param parameterTypes the parameter types
+    * @param parameterAnnotations the parameter annotations
     * @param exceptionTypes the exception types
     * @param modifiers the modifiers
     * @param declaring the declaring class

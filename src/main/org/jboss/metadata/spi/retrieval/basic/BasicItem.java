@@ -29,6 +29,7 @@ import org.jboss.metadata.spi.retrieval.Item;
 /**
  * BasicItem.
  * 
+ * @param <T> The item type
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */

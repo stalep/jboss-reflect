@@ -46,7 +46,7 @@ public class AnnotationProxy extends org.jboss.annotation.factory.AnnotationProx
 
    public static Object createProxy(javassist.bytecode.annotation.Annotation info, Class annotation) throws Exception
    {
-      Map map = ProxyMapCreator.createProxyMap(annotation, info);
+      Map<String, Object> map = ProxyMapCreator.createProxyMap(annotation, info);
       DefaultValueAnnotationValidator reader = new DefaultValueAnnotationValidator();
       reader.validate(map, annotation);
       AnnotationProxy proxyHandler = new AnnotationProxy(annotation, map);

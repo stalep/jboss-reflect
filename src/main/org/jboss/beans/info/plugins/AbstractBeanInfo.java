@@ -130,7 +130,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return classAdapter.getClassInfo();
    }
 
-   public List getDependencies()
+   public List<Object> getDependencies()
    {
       return classAdapter.getDependencies();
    }

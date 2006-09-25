@@ -76,6 +76,7 @@ public class AbstractPropertyInfo extends JBossObject implements PropertyInfo
     * Create a new property info
     * 
     * @param name the name
+    * @param upperName the upper case version of the name
     * @param type the type
     * @param getter the getter
     * @param setter the setter

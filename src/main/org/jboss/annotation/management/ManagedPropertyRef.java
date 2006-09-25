@@ -38,22 +38,22 @@ public @interface ManagedPropertyRef
    /**
     * A namespace context that maps the managed property onto a managed view
     * context (e.g., /, /DataSource, /DataSource/Pool).
-    * @return
     */
    String context() default "/";
+
    /**
     * The DeploymentBean name which sources the property
-    * @return
     */
    String beanName();
+   
    /**
     * The DeploymentBean property name
-    * @return
     */
    String propertyName();
+   
    /**
     * An option management view description of the property
-    * @return
+    * @return the description
     */
    String description() default "";
 }

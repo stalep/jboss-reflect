@@ -309,12 +309,13 @@ public class VFSClassLoader extends SecureClassLoader
    /**
     * Determine the protection domain. If we are a copy of the original
     * deployment, use the original url as the codebase.
+    * 
+    * @param classFile the virtual file for this class
     * @return the protection domain
-    * @throws MalformedURLException 
+    * @throws Exception for any error
     * TODO certificates and principles?
     */
-   protected ProtectionDomain getProtectionDomain(VirtualFile classFile)
-      throws Exception
+   protected ProtectionDomain getProtectionDomain(VirtualFile classFile) throws Exception
    {
       Certificate certs[] = null;
       URL codesourceUrl = classFile.toURL();
@@ -332,9 +333,10 @@ public class VFSClassLoader extends SecureClassLoader
     * 
     * @param searchCtxs - input array of vfs paths relative to vfs
     * @param vfs - the vfs to resolve the searchCtxs against
+    * @return the contexts
+    * @throws IOException for any error
     */
-   protected String[] resolveSearchCtxs(String[] searchCtxs, VFS vfs)
-      throws IOException
+   protected String[] resolveSearchCtxs(String[] searchCtxs, VFS vfs) throws IOException
    {
       ArrayList<String> tmp = new ArrayList<String>(searchCtxs.length);
       for(String ctx : searchCtxs)

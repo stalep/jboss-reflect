@@ -47,8 +47,9 @@ public class JavassistParameterInfo extends JavassistAnnotatedInfo implements Pa
    /**
     * Create a new JavassistParameterInfo.
     * 
+    * @param annotationHelper the annotation helper
     * @param annotated the annotated object
-    * @param name the name
+    * @param index the index
     * @param parameterType the type
     */
    public JavassistParameterInfo(AnnotationHelper annotationHelper, JavassistAnnotatedParameterInfo annotated, int index, TypeInfo parameterType)

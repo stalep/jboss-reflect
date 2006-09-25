@@ -49,7 +49,7 @@ public interface TypeInfo
     * 
     * @param value the original value
     * @return the converted value
-    * @throws Throwble for any error
+    * @throws Throwable for any error
     */
    Object convertValue(Object value) throws Throwable;
    
@@ -73,7 +73,7 @@ public interface TypeInfo
     * 
     * @param size the size
     * @return the converted value
-    * @throws Throwble for any error
+    * @throws Throwable for any error
     */
    Object[] newArrayInstance(int size) throws Throwable;
 }

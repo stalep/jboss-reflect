@@ -34,6 +34,7 @@ public interface MutableMetaData
    /**
     * Add an annotation
     * 
+    * @param <T> the annotation type
     * @param annotation the annotation
     * @param annotationType the annotation type
     * @return any previous annotation
@@ -43,6 +44,7 @@ public interface MutableMetaData
    /**
     * Remove an annotation
     * 
+    * @param <T> the annotation type
     * @param annotationType the annotation type
     * @return any previous annotation
     */
@@ -51,6 +53,7 @@ public interface MutableMetaData
    /**
     * Add metaData
     * 
+    * @param <T> the metadata type
     * @param metaData the meta data
     * @param type the expected type
     * @return any previous meta data
@@ -60,6 +63,7 @@ public interface MutableMetaData
    /**
     * Remove metaData
     * 
+    * @param <T> the metadata type
     * @param type the meta data type
     * @return any previous meta data
     */
@@ -68,6 +72,7 @@ public interface MutableMetaData
    /**
     * Add metaData
     *
+    * @param <T> the metadata type
     * @param name the name
     * @param metaData the meta data
     * @param type the expected type
@@ -78,6 +83,7 @@ public interface MutableMetaData
    /**
     * Remove metadata
     * 
+    * @param <T> the metadata type
     * @param name the name of the meta data
     * @param type the expected type of the metadata
     * @return the metadata or null if not present

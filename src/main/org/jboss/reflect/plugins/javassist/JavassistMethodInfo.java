@@ -57,9 +57,10 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
    /**
     * Create a new JavassistMethodInfo.
     * 
+    * @param annotationHelper the annotation helper
     * @param typeInfo the type info
     * @param key the key
-    * @param method the method
+    * @param ctMethod the method
     */
    public JavassistMethodInfo(AnnotationHelper annotationHelper, JavassistTypeInfo typeInfo, SignatureKey key, CtMethod ctMethod)
    {

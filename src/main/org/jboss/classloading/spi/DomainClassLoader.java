@@ -33,10 +33,6 @@ import java.util.Enumeration;
  */
 public interface DomainClassLoader
 {
-   // Constants -----------------------------------------------------
-   
-   // Public --------------------------------------------------------
-
    /**
     * The domain of the classloader
     * 
@@ -47,15 +43,22 @@ public interface DomainClassLoader
    /**
     * Set the domain of the classloader
     * 
+    * @param domain the domain
     */
    void setDomain(ClassLoadingDomain domain);
 
+   /**
+    * Get the classpath
+    * 
+    * @return the classpath
+    */
    public URL[] getClasspath();
 
    /**
+    * Load a class
     * 
-    * @param name
-    * @return
+    * @param name the name
+    * @return the class
     * @throws ClassNotFoundException
     */
    Class loadClass(String name) throws ClassNotFoundException;
@@ -77,6 +80,14 @@ public interface DomainClassLoader
     * @return the resource or null if not found
     */
    URL loadResourceLocally(String name);
+   
+   /**
+    * Find resources locally
+    * 
+    * @param name the name of the resource
+    * @return the resources
+    * @throws IOException for any error
+    */
    Enumeration<URL> findResourcesLocally(String name) throws IOException;
 
    /**
@@ -100,12 +111,4 @@ public interface DomainClassLoader
     * @return the package
     */
    Package getPackage(String name);
-   
-   // Package protected ---------------------------------------------
-
-   // Protected -----------------------------------------------------
-   
-   // Private -------------------------------------------------------
-
-   // Inner classes -------------------------------------------------
 }

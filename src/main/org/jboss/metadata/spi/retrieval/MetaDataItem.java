@@ -27,6 +27,7 @@ package org.jboss.metadata.spi.retrieval;
  * <p>For the purposes of retrieval, two annotations
  * are equal if they have the same name.
  * 
+ * @param <T> the item type
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */

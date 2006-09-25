@@ -54,6 +54,7 @@ public interface FieldInfo extends AnnotatedInfo, MemberInfo
     * Get the value of the field
     * 
     * @param target the target
+    * @return the field value
     * @throws Throwable for any error
     */
    Object get(Object target) throws Throwable;

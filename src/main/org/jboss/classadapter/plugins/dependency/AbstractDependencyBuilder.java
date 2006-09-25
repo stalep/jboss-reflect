@@ -34,7 +34,7 @@ import org.jboss.classadapter.spi.DependencyBuilder;
  */
 public class AbstractDependencyBuilder implements DependencyBuilder
 {
-   public List getDependencies(ClassAdapter classAdapter)
+   public List<Object> getDependencies(ClassAdapter classAdapter)
    {
       return null;
    }

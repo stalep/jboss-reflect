@@ -47,6 +47,7 @@ public interface MetaData
    /**
     * Get annotation
     * 
+    * @param <T> the annotation type
     * @param annotationType the annotation type 
     * @return the annotation or null if not present
     */
@@ -76,7 +77,8 @@ public interface MetaData
 
    /**
     * Get metadata
-    * 
+    *
+    * @param <T> the metadata type
     * @param type the type
     * @return the metadata or null if not present
     */
@@ -115,6 +117,7 @@ public interface MetaData
    /**
     * Get metadata
     * 
+    * @param <T> the metadata type
     * @param name the name of the meta data
     * @param type the expected type of the metadata
     * @return the metadata or null if not present

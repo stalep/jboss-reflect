@@ -35,6 +35,7 @@ public interface MetaDataLoader extends MetaDataRetrieval
    /**
     * Whether the item is cachable
     * 
+    * @param <T> the item type
     * @param item the item
     * @return true when cachable
     */

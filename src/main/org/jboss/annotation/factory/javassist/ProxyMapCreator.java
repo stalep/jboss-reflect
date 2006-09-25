@@ -232,10 +232,10 @@ public class ProxyMapCreator implements MemberValueVisitor
       throw new RuntimeException("unable to determine member type for annotation: " + annotation.getName() + "." + member);
    }
 
-   public static Map createProxyMap(Class annotation, javassist.bytecode.annotation.Annotation info)
+   public static Map<String, Object> createProxyMap(Class annotation, javassist.bytecode.annotation.Annotation info)
    {
       //TODO: Need to handle default values for annotations in jdk 1.5
-      Map map = new HashMap();
+      Map<String, Object> map = new HashMap<String, Object>();
 
       if (info.getMemberNames() == null) return map;
       Set members = info.getMemberNames();

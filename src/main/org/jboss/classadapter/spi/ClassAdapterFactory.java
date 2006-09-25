@@ -58,7 +58,7 @@ public interface ClassAdapterFactory
    /**
     * Get a class adapter
     * 
-    * @param type the type info
+    * @param typeInfo the type info
     * @return the class adapter
     */
    ClassAdapter getClassAdapter(TypeInfo typeInfo);

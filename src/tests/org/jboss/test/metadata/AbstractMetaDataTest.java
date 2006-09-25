@@ -97,6 +97,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert an annotation
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param type the annotation type
     * @throws Exception for any error
@@ -119,6 +120,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert an annotation
     * 
+    * @param <T> the type
     * @param metaData the retrieval
     * @param type the annotation type
     * @throws Exception for any error
@@ -136,6 +138,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert meta data
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param type the type
     * @throws Exception for any error
@@ -156,6 +159,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert meta data
     * 
+    * @param <T> the type
     * @param metaData the retrieval
     * @param type the type
     * @throws Exception for any error
@@ -172,6 +176,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert meta data
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param name the name
     * @param type the type
@@ -193,6 +198,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert meta data
     * 
+    * @param <T> the type
     * @param metaData the retrieval
     * @param name the name
     * @param type the type
@@ -210,6 +216,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert an annotation is not present
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param type the annotation type
     * @throws Exception for any error
@@ -228,6 +235,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert an annotation is not present
     * 
+    * @param <T> the type
     * @param metaData the retrieval
     * @param type the annotation type
     * @throws Exception for any error
@@ -245,6 +253,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert a metadata type is not present
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param type the type
     * @throws Exception for any error
@@ -262,6 +271,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert a metadata type is not present
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param type the type
     * @throws Exception for any error
@@ -278,6 +288,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert a metadata name is not present
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param name the name
     * @param type the type
@@ -296,6 +307,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert a metadata name is not present
     * 
+    * @param <T> the type
     * @param metaData the retrieval
     * @param name the name
     * @param type the type
@@ -384,6 +396,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is added with no previous
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param annotation the annotation
     * @param expectedAnnotations the expected annotations
@@ -400,6 +413,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is added with no previous
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param mutable the mutable
     * @param annotation the annotation
@@ -434,6 +448,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is added with no previous
     * 
+    * @param <T> the type
     * @param mutable the retrieval
     * @param annotation the annotation
     * @param expectedAnnotations the expected annotations
@@ -464,6 +479,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an meta data is added with no previous
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the meta data
     * @param type the type
@@ -481,6 +497,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an meta data is added with no previous
     *
+    * @param <T> the type
     * @param metaData the meta data
     * @param mutable the mutable
     * @param object the object
@@ -513,6 +530,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an meta data is added with no previous
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the meta data
     * @param type the type
@@ -541,6 +559,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an meta data is added with no previous
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the meta data
     * @param name the name
@@ -559,6 +578,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an meta data is added with no previous
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param mutable the mutable
     * @param object the object
@@ -591,6 +611,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an meta data is added with no previous
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the meta data
     * @param name the name
@@ -619,11 +640,11 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is added with a previous value
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param annotation the annotation
-    * @param expected the expected type
-    * @param expectedAnnotations the expected annotations
     * @param last the last valid time
+    * @return the new last valid time
     * @throws Exception for any error
     */
    protected <T extends Annotation> long assertAddAnnotationWithPrevious(MutableMetaData mutable, T annotation, long last) throws Exception
@@ -635,12 +656,12 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is added with a previous value
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param mutable the mutable
     * @param annotation the annotation
-    * @param expected the expected type
-    * @param expectedAnnotations the expected annotations
     * @param last the last valid time
+    * @return the new last valid time
     * @throws Exception for any error
     */
    protected <T extends Annotation> long assertAddAnnotationWithPrevious(MetaData metaData, MutableMetaData mutable, T annotation, long last) throws Exception
@@ -669,11 +690,11 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is added with a previous value
     * 
+    * @param <T> the type
     * @param mutable the retrieval
     * @param annotation the annotation
-    * @param expected the expected type
-    * @param expectedAnnotations the expected annotations
     * @param last the last valid time
+    * @return the new last valid time
     * @throws Exception for any error
     */
    protected <T extends Annotation> long assertAddAnnotationWithPrevious(MutableMetaDataLoader mutable, T annotation, long last) throws Exception
@@ -704,10 +725,10 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is added with a previous value
     * 
+    * @param <T> the type
     * @param mutable the retrieval
     * @param annotation the annotation
-    * @param expected the expected type
-    * @param expectedAnnotations the expected annotations
+    * @param last the last valid time
     * @throws Exception for any error
     */
    protected <T extends Annotation> void assertAddAnnotationWithPreviousSameObject(MutableMetaData mutable, T annotation, long last) throws Exception
@@ -734,11 +755,11 @@ public class AbstractMetaDataTest extends BaseTestCase
 
    /**
     * Check an annotation is added with a previous value
-    * 
+    *
+    * @param <T> the type
     * @param mutable the retrieval
     * @param annotation the annotation
-    * @param expected the expected type
-    * @param expectedAnnotations the expected annotations
+    * @param last the last valid time
     * @throws Exception for any error
     */
    protected <T extends Annotation> void assertAddAnnotationWithPreviousSameObject(MutableMetaDataLoader mutable, T annotation, long last) throws Exception
@@ -769,10 +790,12 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check metadata is added with a previous value
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the object
     * @param type the type
     * @param last the last valid time
+    * @return the new last valid time
     * @throws Exception for any error
     */
    protected <T> long assertAddMetaDataWithPrevious(MutableMetaData mutable, T object, Class<T> type, long last) throws Exception
@@ -784,11 +807,13 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check metadata is added with a previous value
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param mutable the mutable
     * @param object the object
     * @param type the type
     * @param last the last valid time
+    * @return the new last valid time
     * @throws Exception for any error
     */
    protected <T> long assertAddMetaDataWithPrevious(MetaData metaData, MutableMetaData mutable, T object, Class<T> type, long last) throws Exception
@@ -815,10 +840,12 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check metadata is added with a previous value
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the object
     * @param type the type
     * @param last the last valid time
+    * @return the new last valid time
     * @throws Exception for any error
     */
    protected <T> long assertAddMetaDataWithPrevious(MutableMetaDataLoader mutable, T object, Class<T> type, long last) throws Exception
@@ -841,11 +868,13 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check metadata is added with a previous value
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the object
     * @param name the name 
     * @param type the type
     * @param last the last valid time
+    * @return the new last valid time
     * @throws Exception for any error
     */
    protected <T> long assertAddMetaDataWithPrevious(MutableMetaData mutable, T object, String name, Class<T> type, long last) throws Exception
@@ -857,11 +886,14 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check metadata is added with a previous value
     * 
-    * @param mutable the meta data
+    * @param <T> the type
+    * @param metaData the meta data
+    * @param mutable the mutable
     * @param object the object
     * @param name the name 
     * @param type the type
     * @param last the last valid time
+    * @return the new last valid time
     * @throws Exception for any error
     */
    protected <T> long assertAddMetaDataWithPrevious(MetaData metaData, MutableMetaData mutable, T object, String name, Class<T> type, long last) throws Exception
@@ -887,11 +919,13 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check metadata is added with a previous value
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the object
     * @param name the name 
     * @param type the type
     * @param last the last valid time
+    * @return the new last valid time
     * @throws Exception for any error
     */
    protected <T> long assertAddMetaDataWithPrevious(MutableMetaDataLoader mutable, T object, String name, Class<T> type, long last) throws Exception
@@ -913,6 +947,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check metadata is added with a previous value the same object
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the object
     * @param type the type
@@ -942,6 +977,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check metadata is added with a previous value the same object
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the object
     * @param type the type
@@ -968,6 +1004,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check metadata is added with a previous value the same object
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the object
     * @param name the name
@@ -997,6 +1034,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check metadata is added with a previous value the same object
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param object the object
     * @param name the name
@@ -1023,8 +1061,10 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is removed
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param expected the expected type
+    * @param expectedAnnotations the expected annotations
     * @param last the last valid time
     * @throws Exception for any error
     */
@@ -1037,9 +1077,11 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is removed
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param mutable the meta data loader
     * @param expected the expected type
+    * @param expectedAnnotations the expected annotations
     * @param last the last valid time
     * @param stillExpected whether it is still expected elsewhere
     * @throws Exception for any error
@@ -1080,8 +1122,10 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is removed
     * 
+    * @param <T> the type
     * @param mutable the retrieval
     * @param expected the expected type
+    * @param expectedAnnotations the expected annotations
     * @param last the last valid time
     * @throws Exception for any error
     */
@@ -1113,8 +1157,10 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check meta data is removed
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param type the type
+    * @param expected the expected meta data
     * @param last the last valid time
     * @throws Exception for any error
     */
@@ -1127,9 +1173,11 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check meta data is removed
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param mutable the mutable
     * @param type the type
+    * @param expected the expected meta data
     * @param last the last valid time
     * @param stillExpected whether it is still expected elsewhere
     * @throws Exception for any error
@@ -1167,8 +1215,10 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check meta data is removed
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param type the type
+    * @param expected the expected meta data
     * @param last the last valid time
     * @throws Exception for any error
     */
@@ -1192,9 +1242,11 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check meta data is removed
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param name the name
     * @param type the type
+    * @param expected the expected meta data
     * @param last the last valid time
     * @throws Exception for any error
     */
@@ -1207,10 +1259,12 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check meta data is removed
     * 
+    * @param <T> the type
     * @param metaData the meta data
     * @param mutable the mutable
     * @param name the name
     * @param type the type
+    * @param expected the expected meta data
     * @param last the last valid time
     * @param stillExpected whether it is still expected elsewhere
     * @throws Exception for any error
@@ -1246,9 +1300,11 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check meta data is removed
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param name the name
     * @param type the type
+    * @param expected the expected meta data
     * @param last the last valid time
     * @throws Exception for any error
     */
@@ -1270,6 +1326,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is not removed
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param expected the expected type
     * @param last the last valid time
@@ -1299,6 +1356,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check an annotation is not removed
     * 
+    * @param <T> the type
     * @param mutable the retrieval
     * @param expected the expected type
     * @param last the last valid time
@@ -1325,6 +1383,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check meta data is not removed
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param type the type
     * @param last the last valid time
@@ -1352,6 +1411,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check meta data is not removed
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param type the type
     * @param last the last valid time
@@ -1376,6 +1436,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check meta data is not removed
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param name the name
     * @param type the type
@@ -1403,6 +1464,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Check meta data is not removed
     * 
+    * @param <T> the type
     * @param mutable the meta data
     * @param name the name
     * @param type the type
@@ -1461,7 +1523,6 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the meta data
     * @param last the last valid time
-    * @return the current valid time
     */
    protected void assertValidTimeUnchanged(MetaData metaData, long last)
    {
@@ -1476,7 +1537,6 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the retrieval
     * @param last the last valid time
-    * @return the current valid time
     */
    protected void assertValidTimeUnchanged(MetaDataRetrieval metaData, long last)
    {
@@ -1511,6 +1571,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the meta data
     * @param expected the expected annotation classes
+    * @throws Exception for any error
     */
    protected void assertAllAnnotations(MetaData metaData, ExpectedAnnotations expected) throws Exception
    {
@@ -1523,6 +1584,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param metaData the meta data
     * @param expected the expected annotation classes
     * @param local whether to test the local annotations
+    * @throws Exception for any error
     */
    protected void assertAllAnnotations(MetaData metaData, ExpectedAnnotations expected, boolean local) throws Exception
    {
@@ -1539,6 +1601,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the meta data
     * @param expected the expected annotation classes
+    * @throws Exception for any error
     */
    protected void assertAnnotations(MetaData metaData, ExpectedAnnotations expected) throws Exception
    {
@@ -1562,6 +1625,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the meta data
     * @param expected the expected annotation classes
+    * @throws Exception for any error
     */
    protected void assertLocalAnnotations(MetaData metaData, ExpectedAnnotations expected) throws Exception
    {
@@ -1585,6 +1649,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the retrieval
     * @param expected the expected annotation classes
+    * @throws Exception for any error
     */
    protected void assertAllAnnotations(MetaDataRetrieval metaData, ExpectedAnnotations expected) throws Exception
    {
@@ -1597,6 +1662,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param metaData the retrieval
     * @param expected the expected annotation classes
     * @param local whether to test the local annotations
+    * @throws Exception for any error
     */
    protected void assertAllAnnotations(MetaDataRetrieval metaData, ExpectedAnnotations expected, boolean local) throws Exception
    {
@@ -1613,6 +1679,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the retrieval
     * @param expected the expected annotation classes
+    * @throws Exception for any error
     */
    protected void assertAnnotations(MetaDataRetrieval metaData, ExpectedAnnotations expected) throws Exception
    {
@@ -1640,6 +1707,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the retrieval
     * @param expected the expected annotation classes
+    * @throws Exception for any error
     */
    protected void assertLocalAnnotations(MetaDataRetrieval metaData, ExpectedAnnotations expected) throws Exception
    {
@@ -1667,6 +1735,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the meta data
     * @param expected the expected types
+    * @throws Exception for any error
     */
    protected void assertAllMetaData(MetaData metaData, ExpectedMetaData expected) throws Exception
    {
@@ -1679,6 +1748,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param metaData the meta data
     * @param expected the expected types
     * @param local whether to include the local meta data
+    * @throws Exception for any error
     */
    protected void assertAllMetaData(MetaData metaData, ExpectedMetaData expected, boolean local) throws Exception
    {
@@ -1692,6 +1762,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the meta data
     * @param expected the expected types
+    * @throws Exception for any error
     */
    protected void assertMetaData(MetaData metaData, ExpectedMetaData expected) throws Exception
    {
@@ -1715,6 +1786,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the meta data
     * @param expected the expected types
+    * @throws Exception for any error
     */
    protected void assertLocalMetaData(MetaData metaData, ExpectedMetaData expected) throws Exception
    {
@@ -1738,6 +1810,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the retrieval
     * @param expected the expected types
+    * @throws Exception for any error
     */
    protected void assertAllMetaData(MetaDataRetrieval metaData, ExpectedMetaData expected) throws Exception
    {
@@ -1750,6 +1823,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param metaData the retrieval
     * @param expected the expected types
     * @param local whether to include the local meta data
+    * @throws Exception for any error
     */
    protected void assertAllMetaData(MetaDataRetrieval metaData, ExpectedMetaData expected, boolean local) throws Exception
    {
@@ -1763,6 +1837,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the retrieval
     * @param expected the expected types
+    * @throws Exception for any error
     */
    protected void assertMetaData(MetaDataRetrieval metaData, ExpectedMetaData expected) throws Exception
    {
@@ -1790,6 +1865,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the retrieval
     * @param expected the expected types
+    * @throws Exception for any error
     */
    protected void assertLocalMetaData(MetaDataRetrieval metaData, ExpectedMetaData expected) throws Exception
    {
@@ -1832,6 +1908,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the meta data
     * @param expected the expected annotation classes
+    * @throws Exception for any error
     */
    protected void assertAnnotationMetaDatas(MetaData metaData, ExpectedAnnotations expected) throws Exception
    {
@@ -1857,6 +1934,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the meta data
     * @param expected the expected annotation classes
+    * @throws Exception for any error
     */
    protected void assertLocalAnnotationMetaDatas(MetaData metaData, ExpectedAnnotations expected) throws Exception
    {
@@ -1882,6 +1960,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the retrieval
     * @param expected the expected annotation classes
+    * @throws Exception for any error
     */
    protected void assertAnnotationMetaDatas(MetaDataRetrieval metaData, ExpectedAnnotations expected) throws Exception
    {
@@ -1911,6 +1990,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * 
     * @param metaData the retrieval
     * @param expected the expected annotation classes
+    * @throws Exception for any error
     */
    protected void assertLocalAnnotationMetaDatas(MetaDataRetrieval metaData, ExpectedAnnotations expected) throws Exception
    {
@@ -1962,6 +2042,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    /**
     * Assert two collections are equal
     * 
+    * @param <T> the type
     * @param context the context
     * @param expected the expected
     * @param actual the actual

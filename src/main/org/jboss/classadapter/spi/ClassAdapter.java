@@ -81,7 +81,7 @@ public interface ClassAdapter extends JBossInterface
     *
     * @return the list of dependencies
     */
-   List getDependencies();
+   List<Object> getDependencies();
 
    /**
     * Get the Joinpoint Factory for this adapter.

@@ -22,7 +22,6 @@
 package org.jboss.reflect.plugins.javassist;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 
 import org.jboss.reflect.plugins.AnnotationHelper;
 import org.jboss.reflect.spi.AnnotationInfo;

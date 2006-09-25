@@ -59,6 +59,7 @@ public class JavassistFieldInfo extends JavassistAnnotatedInfo implements FieldI
    /**
     * Create a new JavassistFieldInfo.
     * 
+    * @param annotationHelper the annotation helper
     * @param typeInfo the type info
     * @param ctField the field
     */

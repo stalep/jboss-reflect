@@ -85,7 +85,7 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader
    /**
     * Create a new MemoryMetaDataLoader.
     * 
-    * @param key the scope key
+    * @param scope the scope key
     */
    public MemoryMetaDataLoader(ScopeKey scope)
    {
@@ -95,7 +95,7 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader
    /**
     * Create a new MemoryMetaDataLoader.
     * 
-    * @param key the scope key
+    * @param scope the scope key
     * @param cachable whether items produced should be cachable
     * @param restricted whether restricted items are allowed
     */
@@ -155,7 +155,7 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader
       T result = null;
 
       Class<? extends Annotation> annotationType = annotation.annotationType();
-      BasicAnnotationItem<T> old = (BasicAnnotationItem<T>) annotations.get(annotationType.getName());
+      BasicAnnotationItem<T> old = annotations.get(annotationType.getName());
       if (old != null)
       {
          result = old.getAnnotation();
@@ -177,7 +177,7 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader
    {
       if (annotations == null)
          return null;
-      BasicAnnotationItem<T> annotation = (BasicAnnotationItem<T>) annotations.remove(annotationType.getName());
+      BasicAnnotationItem<T> annotation = annotations.remove(annotationType.getName());
       if (annotation == null)
          return null;
       annotation.invalidate();
@@ -270,7 +270,7 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader
 
       T result = null;
       
-      BasicMetaDataItem<T> old = (BasicMetaDataItem<T>) metaDataByName.get(type.getName());
+      BasicMetaDataItem<T> old = metaDataByName.get(type.getName());
       if (old != null)
       {
          result = old.getValue();
@@ -325,7 +325,7 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader
 
       T result = null;
       
-      BasicMetaDataItem<T> old = (BasicMetaDataItem<T>) metaDataByName.get(name);
+      BasicMetaDataItem<T> old = metaDataByName.get(name);
       if (old != null)
       {
          result = old.getValue();

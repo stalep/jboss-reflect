@@ -244,7 +244,7 @@ public class ScopeKey implements Serializable, Cloneable
    /**
     * Get a scope level
     * 
-    * @param level the scope level
+    * @param scopeLevel the scope level
     * @return the scope or null if there is no such level
     */
    public Scope getScopeLevel(ScopeLevel scopeLevel)
@@ -258,7 +258,7 @@ public class ScopeKey implements Serializable, Cloneable
    /**
     * Remove a scope level
     * 
-    * @param level the scope level
+    * @param scopeLevel the scope level
     * @return the scope or null if there is no such level
     */
    public Scope removeScopeLevel(ScopeLevel scopeLevel)

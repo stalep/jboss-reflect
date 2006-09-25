@@ -29,6 +29,7 @@ import org.jboss.metadata.spi.retrieval.AnnotationItem;
 /**
  * BasicAnnotationItem.
  * 
+ * @param <T> the annotation type
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */

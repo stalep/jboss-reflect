@@ -64,6 +64,7 @@ public interface MetaDataRetrieval
    /**
     * Get annotation
     * 
+    * @param <T> the annotation type
     * @param annotationType the annotation type 
     * @return the annotation or null if not present
     */
@@ -86,6 +87,7 @@ public interface MetaDataRetrieval
    /**
     * Get metadata
     * 
+    * @param <T> the metadata type
     * @param type the type
     * @return the metadata or null if not present
     */

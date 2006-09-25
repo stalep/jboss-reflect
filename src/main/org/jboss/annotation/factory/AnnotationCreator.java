@@ -65,7 +65,7 @@ public class AnnotationCreator implements AnnotationParserVisitor
       boolean haveJavassist = false;
       try
       {
-         Class clazz = Class.forName("javassist.CtClass");
+         Class.forName("javassist.CtClass");
          haveJavassist = true;
       }
       catch(ClassNotFoundException ignore)
@@ -315,12 +315,13 @@ public class AnnotationCreator implements AnnotationParserVisitor
    {
       try
       {
-         ASTAnnotation node = (ASTAnnotation)AccessController.doPrivileged(new PrivilegedExceptionAction() {
-           public Object run() throws Exception{
+         ASTAnnotation node = AccessController.doPrivileged(new PrivilegedExceptionAction<ASTAnnotation>()
+         {
+           public ASTAnnotation run() throws Exception
+           {
               AnnotationParser parser = new AnnotationParser(new StringReader(annotationExpr));
               org.jboss.annotation.factory.ast.ASTStart start = parser.Start();
               ASTAnnotation node = (ASTAnnotation) start.jjtGetChild(0);
-              
               return node;
            }
          });
@@ -329,14 +330,14 @@ public class AnnotationCreator implements AnnotationParserVisitor
       }
       catch (PrivilegedActionException e)
       {
-         throw new RuntimeException(e.getException());
+         throw new RuntimeException("Error getting root expression", e.getException());
       }
    }
    
    
    public static Object createAnnotation(ASTAnnotation node, Class annotation, ClassLoader cl) throws Exception
    {
-      HashMap map = new HashMap();
+      HashMap<String, Object> map = new HashMap<String, Object>();
       if (annotation == null)
       {
          ClassLoader loader = (cl != null) ? cl : Thread.currentThread().getContextClassLoader();

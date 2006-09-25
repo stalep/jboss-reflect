@@ -36,6 +36,7 @@ public final class AnnotationMatcher
    /**
     * Match an annotation
     * 
+    * @param <T> the annotation type
     * @param annotations the annotations
     * @param annotationType the annotation type
     * @return the matched annotation or null if no match
@@ -58,6 +59,7 @@ public final class AnnotationMatcher
    /**
     * Match an annotation item
     * 
+    * @param <T> the annotation type
     * @param annotations the annotation items
     * @param annotationType the annotation type
     * @return the matched annotation item or null if no match
@@ -71,7 +73,7 @@ public final class AnnotationMatcher
          {
             Annotation a = item.getAnnotation();
             if (annotationType.equals(a.annotationType()))
-               return (AnnotationItem<T>) item;
+               return item;
          }
       }
       

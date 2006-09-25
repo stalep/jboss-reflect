@@ -25,22 +25,23 @@ import org.jboss.reflect.plugins.ArrayInfoImpl;
 import org.jboss.reflect.spi.TypeInfo;
 
 /**
+ * Javassist array info
  * 
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  * @version $Revision$
  */
 public class JavassistArrayInfoImpl extends ArrayInfoImpl
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = 9195834689976459024L;
 
    public JavassistArrayInfoImpl()
    {
-      // FIXME JavassistArrayInfoImpl constructor
       super();
    }
 
    public JavassistArrayInfoImpl(TypeInfo componentType)
    {
-      // FIXME JavassistArrayInfoImpl constructor
       super(componentType);
    }
 

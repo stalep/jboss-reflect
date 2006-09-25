@@ -21,14 +21,11 @@
 */ 
 package org.jboss.test.annotation.factory.test;
 
-import java.lang.annotation.Annotation;
-
 import junit.framework.Test;
 
 import org.jboss.annotation.factory.AnnotationCreator;
 import org.jboss.annotation.factory.AnnotationValidationException;
 import org.jboss.test.annotation.factory.support.ComplexWithDefault;
-import org.jboss.test.annotation.factory.support.MyEnum;
 
  
 /**
@@ -53,7 +50,7 @@ public class NoJavassistAnnotationCreatorTestCase extends AnnotationCreatorTest
       try
       {
          String expr = "@org.jboss.test.annotation.factory.support.ComplexWithDefault";
-         Annotation annotation = (Annotation)AnnotationCreator.createAnnotation(expr, ComplexWithDefault.class);
+         AnnotationCreator.createAnnotation(expr, ComplexWithDefault.class);
          fail("Should have had a validation exception");
       }
       catch (AnnotationValidationException expected)

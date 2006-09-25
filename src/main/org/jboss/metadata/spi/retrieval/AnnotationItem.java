@@ -29,6 +29,7 @@ import java.lang.annotation.Annotation;
  * <p>For the purposes of retrieval, two annotations
  * are equal if they have the same annotation type.
  * 
+ * @param <T> the annoation type
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */

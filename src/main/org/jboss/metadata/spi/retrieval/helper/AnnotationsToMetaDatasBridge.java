@@ -39,7 +39,7 @@ public class AnnotationsToMetaDatasBridge implements MetaDatasItem
    /**
     * Create a new AnnotationsToMetaDatasBridge.
     * 
-    * @param annotation the annotation
+    * @param annotations the annotations
     */
    public AnnotationsToMetaDatasBridge(AnnotationsItem annotations)
    {

@@ -42,8 +42,9 @@ public interface AnnotationHelper
 
    /**
     * Create an annotation from the underlying implementation and its info type
-    * @param The annotation info
+    * @param info the annotation info
     * @param ann the underlying annotation
+    * @return the annotation value
     */
    AnnotationValue createAnnotationValue(AnnotationInfo info, Object ann);
 }

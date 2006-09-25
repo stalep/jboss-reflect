@@ -104,6 +104,7 @@ public class LinkHandler extends AbstractURLHandler
     * @param links the links
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url
+    * @throws URISyntaxException if the uri cannot be parsed
     */
    public LinkHandler(FileSystemContext context, VirtualFileHandler parent, URI uri, String name,
          List<LinkInfo> links)

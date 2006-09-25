@@ -39,5 +39,5 @@ public interface AnnotationValidator
     * @param annotation The annotation type
     * @throws AnnotationValidationException if some attributes were not filled in and no default value exists for that attribute
     */
-   void validate(Map map, Class annotation);
+   void validate(Map<String, Object> map, Class annotation);
 }

@@ -35,6 +35,8 @@ public interface MetaDataContext extends MetaDataRetrieval
 {
    /**
     * Get the parent
+    * 
+    * @return the parent context
     */
    MetaDataContext getParent();
    
