@@ -200,9 +200,13 @@ public class VFSUtils
     * 
     * @param name the name to fix
     * @return the fixed name
+    * @throws IllegalArgumentException for a null name
     */
    public static String fixName(String name)
    {
+      if (name == null)
+         throw new IllegalArgumentException("Null name");
+      
       int length = name.length();
       if (length <= 1)
          return name;

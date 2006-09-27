@@ -144,7 +144,8 @@ public class VFSClassLoader extends SecureClassLoader
    }
 
    /**
-    * TODO
+    * TODO getPackageNames
+    * 
     * @see org.jboss.classloading.spi.DomainClassLoader#getPackageNames()
     */
    public String[] getPackageNames()
@@ -290,7 +291,7 @@ public class VFSClassLoader extends SecureClassLoader
             for(String ctx : cp.searchCtxs)
             {
                String path = ctx + '/' + name;
-               vf = cp.vfs.findChildFromRoot(path);
+               vf = cp.vfs.findChild(path);
                if( vf != null )
                {
                   break outer;
@@ -348,7 +349,7 @@ public class VFSClassLoader extends SecureClassLoader
             String dir = "";
             if( slash > 0 )
                dir = ctx.substring(0, slash);
-            VirtualFile dirFile = vfs.findChildFromRoot(dir);
+            VirtualFile dirFile = vfs.findChild(dir);
             List<VirtualFile> children = dirFile.getChildren();
             StringBuilder sb = new StringBuilder(dir);
             sb.append('/');

@@ -19,44 +19,38 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.virtual.plugins.vfs.helpers;
+package org.jboss.test.virtual.support;
 
-import org.jboss.virtual.VirtualFileVisitor;
-import org.jboss.virtual.VisitorAttributes;
+import java.io.IOException;
+
+import org.jboss.virtual.spi.VirtualFileHandler;
 
 /**
- * AbstractVirtualFileVisitor.
+ * MockSimpleVirtualFileHandler.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public abstract class AbstractVirtualFileVisitor implements VirtualFileVisitor
+public class MockSimpleVirtualFileHandler extends AbstractMockVirtualFileHandler
 {
-   /** The attributes */
-   private final VisitorAttributes attributes;
+   /** The serialVersionUID */
+   private static final long serialVersionUID = -7967261672121081602L;
 
    /**
-    * Create a new AbstractVirtualFileVisitor using the default visitor attributes
-    */
-   protected AbstractVirtualFileVisitor()
-   {
-      this(null);
-   }
-
-   /**
-    * Create a new AbstractVirtualFileVisitor using the default visitor attributes
+    * Create a new MockSimpleVirtualFileHandler.
     * 
-    * @param attributes the attributes, uses the default if null
+    * @param context the context
+    * @param parent the parent
+    * @param name the name
     */
-   protected AbstractVirtualFileVisitor(VisitorAttributes attributes)
+   public MockSimpleVirtualFileHandler(MockVFSContext context, MockSimpleVirtualFileHandler parent, String name)
    {
-      if (attributes == null)
-         attributes = VisitorAttributes.DEFAULT;
-      this.attributes = attributes;
+      super(context, parent, name);
    }
-   
-   public VisitorAttributes getAttributes()
+
+   public VirtualFileHandler findChild(String path) throws IOException
    {
-      return attributes;
+      throwIOException("findChild");
+      return simpleFindChild(path);
    }
 }

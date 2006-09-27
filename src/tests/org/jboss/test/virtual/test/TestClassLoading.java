@@ -1,11 +1,11 @@
 package org.jboss.test.virtual.test;
 
-import java.io.File;
 import java.net.URL;
 
 import org.jboss.test.BaseTestCase;
 import org.jboss.virtual.VFS;
 import org.jboss.virtual.classloading.VFSClassLoader;
+import org.jboss.virtual.plugins.context.jar.JarUtils;
 
 public class TestClassLoading extends BaseTestCase
 {
@@ -18,9 +18,8 @@ public class TestClassLoading extends BaseTestCase
       throws Exception
    {
       super.enableTrace("org.jboss");
-      File libDir = new File("output/lib");
-      URL libURL = libDir.toURL();
-      VFS vfs = VFS.getVFS(libURL);
+      URL url = getResource("/vfs/test/");
+      VFS vfs = VFS.getVFS(url);
    
       String[] searchCtxts = {"jar1.jar"};
       ClassLoader parent = null;
@@ -28,7 +27,11 @@ public class TestClassLoading extends BaseTestCase
       URL mf = cl.findResource("META-INF/MANIFEST.MF");
       assertTrue("META-INF/application.xml != null", mf != null);
       log.info(mf);
-      assertEquals("jar:file:/C:/svn/JBossMC/jbossmc/container/output/lib/jar1.jar!/META-INF/MANIFEST.MF", mf.toString());
+      
+      URL expected = new URL(url, "jar1.jar");
+      expected = JarUtils.createJarURL(expected);
+      expected = new URL(expected, "META-INF/MANIFEST.MF");
+      assertEquals(expected, mf);
 
       Class c = cl.loadClass("org.jboss.test.vfs.support.jar1.ClassInJar1");
       assertEquals("org.jboss.test.vfs.support.jar1.ClassInJar1", c.getName());

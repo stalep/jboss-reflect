@@ -19,44 +19,55 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.virtual.plugins.vfs.helpers;
+package org.jboss.test.virtual.support;
 
-import org.jboss.virtual.VirtualFileVisitor;
-import org.jboss.virtual.VisitorAttributes;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * AbstractVirtualFileVisitor.
+ * MockInputStream.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public abstract class AbstractVirtualFileVisitor implements VirtualFileVisitor
+public class MockInputStream extends ByteArrayInputStream
 {
-   /** The attributes */
-   private final VisitorAttributes attributes;
-
-   /**
-    * Create a new AbstractVirtualFileVisitor using the default visitor attributes
-    */
-   protected AbstractVirtualFileVisitor()
-   {
-      this(null);
-   }
-
-   /**
-    * Create a new AbstractVirtualFileVisitor using the default visitor attributes
-    * 
-    * @param attributes the attributes, uses the default if null
-    */
-   protected AbstractVirtualFileVisitor(VisitorAttributes attributes)
-   {
-      if (attributes == null)
-         attributes = VisitorAttributes.DEFAULT;
-      this.attributes = attributes;
-   }
+   /** Whether we are closed */
+   private AtomicBoolean closed = new AtomicBoolean(false);
    
-   public VisitorAttributes getAttributes()
+   /**
+    * Create a new MockInputStream.
+    * 
+    * @param buf
+    * @param offset
+    * @param length
+    */
+   public MockInputStream(byte[] buf, int offset, int length)
    {
-      return attributes;
+      super(buf, offset, length);
+   }
+
+   /**
+    * Create a new MockInputStream.
+    * 
+    * @param buf
+    */
+   public MockInputStream(byte[] buf)
+   {
+      super(buf);
+   }
+
+   public void close() throws IOException
+   {
+      closed.set(true);
+   }
+
+   public int read()
+   {
+      if (closed.get())
+         return -1;
+      else
+         return super.read();
    }
 }

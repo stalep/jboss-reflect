@@ -157,7 +157,7 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
       return new VirtualFile(this);
    }
    
-   public VirtualFileHandler getParent()
+   public VirtualFileHandler getParent() throws IOException
    {
       checkClosed();
       return parent;
@@ -287,7 +287,7 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
       buffer.append('@');
       buffer.append(System.identityHashCode(this));
       buffer.append("[path=").append(getPathName());
-      buffer.append(" context=").append(getVFSContext());
+      buffer.append(" context=").append(getVFSContext().getRootURI());
       buffer.append(" real=").append(safeToURLString());
       buffer.append(']');
       return buffer.toString();

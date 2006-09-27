@@ -131,7 +131,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
    {
       URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
-      VirtualFile jar = vfs.findChildFromRoot("outer.jar");
+      VirtualFile jar = vfs.findChild("outer.jar");
       assertTrue("outer.jar != null", jar != null);
 
       /*
@@ -155,7 +155,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
    {
       URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
-      VirtualFile jar = vfs.findChildFromRoot("unpacked-outer.jar");
+      VirtualFile jar = vfs.findChild("unpacked-outer.jar");
       assertTrue("unpacked-outer.jar != null", jar != null);
 
       /**
@@ -186,24 +186,24 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VFS vfs = VFS.getVFS(rootURL);
 
       // Check resolving the root file
-      VirtualFile root = vfs.findChildFromRoot("");
+      VirtualFile root = vfs.findChild("");
       assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
       assertTrue("root isDirectory", root.isDirectory());
 
       // Find the outer.jar
-      VirtualFile outerJar = vfs.findChildFromRoot("outer.jar");
+      VirtualFile outerJar = vfs.findChild("outer.jar");
       assertNotNull("outer.jar", outerJar);
       assertEquals("outer.jar name", "outer.jar", outerJar.getName());
       assertEquals("outer.jar path", "outer.jar", outerJar.getPathName());
       
-      VirtualFile outerJarMF = vfs.findChildFromRoot("outer.jar/META-INF/MANIFEST.MF");
+      VirtualFile outerJarMF = vfs.findChild("outer.jar/META-INF/MANIFEST.MF");
       assertNotNull("outer.jar/META-INF/MANIFEST.MF", outerJarMF);
 
       // Test a non-canonical path
       rootURL = getResource("/vfs/sundry/../test");
       // Check resolving the root file
-      root = vfs.findChildFromRoot("");
+      root = vfs.findChild("");
       assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
       assertTrue("root isDirectory", root.isDirectory());
@@ -223,7 +223,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VFS vfs = VFS.getVFS(rootURL);
       
       // Find ClassInJar1.class
-      VirtualFile vf = vfs.findChildFromRoot("jar1.jar"); 
+      VirtualFile vf = vfs.findChild("jar1.jar"); 
       VirtualFile c1 = vf.findChild("org/jboss/test/vfs/support/jar1/ClassInJar1.class");
       assertNotNull("ClassInJar1.class VF", c1);
       log.debug("Found ClassInJar1.class: "+c1);
@@ -234,7 +234,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       log.debug("Found ClassInJar1$InnerClass.class: "+c1i);
 
       // Find ClassInJar2.class
-      vf = vfs.findChildFromRoot("jar2.jar");
+      vf = vfs.findChild("jar2.jar");
       VirtualFile c2 = vf.findChild("org/jboss/test/vfs/support/jar2/ClassInJar2.class");
       assertNotNull("ClassInJar2.class VF", c2);
       log.debug("Found ClassInJar2.class: "+c2);
@@ -248,24 +248,24 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VFS vfs = VFS.getVFS(rootURL);
 
       // Check resolving the root file
-      VirtualFile root = vfs.findChildFromRoot("");
+      VirtualFile root = vfs.findChild("");
       assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
       assertTrue("root isDirectory", root.isDirectory());
 
       // Find the outer.jar
-      VirtualFile outerJar = vfs.findChildFromRoot("unpacked-outer.jar");
+      VirtualFile outerJar = vfs.findChild("unpacked-outer.jar");
       assertNotNull("unpacked-outer.jar", outerJar);
       assertEquals("unpacked-outer.jar name", "unpacked-outer.jar", outerJar.getName());
       assertEquals("unpacked-outer.jar path", "unpacked-outer.jar", outerJar.getPathName());
       
-      VirtualFile outerJarMF = vfs.findChildFromRoot("unpacked-outer.jar/META-INF/MANIFEST.MF");
+      VirtualFile outerJarMF = vfs.findChild("unpacked-outer.jar/META-INF/MANIFEST.MF");
       assertNotNull("unpacked-outer.jar/META-INF/MANIFEST.MF", outerJarMF);
 
       // Test a non-canonical path
       rootURL = getResource("/test/sundry/../test");
       // Check resolving the root file
-      root = vfs.findChildFromRoot("");
+      root = vfs.findChild("");
       assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
       assertTrue("root isDirectory", root.isDirectory());
@@ -280,7 +280,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
    {
       URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
-      VirtualFile inner = vfs.findChildFromRoot("outer.jar/jar1.jar");
+      VirtualFile inner = vfs.findChild("outer.jar/jar1.jar");
       log.info("IsFile: "+inner.isFile());
       log.info(inner.getLastModified());
       List<VirtualFile> contents = inner.getChildren();
@@ -290,7 +290,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       {
          log.info("  "+vf.getName());
       }
-      VirtualFile vf = vfs.findChildFromRoot("outer.jar/jar1.jar");
+      VirtualFile vf = vfs.findChild("outer.jar/jar1.jar");
       VirtualFile jar1MF = vf.findChild("META-INF/MANIFEST.MF");
       InputStream mfIS = jar1MF.openStream();
       Manifest mf = new Manifest(mfIS);
@@ -347,7 +347,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       log.info("+++ testVFSerialization, tmp="+tmp.getCanonicalPath());
       URL rootURL = tmpRoot.toURL();
       VFS vfs = VFS.getVFS(rootURL);
-      VirtualFile tmpVF = vfs.findChildFromRoot("vfs.ser");
+      VirtualFile tmpVF = vfs.findChild("vfs.ser");
       FileOutputStream fos = new FileOutputStream(tmp);
       ObjectOutputStream oos = new ObjectOutputStream(fos);
       oos.writeObject(tmpVF);
@@ -424,7 +424,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       vfsSer.createNewFile();
       vfsSer.deleteOnExit();
 
-      VirtualFile tmpVF = vfs.findChildFromRoot("tst.jar");
+      VirtualFile tmpVF = vfs.findChild("tst.jar");
       // Validate the vf jar against the tmp file attributes
       long lastModified = tmpJar.lastModified();
       long size = tmpJar.length();
@@ -482,7 +482,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       // this expects to be run with a working dir of the container root
       URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
-      VirtualFile inner = vfs.findChildFromRoot("outer.jar/jar1.jar");
+      VirtualFile inner = vfs.findChild("outer.jar/jar1.jar");
 
       File vfsSer = File.createTempFile("testVFNestedJarSerialization", ".ser");
       vfsSer.deleteOnExit();
@@ -505,7 +505,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       {
          log.info("  "+vf.getName());
       }
-      VirtualFile vf = vfs.findChildFromRoot("outer.jar/jar1.jar");
+      VirtualFile vf = vfs.findChild("outer.jar/jar1.jar");
       VirtualFile jar1MF = vf.findChild("META-INF/MANIFEST.MF");
       InputStream mfIS = jar1MF.openStream();
       Manifest mf = new Manifest(mfIS);
@@ -579,7 +579,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VFS vfs = VFS.getVFS(vfsRoot.toURI());
 
       // We should find the test-link.war the link represents
-      VirtualFile war = vfs.findChildFromRoot("test-link.war");
+      VirtualFile war = vfs.findChild("test-link.war");
       assertNotNull("war", war);
 
       // Validate the WEB-INF/classes child link
@@ -619,7 +619,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
 
-      VirtualFile outerJar = vfs.findChildFromRoot("unpacked-outer.jar");
+      VirtualFile outerJar = vfs.findChild("unpacked-outer.jar");
       URL outerURL = outerJar.toURL();
       log.debug("outerURL: "+outerURL);
       assertTrue(outerURL+" ends in '/'", outerURL.getPath().endsWith("/"));

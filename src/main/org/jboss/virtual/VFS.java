@@ -45,20 +45,6 @@ public class VFS
    private final VFSContext context;
 
    /**
-    * Get the virtual file system for a root url
-    * 
-    * @param rootURL the root url
-    * @return the virtual file system
-    * @throws IOException if there is a problem accessing the VFS
-    * @throws IllegalArgumentException if the rootURL is null
-    */
-   public static VFS getVFS(URL rootURL) throws IOException
-   {
-      VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURL);
-      VFSContext context = factory.getVFS(rootURL);
-      return context.getVFS();
-   }
-   /**
     * Get the virtual file system for a root uri
     * 
     * @param rootURI the root URI
@@ -69,8 +55,70 @@ public class VFS
    public static VFS getVFS(URI rootURI) throws IOException
    {
       VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURI);
+      if (factory == null)
+         throw new IOException("No context factory for " + rootURI);
       VFSContext context = factory.getVFS(rootURI);
       return context.getVFS();
+   }
+
+   /**
+    * Get the root virtual file
+    * 
+    * @param rootURI the root uri
+    * @return the virtual file
+    * @throws IOException if there is a problem accessing the VFS
+    * @throws IllegalArgumentException if the rootURL
+    */
+   public static VirtualFile getRoot(URI rootURI) throws IOException
+   {
+      VFS vfs = getVFS(rootURI);
+      return vfs.getRoot();
+   }
+
+   /**
+    * Get a virtual file
+    * 
+    * @param rootURI the root uri
+    * @param name the path name
+    * @return the virtual file
+    * @throws IOException if there is a problem accessing the VFS
+    * @throws IllegalArgumentException if the rootURL or name is null
+    */
+   public static VirtualFile getVirtualFile(URI rootURI, String name) throws IOException
+   {
+      VFS vfs = getVFS(rootURI);
+      return vfs.findChild(name);
+   }
+
+   /**
+    * Get the virtual file system for a root url
+    * 
+    * @param rootURL the root url
+    * @return the virtual file system
+    * @throws IOException if there is a problem accessing the VFS
+    * @throws IllegalArgumentException if the rootURL is null
+    */
+   public static VFS getVFS(URL rootURL) throws IOException
+   {
+      VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURL);
+      if (factory == null)
+         throw new IOException("No context factory for " + rootURL);
+      VFSContext context = factory.getVFS(rootURL);
+      return context.getVFS();
+   }
+
+   /**
+    * Get the root virtual file
+    * 
+    * @param rootURL the root url
+    * @return the virtual file
+    * @throws IOException if there is a problem accessing the VFS
+    * @throws IllegalArgumentException if the rootURL
+    */
+   public static VirtualFile getRoot(URL rootURL) throws IOException
+   {
+      VFS vfs = getVFS(rootURL);
+      return vfs.getRoot();
    }
 
    /**
@@ -85,7 +133,7 @@ public class VFS
    public static VirtualFile getVirtualFile(URL rootURL, String name) throws IOException
    {
       VFS vfs = getVFS(rootURL);
-      return vfs.findChildFromRoot(name);
+      return vfs.findChild(name);
    }
 
    /**
@@ -114,47 +162,6 @@ public class VFS
    }
    
    /**
-    * Get a parent
-    * 
-    * @param child the child
-    * @return the parent or null if there is no parent
-    * @throws IOException for any problem accessing the VFS (including the child does not exist)
-    * @throws IllegalArgumentException if the child is null
-    */
-   public VirtualFile getParent(VirtualFile child) throws IOException
-   {
-      if (child == null)
-         throw new IllegalArgumentException("Null parent");
-         
-      VirtualFileHandler handler = child.getHandler();
-      VirtualFileHandler parent = handler.getParent();
-      return parent.getVirtualFile();
-   }
-   
-   /**
-    * Find a child
-    * 
-    * @param parent the context file
-    * @param path the child path
-    * @return the child
-    * @throws IOException for any problem accessing the VFS (including the child does not exist)
-    * @throws IllegalArgumentException if the parent or path is null
-    */
-   public VirtualFile findChild(VirtualFile parent, String path) throws IOException
-   {
-      if (parent == null)
-         throw new IllegalArgumentException("Null parent");
-      if (path == null)
-         throw new IllegalArgumentException("Null path");
-      
-      VirtualFileHandler handler = parent.getHandler();
-      VFSContext handlerContext = handler.getVFSContext();
-      path = VFSUtils.fixName(path);
-      VirtualFileHandler result = handlerContext.findChild(handler, path);
-      return result.getVirtualFile();
-   }
-   
-   /**
     * Find a child from the root
     * 
     * @param path the child path
@@ -162,7 +169,7 @@ public class VFS
     * @throws IOException for any problem accessing the VFS (including the child does not exist)
     * @throws IllegalArgumentException if the path is null
     */
-   public VirtualFile findChildFromRoot(String path) throws IOException
+   public VirtualFile findChild(String path) throws IOException
    {
       if (path == null)
          throw new IllegalArgumentException("Null path");
@@ -174,11 +181,26 @@ public class VFS
    }
    
    /**
+    * Find a child from the root
+    * 
+    * @Deprecated use {@link #findChild(String)}
+    * @param path the child path
+    * @return the child
+    * @throws IOException for any problem accessing the VFS (including the child does not exist)
+    * @throws IllegalArgumentException if the path is null
+    */
+   @Deprecated
+   public VirtualFile findChildFromRoot(String path) throws IOException
+   {
+      return findChild(path);
+   }
+   
+   /**
     * Get the children
     * 
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the file is closed
+    * @throws IllegalStateException if the root is not a directory
     */
    public List<VirtualFile> getChildren() throws IOException
    {
@@ -191,7 +213,7 @@ public class VFS
     * @param filter to filter the children
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the file is closed or it is not a directory
+    * @throws IllegalStateException if the root is not a directory
     */
    public List<VirtualFile> getChildren(VirtualFileFilter filter) throws IOException
    {
@@ -205,7 +227,7 @@ public class VFS
     * 
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the file is closed
+    * @throws IllegalStateException if the root is not a directory
     */
    public List<VirtualFile> getChildrenRecursively() throws IOException
    {
@@ -220,7 +242,7 @@ public class VFS
     * @param filter to filter the children
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the file is closed or it is not a directory
+    * @throws IllegalStateException if the root is not a directory
     */
    public List<VirtualFile> getChildrenRecursively(VirtualFileFilter filter) throws IOException
    {
@@ -233,10 +255,13 @@ public class VFS
     * @param visitor the visitor
     * @throws IOException for any problem accessing the VFS
     * @throws IllegalArgumentException if the visitor is null
+    * @throws IllegalStateException if the root is not a directory
     */
    public void visit(VirtualFileVisitor visitor) throws IOException
    {
       VirtualFileHandler handler = context.getRoot();
+      if (handler.isDirectory() == false)
+         throw new IllegalStateException("Not a directory");
       WrappingVirtualFileHandlerVisitor wrapper = new WrappingVirtualFileHandlerVisitor(visitor);
       context.visit(handler, wrapper);
    }
@@ -248,8 +273,9 @@ public class VFS
     * @param visitor the visitor
     * @throws IOException for any problem accessing the VFS
     * @throws IllegalArgumentException if the file or visitor is null
+    * @throws IllegalStateException if the root is not a directory
     */
-   public void visit(VirtualFile file, VirtualFileVisitor visitor) throws IOException
+   protected void visit(VirtualFile file, VirtualFileVisitor visitor) throws IOException
    {
       if (file == null)
          throw new IllegalArgumentException("Null file");

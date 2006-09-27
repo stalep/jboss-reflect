@@ -21,51 +21,43 @@
   */
 package org.jboss.virtual.plugins.vfs.helpers;
 
-import org.jboss.virtual.VirtualFile;
+import org.jboss.virtual.VirtualFileFilterWithAttributes;
 import org.jboss.virtual.VisitorAttributes;
 
 /**
- * Matches a suffix recursively
+ * AbstractVirtualFileFilterWithAttributes
  * 
- * @author Scott.Stark@jboss.org
  * @author adrian@jboss.org
  * @version $Revision: 44223 $
  */
-public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
+public abstract class AbstractVirtualFileFilterWithAttributes implements VirtualFileFilterWithAttributes
 {
-   /** The suffix */
-   private String suffix;
+   /** The attributes */
+   private VisitorAttributes attributes;
    
    /**
-    * Create a new SuffixMatchFilter,
-    * using {@link VisitorAttributes#RECURSE_NO_DIRECTORIES}
-    * 
-    * @param suffix the suffix
-    * @throws IllegalArgumentException for a null suffix
+    * Create a new AbstractVirtualFileFilterWithAttributes,
+    * using {@link VisitorAttributes#DEFAULT}
     */
-   public SuffixMatchFilter(String suffix)
+   public AbstractVirtualFileFilterWithAttributes()
    {
-      this(suffix, null);
+      this(null);
    }
    
    /**
-    * Create a new SuffixMatchFilter.
+    * Create a new AbstractVirtualFileFilterWithAttributes.
     * 
-    * @param suffix the suffix
-    * @param attributes the attributes, pass null to use {@link VisitorAttributes#RECURSE_NO_DIRECTORIES}
-    * @throws IllegalArgumentException for a null suffix
+    * @param attributes the attributes, pass null to use {@link VisitorAttributes#DEFAULT}
     */
-   public SuffixMatchFilter(String suffix, VisitorAttributes attributes)
+   public AbstractVirtualFileFilterWithAttributes(VisitorAttributes attributes)
    {
-      super(attributes == null ? VisitorAttributes.RECURSE_NO_DIRECTORIES : attributes);
-      if (suffix == null)
-         throw new IllegalArgumentException("Null suffix");
-      this.suffix = suffix;
+      if (attributes == null)
+         attributes = VisitorAttributes.DEFAULT;
+      this.attributes = attributes;
    }
-
-   public boolean accepts(VirtualFile file)
+   
+   public VisitorAttributes getAttributes()
    {
-      String name = file.getName();
-      return name.endsWith(suffix);
+      return attributes;
    }
 }

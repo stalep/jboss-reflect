@@ -19,44 +19,57 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.virtual.plugins.vfs.helpers;
+package org.jboss.test.virtual.support;
 
-import org.jboss.virtual.VirtualFileVisitor;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.VisitorAttributes;
+import org.jboss.virtual.plugins.vfs.helpers.AbstractVirtualFileFilterWithAttributes;
 
 /**
- * AbstractVirtualFileVisitor.
+ * MockVirtualFileFilter.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public abstract class AbstractVirtualFileVisitor implements VirtualFileVisitor
+public class MockVirtualFileFilter extends AbstractVirtualFileFilterWithAttributes
 {
-   /** The attributes */
-   private final VisitorAttributes attributes;
-
+   /** The visited files */
+   private List<VirtualFile> visited = new ArrayList<VirtualFile>();
+   
    /**
-    * Create a new AbstractVirtualFileVisitor using the default visitor attributes
+    * Create a new MockVirtualFileFilter.
     */
-   protected AbstractVirtualFileVisitor()
+   public MockVirtualFileFilter()
    {
-      this(null);
+      super();
    }
 
    /**
-    * Create a new AbstractVirtualFileVisitor using the default visitor attributes
+    * Create a new MockVirtualFileFilter.
     * 
-    * @param attributes the attributes, uses the default if null
+    * @param attributes the visitor attributes
     */
-   protected AbstractVirtualFileVisitor(VisitorAttributes attributes)
+   public MockVirtualFileFilter(VisitorAttributes attributes)
    {
-      if (attributes == null)
-         attributes = VisitorAttributes.DEFAULT;
-      this.attributes = attributes;
+      super(attributes);
+   }
+
+   /**
+    * Get the visited files
+    * 
+    * @return the files
+    */
+   public List<VirtualFile> getVisited()
+   {
+      return visited;
    }
    
-   public VisitorAttributes getAttributes()
+   public boolean accepts(VirtualFile file)
    {
-      return attributes;
+      visited.add(file);
+      return true;
    }
 }

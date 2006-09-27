@@ -46,8 +46,7 @@ import org.jboss.virtual .spi.VirtualFileHandler;
  * @author adrian@jboss.org
  * @version $Revision: 44334 $
  */
-public class VirtualFile
-   implements Serializable
+public class VirtualFile implements Serializable
 {
    private static final long serialVersionUID = 1L;
 
@@ -120,6 +119,7 @@ public class VirtualFile
    {
       return getHandler().toURL();
    }
+   
    /**
     * Get the VF URI (file://root/org/jboss/X.java)
     * 
@@ -267,14 +267,16 @@ public class VirtualFile
    /**
     * Get the parent
     * 
-    * @return the parent
+    * @return the parent or null if there is no parent
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalStateException if the file is closed
     */
    public VirtualFile getParent() throws IOException
    {
       VirtualFileHandler parent = getHandler().getParent();
-      return parent.getVirtualFile();
+      if (parent != null)
+         return parent.getVirtualFile();
+      return null;
    }
    
    /**
