@@ -32,74 +32,74 @@ public class VisitorAttributes
    /** The default attributes */
    public static final VisitorAttributes DEFAULT = new ImmutableVisitorAttributes();
 
-   /** No directories */
-   public static final VisitorAttributes NO_DIRECTORIES = new ImmutableVisitorAttributes(false, false);
+   /** Leaves only */
+   public static final VisitorAttributes LEAVES_ONLY = new ImmutableVisitorAttributes(true, false);
 
-   /** Recurse directories */
-   public static final VisitorAttributes RECURSE_DIRECTORIES = new ImmutableVisitorAttributes(true, true);
+   /** Recurse */
+   public static final VisitorAttributes RECURSE = new ImmutableVisitorAttributes(false, true);
 
-   /** Recurse but don't visit directories */
-   public static final VisitorAttributes RECURSE_NO_DIRECTORIES = new ImmutableVisitorAttributes(false, true);
+   /** Recurse but only visit leaves */
+   public static final VisitorAttributes RECURSE_LEAVES_ONLY = new ImmutableVisitorAttributes(true, true);
    
    /** Whether to include the root */
    private boolean includeRoot = false;
 
-   /** Whether to include directories */
-   private boolean includeDirectories = true;
+   /** Whether to only visit leaves */
+   private boolean leavesOnly = false;
 
-   /** Whether to recurse directories */
-   private boolean recurseDirectories = false;
+   /** Whether to recurse */
+   private boolean recurse = false;
 
    /** Whether to ignore individual file errors */
    private boolean ignoreErrors = false;
 
-   /** Whether to ignore hidden files */
-   private boolean ignoreHidden = true;
+   /** Whether to include hidden files */
+   private boolean includeHidden = false;
    
    /**
-    * Whether to include the directories<p>
-    * 
-    * Default: true
-    * 
-    * @return the includeDirectories.
-    */
-   public boolean isIncludeDirectories()
-   {
-      return includeDirectories;
-   }
-
-   /**
-    * Set the includeDirectories.
-    * 
-    * @param includeDirectories the includeDirectories.
-    * @throws IllegalStateException if you attempt to modify one of the preconfigured static values of this class
-    */
-   public void setIncludeDirectories(boolean includeDirectories)
-   {
-      this.includeDirectories = includeDirectories;
-   }
-
-   /**
-    * Whether to recurse into directories<p>
+    * Whether to visit leaves only<p>
     * 
     * Default: false
     * 
-    * @return the recurseDirectories.
+    * @return the visit leaves only.
     */
-   public boolean isRecurseDirectories()
+   public boolean isLeavesOnly()
    {
-      return recurseDirectories;
+      return leavesOnly;
    }
 
    /**
-    * Set the recurseDirectories.
+    * Set the leaves only.
     * 
-    * @param recurseDirectories the recurseDirectories.
+    * @param leavesOnly the leaves only
     * @throws IllegalStateException if you attempt to modify one of the preconfigured static values of this class
     */
-   public void setRecurseDirectories(boolean recurseDirectories)
+   public void setLeavesOnly(boolean leavesOnly)
    {
-      this.recurseDirectories = recurseDirectories;
+      this.leavesOnly = leavesOnly;
+   }
+
+   /**
+    * Whether to recurse<p>
+    * 
+    * Default: false
+    * 
+    * @return the recurse.
+    */
+   public boolean isRecurse()
+   {
+      return recurse;
+   }
+
+   /**
+    * Set the recurse.
+    * 
+    * @param recurse the recurse.
+    * @throws IllegalStateException if you attempt to modify one of the preconfigured static values of this class
+    */
+   public void setRecurse(boolean recurse)
+   {
+      this.recurse = recurse;
    }
 
    /**
@@ -128,7 +128,7 @@ public class VisitorAttributes
    /**
     * Whether to ignore individual errors<p>
     * 
-    * Default: true
+    * Default: false
     * 
     * @return the ignoreErrors.
     */
@@ -149,26 +149,26 @@ public class VisitorAttributes
    }
 
    /**
-    * Whether to ignore hidden files<p>
+    * Whether to include hidden files<p>
     * 
-    * Default: true
+    * Default: false
     * 
-    * @return the ignoreHidden.
+    * @return the includeHidden.
     */
-   public boolean isIgnoreHidden()
+   public boolean isIncludeHidden()
    {
-      return ignoreHidden;
+      return includeHidden;
    }
 
    /**
-    * Set the ignoreHidden.
+    * Set the includeHidden.
     * 
-    * @param ignoreHidden the ignoreHidden.
+    * @param includeHidden the includeHidden.
     * @throws IllegalStateException if you attempt to modify one of the preconfigured static values of this class
     */
-   public void setIgnoreHidden(boolean ignoreHidden)
+   public void setIncludeHidden(boolean includeHidden)
    {
-      this.ignoreHidden = ignoreHidden;
+      this.includeHidden = includeHidden;
    }
 
    /**
@@ -186,17 +186,17 @@ public class VisitorAttributes
       /**
        * Create a new ImmutableVirtualFileVisitorAttributes.
        * 
-       * @param includeDirectories whether to include directories 
-       * @param recurseDirectories whether to recurse into directories
+       * @param leavesOnly whether to visit leaves only 
+       * @param recurse whether to recurse
        */
-      public ImmutableVisitorAttributes(boolean includeDirectories, boolean recurseDirectories)
+      public ImmutableVisitorAttributes(boolean leavesOnly, boolean recurse)
       {
-         super.setIncludeDirectories(includeDirectories);
-         super.setRecurseDirectories(recurseDirectories);
+         super.setLeavesOnly(leavesOnly);
+         super.setRecurse(recurse);
       }
       
       @Override
-      public void setIncludeDirectories(boolean includeDirectories)
+      public void setLeavesOnly(boolean leavesOnly)
       {
          throw new IllegalStateException("The preconfigured attributes are immutable");
       }
@@ -208,7 +208,7 @@ public class VisitorAttributes
       }
 
       @Override
-      public void setRecurseDirectories(boolean recurseDirectories)
+      public void setRecurse(boolean recurse)
       {
          throw new IllegalStateException("The preconfigured attributes are immutable");
       }
@@ -220,7 +220,7 @@ public class VisitorAttributes
       }
 
       @Override
-      public void setIgnoreHidden(boolean ignoreHidden)
+      public void setIncludeHidden(boolean includeHidden)
       {
          throw new IllegalStateException("The preconfigured attributes are immutable");
       }

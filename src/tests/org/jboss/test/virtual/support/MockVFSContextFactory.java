@@ -23,11 +23,11 @@ package org.jboss.test.virtual.support;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.jboss.util.NotImplementedException;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VFSContextFactory;
 
@@ -83,6 +83,19 @@ public class MockVFSContextFactory implements VFSContextFactory
          throw new IOException("No such context " + rootURI);
       return context;
    }
+   
+   public VFSContext getVFS(URL rootURL) throws IOException
+   {
+      throwIOException("getVFSURL");
+      try
+      {
+         return getVFS(rootURL.toURI());
+      }
+      catch (URISyntaxException e)
+      {
+         throw new IOException("Error creating URI: " + rootURL);
+      }
+   }
 
    /**
     * Add a context
@@ -117,10 +130,5 @@ public class MockVFSContextFactory implements VFSContextFactory
    {
       contexts.clear();
       ioException = "";
-   }
-   
-   public VFSContext getVFS(URL rootURL) throws IOException
-   {
-      throw new NotImplementedException("URLs are not implemented for the mock virtual file system");
    }
 }

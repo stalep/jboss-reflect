@@ -157,31 +157,22 @@ public class VirtualFile implements Serializable
    }
 
    /**
-    * Whether it is a directory
-    * 
-    * @return true if a directory.
-    * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the file is closed
-    */
-   public boolean isDirectory() throws IOException
-   {
-      return getHandler().isDirectory();
-   }
-
-   /**
-    * Whether it is a simple file
+    * Whether it is a simple leaf of the VFS,
+    * i.e. whether it can contain other files
     * 
     * @return true if a simple file.
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalStateException if the file is closed
     */
-   public boolean isFile() throws IOException
+   public boolean isLeaf() throws IOException
    {
-      return getHandler().isFile();
+      return getHandler().isLeaf();
    }
    
    /**
-    * Whether it is an archive
+    * Whether it is an archive<p>
+    *  
+    * NOTE: a file system directory can be an archive if it looks like an unpacked archive
     * 
     * @return true when an archive
     * @throws IOException for any problem accessing the virtual file system
@@ -297,12 +288,12 @@ public class VirtualFile implements Serializable
     * @param filter to filter the children
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the file is closed or it is not a directory
+    * @throws IllegalStateException if the file is closed or it is a leaf node
     */
    public List<VirtualFile> getChildren(VirtualFileFilter filter) throws IOException
    {
-      if (isDirectory() == false)
-         throw new IllegalStateException("Not a directory: " + this);
+      if (isLeaf())
+         throw new IllegalStateException("File cannot contain children: " + this);
 
       if (filter == null)
          filter = MatchAllVirtualFileFilter.INSTANCE;
@@ -314,7 +305,7 @@ public class VirtualFile implements Serializable
    /**
     * Get all the children recursively<p>
     * 
-    * This always uses {@link VisitorAttributes#RECURSE_DIRECTORIES}
+    * This always uses {@link VisitorAttributes#RECURSE}
     * 
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
@@ -328,21 +319,21 @@ public class VirtualFile implements Serializable
    /**
     * Get all the children recursively<p>
     * 
-    * This always uses {@link VisitorAttributes#RECURSE_DIRECTORIES}
+    * This always uses {@link VisitorAttributes#RECURSE}
     * 
     * @param filter to filter the children
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the file is closed or it is not a directory
+    * @throws IllegalStateException if the file is closed or it is a leaf node
     */
    public List<VirtualFile> getChildrenRecursively(VirtualFileFilter filter) throws IOException
    {
-      if (isDirectory() == false)
-         throw new IllegalStateException("Not a directory: " + this);
+      if (isLeaf())
+         throw new IllegalStateException("File cannot contain children: " + this);
 
       if (filter == null)
          filter = MatchAllVirtualFileFilter.INSTANCE;
-      FilterVirtualFileVisitor visitor = new FilterVirtualFileVisitor(filter, VisitorAttributes.RECURSE_DIRECTORIES);
+      FilterVirtualFileVisitor visitor = new FilterVirtualFileVisitor(filter, VisitorAttributes.RECURSE);
       visit(visitor);
       return visitor.getMatched();
    }
@@ -353,12 +344,13 @@ public class VirtualFile implements Serializable
     * @param visitor the visitor
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalArgumentException if the visitor is null
-    * @throws IllegalStateException if the file is closed or it is not a directory
+    * @throws IllegalStateException if the file is closed or it is a leaf node
     */
    public void visit(VirtualFileVisitor visitor) throws IOException
    {
-      if (isDirectory() == false)
-         throw new IllegalStateException("Not a directory: " + this);
+      if (isLeaf())
+         throw new IllegalStateException("File cannot contain children: " + this);
+
       getVFS().visit(this, visitor);
    }
 
@@ -369,13 +361,14 @@ public class VirtualFile implements Serializable
     * @return the child
     * @throws IOException for any problem accessing the VFS (including the child does not exist)
     * @throws IllegalArgumentException if the path is null
-    * @throws IllegalStateException if the file is closed or it is not a directory
+    * @throws IllegalStateException if the file is closed or it is a leaf node
     */
    public VirtualFile findChild(String path) throws IOException
    {
       VirtualFileHandler handler = getHandler();
-      if (handler.isDirectory() == false)
-         throw new IllegalStateException("Not a directory: " + this);
+      
+      if (handler.isLeaf())
+         throw new IllegalStateException("File cannot contain children: " + this);
 
       path = VFSUtils.fixName(path);
       VirtualFileHandler child = handler.findChild(path);

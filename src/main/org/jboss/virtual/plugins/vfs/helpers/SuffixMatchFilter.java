@@ -38,7 +38,7 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
    
    /**
     * Create a new SuffixMatchFilter,
-    * using {@link VisitorAttributes#RECURSE_NO_DIRECTORIES}
+    * using {@link VisitorAttributes#RECURSE_LEAVES_ONLY}
     * 
     * @param suffix the suffix
     * @throws IllegalArgumentException for a null suffix
@@ -52,12 +52,12 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
     * Create a new SuffixMatchFilter.
     * 
     * @param suffix the suffix
-    * @param attributes the attributes, pass null to use {@link VisitorAttributes#RECURSE_NO_DIRECTORIES}
+    * @param attributes the attributes, pass null to use {@link VisitorAttributes#RECURSE_LEAVES_ONLY}
     * @throws IllegalArgumentException for a null suffix
     */
    public SuffixMatchFilter(String suffix, VisitorAttributes attributes)
    {
-      super(attributes == null ? VisitorAttributes.RECURSE_NO_DIRECTORIES : attributes);
+      super(attributes == null ? VisitorAttributes.RECURSE_LEAVES_ONLY : attributes);
       if (suffix == null)
          throw new IllegalArgumentException("Null suffix");
       this.suffix = suffix;

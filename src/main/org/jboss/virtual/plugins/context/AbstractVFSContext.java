@@ -124,12 +124,12 @@ public abstract class AbstractVFSContext implements VFSContext
       
       VisitorAttributes attributes = visitor.getAttributes();
       boolean includeRoot = attributes.isIncludeRoot();
-      boolean includeDirs = attributes.isIncludeDirectories();
-      boolean recurseDirs = attributes.isRecurseDirectories();
+      boolean leavesOnly = attributes.isLeavesOnly();
+      boolean recurse = attributes.isRecurse();
       boolean ignoreErrors = attributes.isIgnoreErrors();
-      boolean ignoreHidden = attributes.isIgnoreHidden();
+      boolean includeHidden = attributes.isIncludeHidden();
 
-      visit(handler, visitor, includeRoot, includeDirs, recurseDirs, ignoreErrors, ignoreHidden);
+      visit(handler, visitor, includeRoot, leavesOnly, recurse, ignoreErrors, includeHidden);
    }
 
    /**
@@ -139,13 +139,13 @@ public abstract class AbstractVFSContext implements VFSContext
     * @param handler the reference handler
     * @param visitor the visitor
     * @param includeRoot whether to visit the root
-    * @param includeDirs whether to visit directories
-    * @param recurseDirs whether to recurse into directories
+    * @param leavesOnly whether to visit leaves only
+    * @param recurse whether to recurse
     * @param ignoreErrors whether to ignore errors
-    * @param ignoreHidden whether to ignore hidden files
+    * @param includeHidden whether to include hidden files
     * @throws IOException for any problem accessing the virtual file system
     */
-   protected void visit(VirtualFileHandler handler, VirtualFileHandlerVisitor visitor, boolean includeRoot, boolean includeDirs, boolean recurseDirs, boolean ignoreErrors, boolean ignoreHidden) throws IOException
+   protected void visit(VirtualFileHandler handler, VirtualFileHandlerVisitor visitor, boolean includeRoot, boolean leavesOnly, boolean recurse, boolean ignoreErrors, boolean includeHidden) throws IOException
    {
       // Visit the root when asked
       if (includeRoot)
@@ -169,20 +169,20 @@ public abstract class AbstractVFSContext implements VFSContext
       for (VirtualFileHandler child : children)
       {
          // Ignore hidden if asked
-         if (ignoreHidden && child.isHidden())
+         if (includeHidden == false && child.isHidden())
             continue;
          
-         // Exclude directories if asked
-         boolean isDirectory = child.isDirectory();
-         if (includeDirs || isDirectory == false)
+         // Visit the leaf or non-leaves when asked
+         boolean isLeaf = child.isLeaf();
+         if (leavesOnly == false || isLeaf)
             visitor.visit(child);
          
-         // Recurse into directories when asked
-         if (recurseDirs && isDirectory)
+         // Recurse when asked
+         if (recurse && isLeaf == false)
          {
             try
             {
-               visit(child, visitor, false, includeDirs, recurseDirs, ignoreErrors, ignoreHidden);
+               visit(child, visitor, false, leavesOnly, recurse, ignoreErrors, includeHidden);
             }
             catch (StackOverflowError e)
             {

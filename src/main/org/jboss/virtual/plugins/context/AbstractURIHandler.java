@@ -88,12 +88,6 @@ public abstract class AbstractURIHandler extends AbstractVirtualFileHandler
       return false;
    }
 
-   public boolean isFile() throws IOException
-   {
-      checkClosed();
-      return isDirectory() == false;
-   }
-
    public boolean isHidden() throws IOException
    {
       checkClosed();

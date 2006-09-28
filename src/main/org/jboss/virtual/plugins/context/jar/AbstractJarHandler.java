@@ -146,10 +146,10 @@ public class AbstractJarHandler extends AbstractURLHandler
       return true;
    }
 
-   public boolean isDirectory()
+   public boolean isLeaf()
    {
       checkClosed();
-      return true;
+      return false;
    }
 
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException

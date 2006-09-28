@@ -24,8 +24,10 @@ package org.jboss.virtual.plugins.context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import org.jboss.virtual.spi.VFSContext;
@@ -41,11 +43,15 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  */
 public class DelegatingHandler extends AbstractVirtualFileHandler
 {
+   /** Serialization */
    private static final long serialVersionUID = 1;
+   
+   /** The delegate */
    private VirtualFileHandler delegate;
 
    /**
     * Create a DelegatingHandler
+    * 
     * @param context - the context for the parent
     * @param parent - the parent of the delegate in this VFS
     * @param name - the name of the delegate in this VFS
@@ -83,14 +89,9 @@ public class DelegatingHandler extends AbstractVirtualFileHandler
       return delegate.isArchive();
    }
 
-   public boolean isDirectory() throws IOException
+   public boolean isLeaf() throws IOException
    {
-      return delegate.isDirectory();
-   }
-
-   public boolean isFile() throws IOException
-   {
-      return delegate.isFile();
+      return delegate.isLeaf();
    }
 
    public boolean isHidden() throws IOException
@@ -108,4 +109,8 @@ public class DelegatingHandler extends AbstractVirtualFileHandler
       return delegate.toURI();
    }
 
+   public URL toURL() throws URISyntaxException, MalformedURLException
+   {
+      return delegate.toURL();
+   }
 }

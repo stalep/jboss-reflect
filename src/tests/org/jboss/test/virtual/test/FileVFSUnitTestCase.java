@@ -189,7 +189,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VirtualFile root = vfs.findChild("");
       assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
-      assertTrue("root isDirectory", root.isDirectory());
+      assertFalse("root isDirectory", root.isLeaf());
 
       // Find the outer.jar
       VirtualFile outerJar = vfs.findChild("outer.jar");
@@ -206,7 +206,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       root = vfs.findChild("");
       assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
-      assertTrue("root isDirectory", root.isDirectory());
+      assertFalse("root isDirectory", root.isLeaf());
    }
 
    /**
@@ -251,7 +251,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VirtualFile root = vfs.findChild("");
       assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
-      assertTrue("root isDirectory", root.isDirectory());
+      assertFalse("root isDirectory", root.isLeaf());
 
       // Find the outer.jar
       VirtualFile outerJar = vfs.findChild("unpacked-outer.jar");
@@ -268,7 +268,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       root = vfs.findChild("");
       assertEquals("root name", "test", root.getName());
       assertEquals("root path", "", root.getPathName());
-      assertTrue("root isDirectory", root.isDirectory());
+      assertFalse("root isDirectory", root.isLeaf());
    }
 
    /**
@@ -281,7 +281,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       URL rootURL = getResource("/vfs/test");
       VFS vfs = VFS.getVFS(rootURL);
       VirtualFile inner = vfs.findChild("outer.jar/jar1.jar");
-      log.info("IsFile: "+inner.isFile());
+      log.info("IsFile: "+inner.isLeaf());
       log.info(inner.getLastModified());
       List<VirtualFile> contents = inner.getChildren();
       // META-INF/*, org/jboss/test/vfs/support/jar1/* at least
@@ -371,8 +371,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       assertEquals("size", size, tmpVF.getSize());
       assertEquals("url", url, tmpVF.toURL());
       assertEquals("isArchive", false, tmpVF.isArchive());
-      assertEquals("isFile", true, tmpVF.isFile());
-      assertEquals("isDirectory", false, tmpVF.isDirectory());
+      assertEquals("isLeaf", true, tmpVF.isLeaf());
       assertEquals("isHidden", false, tmpVF.isHidden());
 
       // Read in the VF from the serialized file
@@ -387,8 +386,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       assertEquals("size", size, tmpVF2.getSize());
       assertEquals("url", url, tmpVF2.toURL());
       assertEquals("isArchive", false, tmpVF2.isArchive());
-      assertEquals("isFile", true, tmpVF2.isFile());
-      assertEquals("isDirectory", false, tmpVF2.isDirectory());
+      assertEquals("isLeaf", true, tmpVF2.isLeaf());
       assertEquals("isHidden", false, tmpVF2.isHidden());
    }
 
@@ -586,7 +584,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VirtualFile classes = war.findChild("WEB-INF/classes");
       String classesName = classes.getName();
       String classesPathName = classes.getPathName();
-      boolean classesIsDirectory = classes.isDirectory();
+      boolean classesIsDirectory = classes.isLeaf() == false;
       assertEquals("classes.name", "classes", classesName);
       assertEquals("classes.pathName", "test-link.war/WEB-INF/classes", classesPathName);
       assertEquals("classes.isDirectory", true, classesIsDirectory);
@@ -598,7 +596,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VirtualFile lib = war.findChild("WEB-INF/lib");
       String libName = lib.getName();
       String libPathName = lib.getPathName();
-      boolean libIsDirectory = lib.isDirectory();
+      boolean libIsDirectory = lib.isLeaf() == false;
       assertEquals("lib.name", "lib", libName);
       assertEquals("lib.pathName", "test-link.war/WEB-INF/lib", libPathName);
       assertEquals("lib.isDirectory", true, libIsDirectory);

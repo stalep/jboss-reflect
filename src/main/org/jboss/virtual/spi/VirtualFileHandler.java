@@ -91,29 +91,23 @@ public interface VirtualFileHandler extends Serializable
    long getSize() throws IOException;
 
    /**
-    * Whether it is a directory
-    * 
-    * @return true if a directory.
-    * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if closed
-    */
-   boolean isDirectory() throws IOException;
-
-   /**
-    * Whether it is a simple file
+    * Whether it is a simple leaf of the VFS,
+    * i.e. whether it can contain other files
     * 
     * @return true if a simple file.
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if closed
+    * @throws IllegalStateException if the file is closed
     */
-   boolean isFile() throws IOException;
+   boolean isLeaf() throws IOException;
    
    /**
-    * Whether it is an archive
+    * Whether it is an archive<p>
+    *  
+    * NOTE: a file system directory can be an archive if it looks like an unpacked archive
     * 
-    * @return the archive
+    * @return true when an archive
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if closed
+    * @throws IllegalStateException if the file is closed
     */
    boolean isArchive() throws IOException;
 

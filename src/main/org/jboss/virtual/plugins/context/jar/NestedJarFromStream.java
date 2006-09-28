@@ -72,7 +72,6 @@ public class NestedJarFromStream
       return child;
    }
 
-
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
    {
       if( inited == false )
@@ -82,19 +81,16 @@ public class NestedJarFromStream
       return children;
    }
 
-
-   public boolean isFile()
+   public boolean isArchive() throws IOException
    {
       return true;
    }
-   public boolean isDirectory()
+
+   public boolean isLeaf() throws IOException
    {
       return false;
    }
-   public boolean isArchive()
-   {
-      return true;
-   }
+
    public boolean isHidden()
    {
       return false;
@@ -338,14 +334,11 @@ public class NestedJarFromStream
          return entry.getSize();
       }
 
-      public boolean isDirectory()
+      public boolean isLeaf()
       {
-         return isJar;
-      }
-
-      public boolean isFile()
-      {
-         return isJar == false;
+         if (isJar)
+            return false;
+         return entry.isDirectory() == false;
       }
 
       // Stream accessor

@@ -88,9 +88,9 @@ public class LinkHandler extends AbstractURLHandler
          return null;
       }
 
-      public boolean isDirectory() throws IOException
+      public boolean isLeaf() throws IOException
       {
-         return true;
+         return false;
       }
    }
 
@@ -178,13 +178,7 @@ public class LinkHandler extends AbstractURLHandler
       return false;
    }
 
-   public boolean isDirectory()
-   {
-      return true;
-   }
-
-   @Override
-   public boolean isFile()
+   public boolean isLeaf()
    {
       return false;
    }

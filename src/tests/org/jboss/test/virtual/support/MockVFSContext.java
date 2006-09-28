@@ -22,8 +22,10 @@
 package org.jboss.test.virtual.support;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.jboss.util.UnexpectedThrowable;
 import org.jboss.virtual.VirtualFile;
@@ -63,6 +65,18 @@ public class MockVFSContext extends AbstractVFSContext
       {
          throw new UnexpectedThrowable("Unexpected", e);
       }
+   }
+   
+   /**
+    * Create mock URL
+    * 
+    * @param uri the uri
+    * @return the url
+    * @throws MalformedURLException for any error
+    */
+   public static URL createMockURL(URI uri) throws MalformedURLException
+   {
+      return new URL(uri.getScheme(), uri.getHost(), uri.getPort(), uri.getRawPath(), MockURLStreamHandler.INSTANCE);
    }
    
    /**
@@ -126,5 +140,16 @@ public class MockVFSContext extends AbstractVFSContext
       if (rootFile != null)
          rootFile.close();
       super.finalize();
+   }
+   
+   /**
+    * Get the root URL
+    * 
+    * @return the url
+    * @throws MalformedURLException for any error
+    */
+   public URL getRootURL() throws MalformedURLException
+   {
+      return createMockURL(getRootURI());
    }
 }

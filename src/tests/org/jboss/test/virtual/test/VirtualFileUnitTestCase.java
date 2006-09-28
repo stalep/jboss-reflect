@@ -24,6 +24,7 @@ package org.jboss.test.virtual.test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -140,11 +141,10 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       assertEquals(child11.toURI(), found11.toURI());
    }
 
-   /* TODO URL testing
    public void testToURL() throws Exception
    {
       MockVFSContext context = registerStructuredVFSContextWithSubChildren();
-      URL url = context.getRootURI().toURL();
+      URL url = context.getRootURL();
       VirtualFile child1 = getChildHandler(context, "child1").getVirtualFile();
       VirtualFile child11 = getChildHandler(context, "child1/child1,1").getVirtualFile();
       
@@ -157,7 +157,6 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       VirtualFile found11 = root.findChild("child1/child1,1");
       assertEquals(child11.toURL(), found11.toURL());
    }
-   */
 
    public void testGetLastModfied() throws Exception
    {
@@ -251,27 +250,27 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       }
    }
 
-   public void testIsDirectory() throws Exception
+   public void testIsLeaf() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setDirectory(true);
+      context.getMockRoot().setLeaf(false);
 
       VirtualFile file = VFS.getRoot(context.getRootURI());
-      assertEquals(true, file.isDirectory());
+      assertEquals(false, file.isLeaf());
 
-      context.getMockRoot().setDirectory(false);
-      assertEquals(false, file.isDirectory());
+      context.getMockRoot().setLeaf(true);
+      assertEquals(true, file.isLeaf());
    }
 
-   public void testIsDirectoryIOException() throws Exception
+   public void testIsLeafIOException() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setIOException("isDirectory");
+      context.getMockRoot().setIOException("isLeaf");
 
       VirtualFile file = VFS.getRoot(context.getRootURI());
       try
       {
-         file.isDirectory();
+         file.isLeaf();
          fail("Should not be here");
       }
       catch (Throwable t)
@@ -280,7 +279,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       }
    }
 
-   public void testIsDirectoryClosed() throws Exception
+   public void testIsLeafClosed() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
 
@@ -288,53 +287,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       file.close();
       try
       {
-         file.isDirectory();
-         fail("Should not be here");
-      }
-      catch (Throwable t)
-      {
-         checkThrowable(IllegalStateException.class, t);
-      }
-   }
-
-   public void testIsFile() throws Exception
-   {
-      MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setDirectory(true);
-
-      VirtualFile file = VFS.getRoot(context.getRootURI());
-      assertEquals(false, file.isFile());
-
-      context.getMockRoot().setDirectory(false);
-      assertEquals(true, file.isFile());
-   }
-
-   public void testIsFileIOException() throws Exception
-   {
-      MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setIOException("isFile");
-
-      VirtualFile file = VFS.getRoot(context.getRootURI());
-      try
-      {
-         file.isFile();
-         fail("Should not be here");
-      }
-      catch (Throwable t)
-      {
-         checkThrowable(IOException.class, t);
-      }
-   }
-
-   public void testIsFileClosed() throws Exception
-   {
-      MockVFSContext context = registerSimpleVFSContext();
-
-      VirtualFile file = VFS.getRoot(context.getRootURI());
-      file.close();
-      try
-      {
-         file.isFile();
+         file.isLeaf();
          fail("Should not be here");
       }
       catch (Throwable t)
@@ -660,7 +613,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
    public void testGetAllChildrenNoChildren() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setDirectory(true);
+      context.getMockRoot().setLeaf(false);
       
       VirtualFile file = VFS.getRoot(context.getRootURI());
       List<VirtualFile> children = file.getChildren();
@@ -669,7 +622,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       assertEmpty(children);
    }
 
-   public void testGetAllChildrenNotADirectory() throws Exception
+   public void testGetAllChildrenIsLeaf() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
       
@@ -743,7 +696,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
    public void testGetAllChildrenWithNullFilterNoChildren() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setDirectory(true);
+      context.getMockRoot().setLeaf(false);
       
       VirtualFile file = VFS.getRoot(context.getRootURI());
       List<VirtualFile> children = file.getChildren(null);
@@ -752,7 +705,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       assertEmpty(children);
    }
 
-   public void testGetAllChildrenWithNullFilterNotADirectory() throws Exception
+   public void testGetAllChildrenWithNullFilterIsLeaf() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
       
@@ -830,7 +783,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
    public void testGetAllChildrenWithFilterNoChildren() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setDirectory(true);
+      context.getMockRoot().setLeaf(false);
       
       VirtualFile file = VFS.getRoot(context.getRootURI());
       MockVirtualFileFilter filter = new MockVirtualFileFilter();
@@ -841,7 +794,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       assertEmpty(filter.getVisited());
    }
 
-   public void testGetAllChildrenWithFilterNotADirectory() throws Exception
+   public void testGetAllChildrenWithFilterIsLeaf() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
       
@@ -929,7 +882,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
    public void testGetAllChildrenRecursivelyNoChildren() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setDirectory(true);
+      context.getMockRoot().setLeaf(false);
       
       VirtualFile file = VFS.getRoot(context.getRootURI());
       List<VirtualFile> children = file.getChildrenRecursively();
@@ -938,7 +891,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       assertEmpty(children);
    }
 
-   public void testGetAllChildrenRecursivelyNotADirectory() throws Exception
+   public void testGetAllChildrenRecursivelyIsLeaf() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
       
@@ -1024,7 +977,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
    public void testGetAllChildrenRecursivelyWithNullFilterNoChildren() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setDirectory(true);
+      context.getMockRoot().setLeaf(false);
       
       VirtualFile file = VFS.getRoot(context.getRootURI());
       List<VirtualFile> children = file.getChildrenRecursively(null);
@@ -1033,7 +986,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       assertEmpty(children);
    }
 
-   public void testGetAllChildrenRecursivelyWithNullFilterNotADirectory() throws Exception
+   public void testGetAllChildrenRecursivelyWithNullFilterIsLeaf() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
       
@@ -1123,7 +1076,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
    public void testGetAllChildrenRecursivelyWithFilterNoChildren() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setDirectory(true);
+      context.getMockRoot().setLeaf(false);
       
       VirtualFile file = VFS.getRoot(context.getRootURI());
       MockVirtualFileFilter filter = new MockVirtualFileFilter();
@@ -1134,7 +1087,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       assertEmpty(filter.getVisited());
    }
 
-   public void testGetAllChildrenRecursivelyWithFilterNotADirectory() throws Exception
+   public void testGetAllChildrenRecursivelyWithFilterIsLeaf() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
       
@@ -1213,7 +1166,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
    public void testVisitAllChildrenNoChildren() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setDirectory(true);
+      context.getMockRoot().setLeaf(false);
       
       VirtualFile file = VFS.getRoot(context.getRootURI());
       MockVirtualFileFilter filter = new MockVirtualFileFilter();
@@ -1223,7 +1176,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       assertEmpty(filter.getVisited());
    }
 
-   public void testVisitAllChildrenNotADirectory() throws Exception
+   public void testVisitAllChildrenIsLeaf() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
       
@@ -1279,7 +1232,7 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
    public void testFindChildSame() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setDirectory(true);
+      context.getMockRoot().setLeaf(false);
       
       VirtualFile root = VFS.getRoot(context.getRootURI());
       

@@ -232,12 +232,12 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
          return this;
 
       // Go through each context starting from ours 
-      // check the parent contexts are directories
+      // check the parents are not leaves.
       VirtualFileHandler current = this;
       for (int i = 0; i < tokens.length; ++i)
       {
-         if (current.isDirectory() == false)
-            throw new IOException("Not a directory: " + current);
+         if (current.isLeaf())
+            throw new IOException("File cannot have children: " + current);
          if (current instanceof StructuredVirtualFileHandler)
          {
             StructuredVirtualFileHandler structured = (StructuredVirtualFileHandler) current;

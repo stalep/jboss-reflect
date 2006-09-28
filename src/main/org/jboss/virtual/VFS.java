@@ -200,7 +200,7 @@ public class VFS
     * 
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the root is not a directory
+    * @throws IllegalStateException if the root is a leaf node
     */
    public List<VirtualFile> getChildren() throws IOException
    {
@@ -213,7 +213,7 @@ public class VFS
     * @param filter to filter the children
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the root is not a directory
+    * @throws IllegalStateException if the root is a leaf node
     */
    public List<VirtualFile> getChildren(VirtualFileFilter filter) throws IOException
    {
@@ -223,11 +223,11 @@ public class VFS
    /**
     * Get all the children recursively<p>
     * 
-    * This always uses {@link VisitorAttributes#RECURSE_DIRECTORIES}
+    * This always uses {@link VisitorAttributes#RECURSE}
     * 
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the root is not a directory
+    * @throws IllegalStateException if the root is a leaf node
     */
    public List<VirtualFile> getChildrenRecursively() throws IOException
    {
@@ -237,12 +237,12 @@ public class VFS
    /**
     * Get all the children recursively<p>
     * 
-    * This always uses {@link VisitorAttributes#RECURSE_DIRECTORIES}
+    * This always uses {@link VisitorAttributes#RECURSE}
     * 
     * @param filter to filter the children
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the root is not a directory
+    * @throws IllegalStateException if the root is a leaf node
     */
    public List<VirtualFile> getChildrenRecursively(VirtualFileFilter filter) throws IOException
    {
@@ -255,13 +255,14 @@ public class VFS
     * @param visitor the visitor
     * @throws IOException for any problem accessing the VFS
     * @throws IllegalArgumentException if the visitor is null
-    * @throws IllegalStateException if the root is not a directory
+    * @throws IllegalStateException if the root is a leaf node
     */
    public void visit(VirtualFileVisitor visitor) throws IOException
    {
       VirtualFileHandler handler = context.getRoot();
-      if (handler.isDirectory() == false)
-         throw new IllegalStateException("Not a directory");
+      if (handler.isLeaf())
+         throw new IllegalStateException("File cannot contain children: " + handler);
+      
       WrappingVirtualFileHandlerVisitor wrapper = new WrappingVirtualFileHandlerVisitor(visitor);
       context.visit(handler, wrapper);
    }
@@ -273,7 +274,7 @@ public class VFS
     * @param visitor the visitor
     * @throws IOException for any problem accessing the VFS
     * @throws IllegalArgumentException if the file or visitor is null
-    * @throws IllegalStateException if the root is not a directory
+    * @throws IllegalStateException if the root is a leaf node
     */
    protected void visit(VirtualFile file, VirtualFileVisitor visitor) throws IOException
    {

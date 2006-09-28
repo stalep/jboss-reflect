@@ -100,14 +100,9 @@ public class JarEntryHandler extends AbstractURLHandler
       return false;
    }
 
-   public boolean isDirectory()
+   public boolean isLeaf()
    {
-      return getEntry().isDirectory();
-   }
-
-   public boolean isFile()
-   {
-      return isDirectory() == false;
+      return getEntry().isDirectory() == false;
    }
 
    public boolean isHidden()

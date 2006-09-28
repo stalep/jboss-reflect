@@ -24,8 +24,10 @@ package org.jboss.test.virtual.support;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -58,8 +60,8 @@ public abstract class AbstractMockVirtualFileHandler extends AbstractVirtualFile
    /** Size */
    private long size;
    
-   /** Is a directory */
-   private boolean directory;
+   /** Is a leaf */
+   private boolean leaf = true;
    
    /** Is an archive */
    private boolean archive;
@@ -152,7 +154,7 @@ public abstract class AbstractMockVirtualFileHandler extends AbstractVirtualFile
          throw new IllegalArgumentException("Null child");
       if (children.contains(child) == false)
          children.add(child);
-      directory = true;
+      leaf = false;
    }
 
    public long getLastModified() throws IOException
@@ -206,28 +208,21 @@ public abstract class AbstractMockVirtualFileHandler extends AbstractVirtualFile
       this.archive = archive;
    }
 
-   public boolean isDirectory() throws IOException
+   public boolean isLeaf() throws IOException
    {
       checkClosed();
-      throwIOException("isDirectory");
-      return directory;
+      throwIOException("isLeaf");
+      return leaf;
    }
 
    /**
-    * Set directory.
+    * Set leaf.
     * 
-    * @param directory whether it is a directory.
+    * @param leaf whether this is a leaf.
     */
-   public void setDirectory(boolean directory)
+   public void setLeaf(boolean leaf)
    {
-      this.directory = directory;
-   }
-
-   public boolean isFile() throws IOException
-   {
-      checkClosed();
-      throwIOException("isFile");
-      return directory == false;
+      this.leaf = leaf;
    }
 
    public boolean isHidden() throws IOException
@@ -267,6 +262,12 @@ public abstract class AbstractMockVirtualFileHandler extends AbstractVirtualFile
    public URI toURI()
    {
       return uri;
+   }
+
+   @Override
+   public URL toURL() throws MalformedURLException, URISyntaxException
+   {
+      return MockVFSContext.createMockURL(uri);
    }
 
    @Override
