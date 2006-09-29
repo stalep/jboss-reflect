@@ -208,7 +208,7 @@ public abstract class AbstractVFSContextTest extends AbstractVFSTest
       Set<String> actual = new HashSet<String>();
       for (VirtualFileHandler child : visitor.getVisited())
       {
-         if (child.getName().startsWith("META-INF") == false)
+         if (child.getName().startsWith("META-INF") == false && child.getName().equals(".svn") == false)
             actual.add(child.getName());
       }
       
