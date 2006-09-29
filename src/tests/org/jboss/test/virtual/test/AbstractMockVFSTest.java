@@ -24,7 +24,6 @@ package org.jboss.test.virtual.test;
 import java.io.IOException;
 import java.net.URI;
 
-import org.jboss.test.BaseTestCase;
 import org.jboss.test.virtual.support.MockSimpleVirtualFileHandler;
 import org.jboss.test.virtual.support.MockStructuredVirtualFileHandler;
 import org.jboss.test.virtual.support.MockVFSContext;
@@ -41,7 +40,7 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public abstract class AbstractMockVFSTest extends BaseTestCase
+public abstract class AbstractMockVFSTest extends AbstractVFSTest
 {
    /** The vfs context factory */
    protected static MockVFSContextFactory mockVFSContextFactory = new MockVFSContextFactory();
@@ -117,6 +116,69 @@ public abstract class AbstractMockVFSTest extends BaseTestCase
       return context;
    }
    
+   protected MockVFSContext createSimpleVFSContextWithChildrenAndNonLeafs()
+   {
+      MockVFSContext context = new MockVFSContext("simpleWithChildren");
+      MockSimpleVirtualFileHandler root = new MockSimpleVirtualFileHandler(context, null, "");
+      context.setRoot(root);
+      new MockSimpleVirtualFileHandler(context, root, "child1");
+      new MockSimpleVirtualFileHandler(context, root, "child2");
+      new MockSimpleVirtualFileHandler(context, root, "child3");
+      MockSimpleVirtualFileHandler folder1 = new MockSimpleVirtualFileHandler(context, root, "folder1");
+      folder1.setLeaf(false);
+      new MockSimpleVirtualFileHandler(context, root, "folder1/child1");
+      MockSimpleVirtualFileHandler folder2 = new MockSimpleVirtualFileHandler(context, root, "folder2");
+      folder2.setLeaf(false);
+      new MockSimpleVirtualFileHandler(context, root, "folder2/child1");
+      new MockSimpleVirtualFileHandler(context, root, "folder2/child2");
+      MockSimpleVirtualFileHandler folder3 = new MockSimpleVirtualFileHandler(context, root, "folder3");
+      folder3.setLeaf(false);
+      new MockSimpleVirtualFileHandler(context, root, "folder3/child1");
+      new MockSimpleVirtualFileHandler(context, root, "folder3/child2");
+      new MockSimpleVirtualFileHandler(context, root, "folder3/child3");
+      
+      return context;
+   }
+   
+   protected MockVFSContext registerSimpleVFSContextWithChildrenAndNonLeafs()
+   {
+      MockVFSContext context = createSimpleVFSContextWithChildrenAndNonLeafs();
+      mockVFSContextFactory.addVFSContext(context);
+      return context;
+   }
+   
+   protected MockVFSContext createSimpleVFSContextWithChildrenAndNonLeafsWithHidden()
+   {
+      MockVFSContext context = new MockVFSContext("simpleWithChildren");
+      MockSimpleVirtualFileHandler root = new MockSimpleVirtualFileHandler(context, null, "");
+      context.setRoot(root);
+      MockSimpleVirtualFileHandler child1 = new MockSimpleVirtualFileHandler(context, root, "child1");
+      child1.setHidden(true);
+      new MockSimpleVirtualFileHandler(context, root, "child2");
+      new MockSimpleVirtualFileHandler(context, root, "child3");
+      MockSimpleVirtualFileHandler folder1 = new MockSimpleVirtualFileHandler(context, root, "folder1");
+      folder1.setLeaf(false);
+      new MockSimpleVirtualFileHandler(context, root, "folder1/child1");
+      MockSimpleVirtualFileHandler folder2 = new MockSimpleVirtualFileHandler(context, root, "folder2");
+      folder2.setLeaf(false);
+      new MockSimpleVirtualFileHandler(context, root, "folder2/child1");
+      new MockSimpleVirtualFileHandler(context, root, "folder2/child2");
+      MockSimpleVirtualFileHandler folder3 = new MockSimpleVirtualFileHandler(context, root, "folder3");
+      folder3.setLeaf(false);
+      new MockSimpleVirtualFileHandler(context, root, "folder3/child1");
+      new MockSimpleVirtualFileHandler(context, root, "folder3/child2");
+      new MockSimpleVirtualFileHandler(context, root, "folder3/child3");
+      
+      return context;
+   }
+   
+   protected MockVFSContext registerSimpleVFSContextWithChildrenAndNonLeafsWithHidden()
+   {
+      MockVFSContext context = createSimpleVFSContextWithChildrenAndNonLeafsWithHidden();
+      mockVFSContextFactory.addVFSContext(context);
+      return context;
+   }
+   
    protected MockVFSContext createStructuredVFSContextWithSubChildren()
    {
       MockVFSContext context = new MockVFSContext("simpleWithChildren");
@@ -137,6 +199,69 @@ public abstract class AbstractMockVFSTest extends BaseTestCase
    protected MockVFSContext registerStructuredVFSContextWithSubChildren()
    {
       MockVFSContext context = createStructuredVFSContextWithSubChildren();
+      mockVFSContextFactory.addVFSContext(context);
+      return context;
+   }
+   
+   protected MockVFSContext createStructuredVFSContextWithChildrenAndNonLeafs()
+   {
+      MockVFSContext context = new MockVFSContext("simpleWithChildren");
+      MockStructuredVirtualFileHandler root = new MockStructuredVirtualFileHandler(context, null, "");
+      context.setRoot(root);
+      new MockStructuredVirtualFileHandler(context, root, "child1");
+      new MockStructuredVirtualFileHandler(context, root, "child2");
+      new MockStructuredVirtualFileHandler(context, root, "child3");
+      MockStructuredVirtualFileHandler folder1 = new MockStructuredVirtualFileHandler(context, root, "folder1");
+      folder1.setLeaf(false);
+      new MockStructuredVirtualFileHandler(context, folder1, "child1");
+      MockStructuredVirtualFileHandler folder2 = new MockStructuredVirtualFileHandler(context, root, "folder2");
+      folder2.setLeaf(false);
+      new MockStructuredVirtualFileHandler(context, folder2, "child1");
+      new MockStructuredVirtualFileHandler(context, folder2, "child2");
+      MockStructuredVirtualFileHandler folder3 = new MockStructuredVirtualFileHandler(context, root, "folder3");
+      folder3.setLeaf(false);
+      new MockStructuredVirtualFileHandler(context, folder3, "child1");
+      new MockStructuredVirtualFileHandler(context, folder3, "child2");
+      new MockStructuredVirtualFileHandler(context, folder3, "child3");
+      
+      return context;
+   }
+   
+   protected MockVFSContext registerStructuredVFSContextWithChildrenAndNonLeafs()
+   {
+      MockVFSContext context = createStructuredVFSContextWithChildrenAndNonLeafs();
+      mockVFSContextFactory.addVFSContext(context);
+      return context;
+   }
+   
+   protected MockVFSContext createStructuredVFSContextWithChildrenAndNonLeafsWithHidden()
+   {
+      MockVFSContext context = new MockVFSContext("simpleWithChildren");
+      MockStructuredVirtualFileHandler root = new MockStructuredVirtualFileHandler(context, null, "");
+      context.setRoot(root);
+      MockStructuredVirtualFileHandler child1 = new MockStructuredVirtualFileHandler(context, root, "child1");
+      child1.setHidden(true);
+      new MockStructuredVirtualFileHandler(context, root, "child2");
+      new MockStructuredVirtualFileHandler(context, root, "child3");
+      MockStructuredVirtualFileHandler folder1 = new MockStructuredVirtualFileHandler(context, root, "folder1");
+      folder1.setLeaf(false);
+      new MockStructuredVirtualFileHandler(context, folder1, "child1");
+      MockStructuredVirtualFileHandler folder2 = new MockStructuredVirtualFileHandler(context, root, "folder2");
+      folder2.setLeaf(false);
+      new MockStructuredVirtualFileHandler(context, folder2, "child1");
+      new MockStructuredVirtualFileHandler(context, folder2, "child2");
+      MockStructuredVirtualFileHandler folder3 = new MockStructuredVirtualFileHandler(context, root, "folder3");
+      folder3.setLeaf(false);
+      new MockStructuredVirtualFileHandler(context, folder3, "child1");
+      new MockStructuredVirtualFileHandler(context, folder3, "child2");
+      new MockStructuredVirtualFileHandler(context, folder3, "child3");
+      
+      return context;
+   }
+   
+   protected MockVFSContext registerStructuredVFSContextWithChildrenAndNonLeafsWithHidden()
+   {
+      MockVFSContext context = createStructuredVFSContextWithChildrenAndNonLeafsWithHidden();
       mockVFSContextFactory.addVFSContext(context);
       return context;
    }
