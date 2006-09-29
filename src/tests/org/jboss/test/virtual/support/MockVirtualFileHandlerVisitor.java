@@ -19,43 +19,56 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.virtual.plugins.vfs.helpers;
+package org.jboss.test.virtual.support;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jboss.virtual.VisitorAttributes;
-import org.jboss.virtual.spi.VirtualFileHandlerVisitor;
+import org.jboss.virtual.plugins.vfs.helpers.AbstractVirtualFileHandlerVisitor;
+import org.jboss.virtual.spi.VirtualFileHandler;
 
 /**
- * AbstractVirtualFileVisitor.
+ * MockVirtualFileHandlerVisitor.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public abstract class AbstractVirtualFileHandlerVisitor implements VirtualFileHandlerVisitor
+public class MockVirtualFileHandlerVisitor extends AbstractVirtualFileHandlerVisitor
 {
-   private final VisitorAttributes attributes;
+   /** The visited handlers */
+   private List<VirtualFileHandler> visited = new ArrayList<VirtualFileHandler>();
 
    /**
-    * Create a new AbstractVirtualFileVisitor using the default visitor attributes
+    * Create a new MockVirtualFileHandlerVisitor.
     */
-   protected AbstractVirtualFileHandlerVisitor()
+   public MockVirtualFileHandlerVisitor()
    {
-      this(null);
+      super();
    }
 
    /**
-    * Create a new AbstractVirtualFileVisitor using the default visitor attributes
+    * Create a new MockVirtualFileHandlerVisitor.
     * 
-    * @param attributes the attributes or @{Link {@link VisitorAttributes#DEFAULT} when null
+    * @param attributes the visitor attributes
     */
-   protected AbstractVirtualFileHandlerVisitor(VisitorAttributes attributes)
+   public MockVirtualFileHandlerVisitor(VisitorAttributes attributes)
    {
-      if (attributes == null)
-         attributes = VisitorAttributes.DEFAULT;
-      this.attributes = attributes;
+      super(attributes);
+   }
+
+   /**
+    * Get the visited handlers
+    * 
+    * @return the handlers
+    */
+   public List<VirtualFileHandler> getVisited()
+   {
+      return visited;
    }
    
-   public VisitorAttributes getAttributes()
+   public void visit(VirtualFileHandler handler)
    {
-      return attributes;
+      visited.add(handler);
    }
 }

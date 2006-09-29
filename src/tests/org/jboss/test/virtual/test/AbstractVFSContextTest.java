@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jboss.test.virtual.support.MockVirtualFileHandlerVisitor;
 import org.jboss.virtual.VFS;
 import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.spi.VFSContext;
@@ -95,7 +96,7 @@ public abstract class AbstractVFSContextTest extends AbstractVFSTest
       Set<String> actual = new HashSet<String>();
       for (VirtualFileHandler child : children)
       {
-         if (child.getName().startsWith("META-INF") == false)
+         if (child.getName().startsWith("META-INF") == false && child.getName().equals(".svn") == false)
             actual.add(child.getName());
       }
       
@@ -192,9 +193,55 @@ public abstract class AbstractVFSContextTest extends AbstractVFSTest
       }
    }
 
-   /* TODO visit
    public void testVisit() throws Exception
    {
+      VFSContext context = getVFSContext("children");
+      VirtualFileHandler root = context.getRoot();
+      MockVirtualFileHandlerVisitor visitor = new MockVirtualFileHandlerVisitor();
+      context.visit(root, visitor);
+      
+      Set<String> expected = new HashSet<String>();
+      expected.add("child1");
+      expected.add("child2");
+      expected.add("child3");
+
+      Set<String> actual = new HashSet<String>();
+      for (VirtualFileHandler child : visitor.getVisited())
+      {
+         if (child.getName().startsWith("META-INF") == false)
+            actual.add(child.getName());
+      }
+      
+      assertEquals(expected, actual);
    }
-   */
+
+   public void testVisitNullHandler() throws Exception
+   {
+      VFSContext context = getVFSContext("children");
+      MockVirtualFileHandlerVisitor visitor = new MockVirtualFileHandlerVisitor();
+      try
+      {
+         context.visit(null, visitor);
+         fail("Should not be here!");
+      }
+      catch (Throwable t)
+      {
+         checkThrowable(IllegalArgumentException.class, t);
+      }
+   }
+
+   public void testVisitNullVisitor() throws Exception
+   {
+      VFSContext context = getVFSContext("children");
+      VirtualFileHandler root = context.getRoot();
+      try
+      {
+         context.visit(root, null);
+         fail("Should not be here!");
+      }
+      catch (Throwable t)
+      {
+         checkThrowable(IllegalArgumentException.class, t);
+      }
+   }
 }
