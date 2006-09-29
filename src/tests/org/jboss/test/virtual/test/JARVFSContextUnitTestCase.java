@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -21,36 +21,37 @@
 */
 package org.jboss.test.virtual.test;
 
+import java.net.URL;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+
+import org.jboss.virtual.plugins.context.jar.JarContext;
+import org.jboss.virtual.plugins.context.jar.JarUtils;
+import org.jboss.virtual.spi.VFSContext;
 
 /**
- * VFS All Test Suite.
+ * JARVFSContextUnitTestCase.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision: 46146 $
+ * @version $Revision: 1.1 $
  */
-public class VFSAllTestSuite extends TestSuite
+public class JARVFSContextUnitTestCase extends AbstractVFSContextTest
 {
-   public static void main(String[] args)
+   public JARVFSContextUnitTestCase(String name)
    {
-      TestRunner.run(suite());
+      super(name);
    }
 
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("VFS Tests");
+      return new TestSuite(JARVFSContextUnitTestCase.class);
+   }
 
-      suite.addTest(VFSUnitTestCase.suite());
-      suite.addTest(VirtualFileUnitTestCase.suite());
-      suite.addTest(FileVFSUnitTestCase.suite());
-      suite.addTest(SundryVFSUnitTestCase.suite());
-      suite.addTest(FileVFSContextUnitTestCase.suite());
-      suite.addTest(FileVirtualFileHandlerUnitTestCase.suite());
-      suite.addTest(JARVFSContextUnitTestCase.suite());
-      suite.addTest(JARVirtualFileHandlerUnitTestCase.suite());
-      
-      return suite;
+   protected VFSContext getVFSContext(String name) throws Exception
+   {
+      URL url = getResource("/vfs/context/jar/" + name + ".jar");
+      url = JarUtils.createJarURL(url);
+      return new JarContext(url);
    }
 }

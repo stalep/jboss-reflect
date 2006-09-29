@@ -287,7 +287,7 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
       buffer.append('@');
       buffer.append(System.identityHashCode(this));
       buffer.append("[path=").append(getPathName());
-      buffer.append(" context=").append(getVFSContext().getRootURI());
+      buffer.append(" context=").append(context.getRootURI());
       buffer.append(" real=").append(safeToURLString());
       buffer.append(']');
       return buffer.toString();
