@@ -263,8 +263,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          AnnotationAttributeImpl[] atttributes = new AnnotationAttributeImpl[methods.length];
          for (int i = 0 ; i < methods.length ; i++)
          {
-            AnnotationAttributeImpl impl = new AnnotationAttributeImpl(methods[i].getName(), getTypeInfo(methods[i].getReturnType()), null);
-            atttributes[i] = impl;
+            atttributes[i] = new AnnotationAttributeImpl(methods[i].getName(), getTypeInfo(methods[i].getReturnType()), null);
          }
          ((AnnotationInfoImpl)result).setAttributes(atttributes);
       }
@@ -366,8 +365,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          {
             public Annotation[] run()
             {
-               Annotation[] annotations =  clazz.getAnnotations();
-               return annotations;
+               return clazz.getAnnotations();
             }
          };
          return AccessController.doPrivileged(action);

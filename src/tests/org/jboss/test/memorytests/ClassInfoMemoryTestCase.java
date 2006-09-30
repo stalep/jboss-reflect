@@ -110,9 +110,8 @@ public class ClassInfoMemoryTestCase extends JBossMemoryTestCase
       }
       assertNotNull(info);
       assertTrue(info instanceof ClassInfo);
-      ClassInfo cinfo = (ClassInfo) info;
       //getLog().debug(cinfo);
-      return cinfo;
+      return (ClassInfo) info;
    }
    
    protected void checkTypeSet(HashSet<String> expected, TypeInfo[] typeInfos) throws Throwable

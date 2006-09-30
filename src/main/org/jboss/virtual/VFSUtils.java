@@ -262,8 +262,7 @@ public class VFSUtils
     */
    public static boolean isLink(String name)
    {
-      boolean isLink = name.indexOf(VFS_LINK_PREFIX) >= 0;
-      return isLink;
+      return name.indexOf(VFS_LINK_PREFIX) >= 0;
    }
 
    /**

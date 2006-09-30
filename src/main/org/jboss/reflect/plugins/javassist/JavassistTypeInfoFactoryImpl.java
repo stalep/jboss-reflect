@@ -135,8 +135,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
             AnnotationAttributeImpl[] atttributes = new AnnotationAttributeImpl[methods.length];
             for (int i = 0 ; i < methods.length ; i++)
             {
-               AnnotationAttributeImpl impl = new AnnotationAttributeImpl(methods[i].getName(), getTypeInfo(methods[i].getReturnType()), null);
-               atttributes[i] = impl;
+               atttributes[i] = new AnnotationAttributeImpl(methods[i].getName(), getTypeInfo(methods[i].getReturnType()), null);
             }
             result.setAttributes(atttributes);
             return result;

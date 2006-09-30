@@ -361,11 +361,11 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       PrimitiveValue val = (PrimitiveValue)value;
       TypeInfo type = val.getType();
       assertTrue(PrimitiveInfo.class.isAssignableFrom(type.getClass()));
-      assertTrue(((PrimitiveInfo)type).getName().equals(name));
+      assertTrue((type).getName().equals(name));
       Object obj = null;
       try
       {
-         obj = ((PrimitiveInfo)type).convertValue(val.getValue()); 
+         obj = type.convertValue(val.getValue()); 
       }
       catch (Throwable e)
       {

@@ -68,8 +68,7 @@ public class NestedJarFromStream
    {
       if( inited == false )
          init();
-      VirtualFileHandler child = entries.get(name);
-      return child;
+      return entries.get(name);
    }
 
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
@@ -119,8 +118,7 @@ public class NestedJarFromStream
    {
       if( inited == false )
          init();
-      JarEntryContents jec = entries.get(name);
-      return jec;
+      return entries.get(name);
    }
    public ZipEntry getJarEntry(String name)
       throws IOException
@@ -128,8 +126,7 @@ public class NestedJarFromStream
       if( inited == false )
          init();
       JarEntryContents jec = entries.get(name);
-      ZipEntry entry = (jec != null ? jec.getEntry() : null);
-      return entry;
+      return (jec != null ? jec.getEntry() : null);
    }
    public byte[] getContents(String name)
       throws IOException
@@ -137,8 +134,7 @@ public class NestedJarFromStream
       if( inited == false )
          init();
       JarEntryContents jec = entries.get(name);
-      byte[] contents = (jec != null ? jec.getContents() : null);
-      return contents;
+      return (jec != null ? jec.getContents() : null);
    }
 
    public String getName()

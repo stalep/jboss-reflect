@@ -181,8 +181,7 @@ public class VFSClassLoader extends SecureClassLoader
          is.close();
          tmp = baos.toByteArray();
          ProtectionDomain pd = getProtectionDomain(classFile);
-         Class c = super.defineClass(name, tmp, 0, tmp.length, pd);
-         return c;
+         return super.defineClass(name, tmp, 0, tmp.length, pd);
       }
       catch (Exception e)
       {

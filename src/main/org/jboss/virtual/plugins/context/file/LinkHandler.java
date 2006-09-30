@@ -78,8 +78,7 @@ public class LinkHandler extends AbstractURLHandler
 
       public VirtualFileHandler createChildHandler(String name) throws IOException
       {
-         VirtualFileHandler child = children.get(name);
-         return child;
+         return children.get(name);
       }
 
       public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
@@ -185,8 +184,7 @@ public class LinkHandler extends AbstractURLHandler
 
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
    {
-      List<VirtualFileHandler> result = new ArrayList<VirtualFileHandler>(linkTargets.values());
-      return result;
+      return new ArrayList<VirtualFileHandler>(linkTargets.values());
    }
 
    public VirtualFileHandler findChild(String path) throws IOException
@@ -217,8 +215,7 @@ public class LinkHandler extends AbstractURLHandler
       VFSContext context = factory.getVFS(linkURI);
       VirtualFileHandler rootHandler = context.getRoot();
       // Wrap the handler in a delegate so we can change the parent and name
-      DelegatingHandler handler = new DelegatingHandler(this.getVFSContext(), parent, name, rootHandler);
       // TODO: if the factory caches contexts the root handler may not point to the link
-      return handler;
+      return new DelegatingHandler(this.getVFSContext(), parent, name, rootHandler);
    }
 }

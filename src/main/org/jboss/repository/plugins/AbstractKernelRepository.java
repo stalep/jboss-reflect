@@ -95,8 +95,7 @@ public class AbstractKernelRepository
          levelData[n] = (MetaData) maps[n].get(tmpKey);
       }
 
-      Object value = combiner.combine(key, levelData);
-      return value;
+      return combiner.combine(key, levelData);
    }
 
    /**

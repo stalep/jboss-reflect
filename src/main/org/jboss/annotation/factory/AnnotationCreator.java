@@ -315,18 +315,16 @@ public class AnnotationCreator implements AnnotationParserVisitor
    {
       try
       {
-         ASTAnnotation node = AccessController.doPrivileged(new PrivilegedExceptionAction<ASTAnnotation>()
+
+         return AccessController.doPrivileged(new PrivilegedExceptionAction<ASTAnnotation>()
          {
            public ASTAnnotation run() throws Exception
            {
               AnnotationParser parser = new AnnotationParser(new StringReader(annotationExpr));
-              org.jboss.annotation.factory.ast.ASTStart start = parser.Start();
-              ASTAnnotation node = (ASTAnnotation) start.jjtGetChild(0);
-              return node;
+              ASTStart start = parser.Start();
+              return (ASTAnnotation) start.jjtGetChild(0);
            }
          });
-         
-         return node;
       }
       catch (PrivilegedActionException e)
       {

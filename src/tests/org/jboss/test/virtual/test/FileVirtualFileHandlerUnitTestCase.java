@@ -58,8 +58,7 @@ public class FileVirtualFileHandlerUnitTestCase extends AbstractVirtualFileHandl
       URL url = getRootResource(name);
       if (path != null)
          url = new URL(url, path);
-      File file = new File(url.getPath());
-      return file;
+      return new File(url.getPath());
    }
    
    protected VFSContext getVFSContext(String name) throws Exception

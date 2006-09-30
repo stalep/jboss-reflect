@@ -124,7 +124,7 @@ public class AnnotationValueFactory
       else
       {
          Object[] ret = null;
-         String typeName = ((PrimitiveInfo)componentType).getName();
+         String typeName = componentType.getName();
 
          if (typeName.equals("boolean"))
          {

@@ -63,8 +63,7 @@ public class JARVirtualFileHandlerUnitTestCase extends AbstractVirtualFileHandle
    protected File getRealJarFile(String name) throws Exception
    {
       URL url = getRootResource(name);
-      File file = new File(url.getPath());
-      return file;
+      return new File(url.getPath());
    }
    
    protected JarEntry getRealJarEntry(String name, String path) throws Exception
@@ -73,8 +72,7 @@ public class JARVirtualFileHandlerUnitTestCase extends AbstractVirtualFileHandle
       url = JarUtils.createJarURL(url);
       JarURLConnection c = (JarURLConnection) url.openConnection();
       JarFile jarFile = c.getJarFile();
-      JarEntry entry = jarFile.getJarEntry(path);
-      return entry;
+      return jarFile.getJarEntry(path);
    }
    
    protected VFSContext getVFSContext(String name) throws Exception
