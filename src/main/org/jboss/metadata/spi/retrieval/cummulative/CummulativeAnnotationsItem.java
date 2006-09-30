@@ -121,7 +121,7 @@ public class CummulativeAnnotationsItem extends SimpleAnnotationsItem
    {
       Set<AnnotationItem> temp = null;
 
-      List<MetaDataRetrieval> retrievals = null;
+      List<MetaDataRetrieval> retrievals;
       
       if (includeParent)
          retrievals = context.getRetrievals();

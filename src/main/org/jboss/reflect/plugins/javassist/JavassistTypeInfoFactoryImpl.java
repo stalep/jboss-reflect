@@ -268,7 +268,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
    {
       try
       {
-         Object[] annotations = null;
+         Object[] annotations;
          if (obj instanceof CtMember)
          {
             annotations = ((CtMember)obj).getAvailableAnnotations();

@@ -85,7 +85,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
 
    public AnnotationValue[] getAnnotations(Object obj)
    {
-      Annotation[] annotations = null;
+      Annotation[] annotations;
       if (obj instanceof AccessibleObject)
       {
          annotations = readAnnotations((AccessibleObject)obj);

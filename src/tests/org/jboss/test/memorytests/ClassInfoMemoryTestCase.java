@@ -52,12 +52,10 @@ public class ClassInfoMemoryTestCase extends JBossMemoryTestCase
    }
    public void testSimpleBeanClassInfo() throws Throwable
    {
-     WeakReference weakReferenceOnLoader = null; 
-     
      ClassLoader oldloader = Thread.currentThread().getContextClassLoader();
      System.out.println("+++oldloader =" + oldloader.toString());
      ClassLoader loader = newClassLoader(ClassInfoMemoryTestCase.class);
-     weakReferenceOnLoader = new WeakReference<ClassLoader>(loader);
+     WeakReference weakReferenceOnLoader = new WeakReference<ClassLoader>(loader);
      
      System.out.println("+++newloader =" + loader.toString());
      //step1

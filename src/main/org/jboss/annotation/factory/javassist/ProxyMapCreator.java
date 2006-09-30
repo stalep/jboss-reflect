@@ -78,11 +78,7 @@ public class ProxyMapCreator implements MemberValueVisitor
    {
       Class baseType = type.getComponentType();
       int size = 0;
-      if (arrayMemberValue.getValue() == null || arrayMemberValue.getValue().length == 0)
-      {
-         size = 0;
-      }
-      else
+      if (arrayMemberValue.getValue() != null)
       {
          size = arrayMemberValue.getValue().length;
       }

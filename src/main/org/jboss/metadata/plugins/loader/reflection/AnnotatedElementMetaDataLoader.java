@@ -49,7 +49,7 @@ public class AnnotatedElementMetaDataLoader extends BasicMetaDataLoader
    
    private static final ScopeKey getScopeKey(AnnotatedElement annotated)
    {
-      Scope scope = null;
+      Scope scope;
       if (annotated instanceof Class)
       {
          Class clazz = (Class) annotated;

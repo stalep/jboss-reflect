@@ -123,7 +123,7 @@ public class LinkHandler extends AbstractURLHandler
             String[] paths = PathTokenizer.getTokens(linkName);
             int n = 0;
             VirtualFileHandler linkParent = this;
-            String atom = null;
+            String atom;
             // Look for an existing parent           
             for(; n < paths.length-1; n ++)
             {

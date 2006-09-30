@@ -306,7 +306,7 @@ public class NestedJarFromStream
       }
       public VirtualFileHandler findChild(String path) throws IOException
       {
-         VirtualFileHandler child = null;
+         VirtualFileHandler child;
          if( isJar )
          {
             initNestedJar();

@@ -120,7 +120,7 @@ public class CummulativeMetaDatasItem extends SimpleMetaDatasItem
    {
       Set<MetaDataItem> temp = null;
 
-      List<MetaDataRetrieval> retrievals = null;
+      List<MetaDataRetrieval> retrievals;
       
       if (includeParent)
          retrievals = context.getRetrievals();

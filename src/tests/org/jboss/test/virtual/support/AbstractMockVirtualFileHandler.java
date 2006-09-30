@@ -87,7 +87,7 @@ public abstract class AbstractMockVirtualFileHandler extends AbstractVirtualFile
    {
       try
       {
-         String uri = null;
+         String uri;
          if (parent != null)
             uri = parent.toURI().toString();
          else
