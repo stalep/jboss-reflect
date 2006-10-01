@@ -42,19 +42,19 @@ public class VisitorAttributes
    public static final VisitorAttributes RECURSE_LEAVES_ONLY = new ImmutableVisitorAttributes(true, true);
    
    /** Whether to include the root */
-   private boolean includeRoot = false;
+   private boolean includeRoot;
 
    /** Whether to only visit leaves */
-   private boolean leavesOnly = false;
+   private boolean leavesOnly;
 
    /** Whether to recurse */
-   private boolean recurse = false;
+   private boolean recurse;
 
    /** Whether to ignore individual file errors */
-   private boolean ignoreErrors = false;
+   private boolean ignoreErrors;
 
    /** Whether to include hidden files */
-   private boolean includeHidden = false;
+   private boolean includeHidden;
    
    /**
     * Whether to visit leaves only<p>

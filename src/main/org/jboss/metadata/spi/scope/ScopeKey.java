@@ -49,7 +49,7 @@ public class ScopeKey implements Serializable, Cloneable
    private ScopeLevel maxScopeLevel;
    
    /** Whether the key is frozen */
-   private volatile boolean frozen = false;
+   private volatile boolean frozen;
 
    static
    {

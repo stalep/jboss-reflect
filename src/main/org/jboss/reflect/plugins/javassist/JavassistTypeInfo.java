@@ -61,19 +61,19 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    private Map<SignatureKey, JavassistConstructorInfo> constructors = CollectionsFactory.createLazyMap();
 
    /** The constructors */
-   private ConstructorInfo[] constructorArray = null;
+   private ConstructorInfo[] constructorArray;
 
    /** The fields */
    private Map<String, JavassistFieldInfo> fields = CollectionsFactory.createLazyMap();
 
    /** The fields */
-   private FieldInfo[] fieldArray = null;
+   private FieldInfo[] fieldArray;
 
    /** The methods */
    private Map<SignatureKey, JavassistMethodInfo> methods = CollectionsFactory.createLazyMap();
 
    /** The methods */
-   private MethodInfo[] methodArray = null;
+   private MethodInfo[] methodArray;
 
    /**
     * Create a new JavassistTypeInfo.

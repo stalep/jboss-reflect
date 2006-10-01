@@ -62,7 +62,7 @@ public class VFSContextFactoryLocator
    public static final String SERVICES_PATH = "META-INF/services/" + VFSContextFactory.class.getName();
    
    /** Has the default initialzation been performed */
-   private static boolean initialized = false;
+   private static boolean initialized;
 
    /**
     * Register a new VFSContextFactory
