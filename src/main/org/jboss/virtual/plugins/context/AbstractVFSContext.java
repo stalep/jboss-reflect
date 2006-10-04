@@ -128,8 +128,9 @@ public abstract class AbstractVFSContext implements VFSContext
       boolean recurse = attributes.isRecurse();
       boolean ignoreErrors = attributes.isIgnoreErrors();
       boolean includeHidden = attributes.isIncludeHidden();
+      boolean recurseArchives = attributes.isRecurseArchives();
 
-      visit(handler, visitor, includeRoot, leavesOnly, recurse, ignoreErrors, includeHidden);
+      visit(handler, visitor, includeRoot, leavesOnly, recurse, ignoreErrors, includeHidden, recurseArchives);
    }
 
    /**
@@ -145,7 +146,7 @@ public abstract class AbstractVFSContext implements VFSContext
     * @param includeHidden whether to include hidden files
     * @throws IOException for any problem accessing the virtual file system
     */
-   protected void visit(VirtualFileHandler handler, VirtualFileHandlerVisitor visitor, boolean includeRoot, boolean leavesOnly, boolean recurse, boolean ignoreErrors, boolean includeHidden) throws IOException
+   protected void visit(VirtualFileHandler handler, VirtualFileHandlerVisitor visitor, boolean includeRoot, boolean leavesOnly, boolean recurse, boolean ignoreErrors, boolean includeHidden, boolean recurseArchives) throws IOException
    {
       // Visit the root when asked
       if (includeRoot)
@@ -176,13 +177,16 @@ public abstract class AbstractVFSContext implements VFSContext
          boolean isLeaf = child.isLeaf();
          if (leavesOnly == false || isLeaf)
             visitor.visit(child);
-         
+
+         boolean allowArchives = true;
+         if (child.isArchive() && recurseArchives == false) allowArchives = false;
+
          // Recurse when asked
-         if (recurse && isLeaf == false)
+         if (recurse && isLeaf == false && allowArchives)
          {
             try
             {
-               visit(child, visitor, false, leavesOnly, recurse, ignoreErrors, includeHidden);
+               visit(child, visitor, false, leavesOnly, recurse, ignoreErrors, includeHidden, recurseArchives);
             }
             catch (StackOverflowError e)
             {

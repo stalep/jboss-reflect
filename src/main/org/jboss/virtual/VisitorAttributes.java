@@ -55,7 +55,20 @@ public class VisitorAttributes
 
    /** Whether to include hidden files */
    private boolean includeHidden;
-   
+
+   /** Whether to recurse archives or not */
+   private boolean recurseArchives;
+
+   public boolean isRecurseArchives()
+   {
+      return recurseArchives;
+   }
+
+   public void setRecurseArchives(boolean recurseArchives)
+   {
+      this.recurseArchives = recurseArchives;
+   }
+
    /**
     * Whether to visit leaves only<p>
     * 
