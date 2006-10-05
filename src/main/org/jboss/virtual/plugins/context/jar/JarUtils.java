@@ -77,6 +77,25 @@ public class JarUtils
          throw new IllegalArgumentException("Null suffix");
       return jarSuffixes.remove(suffix);
    }
+   
+   /**
+    * Get the lis of jar suffixes
+    * 
+    * @return the list of suffixes
+    */
+   public static Set<String> getSuffixes()
+   {
+      return jarSuffixes;
+   }
+
+   /**
+    * Clear the list of suffixes
+    * 
+    */
+   public static void clearSuffixes()
+   {
+      jarSuffixes.clear();
+   }
 
    /**
     * Utilities
