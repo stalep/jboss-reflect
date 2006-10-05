@@ -28,6 +28,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.jboss.test.BaseTestCase;
+import org.jboss.test.virtual.support.MetaDataMatchFilter;
 import org.jboss.virtual.VFS;
 import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.VirtualFile;
@@ -628,5 +629,41 @@ public class FileVFSUnitTestCase extends BaseTestCase
             jar1URL.getPath().endsWith("unpacked-outer.jar/jar1.jar!/"));
       VirtualFile jar1 = outerJar.findChild("jar1.jar");
       assertEquals(jar1URL, jar1.toURL());
+   }
+   
+   /**
+    * Tests that we can find the META-INF/some-data.xml in an unpacked deployment
+    */
+   public void testGetMetaDataUnpackedJar() throws Exception
+   {
+      testGetMetaDataFromJar("unpacked-with-metadata.jar");
+   }
+   
+   /**
+    * Tests that we can find the META-INF/some-data.xml in a packed deployment
+    */
+   public void testGetMetaDataPackedJar() throws Exception
+   {
+      testGetMetaDataFromJar("with-metadata.jar");
+   }
+   
+   private void testGetMetaDataFromJar(String name) throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      
+      VirtualFile jar = vfs.findChild(name);
+      assertNotNull(jar);
+      VirtualFile metadataLocation = jar.findChild("META-INF");
+      assertNotNull(metadataLocation);
+
+      VirtualFile metadataByName = metadataLocation.findChild("some-data.xml");
+      assertNotNull(metadataByName);
+      
+      //This is the same code as is called by AbstractDeploymentContext.getMetaDataFiles(String name, String suffix). 
+      //The MetaDataMatchFilter is a copy of the one used there
+      List<VirtualFile> metaDataList = metadataLocation.getChildren(new MetaDataMatchFilter(null, "-data.xml"));
+      assertNotNull(metaDataList);
+      assertEquals("Wrong size", 1, metaDataList.size());
    }
 }
