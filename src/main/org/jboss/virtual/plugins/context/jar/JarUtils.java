@@ -51,6 +51,20 @@ public class JarUtils
    }
 
    /**
+    * Sets the jar suffixes
+    * 
+    * @param suffix the suffix
+    * @return true when added
+    * @throws IllegalArgumentException for a null suffix
+    */
+   public static void setJarSuffixes(Set<String> suffixes)
+   {
+      if (suffixes == null)
+         throw new IllegalArgumentException("Null suffix");
+      jarSuffixes = suffixes;
+   }
+
+   /**
     * Add a jar suffix
     * 
     * @param suffix the suffix
