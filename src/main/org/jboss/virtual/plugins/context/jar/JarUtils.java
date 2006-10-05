@@ -47,6 +47,7 @@ public class JarUtils
       jarSuffixes.add(".war");
       jarSuffixes.add(".sar");
       jarSuffixes.add(".har");
+      jarSuffixes.add(".aop");
    }
 
    /**
