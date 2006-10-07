@@ -24,7 +24,9 @@ package org.jboss.virtual.plugins.context.jar;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -49,6 +51,7 @@ public class JarEntryHandler extends AbstractURLHandler
    
    /** The jar entry */
    private final JarEntry entry;
+   private transient List<VirtualFileHandler> entryChildren;
    
    /**
     * Create a new JarHandler.
@@ -120,7 +123,9 @@ public class JarEntryHandler extends AbstractURLHandler
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
    {
       checkClosed();
-      return Collections.emptyList();
+      if( entryChildren == null )
+         entryChildren = findChildren(jar, this);
+      return entryChildren;
    }
 
    public VirtualFileHandler findChild(String path) throws IOException
@@ -131,5 +136,36 @@ public class JarEntryHandler extends AbstractURLHandler
          throw new IOException("A JarEntry has no children: " + path + " for " + this);
       else
          return handler.findChild(getName() +"/" + path);
+   }
+
+   /**
+    * Go through the jar entries and find the entries that are the immeadiate children of
+    * the given parent entry. This is based on the entry name being a substring of the
+    * parent name, and the number of '/' separarted paths in the name being equal to the
+    * parent paths + 1.
+    * @param jar
+    * @param parent
+    * @return
+    * @throws IOException
+    */
+   public static List<VirtualFileHandler> findChildren(JarFile jar, JarEntryHandler parent)
+      throws IOException
+   {
+      ArrayList<VirtualFileHandler> children = new ArrayList<VirtualFileHandler>();
+      String parentName = parent.getEntry().getName();
+      String[] parentPaths = parentName.split("/");
+      Enumeration<JarEntry> entries = jar.entries();
+      while( entries.hasMoreElements() )
+      {
+         JarEntry entry = entries.nextElement();
+         String name = entry.getName();
+         if( name.startsWith(parentName) && name.split("/").length == parentPaths.length+1 )
+         {
+            URL childURL = new URL(parent.getURL(), name.substring(parentName.length()));
+            JarEntryHandler child = new JarEntryHandler(parent.getVFSContext(), parent, parent.jar, entry, childURL);
+            children.add(child);
+         }
+      }
+      return children;
    }
 }
