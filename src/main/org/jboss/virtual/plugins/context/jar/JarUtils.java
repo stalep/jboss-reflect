@@ -53,8 +53,7 @@ public class JarUtils
    /**
     * Sets the jar suffixes
     * 
-    * @param suffix the suffix
-    * @return true when added
+    * @param suffixes the suffixes
     * @throws IllegalArgumentException for a null suffix
     */
    public static void setJarSuffixes(Set<String> suffixes)
