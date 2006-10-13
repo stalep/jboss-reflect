@@ -40,6 +40,7 @@ import org.jboss.virtual.spi.VirtualFileHandlerVisitor;
  * AbstractVFSContext.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
 public abstract class AbstractVFSContext implements VFSContext
@@ -153,6 +154,7 @@ public abstract class AbstractVFSContext implements VFSContext
          visitor.visit(handler);
       
       // Visit the children
+      boolean trace = log.isTraceEnabled();
       List<VirtualFileHandler> children;
       try
       {
@@ -162,7 +164,8 @@ public abstract class AbstractVFSContext implements VFSContext
       {
          if (ignoreErrors == false)
             throw e;
-         log.trace("Ignored: " + e);
+         if( trace )
+            log.trace("Ignored: " + e);
          return;
       }
       
@@ -171,15 +174,28 @@ public abstract class AbstractVFSContext implements VFSContext
       {
          // Ignore hidden if asked
          if (includeHidden == false && child.isHidden())
+         {
+            if( trace )
+               log.trace("Ignoring hidden file: "+child);
             continue;
+         }
          
          // Visit the leaf or non-leaves when asked
          boolean isLeaf = child.isLeaf();
          if (leavesOnly == false || isLeaf)
             visitor.visit(child);
+         else if( trace )
+         {
+            log.trace("Skipping non-leaf file: "+child);
+         }
 
          boolean allowArchives = true;
-         if (child.isArchive() && recurseArchives == false) allowArchives = false;
+         if (child.isArchive() && recurseArchives == false)
+         {
+            allowArchives = false;
+            if( trace )
+               log.trace("Won't scan archive: "+child);
+         }
 
          // Recurse when asked
          if (recurse && isLeaf == false && allowArchives)
