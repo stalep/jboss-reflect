@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -120,6 +121,21 @@ public class VFSUtils
       if (parent == null)
          throw new IllegalStateException(file + " has no parent.");
 
+      URL parentURL = null;
+      URL vfsRootURL = null;
+      int rootPathLength = 0;
+      try
+      {
+         parentURL = parent.toURL();
+         vfsRootURL = file.getVFS().getRoot().toURL();
+         rootPathLength = vfsRootURL.getPath().length();
+      }
+      catch(URISyntaxException e)
+      {
+         IOException ioe = new IOException("Failed to get parent URL");
+         ioe.initCause(e);
+      }
+
       StringTokenizer tokenizer = new StringTokenizer(classPath);
       while (tokenizer.hasMoreTokens())
       {
@@ -127,7 +143,10 @@ public class VFSUtils
 
          try
          {
-            VirtualFile vf = parent.findChild(path);
+            URL libURL = new URL(parentURL, path);
+            String libPath = libURL.getPath();
+            String vfsLibPath = libPath.substring(rootPathLength);
+            VirtualFile vf = file.getVFS().findChild(vfsLibPath);
             paths.add(vf);
          }
          catch (IOException e)
