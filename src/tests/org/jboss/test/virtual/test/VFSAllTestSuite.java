@@ -42,6 +42,7 @@ public class VFSAllTestSuite extends TestSuite
    {
       TestSuite suite = new TestSuite("VFS Tests");
 
+      suite.addTest(new TestSuite(URLResolutionUnitTestCase.class));
       suite.addTest(VFSUnitTestCase.suite());
       suite.addTest(VirtualFileUnitTestCase.suite());
       suite.addTest(FileVFSUnitTestCase.suite());
@@ -50,6 +51,7 @@ public class VFSAllTestSuite extends TestSuite
       suite.addTest(FileVirtualFileHandlerUnitTestCase.suite());
       suite.addTest(JARVFSContextUnitTestCase.suite());
       suite.addTest(JARVirtualFileHandlerUnitTestCase.suite());
+      suite.addTest(new TestSuite(TestClassLoading.class));
       
       return suite;
    }
