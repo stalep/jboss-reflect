@@ -54,10 +54,10 @@ public class URLResolutionUnitTestCase extends TestCase
     */
    public void testDirRelativeURLs()
       throws Exception
-{
-   URL root = new URL("file:/root/");
-   URL rootPeer = new URL(root, "peer");
-   URL expected = new URL("file:/root/peer");
-   assertEquals(expected, rootPeer);
-}
+   {
+      URL root = new URL("file:/root/");
+      URL rootPeer = new URL(root, "peer");
+      URL expected = new URL("file:/root/peer");
+      assertEquals(expected, rootPeer);
+   }
 }
