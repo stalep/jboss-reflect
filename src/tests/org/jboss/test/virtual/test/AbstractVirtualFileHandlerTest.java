@@ -119,6 +119,25 @@ public abstract class AbstractVirtualFileHandlerTest extends AbstractVFSTest
       assertEquals("subfolder/subchild", child.getPathName());
    }
 
+   /**
+    * Test that finding a child and listing its parent result in consistent
+    * child handlers.
+    * 
+    * @throws Exception
+    */
+   public void testSubSubChildPathName() throws Exception
+   {
+      VFSContext context = getVFSContext("complex");
+      VirtualFileHandler root = context.getRoot();
+      VirtualFileHandler child = context.findChild(root, "subfolder/subsubfolder/subsubchild");
+      assertEquals("subfolder/subsubfolder/subsubchild", child.getPathName());
+      VirtualFileHandler parent = context.findChild(root, "subfolder/subsubfolder");
+      List<VirtualFileHandler> children = parent.getChildren(false);
+      assertEquals("subfolder/subsubfolder has one child", 1, children.size());
+      child = children.get(0);
+      assertEquals("subfolder/subsubfolder/subsubchild", child.getPathName());
+   }
+
    /* TODO URI testing
    public void testToURI() throws Exception
    {
