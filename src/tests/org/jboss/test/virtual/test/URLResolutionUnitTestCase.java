@@ -46,6 +46,24 @@ public class URLResolutionUnitTestCase extends TestCase
       URL expected = new URL("file:/peer");
       assertEquals(expected, rootPeer);
    }
+   /**
+    * Test resolution of a relative path with a leading .. against
+    * a NON directory URL.
+    * @throws Exception
+    */
+   public void testNonDirDotDotRelativeURLs()
+      throws Exception
+   {
+      URL root = new URL("file:/root/sub1");
+      URL rootPeer = new URL(root, "../peer");
+      URL expected = new URL("file:/peer");
+      assertEquals(expected, rootPeer);
+
+      root = new URL("file:/root/sub1/subsub1");
+      rootPeer = new URL(root, "../peer");
+      expected = new URL("file:/root/peer");
+      assertEquals(expected, rootPeer);
+   }
 
    /**
     * Test resolution when the URL against which relative paths are resolved
@@ -60,4 +78,24 @@ public class URLResolutionUnitTestCase extends TestCase
       URL expected = new URL("file:/root/peer");
       assertEquals(expected, rootPeer);
    }
+
+   /**
+    * Test resolution of a relative path with a leading .. against
+    * a directory URL.
+    * @throws Exception
+    */
+   public void testDirDotDotRelativeURLs()
+      throws Exception
+   {
+      URL root = new URL("file:/root/sub1/");
+      URL rootPeer = new URL(root, "../peer");
+      URL expected = new URL("file:/root/peer");
+      assertEquals(expected, rootPeer);
+
+      root = new URL("file:/root/sub1/subsub1/");
+      rootPeer = new URL(root, "../peer");
+      expected = new URL("file:/root/sub1/peer");
+      assertEquals(expected, rootPeer);
+   }
+
 }
