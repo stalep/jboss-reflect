@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.VisitorAttributes;
 
@@ -37,9 +38,11 @@ import org.jboss.virtual.VisitorAttributes;
  */
 public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
 {
+   private static Logger log = Logger.getLogger(SuffixMatchFilter.class);
    /** The suffixes */
    private List<String> suffixes;
-   
+   private boolean trace;
+
    /**
     * Create a new SuffixMatchFilter,
     * using {@link VisitorAttributes#RECURSE_LEAVES_ONLY}
@@ -63,6 +66,7 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
    {
       this(Collections.EMPTY_LIST, attributes);
       suffixes.add(suffix);
+      trace = log.isTraceEnabled();
    }
    /**
     * Create a new SuffixMatchFilter.
@@ -96,11 +100,17 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
    public boolean accepts(VirtualFile file)
    {
       String name = file.getName();
+      boolean accepts = false;
       for (int i = 0; i < suffixes.size(); ++i)
       {
          if (name.endsWith(suffixes.get(0)))
-            return true;
+         {
+            accepts = true;
+            break;
+         }
       }
-      return false;
+      if( trace )
+         log.trace(file+" accepted: "+accepts);
+      return accepts;
    }
 }
