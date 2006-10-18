@@ -316,6 +316,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       expectedClasses.add("jar1.jar/org/jboss/test/vfs/support/jar1/ClassInJar1$InnerClass.class");
       expectedClasses.add("jar2.jar/org/jboss/test/vfs/support/jar2/ClassInJar2.class");
       expectedClasses.add("org/jboss/test/vfs/support/CommonClass.class");
+      super.enableTrace("org.jboss.virtual.plugins.vfs.helpers.SuffixMatchFilter");
       SuffixMatchFilter classVisitor = new SuffixMatchFilter(".class");
       List<VirtualFile> classes = vfs.getChildren(classVisitor);
       int count = 0;

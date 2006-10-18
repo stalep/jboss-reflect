@@ -21,6 +21,7 @@
 */
 package org.jboss.virtual.plugins.context.jar;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.JarURLConnection;
@@ -31,11 +32,15 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.jboss.virtual.plugins.context.AbstractURLHandler;
+import org.jboss.virtual.plugins.context.StructuredVirtualFileHandler;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VirtualFileHandler;
 
@@ -47,6 +52,7 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  * @version $Revision: 1.1 $
  */
 public class AbstractJarHandler extends AbstractURLHandler
+   implements StructuredVirtualFileHandler
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 1;
@@ -56,6 +62,7 @@ public class AbstractJarHandler extends AbstractURLHandler
 
    /** The jar entries */
    private transient List<VirtualFileHandler> entries;
+   private transient Map<String, VirtualFileHandler> entryMap;
 
    /**
     * Get a jar entry name
@@ -114,15 +121,67 @@ public class AbstractJarHandler extends AbstractURLHandler
       if (enumeration.hasMoreElements() == false)
       {
          entries = Collections.emptyList();
+         entryMap = Collections.emptyMap();
          return;
       }
-      
+
+      // Go through and create a structured representation of the jar
+      Map<String, VirtualFileHandler> parentMap = new HashMap<String, VirtualFileHandler>();
+      ArrayList<LinkedHashMap<String,JarEntry>> levelMapList = new ArrayList<LinkedHashMap<String,JarEntry>>();
       entries = new ArrayList<VirtualFileHandler>();
+      entryMap = new HashMap<String, VirtualFileHandler>();
+      boolean trace = log.isTraceEnabled();
       while (enumeration.hasMoreElements())
       {
          JarEntry entry = enumeration.nextElement();
-         VirtualFileHandler handler = createVirtualFileHandler(this, entry);
-         entries.add(handler);
+         String[] paths = entry.getName().split("/");
+         int depth = paths.length;
+         if( depth >= levelMapList.size() )
+         {
+            for(int n = levelMapList.size(); n <= depth; n ++)
+               levelMapList.add(new LinkedHashMap<String,JarEntry>());
+         }
+         LinkedHashMap<String,JarEntry> levelMap = levelMapList.get(depth);
+         levelMap.put(paths[depth-1], entry);
+         if( trace )
+            log.trace("added "+entry.getName()+" at depth "+depth);
+      }
+      // Process each level to build the handlers in parent first order
+      for(LinkedHashMap<String,JarEntry> levelMap : levelMapList)
+      {
+         for(JarEntry entry : levelMap.values())
+         {
+            String name = entry.getName();
+            int slash = entry.isDirectory() ? name.lastIndexOf('/', name.length()-2) :
+               name.lastIndexOf('/', name.length()-1);
+            VirtualFileHandler parent = this;
+            String entryName = name;
+            if( slash >= 0 )
+            {
+               // Need to include the slash in the name to match the JarEntry.name
+               String parentName = name.substring(0, slash+1);
+               parent = parentMap.get(parentName);
+            }
+            // Get the entry name without any directory '/' ending
+            int start = slash+1;
+            int end = entry.isDirectory() ? name.length()-1 : name.length();
+            entryName = name.substring(start, end);
+            VirtualFileHandler handler = this.createVirtualFileHandler(parent, entry, entryName);
+            if( entry.isDirectory() )
+               parentMap.put(name, handler);
+            if( parent == this )
+            {
+               // This is an immeadiate child of the jar handler
+               entries.add(handler);
+               entryMap.put(entryName, handler);
+            }
+            else if( parent instanceof JarEntryHandler )
+            {
+               // This is a child of the jar entry handler
+               JarEntryHandler ehandler = (JarEntryHandler) parent;
+               ehandler.addChild(handler);
+            }
+         }
       }
    }
 
@@ -160,28 +219,15 @@ public class AbstractJarHandler extends AbstractURLHandler
 
    public VirtualFileHandler findChild(String path) throws IOException
    {
-      if (path == null)
-         throw new IllegalArgumentException("Null path");
+      return super.structuredFindChild(path);
+   }
 
-      if (path.length() == 0)
-         return this;
-      
-      List<VirtualFileHandler> children = getChildren(false);
-      for (VirtualFileHandler child : children)
-      {
-         // Try a simple match
-         String name = child.getName();
-         if (name.equals(path))
-            return child;
-         
-         // Try a partial match on a nested jar
-         if (child.isArchive() && path.startsWith(name))
-         {
-            String remainingPath = path.substring(name.length()+1);
-            return child.findChild(remainingPath);
-         }
-      }
-      throw new IOException("Child not found " + path + " for " + this);
+   public VirtualFileHandler createChildHandler(String name) throws IOException
+   {
+      VirtualFileHandler child = entryMap.get(name);
+      if( child == null )
+         throw new FileNotFoundException(this+" has no child: "+name);
+      return child;
    }
 
    /**
@@ -193,7 +239,9 @@ public class AbstractJarHandler extends AbstractURLHandler
     * @throws IOException for any error accessing the file system
     * @throws IllegalArgumentException for a null parent or entry
     */
-   public VirtualFileHandler createVirtualFileHandler(VirtualFileHandler parent, JarEntry entry) throws IOException
+   protected VirtualFileHandler createVirtualFileHandler(VirtualFileHandler parent, JarEntry entry,
+         String entryName)
+      throws IOException
    {
       if (parent == null)
          throw new IllegalArgumentException("Null parent");
@@ -214,7 +262,7 @@ public class AbstractJarHandler extends AbstractURLHandler
       }
       if (buffer.charAt(buffer.length()-1) != '/')
          buffer.append('/');
-      buffer.append(entry.getName());
+      buffer.append(entryName);
       URL url = new URL(buffer.toString());
 
       VFSContext context = parent.getVFSContext();
@@ -232,8 +280,9 @@ public class AbstractJarHandler extends AbstractURLHandler
       }
       else
       {
-         vfh = new JarEntryHandler(context, parent, jar, entry, url);         
+         vfh = new JarEntryHandler(context, parent, jar, entry, entryName, url);
       }
+
       return vfh;
    }
 

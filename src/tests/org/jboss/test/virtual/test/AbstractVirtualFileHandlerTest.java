@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -133,6 +134,14 @@ public abstract class AbstractVirtualFileHandlerTest extends AbstractVFSTest
       assertEquals("subfolder/subsubfolder/subsubchild", child.getPathName());
       VirtualFileHandler parent = context.findChild(root, "subfolder/subsubfolder");
       List<VirtualFileHandler> children = parent.getChildren(false);
+      // Filter out an .svn stuff since this is run from the source tree
+      Iterator<VirtualFileHandler> iter = children.iterator();
+      while( iter.hasNext() )
+      {
+         child = iter.next();
+         if( child.getName().endsWith(".svn") )
+          iter.remove();
+      }
       assertEquals("subfolder/subsubfolder has one child", 1, children.size());
       child = children.get(0);
       assertEquals("subfolder/subsubfolder/subsubchild", child.getPathName());

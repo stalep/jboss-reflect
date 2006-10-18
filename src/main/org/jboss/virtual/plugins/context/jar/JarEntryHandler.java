@@ -21,17 +21,20 @@
 */
 package org.jboss.virtual.plugins.context.jar;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.jboss.virtual.plugins.context.AbstractURLHandler;
+import org.jboss.virtual.plugins.context.StructuredVirtualFileHandler;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VirtualFileHandler;
 
@@ -39,9 +42,11 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  * JarEntryHandler.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
 public class JarEntryHandler extends AbstractURLHandler
+   implements StructuredVirtualFileHandler
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 1L;
@@ -52,6 +57,7 @@ public class JarEntryHandler extends AbstractURLHandler
    /** The jar entry */
    private final JarEntry entry;
    private transient List<VirtualFileHandler> entryChildren;
+   private transient Map<String, VirtualFileHandler> entryMap;
    
    /**
     * Create a new JarHandler.
@@ -64,16 +70,29 @@ public class JarEntryHandler extends AbstractURLHandler
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url, jar or entry
     */
-   public JarEntryHandler(VFSContext context, VirtualFileHandler parent, JarFile jar, JarEntry entry, URL url) throws IOException
+   public JarEntryHandler(VFSContext context, VirtualFileHandler parent, JarFile jar,
+      JarEntry entry, String entryName, URL url)
+      throws IOException
    {
-      super(context, parent, url, AbstractJarHandler.getEntryName(entry));
+      super(context, parent, url, entryName);
       if (jar == null)
          throw new IllegalArgumentException("Null jar");
       
       this.jar = jar;
       this.entry = entry;
    }
-   
+
+   /**
+    * Add a child to an entry
+    * @param child
+    */
+   public void addChild(VirtualFileHandler child)
+   {
+      if( entryChildren == null )
+         entryChildren = new ArrayList<VirtualFileHandler>();
+      entryChildren.add(child);
+   }
+
    /**
     * Get the entry
     * 
@@ -123,49 +142,29 @@ public class JarEntryHandler extends AbstractURLHandler
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
    {
       checkClosed();
+      List<VirtualFileHandler> children = entryChildren;
       if( entryChildren == null )
-         entryChildren = findChildren(jar, this);
-      return entryChildren;
+         children = Collections.emptyList();
+      return children;
    }
 
    public VirtualFileHandler findChild(String path) throws IOException
    {
-      checkClosed();
-      VirtualFileHandler handler = getParent();
-      if (handler == null)
-         throw new IOException("A JarEntry has no children: " + path + " for " + this);
-      else
-         return handler.findChild(getName() +"/" + path);
+      return super.structuredFindChild(path);
    }
 
-   /**
-    * Go through the jar entries and find the entries that are the immeadiate children of
-    * the given parent entry. This is based on the entry name being a substring of the
-    * parent name, and the number of '/' separarted paths in the name being equal to the
-    * parent paths + 1.
-    * @param jar
-    * @param parent
-    * @return
-    * @throws IOException
-    */
-   public static List<VirtualFileHandler> findChildren(JarFile jar, JarEntryHandler parent)
-      throws IOException
+   public VirtualFileHandler createChildHandler(String name) throws IOException
    {
-      ArrayList<VirtualFileHandler> children = new ArrayList<VirtualFileHandler>();
-      String parentName = parent.getEntry().getName();
-      String[] parentPaths = parentName.split("/");
-      Enumeration<JarEntry> entries = jar.entries();
-      while( entries.hasMoreElements() )
+      if( entryMap == null )
       {
-         JarEntry entry = entries.nextElement();
-         String name = entry.getName();
-         if( name.startsWith(parentName) && name.split("/").length == parentPaths.length+1 )
-         {
-            URL childURL = new URL(parent.getURL(), name.substring(parentName.length()));
-            JarEntryHandler child = new JarEntryHandler(parent.getVFSContext(), parent, parent.jar, entry, childURL);
-            children.add(child);
-         }
+         entryMap = new HashMap<String, VirtualFileHandler>();
+         for(VirtualFileHandler child : entryChildren)
+            entryMap.put(child.getName(), child);
       }
-      return children;
+      VirtualFileHandler child = entryMap.get(name);
+      if( child == null )
+         throw new FileNotFoundException(this+" has no child: "+name);
+      return child;
    }
+
 }
