@@ -101,17 +101,6 @@ public interface VirtualFileHandler extends Serializable
    boolean isLeaf() throws IOException;
    
    /**
-    * Whether it is an archive<p>
-    *  
-    * NOTE: a file system directory can be an archive if it looks like an unpacked archive
-    * 
-    * @return true when an archive
-    * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the file is closed
-    */
-   boolean isArchive() throws IOException;
-
-   /**
     * Whether it is hidden
     * 
     * @return true if hidden.

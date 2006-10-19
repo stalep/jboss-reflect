@@ -296,52 +296,6 @@ public class VirtualFileUnitTestCase extends AbstractMockVFSTest
       }
    }
    
-   public void testIsArchive() throws Exception
-   {
-      MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setArchive(true);
-
-      VirtualFile file = VFS.getRoot(context.getRootURI());
-      assertEquals(true, file.isArchive());
-
-      context.getMockRoot().setArchive(false);
-      assertEquals(false, file.isArchive());
-   }
-
-   public void testIsArchiveIOException() throws Exception
-   {
-      MockVFSContext context = registerSimpleVFSContext();
-      context.getMockRoot().setIOException("isArchive");
-
-      VirtualFile file = VFS.getRoot(context.getRootURI());
-      try
-      {
-         file.isArchive();
-         fail("Should not be here");
-      }
-      catch (Throwable t)
-      {
-         checkThrowable(IOException.class, t);
-      }
-   }
-
-   public void testIsArchiveClosed() throws Exception
-   {
-      MockVFSContext context = registerSimpleVFSContext();
-
-      VirtualFile file = VFS.getRoot(context.getRootURI());
-      file.close();
-      try
-      {
-         file.isArchive();
-         fail("Should not be here");
-      }
-      catch (Throwable t)
-      {
-         checkThrowable(IllegalStateException.class, t);
-      }
-   }
-
    public void testIsHidden() throws Exception
    {
       MockVFSContext context = registerSimpleVFSContext();

@@ -84,11 +84,6 @@ public class DelegatingHandler extends AbstractVirtualFileHandler
       return delegate.getSize();
    }
 
-   public boolean isArchive() throws IOException
-   {
-      return delegate.isArchive();
-   }
-
    public boolean isLeaf() throws IOException
    {
       return delegate.isLeaf();

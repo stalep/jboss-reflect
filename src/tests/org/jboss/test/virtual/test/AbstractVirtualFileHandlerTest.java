@@ -275,38 +275,6 @@ public abstract class AbstractVirtualFileHandlerTest extends AbstractVFSTest
       }
    }
 
-   public void testRootIsArchive() throws Exception
-   {
-      VFSContext context = getVFSContext("archive.jar");
-      VirtualFileHandler root = context.getRoot();
-      assertTrue(root.isArchive());
-   }
-
-   public void testChildIsArchive() throws Exception
-   {
-      VFSContext context = getVFSContext("archive.jar");
-      VirtualFileHandler root = context.getRoot();
-      VirtualFileHandler child = context.findChild(root, "child");
-      assertFalse(child.isArchive());
-   }
-
-   public void testIsArchiveClosed() throws Exception
-   {
-      VFSContext context = getVFSContext("simple");
-      VirtualFileHandler root = context.getRoot();
-      VirtualFileHandler child = context.findChild(root, "child");
-      child.close();
-      try
-      {
-         child.isArchive();
-         fail("Should not be here!");
-      }
-      catch (Throwable t)
-      {
-         checkThrowable(IllegalStateException.class, t);
-      }
-   }
-   
    // TODO how to test a real hidden file across platforms?
    public void testRootIsHidden() throws Exception
    {
@@ -611,7 +579,6 @@ public abstract class AbstractVirtualFileHandlerTest extends AbstractVFSTest
       assertEquals(handler.getVFSContext().getVFS(), file.getVFS());
       assertEquals(handler.getName(), file.getName());
       assertEquals(handler.getPathName(), file.getPathName());
-      assertEquals(handler.isArchive(), file.isArchive());
       assertEquals(handler.isHidden(), file.isHidden());
       assertEquals(handler.isLeaf(), file.isLeaf());
       assertEquals(handler.getLastModified(), file.getLastModified());

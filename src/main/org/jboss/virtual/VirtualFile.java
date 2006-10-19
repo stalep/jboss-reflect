@@ -170,20 +170,6 @@ public class VirtualFile implements Serializable
    }
    
    /**
-    * Whether it is an archive<p>
-    *  
-    * NOTE: a file system directory can be an archive if it looks like an unpacked archive
-    * 
-    * @return true when an archive
-    * @throws IOException for any problem accessing the virtual file system
-    * @throws IllegalStateException if the file is closed
-    */
-   public boolean isArchive() throws IOException
-   {
-      return getHandler().isArchive();
-   }
-   
-   /**
     * Whether it is hidden
     * 
     * @return true when hidden

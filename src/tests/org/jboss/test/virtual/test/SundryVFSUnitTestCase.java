@@ -60,7 +60,7 @@ public class SundryVFSUnitTestCase extends BaseTestCase
    {
       VirtualFile file = getVirtualFile("/vfs/sundry", "jar/archive.jar");
       log.debug(file.getName() + " " + file);
-      assertTrue("Should be an archive", file.isArchive());
+      assertFalse("Should not be a leaf", file.isLeaf());
       file = file.findChild("empty");
       log.debug(file.getName() + " " + file);
    }
@@ -69,7 +69,7 @@ public class SundryVFSUnitTestCase extends BaseTestCase
    {
       VirtualFile file = getVirtualFile("/vfs/sundry/", "jar/archive.jar");
       log.debug(file.getName() + " " + file);
-      assertTrue("Should be an archive", file.isArchive());
+      assertFalse("Should not be a leaf", file.isLeaf());
       file = file.findChild("empty");
       log.debug(file.getName() + " " + file);
    }
@@ -81,7 +81,7 @@ public class SundryVFSUnitTestCase extends BaseTestCase
       VFS vfs = VFS.getVFS(url);
       VirtualFile file = vfs.getRoot();
       log.debug(file.getName() + " " + file);
-      assertTrue("Should be an archive", file.isArchive());
+      assertFalse("Should not be a leaf", file.isLeaf());
       file = file.findChild("empty");
       log.debug(file.getName() + " " + file);
    }

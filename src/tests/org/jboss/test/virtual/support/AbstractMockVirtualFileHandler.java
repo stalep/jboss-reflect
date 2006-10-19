@@ -63,9 +63,6 @@ public abstract class AbstractMockVirtualFileHandler extends AbstractVirtualFile
    /** Is a leaf */
    private boolean leaf = true;
    
-   /** Is an archive */
-   private boolean archive;
-   
    /** Is a hidden */
    private boolean hidden;
    
@@ -189,23 +186,6 @@ public abstract class AbstractMockVirtualFileHandler extends AbstractVirtualFile
    public void setSize(long size)
    {
       this.size = size;
-   }
-
-   public boolean isArchive() throws IOException
-   {
-      checkClosed();
-      throwIOException("isArchive");
-      return archive;
-   }
-
-   /**
-    * Set the archive.
-    * 
-    * @param archive the archive.
-    */
-   public void setArchive(boolean archive)
-   {
-      this.archive = archive;
    }
 
    public boolean isLeaf() throws IOException
