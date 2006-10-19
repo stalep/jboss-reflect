@@ -348,6 +348,37 @@ public class FileVFSUnitTestCase extends BaseTestCase
    }
 
    /**
+    * Test a scan of the unpacked-outer.jar vfs to locate all .class files
+    * @throws Exception
+    */
+   public void testClassScanUnpacked()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test/unpacked-outer.jar");
+      VFS vfs = VFS.getVFS(rootURL);
+   
+      HashSet<String> expectedClasses = new HashSet<String>();
+      expectedClasses.add("jar1.jar/org/jboss/test/vfs/support/jar1/ClassInJar1.class");
+      expectedClasses.add("jar1.jar/org/jboss/test/vfs/support/jar1/ClassInJar1$InnerClass.class");
+      expectedClasses.add("jar2.jar/org/jboss/test/vfs/support/jar2/ClassInJar2.class");
+      expectedClasses.add("org/jboss/test/vfs/support/CommonClass.class");
+      super.enableTrace("org.jboss.virtual.plugins.vfs.helpers.SuffixMatchFilter");
+      SuffixMatchFilter classVisitor = new SuffixMatchFilter(".class");
+      List<VirtualFile> classes = vfs.getChildren(classVisitor);
+      int count = 0;
+      for (VirtualFile cf : classes)
+      {
+         String path = cf.getPathName();
+         if( path.endsWith(".class") )
+         {
+            assertTrue(path, expectedClasses.contains(path));
+            count ++;
+         }
+      }
+      assertEquals("There were 4 classes", 4, count);
+   }
+
+   /**
     * Test the serialization of VirtualFiles
     * @throws Exception
     */
