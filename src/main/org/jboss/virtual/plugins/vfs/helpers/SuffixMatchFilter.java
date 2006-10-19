@@ -22,6 +22,7 @@
 package org.jboss.virtual.plugins.vfs.helpers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
 {
    private static Logger log = Logger.getLogger(SuffixMatchFilter.class);
    /** The suffixes */
-   private List<String> suffixes;
+   private Collection<String> suffixes;
    private boolean trace;
 
    /**
@@ -73,7 +74,7 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
     * @param suffixes - the list of file suffixes to accept.
     * @throws IllegalArgumentException for a null suffixes
     */
-   public SuffixMatchFilter(List<String> suffixes)
+   public SuffixMatchFilter(Collection<String> suffixes)
    {
       this(suffixes, null);
    }
@@ -83,7 +84,7 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
     * @param attributes the attributes, pass null to use {@link VisitorAttributes#RECURSE_LEAVES_ONLY}
     * @throws IllegalArgumentException for a null suffixes
     */
-   public SuffixMatchFilter(List<String> suffixes, VisitorAttributes attributes)
+   public SuffixMatchFilter(Collection<String> suffixes, VisitorAttributes attributes)
    {
       super(attributes == null ? VisitorAttributes.RECURSE_LEAVES_ONLY : attributes);
       if (suffixes == null)
@@ -101,9 +102,9 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
    {
       String name = file.getName();
       boolean accepts = false;
-      for (int i = 0; i < suffixes.size(); ++i)
+      for(String suffix : suffixes)
       {
-         if (name.endsWith(suffixes.get(0)))
+         if (name.endsWith(suffix))
          {
             accepts = true;
             break;

@@ -21,6 +21,7 @@
   */
 package org.jboss.virtual.plugins.vfs.helpers;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.jboss.virtual.VirtualFile;
@@ -35,7 +36,7 @@ import org.jboss.virtual.VirtualFileFilter;
 public class SuffixesExcludeFilter implements VirtualFileFilter
 {
    /** The suffixes */
-   private List<String> suffixes;
+   private Collection<String> suffixes;
    
    /**
     * Create a new SuffixMatchFilter,
@@ -43,7 +44,7 @@ public class SuffixesExcludeFilter implements VirtualFileFilter
     * @param suffixes the suffixes
     * @throws IllegalArgumentException for null suffixes
     */
-   public SuffixesExcludeFilter(List<String> suffixes)
+   public SuffixesExcludeFilter(Collection<String> suffixes)
    {
       if (suffixes == null)
          throw new IllegalArgumentException("Null suffixes");
@@ -58,9 +59,9 @@ public class SuffixesExcludeFilter implements VirtualFileFilter
    public boolean accepts(VirtualFile file)
    {
       String name = file.getName();
-      for (int i = 0; i < suffixes.size(); ++i)
+      for(String suffix : suffixes)
       {
-         if (name.endsWith(suffixes.get(0)))
+         if (name.endsWith(suffix))
             return false;
       }
       return true;
