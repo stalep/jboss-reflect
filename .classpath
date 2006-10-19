@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main"/>
-	<classpathentry output="output/eclipse-classes-tests" kind="src" path="src/tests"/>
+	<classpathentry kind="src" output="output/eclipse-classes-tests-support" path="src/tests-support"/>
+	<classpathentry kind="src" output="output/eclipse-classes-tests" path="src/tests"/>
 	<classpathentry kind="lib" path="src/resources/tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/thirdparty/jboss/common/lib/jboss-common.jar"/>
