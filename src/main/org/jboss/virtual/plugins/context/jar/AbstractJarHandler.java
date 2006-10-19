@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
@@ -127,7 +126,7 @@ public class AbstractJarHandler extends AbstractURLHandler
 
       // Go through and create a structured representation of the jar
       Map<String, VirtualFileHandler> parentMap = new HashMap<String, VirtualFileHandler>();
-      ArrayList<LinkedHashMap<String,JarEntry>> levelMapList = new ArrayList<LinkedHashMap<String,JarEntry>>();
+      ArrayList<ArrayList<JarEntry>> levelMapList = new ArrayList<ArrayList<JarEntry>>();
       entries = new ArrayList<VirtualFileHandler>();
       entryMap = new HashMap<String, VirtualFileHandler>();
       boolean trace = log.isTraceEnabled();
@@ -139,17 +138,20 @@ public class AbstractJarHandler extends AbstractURLHandler
          if( depth >= levelMapList.size() )
          {
             for(int n = levelMapList.size(); n <= depth; n ++)
-               levelMapList.add(new LinkedHashMap<String,JarEntry>());
+               levelMapList.add(new ArrayList<JarEntry>());
          }
-         LinkedHashMap<String,JarEntry> levelMap = levelMapList.get(depth);
-         levelMap.put(paths[depth-1], entry);
+         ArrayList<JarEntry> levelMap = levelMapList.get(depth);
+         levelMap.add(entry);
          if( trace )
             log.trace("added "+entry.getName()+" at depth "+depth);
       }
       // Process each level to build the handlers in parent first order
-      for(LinkedHashMap<String,JarEntry> levelMap : levelMapList)
+      int level = 0;
+      for(ArrayList<JarEntry> levels : levelMapList)
       {
-         for(JarEntry entry : levelMap.values())
+         if( trace )
+            log.trace("Level("+level++ +"): "+levels);
+         for(JarEntry entry : levels)
          {
             String name = entry.getName();
             int slash = entry.isDirectory() ? name.lastIndexOf('/', name.length()-2) :
@@ -168,7 +170,11 @@ public class AbstractJarHandler extends AbstractURLHandler
             entryName = name.substring(start, end);
             VirtualFileHandler handler = this.createVirtualFileHandler(parent, entry, entryName);
             if( entry.isDirectory() )
+            {
                parentMap.put(name, handler);
+               if( trace )
+                  log.trace("Added parent: "+name);
+            }
             if( parent == this )
             {
                // This is an immeadiate child of the jar handler
