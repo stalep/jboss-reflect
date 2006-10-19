@@ -164,6 +164,16 @@
    	description="Rebuild the src/resources/tests jars">
       <!-- src/resources/tests/vfs/test/jar1.jar -->
       <jar destfile="${source.resources}/vfs/test/jar1.jar">
+      	<manifest>
+      		<attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
+      		<attribute name="Specification-Title" value="jar1"/>
+      		<attribute name="Specification-Version" value="1.0.0.GA"/>
+      		<attribute name="Specification-Vendor" value="JBoss Inc."/>
+      		<attribute name="Implementation-Title" value="jar1"/>
+      		<attribute name="Implementation-URL" value="http://www.jboss.org"/>
+      		<attribute name="Implementation-Version" value="1.0.0.GA-jboss"/>
+      		<attribute name="Implementation-Vendor" value="JBoss Inc."/>
+      	</manifest>
       	<fileset dir="${build.classes.support}">
       		<include name="org/jboss/test/vfs/support/jar1/**"/>
       	</fileset>
@@ -181,12 +191,32 @@
 
       <!-- src/resources/tests/vfs/test/jar2.jar -->
       <jar destfile="${source.resources}/vfs/test/jar2.jar">
+      	<manifest>
+      		<attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
+      		<attribute name="Specification-Title" value="jar2"/>
+      		<attribute name="Specification-Version" value="1.0.0.GA"/>
+      		<attribute name="Specification-Vendor" value="JBoss Inc."/>
+      		<attribute name="Implementation-Title" value="jar2"/>
+      		<attribute name="Implementation-URL" value="http://www.jboss.org"/>
+      		<attribute name="Implementation-Version" value="1.0.0.GA-jboss"/>
+      		<attribute name="Implementation-Vendor" value="JBoss Inc."/>
+      	</manifest>
       	<fileset dir="${build.classes.support}">
       		<include name="org/jboss/test/vfs/support/jar2/**"/>
       	</fileset>
    	</jar>
       <!-- src/resources/tests/vfs/test/outer.jar -->
       <jar destfile="${source.resources}/vfs/test/outer.jar">
+      	<manifest>
+      		<attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
+      		<attribute name="Specification-Title" value="outer.jar"/>
+      		<attribute name="Specification-Version" value="1.0.0.GA"/>
+      		<attribute name="Specification-Vendor" value="JBoss Inc."/>
+      		<attribute name="Implementation-Title" value="outer.jar"/>
+      		<attribute name="Implementation-URL" value="http://www.jboss.org"/>
+      		<attribute name="Implementation-Version" value="1.0.0.GA-jboss"/>
+      		<attribute name="Implementation-Vendor" value="JBoss Inc."/>
+      	</manifest>
       	<fileset dir="${build.classes.support}">
       		<include name="org/jboss/test/vfs/support/*"/>
       	</fileset>
