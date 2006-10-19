@@ -116,12 +116,6 @@ public class JarEntryHandler extends AbstractURLHandler
       return getEntry().getSize();
    }
 
-   public boolean isArchive()
-   {
-      checkClosed();
-      return false;
-   }
-
    public boolean isLeaf()
    {
       return getEntry().isDirectory() == false;

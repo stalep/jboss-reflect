@@ -92,12 +92,6 @@ public abstract class AbstractURLHandler extends AbstractVirtualFileHandler
       return c.getContentLength();
    }
 
-   public boolean isArchive() throws IOException
-   {
-      checkClosed();
-      return false;
-   }
-
    public boolean isHidden() throws IOException
    {
       checkClosed();

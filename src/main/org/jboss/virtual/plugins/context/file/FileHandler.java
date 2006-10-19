@@ -112,17 +112,8 @@ public class FileHandler extends AbstractURLHandler
       return getFile().length();
    }
 
-   public boolean isArchive()
-   {
-      if (getFile().isDirectory() == false)
-         return false;
-      return JarUtils.isArchive(getName());
-   }
-
    public boolean isLeaf()
    {
-      if (isArchive())
-         return false;
       return getFile().isFile();
    }
 

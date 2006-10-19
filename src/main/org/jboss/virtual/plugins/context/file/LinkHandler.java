@@ -171,12 +171,6 @@ public class LinkHandler extends AbstractURLHandler
       }
    }
 
-   @Override
-   public boolean isArchive()
-   {
-      return false;
-   }
-
    public boolean isLeaf()
    {
       return false;

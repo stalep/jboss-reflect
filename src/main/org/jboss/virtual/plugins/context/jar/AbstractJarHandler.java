@@ -295,12 +295,6 @@ public class AbstractJarHandler extends AbstractURLHandler
       */
    }
 
-   public boolean isArchive()
-   {
-      checkClosed();
-      return true;
-   }
-
    public boolean isLeaf()
    {
       checkClosed();

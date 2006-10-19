@@ -80,11 +80,6 @@ public class NestedJarFromStream
       return children;
    }
 
-   public boolean isArchive() throws IOException
-   {
-      return true;
-   }
-
    public boolean isLeaf() throws IOException
    {
       return false;
@@ -269,11 +264,6 @@ public class NestedJarFromStream
       public boolean isHidden() throws IOException
       {
          return false;
-      }
-
-      public boolean isArchive()
-      {
-         return isJar;
       }
 
       public ZipEntry getEntry()
