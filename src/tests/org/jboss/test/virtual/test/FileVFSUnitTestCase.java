@@ -115,8 +115,8 @@ public class FileVFSUnitTestCase extends BaseTestCase
       InputStream mfIS = mfe1.openStream();
       Manifest mf = new Manifest(mfIS);
       Attributes mainAttrs = mf.getMainAttributes();
-      String version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_TITLE);
-      assertEquals("jar1", version);
+      String title1 = mainAttrs.getValue(Attributes.Name.SPECIFICATION_TITLE);
+      assertEquals("jar1", title1);
       mfIS.close();
       njfs.close();
 
@@ -132,8 +132,8 @@ public class FileVFSUnitTestCase extends BaseTestCase
       InputStream mf2IS = mfe2.openStream();
       Manifest mf2 = new Manifest(mf2IS);
       Attributes mainAttrs2 = mf2.getMainAttributes();
-      String version2 = mainAttrs2.getValue(Attributes.Name.SPECIFICATION_TITLE);
-      assertEquals("jar2", version2);
+      String title2 = mainAttrs2.getValue(Attributes.Name.SPECIFICATION_TITLE);
+      assertEquals("jar2", title2);
       mf2IS.close();
       njfs2.close();
    }
@@ -376,6 +376,87 @@ public class FileVFSUnitTestCase extends BaseTestCase
          }
       }
       assertEquals("There were 4 classes", 4, count);
+   }
+
+   /**
+    * Test a scan of the jar1-filesonly.jar vfs to locate all .class files
+    * @throws Exception
+    */
+   public void testClassScanFilesonly()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test/jar1-filesonly.jar");
+      VFS vfs = VFS.getVFS(rootURL);
+   
+      HashSet<String> expectedClasses = new HashSet<String>();
+      expectedClasses.add("org/jboss/test/vfs/support/jar1/ClassInJar1.class");
+      expectedClasses.add("org/jboss/test/vfs/support/jar1/ClassInJar1$InnerClass.class");
+      super.enableTrace("org.jboss.virtual.plugins.vfs.helpers.SuffixMatchFilter");
+      SuffixMatchFilter classVisitor = new SuffixMatchFilter(".class");
+      List<VirtualFile> classes = vfs.getChildren(classVisitor);
+      int count = 0;
+      for (VirtualFile cf : classes)
+      {
+         String path = cf.getPathName();
+         if( path.endsWith(".class") )
+         {
+            assertTrue(path, expectedClasses.contains(path));
+            count ++;
+         }
+      }
+      assertEquals("There were 2 classes", 2, count);
+
+      // Make sure we can walk path-wise to the class
+      VirtualFile jar1 = vfs.getRoot();
+      VirtualFile parent = jar1;
+      String className = "org/jboss/test/vfs/support/jar1/ClassInJar1.class";
+      VirtualFile ClassInJar1 = vfs.findChild(className);
+      String[] paths = className.split("/");
+      StringBuilder vfsPath = new StringBuilder();
+      for(String path : paths)
+      {
+         vfsPath.append(path);
+         VirtualFile vf = parent.findChild(path);
+         if( path.equals("ClassInJar1.class") )
+            assertEquals("ClassInJar1.class", ClassInJar1, vf);
+         else
+         {
+            assertEquals("vfsPath", vfsPath.toString(), vf.getPathName());
+            assertEquals("lastModified", ClassInJar1.getLastModified(), vf.getLastModified());
+         }
+         vfsPath.append('/');
+         parent = vf;
+      }
+   }
+
+   /**
+    * Test access of directories in a jar that only stores files
+    * @throws Exception
+    */
+   public void testFilesOnlyJar()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+
+      VirtualFile jar = vfs.findChild("jar1-filesonly.jar");
+      VirtualFile metadataLocation = jar.findChild("META-INF");
+      assertNotNull(metadataLocation);
+      VirtualFile mfFile = metadataLocation.findChild("MANIFEST.MF");
+      assertNotNull(mfFile);
+      InputStream is = mfFile.openStream();
+      Manifest mf = new Manifest(is);
+      mfFile.close();
+      String title = mf.getMainAttributes().getValue(Attributes.Name.SPECIFICATION_TITLE);
+      assertEquals(Attributes.Name.SPECIFICATION_TITLE.toString(), "jar1-filesonly", title);
+
+      // Retry starting from the jar root
+      mfFile = jar.findChild("META-INF/MANIFEST.MF");
+      is = mfFile.openStream();
+      mf = new Manifest(is);
+      mfFile.close();
+      title = mf.getMainAttributes().getValue(Attributes.Name.SPECIFICATION_TITLE);
+      assertEquals(Attributes.Name.SPECIFICATION_TITLE.toString(), "jar1-filesonly", title);
    }
 
    /**

@@ -25,9 +25,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -38,6 +42,7 @@ import org.jboss.virtual.spi.VirtualFileHandler;
  * Nested Jar Handler.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
 public class NestedJarHandler extends AbstractJarHandler
@@ -106,7 +111,9 @@ public class NestedJarHandler extends AbstractJarHandler
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url or vfsPath
     */
-   public NestedJarHandler(VFSContext context, VirtualFileHandler parent, JarFile parentJar, JarEntry entry, URL url) throws IOException
+   public NestedJarHandler(VFSContext context, VirtualFileHandler parent,
+         JarFile parentJar, JarEntry entry, URL url)
+      throws IOException
    {
       super(context, parent, url, getEntryName(entry));
 
@@ -163,4 +170,25 @@ public class NestedJarHandler extends AbstractJarHandler
    {
       return temp.toURL();
    }
+
+   /**
+    * Restore the jar file from the parent jar and entry name
+    * 
+    * @param in
+    * @throws IOException
+    * @throws ClassNotFoundException
+    */
+   private void readObject(ObjectInputStream in)
+      throws IOException, ClassNotFoundException
+   {
+      JarFile parentJar = super.getJar();
+      // Initialize the transient values
+      entry = parentJar.getJarEntry(getName());
+      temp = File.createTempFile("nestedjar", null);
+      temp.deleteOnExit();
+      createTempJar(temp, parentJar, entry);
+      // Initial the parent jar entries
+      super.initJarFile(parentJar);
+   }
+
 }

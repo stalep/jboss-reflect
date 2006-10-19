@@ -40,6 +40,7 @@ import java.util.jar.JarFile;
 
 import org.jboss.virtual.plugins.context.AbstractURLHandler;
 import org.jboss.virtual.plugins.context.StructuredVirtualFileHandler;
+import org.jboss.virtual.plugins.vfs.helpers.PathTokenizer;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VirtualFileHandler;
 
@@ -111,8 +112,10 @@ public class AbstractJarHandler extends AbstractURLHandler
     */
    protected void initJarFile(JarFile jarFile) throws IOException
    {
+      /* This cannot be checked because of serialization
       if (this.jar != null)
          throw new IllegalStateException("jarFile has already been set");
+      */
 
       this.jar = jarFile;
 
@@ -163,6 +166,11 @@ public class AbstractJarHandler extends AbstractURLHandler
                // Need to include the slash in the name to match the JarEntry.name
                String parentName = name.substring(0, slash+1);
                parent = parentMap.get(parentName);
+               if( parent == null )
+               {
+                  // Build up the parent(s) 
+                  parent = buildParents(parentName, parentMap, entry);
+               }
             }
             // Get the entry name without any directory '/' ending
             int start = slash+1;
@@ -187,8 +195,90 @@ public class AbstractJarHandler extends AbstractURLHandler
                JarEntryHandler ehandler = (JarEntryHandler) parent;
                ehandler.addChild(handler);
             }
+            else if( parent instanceof SynthenticDirEntryHandler )
+            {
+               // This is a child of the jar entry handler
+               SynthenticDirEntryHandler ehandler = (SynthenticDirEntryHandler) parent;
+               ehandler.addChild(handler);
+            }
          }
       }
+   }
+
+   /**
+    * Create any missing parents.
+    * 
+    * @param parentName full vfs path name of parent
+    * @param parentMap initJarFile parentMap
+    * @param entry JarEntry missing a parent
+    * @return the VirtualFileHandler for the parent
+    * @throws IOException
+    */
+   protected VirtualFileHandler buildParents(String parentName,
+         Map<String, VirtualFileHandler> parentMap, JarEntry entry)
+      throws IOException
+   {
+      VirtualFileHandler parent = this;
+      String[] paths = PathTokenizer.getTokens(parentName);
+      StringBuilder pathName = new StringBuilder();
+      for(String path : paths)
+      {
+         VirtualFileHandler next = null;
+         pathName.append(path);
+         pathName.append('/');
+         try
+         {
+            next = parent.findChild(path);
+         }
+         catch (IOException e)
+         {
+            // Create a synthetic parent
+            URL url = getURL(parent, path);
+            next = new SynthenticDirEntryHandler(getVFSContext(), parent, path,
+                  entry.getTime(), url);
+            parentMap.put(pathName.toString(), next);
+            if( parent == this )
+            {
+               // This is an immeadiate child of the jar handler
+               entries.add(next);
+               entryMap.put(path, next);
+            }
+            else if( parent instanceof JarEntryHandler )
+            {
+               // This is a child of the jar entry handler
+               JarEntryHandler ehandler = (JarEntryHandler) parent;
+               ehandler.addChild(next);
+            }
+            else if( parent instanceof SynthenticDirEntryHandler )
+            {
+               // This is a child of the jar entry handler
+               SynthenticDirEntryHandler ehandler = (SynthenticDirEntryHandler) parent;
+               ehandler.addChild(next);
+            }
+         }
+         parent = next;
+      }
+      return parent;
+   }
+
+   protected URL getURL(VirtualFileHandler parent, String path)
+      throws MalformedURLException
+   {
+      StringBuilder buffer = new StringBuilder();
+      try
+      {
+         buffer.append(parent.toURL());
+         if (buffer.charAt(buffer.length()-1) != '/')
+            buffer.append('/');
+         buffer.append(path);
+      }
+      catch(URISyntaxException e)
+      {
+         // Should not happen
+         throw new MalformedURLException(e.getMessage());
+      }
+      URL url = new URL(buffer.toString());
+      return url;
    }
 
    protected void doClose()
@@ -256,20 +346,7 @@ public class AbstractJarHandler extends AbstractURLHandler
 
       // Question: Why doesn't this work properly?
       // URL url = new URL(parent.toURL(), entry.getName());
-      StringBuilder buffer = new StringBuilder();
-      try
-      {
-         buffer.append(parent.toURI());
-      }
-      catch(URISyntaxException e)
-      {
-         // Should not happen
-         throw new MalformedURLException(e.getMessage());
-      }
-      if (buffer.charAt(buffer.length()-1) != '/')
-         buffer.append('/');
-      buffer.append(entryName);
-      URL url = new URL(buffer.toString());
+      URL url = getURL(parent, entryName);
 
       VFSContext context = parent.getVFSContext();
 
@@ -309,8 +386,8 @@ public class AbstractJarHandler extends AbstractURLHandler
       if( conn instanceof JarURLConnection )
       {
          JarURLConnection jconn = (JarURLConnection) conn;
-         JarFile jarFile = jconn.getJarFile();
-         initJarFile(jarFile);
+         jar = jconn.getJarFile();
+         // initJarFile(jar) must be called by subclasses readObject
       }
       else
       {

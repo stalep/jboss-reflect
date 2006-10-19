@@ -30,8 +30,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import org.jboss.virtual.plugins.context.AbstractURLHandler;
 import org.jboss.virtual.plugins.context.StructuredVirtualFileHandler;
@@ -39,47 +37,39 @@ import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VirtualFileHandler;
 
 /**
- * JarEntryHandler.
+ * SynthenticDirEntryHandler represents non-existent directory jar entry.
  * 
- * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
-public class JarEntryHandler extends AbstractURLHandler
+public class SynthenticDirEntryHandler extends AbstractURLHandler
    implements StructuredVirtualFileHandler
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 1L;
 
    /** The jar file */
-   private final JarFile jar;
-   
-   /** The jar entry */
-   private final JarEntry entry;
+   private long lastModified;
    private transient List<VirtualFileHandler> entryChildren;
    private transient Map<String, VirtualFileHandler> entryMap;
    
    /**
-    * Create a new JarHandler.
+    * Create a new SynthenticDirEntryHandler.
     * 
     * @param context the context
     * @param parent the parent
-    * @param jar the jar file
-    * @param entry the entry
-    * @param url the url
+    * @param entryName - the simple name for the dir
+    * @param lastModified the timestamp for the dir
+    * @param url the full url
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url, jar or entry
     */
-   public JarEntryHandler(VFSContext context, VirtualFileHandler parent, JarFile jar,
-      JarEntry entry, String entryName, URL url)
+   public SynthenticDirEntryHandler(VFSContext context, VirtualFileHandler parent,
+      String entryName, long lastModified, URL url)
       throws IOException
    {
       super(context, parent, url, entryName);
-      if (jar == null)
-         throw new IllegalArgumentException("Null jar");
-      
-      this.jar = jar;
-      this.entry = entry;
+      this.lastModified = lastModified;
    }
 
    /**
@@ -93,38 +83,21 @@ public class JarEntryHandler extends AbstractURLHandler
       entryChildren.add(child);
    }
 
-   /**
-    * Get the entry
-    * 
-    * @return the file
-    */
-   protected JarEntry getEntry()
-   {
-      checkClosed();
-      return entry;
-   }
-   
    @Override
    public long getLastModified()
    {
-      return getEntry().getTime();
+      return lastModified;
    }
 
    @Override
    public long getSize()
    {
-      return getEntry().getSize();
-   }
-
-   public boolean isArchive()
-   {
-      checkClosed();
-      return false;
+      return 0;
    }
 
    public boolean isLeaf()
    {
-      return getEntry().isDirectory() == false;
+      return false;
    }
 
    public boolean isHidden()
@@ -136,7 +109,7 @@ public class JarEntryHandler extends AbstractURLHandler
    @Override
    public InputStream openStream() throws IOException
    {
-      return jar.getInputStream(getEntry());
+      throw new IOException("Directories cannot be opened");
    }
 
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
