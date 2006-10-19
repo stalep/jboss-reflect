@@ -25,21 +25,25 @@ package org.jboss.virtual;
  * Attributes used when visiting a virtual file system
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
 public class VisitorAttributes
 {
-   /** The default attributes */
+   /** A VirtualFileFilter than accepts any file */
+   public static final AcceptAnyFilter RECURSE_ALL = new AcceptAnyFilter();
+
+   /** The default attributes - visit nothing? */
    public static final VisitorAttributes DEFAULT = new ImmutableVisitorAttributes();
 
-   /** Leaves only */
-   public static final VisitorAttributes LEAVES_ONLY = new ImmutableVisitorAttributes(true, false);
+   /** Visit leaves only and do not recurse non-leaf files */
+   public static final VisitorAttributes LEAVES_ONLY = new ImmutableVisitorAttributes(true, null);
 
-   /** Recurse */
-   public static final VisitorAttributes RECURSE = new ImmutableVisitorAttributes(false, true);
+   /** Recurse and visit all non-leaf files */
+   public static final VisitorAttributes RECURSE = new ImmutableVisitorAttributes(false, RECURSE_ALL);
 
-   /** Recurse but only visit leaves */
-   public static final VisitorAttributes RECURSE_LEAVES_ONLY = new ImmutableVisitorAttributes(true, true);
+   /** Recurse all non-leaf files but only visit leaves */
+   public static final VisitorAttributes RECURSE_LEAVES_ONLY = new ImmutableVisitorAttributes(true, RECURSE_ALL);
    
    /** Whether to include the root */
    private boolean includeRoot;
@@ -47,27 +51,14 @@ public class VisitorAttributes
    /** Whether to only visit leaves */
    private boolean leavesOnly;
 
-   /** Whether to recurse */
-   private boolean recurse;
-
    /** Whether to ignore individual file errors */
    private boolean ignoreErrors;
 
    /** Whether to include hidden files */
    private boolean includeHidden;
 
-   /** Whether to recurse archives or not */
-   private boolean recurseArchives;
-
-   public boolean isRecurseArchives()
-   {
-      return recurseArchives;
-   }
-
-   public void setRecurseArchives(boolean recurseArchives)
-   {
-      this.recurseArchives = recurseArchives;
-   }
+   /** A filter used to control whether a non-leaf is recursive visited */
+   private VirtualFileFilter recurseFilter;
 
    /**
     * Whether to visit leaves only<p>
@@ -93,26 +84,39 @@ public class VisitorAttributes
    }
 
    /**
-    * Whether to recurse<p>
+    * Whether to recurse into the non-leaf file<p>. If there is a recurse
+    * filter then the result will by its accepts(file) value.
     * 
     * Default: false
     * 
-    * @return the recurse.
+    * @return the recurse flag.
     */
-   public boolean isRecurse()
+   public boolean isRecurse(VirtualFile file)
    {
+      boolean recurse = false;
+      if( recurseFilter != null )
+         recurse = recurseFilter.accepts(file);
       return recurse;
    }
 
    /**
-    * Set the recurse.
+    * Get the recurse filter.
+    * @return the current recurse filter.
+    */
+   public VirtualFileFilter getRecurseFilter()
+   {
+      return recurseFilter;
+   }
+
+   /**
+    * Set the recurse filter.
     * 
-    * @param recurse the recurse.
+    * @param filter - the recurse filter.
     * @throws IllegalStateException if you attempt to modify one of the preconfigured static values of this class
     */
-   public void setRecurse(boolean recurse)
+   public void setRecurseFilter(VirtualFileFilter filter)
    {
-      this.recurse = recurse;
+      this.recurseFilter = filter;
    }
 
    /**
@@ -184,6 +188,13 @@ public class VisitorAttributes
       this.includeHidden = includeHidden;
    }
 
+   private static class AcceptAnyFilter implements VirtualFileFilter
+   {
+      public boolean accepts(VirtualFile file)
+      {
+         return true;
+      }      
+   }
    /**
     * Immutable version of the attribues
     */
@@ -200,12 +211,12 @@ public class VisitorAttributes
        * Create a new ImmutableVirtualFileVisitorAttributes.
        * 
        * @param leavesOnly whether to visit leaves only 
-       * @param recurse whether to recurse
+       * @param recurseFilter - filter which controls whether to recurse
        */
-      public ImmutableVisitorAttributes(boolean leavesOnly, boolean recurse)
+      public ImmutableVisitorAttributes(boolean leavesOnly, VirtualFileFilter recurseFilter)
       {
          super.setLeavesOnly(leavesOnly);
-         super.setRecurse(recurse);
+         super.setRecurseFilter(recurseFilter);
       }
       
       @Override
@@ -221,7 +232,7 @@ public class VisitorAttributes
       }
 
       @Override
-      public void setRecurse(boolean recurse)
+      public void setRecurseFilter(VirtualFileFilter filter)
       {
          throw new IllegalStateException("The preconfigured attributes are immutable");
       }

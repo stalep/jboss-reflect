@@ -31,6 +31,8 @@ import java.util.Map;
 import org.jboss.logging.Logger;
 import org.jboss.virtual.VFS;
 import org.jboss.virtual.VFSUtils;
+import org.jboss.virtual.VirtualFile;
+import org.jboss.virtual.VirtualFileFilter;
 import org.jboss.virtual.VisitorAttributes;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VirtualFileHandler;
@@ -126,12 +128,11 @@ public abstract class AbstractVFSContext implements VFSContext
       VisitorAttributes attributes = visitor.getAttributes();
       boolean includeRoot = attributes.isIncludeRoot();
       boolean leavesOnly = attributes.isLeavesOnly();
-      boolean recurse = attributes.isRecurse();
       boolean ignoreErrors = attributes.isIgnoreErrors();
       boolean includeHidden = attributes.isIncludeHidden();
-      boolean recurseArchives = attributes.isRecurseArchives();
-
-      visit(handler, visitor, includeRoot, leavesOnly, recurse, ignoreErrors, includeHidden, recurseArchives);
+      VirtualFileFilter recurseFilter = attributes.getRecurseFilter();
+      visit(handler, visitor, includeRoot, leavesOnly, ignoreErrors,
+            includeHidden, recurseFilter);
    }
 
    /**
@@ -142,12 +143,14 @@ public abstract class AbstractVFSContext implements VFSContext
     * @param visitor the visitor
     * @param includeRoot whether to visit the root
     * @param leavesOnly whether to visit leaves only
-    * @param recurse whether to recurse
     * @param ignoreErrors whether to ignore errors
     * @param includeHidden whether to include hidden files
     * @throws IOException for any problem accessing the virtual file system
     */
-   protected void visit(VirtualFileHandler handler, VirtualFileHandlerVisitor visitor, boolean includeRoot, boolean leavesOnly, boolean recurse, boolean ignoreErrors, boolean includeHidden, boolean recurseArchives) throws IOException
+   protected void visit(VirtualFileHandler handler, VirtualFileHandlerVisitor visitor,
+         boolean includeRoot, boolean leavesOnly, boolean ignoreErrors,
+         boolean includeHidden, VirtualFileFilter recurseFilter)
+      throws IOException
    {
       // Visit the root when asked
       if (includeRoot)
@@ -189,20 +192,13 @@ public abstract class AbstractVFSContext implements VFSContext
             log.trace("Skipping non-leaf file: "+child);
          }
 
-         boolean allowArchives = true;
-         if (child.isArchive() && recurseArchives == false)
-         {
-            allowArchives = false;
-            if( trace )
-               log.trace("Won't scan archive: "+child);
-         }
-
          // Recurse when asked
-         if (recurse && isLeaf == false && allowArchives)
+         VirtualFile file = child.getVirtualFile();
+         if ( isLeaf == false && recurseFilter != null && recurseFilter.accepts(file))
          {
             try
             {
-               visit(child, visitor, false, leavesOnly, recurse, ignoreErrors, includeHidden, recurseArchives);
+               visit(child, visitor, false, leavesOnly, ignoreErrors, includeHidden, recurseFilter);
             }
             catch (StackOverflowError e)
             {
