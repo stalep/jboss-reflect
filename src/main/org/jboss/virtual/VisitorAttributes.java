@@ -33,7 +33,7 @@ public class VisitorAttributes
    /** A VirtualFileFilter than accepts any file */
    public static final AcceptAnyFilter RECURSE_ALL = new AcceptAnyFilter();
 
-   /** The default attributes - visit nothing? */
+   /** The default attributes - visit nothing both leaves, non-leaves, no recursion */
    public static final VisitorAttributes DEFAULT = new ImmutableVisitorAttributes();
 
    /** Visit leaves only and do not recurse non-leaf files */
