@@ -24,7 +24,6 @@ package org.jboss.virtual.plugins.vfs.helpers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import org.jboss.logging.Logger;
 import org.jboss.virtual.VirtualFile;
@@ -46,7 +45,7 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
 
    /**
     * Create a new SuffixMatchFilter,
-    * using {@link VisitorAttributes#RECURSE_LEAVES_ONLY}
+    * using {@link VisitorAttributes#DEFAULT}
     * 
     * @param suffix the suffix
     * @throws IllegalArgumentException for a null suffix
@@ -60,9 +59,10 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
     * Create a new SuffixMatchFilter.
     * 
     * @param suffix the suffix
-    * @param attributes the attributes, pass null to use {@link VisitorAttributes#RECURSE_LEAVES_ONLY}
+    * @param attributes the attributes, pass null to use {@link VisitorAttributes#DEFAULT}
     * @throws IllegalArgumentException for a null suffix
     */
+   @SuppressWarnings("unchecked")      
    public SuffixMatchFilter(String suffix, VisitorAttributes attributes)
    {
       this(Collections.EMPTY_LIST, attributes);
@@ -81,12 +81,12 @@ public class SuffixMatchFilter extends AbstractVirtualFileFilterWithAttributes
    /**
     * Create a new SuffixMatchFilter.
     * @param suffixes - the list of file suffixes to accept.
-    * @param attributes the attributes, pass null to use {@link VisitorAttributes#RECURSE_LEAVES_ONLY}
+    * @param attributes the attributes, pass null to use {@link VisitorAttributes#DEFAULT}
     * @throws IllegalArgumentException for a null suffixes
     */
    public SuffixMatchFilter(Collection<String> suffixes, VisitorAttributes attributes)
    {
-      super(attributes == null ? VisitorAttributes.RECURSE_LEAVES_ONLY : attributes);
+      super(attributes == null ? VisitorAttributes.DEFAULT : attributes);
       if (suffixes == null)
          throw new IllegalArgumentException("Null suffixes");
       this.suffixes = new ArrayList<String>();
