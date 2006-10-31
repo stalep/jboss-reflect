@@ -55,7 +55,7 @@ public class NestedJarHandler extends AbstractJarHandler
    
    /** The temporary file */
    private transient File temp;
-   
+
    /**
     * Create a temporary jar
     * 
@@ -99,7 +99,7 @@ public class NestedJarHandler extends AbstractJarHandler
       
       return new JarFile(temp);
    }
-   
+
    /**
     * Create a new NestedJarHandler.
     * 
@@ -168,7 +168,7 @@ public class NestedJarHandler extends AbstractJarHandler
    @Override
    public URL toURL() throws MalformedURLException, URISyntaxException
    {
-      return temp.toURL();
+      return new URL("jar:" + temp.toURL() + "!/");
    }
 
    /**
