@@ -21,7 +21,7 @@
 */ 
 package org.jboss.repository.plugins.basic;
 
-import org.jboss.repository.spi.KernelRepository;
+import org.jboss.metadata.spi.repository.MetaDataRepository;
 import org.jboss.repository.spi.MetaDataContext;
 import org.jboss.repository.spi.MetaDataContextFactory;
 
@@ -33,7 +33,7 @@ import org.jboss.repository.spi.MetaDataContextFactory;
 public class BasicMetaDataContextFactory implements MetaDataContextFactory
 {
 
-   public MetaDataContext getMetaDataContext(KernelRepository repository, Object beanName)
+   public MetaDataContext getMetaDataContext(MetaDataRepository repository, String beanName)
    {
       return null;
    }

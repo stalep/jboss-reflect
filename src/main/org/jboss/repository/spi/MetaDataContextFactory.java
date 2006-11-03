@@ -21,6 +21,8 @@
 */ 
 package org.jboss.repository.spi;
 
+import org.jboss.metadata.spi.repository.MetaDataRepository;
+
 /**
  * 
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
@@ -28,5 +30,5 @@ package org.jboss.repository.spi;
  */
 public interface MetaDataContextFactory
 {
-   MetaDataContext getMetaDataContext(KernelRepository repository, Object beanName);
+   MetaDataContext getMetaDataContext(MetaDataRepository repository, String beanName);
 }
