@@ -353,7 +353,7 @@ public class AbstractJarHandler extends AbstractURLHandler
          if( useNoCopyJarHandler )
             vfh = new NoCopyNestedJarHandler(context, parent, jar, entry, url);
          else
-            vfh = new NestedJarHandler(context, parent, jar, entry, url);
+            vfh = new NestedJarHandler(context, parent, jar, entry, url, entryName);
       }
       else
       {

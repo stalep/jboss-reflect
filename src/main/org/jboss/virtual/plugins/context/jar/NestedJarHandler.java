@@ -112,10 +112,10 @@ public class NestedJarHandler extends AbstractJarHandler
     * @throws IllegalArgumentException for a null context, url or vfsPath
     */
    public NestedJarHandler(VFSContext context, VirtualFileHandler parent,
-         JarFile parentJar, JarEntry entry, URL url)
+         JarFile parentJar, JarEntry entry, URL url, String entryName)
       throws IOException
    {
-      super(context, parent, url, getEntryName(entry));
+      super(context, parent, url, entryName);
 
       
       try
