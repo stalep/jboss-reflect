@@ -30,5 +30,5 @@ import org.jboss.metadata.spi.repository.MetaDataRepository;
  */
 public interface MetaDataContextFactory
 {
-   MetaDataContext getMetaDataContext(MetaDataRepository repository, String beanName);
+   MetaDataContext getMetaDataContext(ClassLoader beanLoader, MetaDataRepository repository, String beanName);
 }

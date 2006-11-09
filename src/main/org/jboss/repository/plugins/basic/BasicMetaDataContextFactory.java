@@ -33,7 +33,7 @@ import org.jboss.repository.spi.MetaDataContextFactory;
 public class BasicMetaDataContextFactory implements MetaDataContextFactory
 {
 
-   public MetaDataContext getMetaDataContext(MetaDataRepository repository, String beanName)
+   public MetaDataContext getMetaDataContext(ClassLoader beanLoader, MetaDataRepository repository, String beanName)
    {
       return null;
    }
