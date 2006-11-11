@@ -35,7 +35,6 @@ import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipInputStream;
@@ -92,7 +91,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
     * Test that NestedJarFromStream can provide access to nested jar content
     * @throws Exception
     */
-   public void testInnerJarFile()
+   public void testNestedJarFromStream()
       throws Exception
    {
       URL outer = getResource("/vfs/test/outer.jar");
@@ -138,6 +137,41 @@ public class FileVFSUnitTestCase extends BaseTestCase
       assertEquals("jar2", title2);
       mf2IS.close();
       njfs2.close();
+   }
+
+   /**
+    * Test reading the contents of nested jar entries.
+    * @throws Exception
+    */
+   public void testInnerJarFile()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile outerjar = vfs.findChild("outer.jar");
+      assertTrue("outer.jar != null", outerjar != null);
+      VirtualFile jar1 = outerjar.findChild("jar1.jar");
+      assertTrue("outer.jar/jar1.jar != null", jar1 != null);
+      VirtualFile jar2 = outerjar.findChild("jar2.jar");
+      assertTrue("outer.jar/jar2.jar != null", jar2 != null);
+
+      VirtualFile jar1MF = jar1.findChild("META-INF/MANIFEST.MF");
+      assertNotNull("jar1!/META-INF/MANIFEST.MF", jar1MF);
+      InputStream mfIS = jar1MF.openStream();
+      Manifest mf1 = new Manifest(mfIS);
+      Attributes mainAttrs1 = mf1.getMainAttributes();
+      String title1 = mainAttrs1.getValue(Attributes.Name.SPECIFICATION_TITLE);
+      assertEquals("jar1", title1);
+      jar1MF.close();
+
+      VirtualFile jar2MF = jar2.findChild("META-INF/MANIFEST.MF");
+      assertNotNull("jar2!/META-INF/MANIFEST.MF", jar2MF);
+      InputStream mfIS2 = jar2MF.openStream();
+      Manifest mf2 = new Manifest(mfIS2);
+      Attributes mainAttrs2 = mf2.getMainAttributes();
+      String title2 = mainAttrs2.getValue(Attributes.Name.SPECIFICATION_TITLE);
+      assertEquals("jar2", title2);
+      jar2MF.close();
    }
 
    /**
@@ -800,6 +834,54 @@ public class FileVFSUnitTestCase extends BaseTestCase
          }
       }
    }
+
+   /**
+    * Test copying a jar that is nested in another jar.
+    * 
+    * @throws Exception
+    */
+   public void testCopyInnerJar()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile outerjar = vfs.findChild("outer.jar");
+      assertTrue("outer.jar != null", outerjar != null);
+      VirtualFile jar = outerjar.findChild("jar1.jar");
+      assertTrue("outer.jar/jar1.jar != null", jar != null);
+
+      File tmpJar = File.createTempFile("testCopyInnerJar", ".jar");
+      tmpJar.deleteOnExit();
+
+      try
+      {
+         InputStream is = jar.openStream();
+         FileOutputStream fos = new FileOutputStream(tmpJar);
+         byte[] buffer = new byte[1024];
+         int read;
+         while( (read = is.read(buffer)) > 0 )
+         {
+            fos.write(buffer, 0, read);
+         }
+         fos.close();
+         log.debug("outer.jar/jar1.jar size is: "+jar.getSize());
+         log.debug(tmpJar.getAbsolutePath()+" size is: "+tmpJar.length());
+         assertTrue("outer.jar > 0", jar.getSize() > 0);
+         assertEquals("copy jar size", jar.getSize(), tmpJar.length());
+         jar.close();
+      }
+      finally
+      {
+         try
+         {
+            tmpJar.delete();
+         }
+         catch(Exception ignore)
+         {
+         }
+      }
+   }
+
    /**
     * Tests that we can find the META-INF/some-data.xml in an unpacked deployment
     */
