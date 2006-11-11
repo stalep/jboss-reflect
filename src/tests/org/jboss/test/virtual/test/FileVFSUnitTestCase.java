@@ -35,6 +35,7 @@ import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipInputStream;
@@ -47,6 +48,7 @@ import org.jboss.test.virtual.support.MetaDataMatchFilter;
 import org.jboss.virtual.VFS;
 import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.VirtualFile;
+import org.jboss.virtual.VisitorAttributes;
 import org.jboss.virtual.plugins.context.jar.JarUtils;
 import org.jboss.virtual.plugins.context.jar.NestedJarFromStream;
 import org.jboss.virtual.plugins.vfs.helpers.SuffixMatchFilter;
@@ -332,7 +334,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       expectedClasses.add("jar2.jar/org/jboss/test/vfs/support/jar2/ClassInJar2.class");
       expectedClasses.add("org/jboss/test/vfs/support/CommonClass.class");
       super.enableTrace("org.jboss.virtual.plugins.vfs.helpers.SuffixMatchFilter");
-      SuffixMatchFilter classVisitor = new SuffixMatchFilter(".class");
+      SuffixMatchFilter classVisitor = new SuffixMatchFilter(".class", VisitorAttributes.RECURSE);
       List<VirtualFile> classes = vfs.getChildren(classVisitor);
       int count = 0;
       for (VirtualFile cf : classes)
@@ -363,7 +365,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       expectedClasses.add("jar2.jar/org/jboss/test/vfs/support/jar2/ClassInJar2.class");
       expectedClasses.add("org/jboss/test/vfs/support/CommonClass.class");
       super.enableTrace("org.jboss.virtual.plugins.vfs.helpers.SuffixMatchFilter");
-      SuffixMatchFilter classVisitor = new SuffixMatchFilter(".class");
+      SuffixMatchFilter classVisitor = new SuffixMatchFilter(".class", VisitorAttributes.RECURSE);
       List<VirtualFile> classes = vfs.getChildren(classVisitor);
       int count = 0;
       for (VirtualFile cf : classes)
@@ -392,7 +394,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       expectedClasses.add("org/jboss/test/vfs/support/jar1/ClassInJar1.class");
       expectedClasses.add("org/jboss/test/vfs/support/jar1/ClassInJar1$InnerClass.class");
       super.enableTrace("org.jboss.virtual.plugins.vfs.helpers.SuffixMatchFilter");
-      SuffixMatchFilter classVisitor = new SuffixMatchFilter(".class");
+      SuffixMatchFilter classVisitor = new SuffixMatchFilter(".class", VisitorAttributes.RECURSE);
       List<VirtualFile> classes = vfs.getChildren(classVisitor);
       int count = 0;
       for (VirtualFile cf : classes)
@@ -754,7 +756,50 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VirtualFile jar1 = outerJar.findChild("jar1.jar");
       assertEquals(jar1URL, jar1.toURL());
    }
-   
+
+   /**
+    * Test copying a jar
+    * 
+    * @throws Exception
+    */
+   public void testCopyJar()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile jar = vfs.findChild("outer.jar");
+      assertTrue("outer.jar != null", jar != null);
+      File tmpJar = File.createTempFile("testCopyJar", ".jar");
+      tmpJar.deleteOnExit();
+
+      try
+      {
+         InputStream is = jar.openStream();
+         FileOutputStream fos = new FileOutputStream(tmpJar);
+         byte[] buffer = new byte[1024];
+         int read;
+         while( (read = is.read(buffer)) > 0 )
+         {
+            fos.write(buffer, 0, read);
+         }
+         fos.close();
+         log.debug("outer.jar size is: "+jar.getSize());
+         log.debug(tmpJar.getAbsolutePath()+" size is: "+tmpJar.length());
+         assertTrue("outer.jar > 0", jar.getSize() > 0);
+         assertEquals("copy jar size", jar.getSize(), tmpJar.length());
+         jar.close();
+      }
+      finally
+      {
+         try
+         {
+            tmpJar.delete();
+         }
+         catch(Exception ignore)
+         {
+         }
+      }
+   }
    /**
     * Tests that we can find the META-INF/some-data.xml in an unpacked deployment
     */
