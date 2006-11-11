@@ -22,6 +22,7 @@
 package org.jboss.virtual.plugins.context.jar;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.JarURLConnection;
 import java.net.URL;
 
@@ -65,5 +66,21 @@ public class JarHandler extends AbstractJarHandler
          e.setStackTrace(original.getStackTrace());
          throw e;
       }
+   }
+
+   /**
+    * Override to return the input stream of the underlying url rather than
+    * a JarInputStream for the jar as this is not usable for copying the
+    * jar.
+    */
+   @Override
+   public InputStream openStream() throws IOException
+   {
+      checkClosed();
+      String jarURL = getURL().toString();
+      String underlyingURL = jarURL.substring(4, jarURL.length()-2);
+      URL realURL = new URL(underlyingURL);
+      InputStream is = realURL.openStream();
+      return is;
    }
 }
