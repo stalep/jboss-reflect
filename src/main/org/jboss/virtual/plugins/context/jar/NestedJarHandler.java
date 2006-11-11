@@ -22,16 +22,14 @@
 package org.jboss.virtual.plugins.context.jar;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -159,10 +157,14 @@ public class NestedJarHandler extends AbstractJarHandler
       return getEntry().getSize();
    }
 
+   /**
+    * Overriden to return the raw tmp jar file stream 
+    */
    @Override
    public InputStream openStream() throws IOException
    {
-      return getJar().getInputStream(getEntry());
+      FileInputStream fis = new FileInputStream(temp);
+      return fis;
    }
 
    @Override
