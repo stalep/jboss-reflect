@@ -44,9 +44,9 @@ public class NoCopyNestedJarHandler extends AbstractJarHandler
    private static final long serialVersionUID = 1L;
 
    /** The jar entry */
-   private JarEntry entry;
+   private transient JarEntry entry;
    private NestedJarFromStream njar;
-      
+
    /**
     * Create a new NestedJarHandler.
     * 

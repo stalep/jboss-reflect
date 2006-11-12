@@ -52,10 +52,10 @@ public class JarEntryHandler extends AbstractURLHandler
    private static final long serialVersionUID = 1L;
 
    /** The jar file */
-   private final JarFile jar;
+   private transient final JarFile jar;
    
    /** The jar entry */
-   private final JarEntry entry;
+   private transient final JarEntry entry;
    private transient List<VirtualFileHandler> entryChildren;
    private transient Map<String, VirtualFileHandler> entryMap;
    
