@@ -166,6 +166,12 @@
      <jar jarfile="${build.lib.retro}/jboss-container14.jar" manifest="${build.etc}/default.mf">
        <fileset dir="${build.classes.retro}"/>
      </jar>
+     <!-- Minimal source bundle -->
+     <zip destfile="${build.lib}/${jar.prefix}-src.zip">
+        <fileset dir="${source.java}">
+           <include name="**"/>
+        </fileset>
+     </zip>
   </target>
    
 
