@@ -789,6 +789,10 @@ public class FileVFSUnitTestCase extends BaseTestCase
             jar1URL.getPath().endsWith("unpacked-outer.jar/jar1.jar!/"));
       VirtualFile jar1 = outerJar.findChild("jar1.jar");
       assertEquals(jar1URL, jar1.toURL());
+
+      VirtualFile packedJar = vfs.findChild("jar1.jar");
+      jar1URL = packedJar.findChild("org/jboss/test/vfs/support").toURL();
+      assertTrue("Jar directory entry URLs must end in /: " + jar1URL.toString(), jar1URL.toString().endsWith("/"));
    }
 
    /**

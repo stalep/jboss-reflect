@@ -357,6 +357,9 @@ public class AbstractJarHandler extends AbstractURLHandler
       }
       else
       {
+         // Jar directory URLs must end in /
+         if (entry.isDirectory())
+            url = new URL(url.toString() + "/");
          vfh = new JarEntryHandler(context, parent, jar, entry, entryName, url);
       }
 
