@@ -75,7 +75,14 @@ public class ValueConvertor
       if (clazz.isAssignableFrom(valueClass))
          return value;
 
-      // First look for a property editor
+      // First see if this is an Enum
+      if (clazz.isEnum())
+      {
+         Class<? extends Enum> eclazz = clazz.asSubclass(Enum.class);
+         return Enum.valueOf(eclazz, value.toString());
+      }
+
+      // Next look for a property editor
       if (valueClass == String.class)
       {
          PropertyEditor editor = PropertyEditorManager.findEditor(clazz);
