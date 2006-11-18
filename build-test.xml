@@ -238,6 +238,44 @@
       		<attribute name="Implementation-Vendor" value="JBoss Inc."/>
       	</manifest>
    	</jar>
+      <!-- src/resources/tests/vfs/test/innermf.jar -->
+      <jar destfile="${source.resources}/vfs/test/innermf.jar">
+         <manifest>
+            <attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
+            <attribute name="Specification-Title" value="innermf.jar"/>
+            <attribute name="Class-Path" value="jar1.jar"/>
+         </manifest>
+      </jar>
+      <!-- src/resources/tests/vfs/test/inner-container.jar -->
+      <jar destfile="${source.resources}/vfs/test/inner-container.jar">
+         <fileset dir="${source.resources}/vfs/test">
+            <include name="innermf.jar" />
+         </fileset>
+      </jar>
+      <!-- src/resources/tests/vfs/test/outermf.jar -->
+      <jar destfile="${source.resources}/vfs/test/outermf.jar">
+         <manifest>
+            <attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
+            <attribute name="Specification-Title" value="outermf.jar"/>
+            <attribute name="Class-Path" value="jar1.jar ./jar2.jar"/>
+         </manifest>
+         <zipfileset dir="${source.resources}/vfs/test">
+            <include name="innermf.jar" />
+         </zipfileset>
+      </jar>
+      <!-- src/resources/tests/vfs/test/outermf.jar -->
+      <mkdir dir="${source.resources}/vfs/test/withalong/rootprefix" />
+      <jar destfile="${source.resources}/vfs/test/withalong/rootprefix/outermf.jar">
+         <manifest>
+            <attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
+            <attribute name="Specification-Title" value="outermf.jar"/>
+            <attribute name="Class-Path" value="jar1.jar ./jar2.jar"/>
+         </manifest>
+         <zipfileset dir="${source.resources}/vfs/test">
+            <include name="innermf.jar" />
+            <include name="inner-container.jar" />
+         </zipfileset>
+      </jar>
    </target>
 
   <!-- ================================================================== -->
