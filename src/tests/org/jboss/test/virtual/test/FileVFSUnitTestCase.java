@@ -29,6 +29,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -884,6 +885,48 @@ public class FileVFSUnitTestCase extends BaseTestCase
          {
          }
       }
+   }
+
+   /**
+    * Test that the outermf.jar manifest classpath is parsed
+    * correctly.
+    * 
+    * @throws Exception
+    */
+   public void testManifestClasspath()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile outerjar = vfs.findChild("outermf.jar");
+      assertNotNull("outermf.jar != null", outerjar);
+
+      ArrayList<VirtualFile> cp = new ArrayList<VirtualFile>();
+      VFSUtils.addManifestLocations(outerjar, cp);
+      // The p0.jar should be found in the classpath
+      assertEquals("cp size 2", 2, cp.size());
+      assertEquals("jar1.jar == cp[0]", "jar1.jar", cp.get(0).getName());
+      assertEquals("jar2.jar == cp[1]", "jar2.jar", cp.get(1).getName());
+   }
+   /**
+    * Test that an inner-inner jar that is extracted does not blowup
+    * the addManifestLocations routine.
+    * 
+    * @throws Exception
+    */
+   public void testInnerManifestClasspath()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile outerjar = vfs.findChild("withalong/rootprefix/outermf.jar");
+      VirtualFile conatinerjar = outerjar.findChild("inner-container.jar");
+      VirtualFile innerjar = conatinerjar.findChild("innermf.jar");
+      assertNotNull("innermf.jar != null", innerjar);
+   
+      ArrayList<VirtualFile> cp = new ArrayList<VirtualFile>();
+      VFSUtils.addManifestLocations(innerjar, cp);
+      // Don't really care what the cp is...
    }
 
    /**
