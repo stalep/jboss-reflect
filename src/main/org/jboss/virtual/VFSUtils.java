@@ -145,6 +145,9 @@ public class VFSUtils
          {
             URL libURL = new URL(parentURL, path);
             String libPath = libURL.getPath();
+            // TODO, this occurs for inner jars. Doubtful that such a mf cp is valid
+            if( rootPathLength > libPath.length() )
+               throw new IOException("Invalid rootPath: "+vfsRootURL+", libPath: "+libPath);
             String vfsLibPath = libPath.substring(rootPathLength);
             VirtualFile vf = file.getVFS().findChild(vfsLibPath);
             paths.add(vf);
