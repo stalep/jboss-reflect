@@ -930,6 +930,40 @@ public class FileVFSUnitTestCase extends BaseTestCase
    }
 
    /**
+    * Validate accessing an packed jar vf and its uri when the vfs path
+    * contains spaces
+    * @throws Exception
+    */
+   public void testJarWithSpacesInPath()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile tstjar = vfs.findChild("path with spaces/tst.jar");
+      assertNotNull("tstjar != null", tstjar);
+      URI uri = tstjar.toURI();
+      URI expectedURI = new URI(rootURL.toString()+"/path%20with%20spaces/tst.jar");
+      assertEquals(uri, expectedURI);
+   }
+
+   /**
+    * Validate accessing an unpacked jar vf and its uri when the vfs path
+    * contains spaces
+    * @throws Exception
+    */
+   public void testUnpackedJarWithSpacesInPath()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile tstjar = vfs.findChild("path with spaces/unpacked-tst.jar");
+      assertNotNull("tstjar != null", tstjar);
+      URI uri = tstjar.toURI();
+      URI expectedURI = new URI(rootURL.toString()+"/path%20with%20spaces/unpacked-tst.jar/");
+      assertEquals(uri, expectedURI);
+   }
+
+   /**
     * Tests that we can find the META-INF/some-data.xml in an unpacked deployment
     */
    public void testGetMetaDataUnpackedJar() throws Exception
