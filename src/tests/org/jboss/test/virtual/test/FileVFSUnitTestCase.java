@@ -942,7 +942,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VirtualFile tstjar = vfs.findChild("path with spaces/tst.jar");
       assertNotNull("tstjar != null", tstjar);
       URI uri = tstjar.toURI();
-      URI expectedURI = new URI(rootURL.toString()+"/path%20with%20spaces/tst.jar");
+      URI expectedURI = new URI("jar:"+rootURL.toString()+"/path%20with%20spaces/tst.jar!/");
       assertEquals(uri, expectedURI);
    }
 
