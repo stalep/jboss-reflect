@@ -106,6 +106,10 @@ public abstract class AbstractURLHandler extends AbstractVirtualFileHandler
 
    public URI toURI() throws URISyntaxException
    {
-      return url.toURI();
+      String urispec = url.toExternalForm();
+      // Escape any spaces
+      urispec = urispec.replaceAll(" ", "%20");
+      URI uri = new URI(urispec);
+      return uri;
    }
 }
