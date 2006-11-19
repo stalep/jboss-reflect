@@ -29,6 +29,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VirtualFileHandler;
 
@@ -106,10 +107,6 @@ public abstract class AbstractURLHandler extends AbstractVirtualFileHandler
 
    public URI toURI() throws URISyntaxException
    {
-      String urispec = url.toExternalForm();
-      // Escape any spaces
-      urispec = urispec.replaceAll(" ", "%20");
-      URI uri = new URI(urispec);
-      return uri;
+      return VFSUtils.toURI(url);
    }
 }

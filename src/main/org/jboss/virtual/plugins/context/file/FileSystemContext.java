@@ -110,7 +110,7 @@ public class FileSystemContext extends AbstractVFSContext
     */
    public FileSystemContext(URL rootURL) throws IOException, URISyntaxException
    {
-      this(rootURL.toURI());
+      this(VFSUtils.toURI(rootURL));
    }
 
    /**

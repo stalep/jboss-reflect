@@ -340,4 +340,20 @@ public class VFSUtils
          info.add(link);
       }
    }
+
+   /**
+    * Deal with urls that may include spaces.
+    * 
+    * @param url
+    * @return uri
+    */
+   public static URI toURI(URL url)
+      throws URISyntaxException
+   {
+      String urispec = url.toExternalForm();
+      // Escape any spaces
+      urispec = urispec.replaceAll(" ", "%20");
+      URI uri = new URI(urispec);
+      return uri;
+   }
 }
