@@ -66,7 +66,9 @@
 
     <!-- The combined library classpath -->
     <path id="library.classpath">
-      <path refid="jboss.common.classpath"/>
+      <path refid="jboss/common.core.classpath"/>
+      <path refid="jboss/common.logging.spi.classpath"/>
+      <path refid="jboss/common.logging.log4j.classpath"/>
       <path refid="junit.junit.classpath"/>
       <path refid="javassist.classpath"/>
       <path refid="apache.log4j.classpath"/>
