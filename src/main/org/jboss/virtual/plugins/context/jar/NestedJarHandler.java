@@ -54,6 +54,8 @@ public class NestedJarHandler extends AbstractJarHandler
    /** The temporary file */
    private transient File temp;
 
+   private transient URL original;
+
    /**
     * Create a temporary jar
     * 
@@ -98,6 +100,26 @@ public class NestedJarHandler extends AbstractJarHandler
       return new JarFile(temp);
    }
 
+   public static NestedJarHandler create(VFSContext context, VirtualFileHandler parent,
+         JarFile parentJar, JarEntry entry, URL url, String entryName) throws IOException
+   {
+      File temp = null;
+
+      try
+      {
+         temp = File.createTempFile("nestedjar", null);
+         temp.deleteOnExit();
+      }
+      catch (IOException original)
+      {
+         // Fix the context of the error message
+         IOException e = new IOException("Error opening jar file: " + url + " reason=" + original.getMessage());
+         e.setStackTrace(original.getStackTrace());
+         throw e;
+      }
+      return new NestedJarHandler(context, parent, parentJar, entry, url, temp, entryName);
+   }
+
    /**
     * Create a new NestedJarHandler.
     * 
@@ -105,29 +127,27 @@ public class NestedJarHandler extends AbstractJarHandler
     * @param parent the parent
     * @param parentJar the parent jar file
     * @param entry the jar entry
-    * @param url the url
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url or vfsPath
     */
-   public NestedJarHandler(VFSContext context, VirtualFileHandler parent,
-         JarFile parentJar, JarEntry entry, URL url, String entryName)
+   protected NestedJarHandler(VFSContext context, VirtualFileHandler parent,
+         JarFile parentJar, JarEntry entry, URL original, File temp, String entryName)
       throws IOException
    {
-      super(context, parent, url, entryName);
+      super(context, parent, temp.toURL(), entryName);
 
+      this.temp = temp;
+      this.original = original;
       
       try
       {
-         temp = File.createTempFile("nestedjar", null);
-         temp.deleteOnExit();
-
          initJarFile(createTempJar(temp, parentJar, entry));
       }
-      catch (IOException original)
+      catch (IOException old)
       {
          // Fix the context of the error message
-         IOException e = new IOException("Error opening jar file: " + url + " reason=" + original.getMessage());
-         e.setStackTrace(original.getStackTrace());
+         IOException e = new IOException("Error opening jar file: " + original + " reason=" + old.getMessage());
+         e.setStackTrace(old.getStackTrace());
          throw e;
       }
       
@@ -167,12 +187,6 @@ public class NestedJarHandler extends AbstractJarHandler
       return fis;
    }
 
-   @Override
-   public URL toURL() throws MalformedURLException, URISyntaxException
-   {
-      return new URL("jar:" + temp.toURL() + "!/");
-   }
-
    /**
     * Restore the jar file from the parent jar and entry name
     * 
@@ -184,11 +198,6 @@ public class NestedJarHandler extends AbstractJarHandler
       throws IOException, ClassNotFoundException
    {
       JarFile parentJar = super.getJar();
-      // Initialize the transient values
-      entry = parentJar.getJarEntry(getName());
-      temp = File.createTempFile("nestedjar", null);
-      temp.deleteOnExit();
-      createTempJar(temp, parentJar, entry);
       // Initial the parent jar entries
       super.initJarFile(parentJar);
    }

@@ -23,8 +23,11 @@ package org.jboss.virtual.plugins.context.jar;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
+import java.io.ObjectInputStream;
 import java.net.JarURLConnection;
 import java.net.URL;
+import java.util.jar.JarFile;
 
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VirtualFileHandler;
@@ -68,19 +71,36 @@ public class JarHandler extends AbstractJarHandler
       }
    }
 
-   /**
-    * Override to return the input stream of the underlying url rather than
-    * a JarInputStream for the jar as this is not usable for copying the
-    * jar.
-    */
-   @Override
-   public InputStream openStream() throws IOException
+   public JarHandler(VFSContext context, VirtualFileHandler parent, File file, URL url, String name) throws IOException
    {
-      checkClosed();
-      String jarURL = getURL().toString();
-      String underlyingURL = jarURL.substring(4, jarURL.length()-2);
-      URL realURL = new URL(underlyingURL);
-      InputStream is = realURL.openStream();
-      return is;
+      super(context, parent, url, name);
+
+      try
+      {
+         initJarFile(new JarFile(file));
+      }
+      catch (IOException original)
+      {
+         // Fix the context of the error message
+         IOException e = new IOException("Error opening jar file: " + url + " reason=" + original.getMessage());
+         e.setStackTrace(original.getStackTrace());
+         throw e;
+      }
    }
+
+   /**
+    * Restore the jar file from the parent jar and entry name
+    *
+    * @param in
+    * @throws IOException
+    * @throws ClassNotFoundException
+    */
+   private void readObject(ObjectInputStream in)
+      throws IOException, ClassNotFoundException
+   {
+      JarFile parentJar = super.getJar();
+      // Initial the parent jar entries
+      initJarFile(parentJar);
+   }
+
 }

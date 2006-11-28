@@ -594,7 +594,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       String vfsPath = tmpJar.getPath();
       vfsPath = vfsPath.substring(tmpRoot.getPath().length()+1);
       URL url = tmpJar.toURL();
-      url = JarUtils.createJarURL(url);
+      //url = JarUtils.createJarURL(url);
       log.debug("name: "+name);
       log.debug("vfsPath: "+vfsPath);
       log.debug("url: "+url);
@@ -784,10 +784,10 @@ public class FileVFSUnitTestCase extends BaseTestCase
       log.debug("outerURL: "+outerURL);
       assertTrue(outerURL+" ends in '/'", outerURL.getPath().endsWith("/"));
       // Validate that jar1 is under unpacked-outer.jar
-      URL jar1URL = JarUtils.createJarURL(new URL(outerURL, "jar1.jar"));
+      URL jar1URL = new URL(outerURL, "jar1.jar");
       log.debug("jar1URL: "+jar1URL+", path="+jar1URL.getPath());
       assertTrue("jar1URL path ends in unpacked-outer.jar/jar1.jar!/",
-            jar1URL.getPath().endsWith("unpacked-outer.jar/jar1.jar!/"));
+            jar1URL.getPath().endsWith("unpacked-outer.jar/jar1.jar"));
       VirtualFile jar1 = outerJar.findChild("jar1.jar");
       assertEquals(jar1URL, jar1.toURL());
 
@@ -942,7 +942,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VirtualFile tstjar = vfs.findChild("path with spaces/tst.jar");
       assertNotNull("tstjar != null", tstjar);
       URI uri = tstjar.toURI();
-      URI expectedURI = new URI("jar:"+rootURL.toString()+"/path%20with%20spaces/tst.jar!/");
+      URI expectedURI = new URI(rootURL.toString()+"/path%20with%20spaces/tst.jar");
       assertEquals(uri, expectedURI);
    }
 

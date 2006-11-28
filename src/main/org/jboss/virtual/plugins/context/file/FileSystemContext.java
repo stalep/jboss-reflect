@@ -173,11 +173,10 @@ public class FileSystemContext extends AbstractVFSContext
       URI fileURL = getFileURI(file);
       if (file.isFile() && JarUtils.isArchive(file.getName()))
       {
-         URL url = JarUtils.createJarURL(file.toURL());
          String name = file.getName();
          try
          {
-            return new JarHandler(this, parent, url, name);
+            return new JarHandler(this, parent, file, file.toURL(), name);
          }
          catch (IOException e)
          {

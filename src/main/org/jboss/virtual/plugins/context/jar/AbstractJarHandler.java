@@ -24,6 +24,7 @@ package org.jboss.virtual.plugins.context.jar;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.File;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -46,27 +47,33 @@ import org.jboss.virtual.spi.VirtualFileHandler;
 
 /**
  * AbstractJarHandler.
- * 
+ *
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @author Scott.Stark@jboss.org
  * @version $Revision: 1.1 $
  */
 public class AbstractJarHandler extends AbstractURLHandler
-   implements StructuredVirtualFileHandler
+        implements StructuredVirtualFileHandler
 {
-   /** serialVersionUID */
+   /**
+    * serialVersionUID
+    */
    private static final long serialVersionUID = 1;
 
-   /** The jar file */
+   /**
+    * The jar file
+    */
    private transient JarFile jar;
 
-   /** The jar entries */
+   /**
+    * The jar entries
+    */
    private transient List<VirtualFileHandler> entries;
    private transient Map<String, VirtualFileHandler> entryMap;
 
    /**
     * Get a jar entry name
-    * 
+    *
     * @param entry the entry
     * @return the name
     * @throws IllegalArgumentException for a null entry
@@ -77,15 +84,15 @@ public class AbstractJarHandler extends AbstractURLHandler
          throw new IllegalArgumentException("Null entry");
       return entry.getName();
    }
-   
+
    /**
     * Create a new JarHandler.
-    * 
+    *
     * @param context the context
-    * @param parent the parent
-    * @param url the url
-    * @param name the name
-    * @throws IOException for an error accessing the file system
+    * @param parent  the parent
+    * @param url     the url
+    * @param name    the name
+    * @throws IOException              for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url or vfsPath
     */
    protected AbstractJarHandler(VFSContext context, VirtualFileHandler parent, URL url, String name) throws IOException
@@ -95,7 +102,7 @@ public class AbstractJarHandler extends AbstractURLHandler
 
    /**
     * Get the jar.
-    * 
+    *
     * @return the jar.
     */
    public JarFile getJar()
@@ -105,9 +112,9 @@ public class AbstractJarHandler extends AbstractURLHandler
 
    /**
     * Initialise the jar file
-    * 
+    *
     * @param jarFile the jar file
-    * @throws IOException for any error reading the jar file
+    * @throws IOException              for any error reading the jar file
     * @throws IllegalArgumentException for a null jarFile
     */
    protected void initJarFile(JarFile jarFile) throws IOException
@@ -138,64 +145,64 @@ public class AbstractJarHandler extends AbstractURLHandler
          JarEntry entry = enumeration.nextElement();
          String[] paths = entry.getName().split("/");
          int depth = paths.length;
-         if( depth >= levelMapList.size() )
+         if (depth >= levelMapList.size())
          {
-            for(int n = levelMapList.size(); n <= depth; n ++)
+            for (int n = levelMapList.size(); n <= depth; n++)
                levelMapList.add(new ArrayList<JarEntry>());
          }
          ArrayList<JarEntry> levelMap = levelMapList.get(depth);
          levelMap.add(entry);
-         if( trace )
-            log.trace("added "+entry.getName()+" at depth "+depth);
+         if (trace)
+            log.trace("added " + entry.getName() + " at depth " + depth);
       }
       // Process each level to build the handlers in parent first order
       int level = 0;
-      for(ArrayList<JarEntry> levels : levelMapList)
+      for (ArrayList<JarEntry> levels : levelMapList)
       {
-         if( trace )
-            log.trace("Level("+level++ +"): "+levels);
-         for(JarEntry entry : levels)
+         if (trace)
+            log.trace("Level(" + level++ + "): " + levels);
+         for (JarEntry entry : levels)
          {
             String name = entry.getName();
-            int slash = entry.isDirectory() ? name.lastIndexOf('/', name.length()-2) :
-               name.lastIndexOf('/', name.length()-1);
+            int slash = entry.isDirectory() ? name.lastIndexOf('/', name.length() - 2) :
+                    name.lastIndexOf('/', name.length() - 1);
             VirtualFileHandler parent = this;
             String entryName = name;
-            if( slash >= 0 )
+            if (slash >= 0)
             {
                // Need to include the slash in the name to match the JarEntry.name
-               String parentName = name.substring(0, slash+1);
+               String parentName = name.substring(0, slash + 1);
                parent = parentMap.get(parentName);
-               if( parent == null )
+               if (parent == null)
                {
                   // Build up the parent(s) 
                   parent = buildParents(parentName, parentMap, entry);
                }
             }
             // Get the entry name without any directory '/' ending
-            int start = slash+1;
-            int end = entry.isDirectory() ? name.length()-1 : name.length();
+            int start = slash + 1;
+            int end = entry.isDirectory() ? name.length() - 1 : name.length();
             entryName = name.substring(start, end);
             VirtualFileHandler handler = this.createVirtualFileHandler(parent, entry, entryName);
-            if( entry.isDirectory() )
+            if (entry.isDirectory())
             {
                parentMap.put(name, handler);
-               if( trace )
-                  log.trace("Added parent: "+name);
+               if (trace)
+                  log.trace("Added parent: " + name);
             }
-            if( parent == this )
+            if (parent == this)
             {
                // This is an immeadiate child of the jar handler
                entries.add(handler);
                entryMap.put(entryName, handler);
             }
-            else if( parent instanceof JarEntryHandler )
+            else if (parent instanceof JarEntryHandler)
             {
                // This is a child of the jar entry handler
                JarEntryHandler ehandler = (JarEntryHandler) parent;
                ehandler.addChild(handler);
             }
-            else if( parent instanceof SynthenticDirEntryHandler )
+            else if (parent instanceof SynthenticDirEntryHandler)
             {
                // This is a child of the jar entry handler
                SynthenticDirEntryHandler ehandler = (SynthenticDirEntryHandler) parent;
@@ -207,21 +214,21 @@ public class AbstractJarHandler extends AbstractURLHandler
 
    /**
     * Create any missing parents.
-    * 
+    *
     * @param parentName full vfs path name of parent
-    * @param parentMap initJarFile parentMap
-    * @param entry JarEntry missing a parent
+    * @param parentMap  initJarFile parentMap
+    * @param entry      JarEntry missing a parent
     * @return the VirtualFileHandler for the parent
     * @throws IOException
     */
    protected VirtualFileHandler buildParents(String parentName,
-         Map<String, VirtualFileHandler> parentMap, JarEntry entry)
-      throws IOException
+                                             Map<String, VirtualFileHandler> parentMap, JarEntry entry)
+           throws IOException
    {
       VirtualFileHandler parent = this;
       String[] paths = PathTokenizer.getTokens(parentName);
       StringBuilder pathName = new StringBuilder();
-      for(String path : paths)
+      for (String path : paths)
       {
          VirtualFileHandler next = null;
          pathName.append(path);
@@ -235,21 +242,21 @@ public class AbstractJarHandler extends AbstractURLHandler
             // Create a synthetic parent
             URL url = getURL(parent, path);
             next = new SynthenticDirEntryHandler(getVFSContext(), parent, path,
-                  entry.getTime(), url);
+                    entry.getTime(), url);
             parentMap.put(pathName.toString(), next);
-            if( parent == this )
+            if (parent == this)
             {
                // This is an immeadiate child of the jar handler
                entries.add(next);
                entryMap.put(path, next);
             }
-            else if( parent instanceof JarEntryHandler )
+            else if (parent instanceof JarEntryHandler)
             {
                // This is a child of the jar entry handler
                JarEntryHandler ehandler = (JarEntryHandler) parent;
                ehandler.addChild(next);
             }
-            else if( parent instanceof SynthenticDirEntryHandler )
+            else if (parent instanceof SynthenticDirEntryHandler)
             {
                // This is a child of the jar entry handler
                SynthenticDirEntryHandler ehandler = (SynthenticDirEntryHandler) parent;
@@ -262,17 +269,17 @@ public class AbstractJarHandler extends AbstractURLHandler
    }
 
    protected URL getURL(VirtualFileHandler parent, String path)
-      throws MalformedURLException
+           throws MalformedURLException
    {
       StringBuilder buffer = new StringBuilder();
       try
       {
          buffer.append(parent.toURL());
-         if (buffer.charAt(buffer.length()-1) != '/')
+         if (buffer.charAt(buffer.length() - 1) != '/')
             buffer.append('/');
          buffer.append(path);
       }
-      catch(URISyntaxException e)
+      catch (URISyntaxException e)
       {
          // Should not happen
          throw new MalformedURLException(e.getMessage());
@@ -315,32 +322,53 @@ public class AbstractJarHandler extends AbstractURLHandler
    public VirtualFileHandler createChildHandler(String name) throws IOException
    {
       VirtualFileHandler child = entryMap.get(name);
-      if( child == null )
-         throw new FileNotFoundException(this+" has no child: "+name);
+      if (child == null)
+         throw new FileNotFoundException(this + " has no child: " + name);
       return child;
    }
 
    /**
     * Create a new virtual file handler
-    * 
+    *
     * @param parent the parent
-    * @param entry the entry
+    * @param entry  the entry
     * @return the handler
-    * @throws IOException for any error accessing the file system
+    * @throws IOException              for any error accessing the file system
     * @throws IllegalArgumentException for a null parent or entry
     */
    protected VirtualFileHandler createVirtualFileHandler(VirtualFileHandler parent, JarEntry entry,
-         String entryName)
-      throws IOException
+                                                         String entryName)
+           throws IOException
    {
       if (parent == null)
          throw new IllegalArgumentException("Null parent");
       if (entry == null)
          throw new IllegalArgumentException("Null entry");
 
-      // Question: Why doesn't this work properly?
-      // URL url = new URL(parent.toURL(), entry.getName());
-      URL url = getURL(parent, entryName);
+
+      StringBuilder buffer = new StringBuilder();
+      try
+      {
+         String parentUrl = parent.toURL().toString();
+         if (parent instanceof JarEntryHandler || parent instanceof SynthenticDirEntryHandler)
+         {
+            buffer.append(parentUrl);
+         }
+         else
+         {
+            buffer.append("jar:").append(parentUrl).append("!/");
+         }
+
+         if (buffer.charAt(buffer.length() - 1) != '/')
+            buffer.append('/');
+         buffer.append(entryName);
+      }
+      catch (URISyntaxException e)
+      {
+         // Should not happen
+         throw new MalformedURLException(e.getMessage());
+      }
+      URL url = new URL(buffer.toString());
 
       VFSContext context = parent.getVFSContext();
 
@@ -350,10 +378,10 @@ public class AbstractJarHandler extends AbstractURLHandler
          String flag = context.getOptions().get("useNoCopyJarHandler");
          boolean useNoCopyJarHandler = Boolean.valueOf(flag);
 
-         if( useNoCopyJarHandler )
+         if (useNoCopyJarHandler)
             vfh = new NoCopyNestedJarHandler(context, parent, jar, entry, url);
          else
-            vfh = new NestedJarHandler(context, parent, jar, entry, url, entryName);
+            vfh = NestedJarHandler.create(context, parent, jar, entry, url, entryName);
       }
       else
       {
@@ -368,27 +396,35 @@ public class AbstractJarHandler extends AbstractURLHandler
 
    /**
     * Restore the jar file from the jar URL
-    * 
+    *
     * @param in
     * @throws IOException
     * @throws ClassNotFoundException
     */
    private void readObject(ObjectInputStream in)
-      throws IOException, ClassNotFoundException
+           throws IOException, ClassNotFoundException
    {
       in.defaultReadObject();
       // Initialize the transient values
       URL jarURL = super.getURL();
-      URLConnection conn = jarURL.openConnection();
-      if( conn instanceof JarURLConnection )
+      String jarAsString = jarURL.toString();
+      if (jarAsString.startsWith("file:"))
       {
-         JarURLConnection jconn = (JarURLConnection) conn;
-         jar = jconn.getJarFile();
-         // initJarFile(jar) must be called by subclasses readObject
+         File fp = new File(jarAsString.substring(6));
+         jar = new JarFile(fp);
       }
       else
       {
-         throw new IOException("Cannot restore from non-JarURLConnection, url: "+jarURL);
+         URLConnection conn = jarURL.openConnection();
+         if (conn instanceof JarURLConnection)
+         {
+            JarURLConnection jconn = (JarURLConnection) conn;
+            jar = jconn.getJarFile();
+         }
+         else
+         {
+            throw new IOException("Cannot restore from non-JarURLConnection, url: " + jarURL);
+         }
       }
    }
 
