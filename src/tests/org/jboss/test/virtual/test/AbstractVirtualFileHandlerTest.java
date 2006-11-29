@@ -164,6 +164,8 @@ public abstract class AbstractVirtualFileHandlerTest extends AbstractVFSTest
       VFSContext context = getVFSContext("simple");
       VirtualFileHandler root = context.getRoot();
       long realLastModified = getRealLastModified("simple", null);
+      // strip any milliseconds
+      realLastModified = realLastModified / 1000 * 1000;
       assertEquals(realLastModified, root.getLastModified());
    }
    
