@@ -32,7 +32,7 @@ import org.jboss.repository.spi.MetaData;
 public class ThreadMetaDataCombiner
    implements MetaDataCombiner
 {
-   private static ThreadLocal metaData = new ThreadLocal();
+   private static ThreadLocal<Object> metaData = new ThreadLocal<Object>();
 
    private MetaDataCombiner next;
 

@@ -21,6 +21,8 @@
 */
 package org.jboss.test;
 
+import java.util.Arrays;
+
 /**
  * A ContainerTest.
  * 
@@ -40,6 +42,18 @@ public class ContainerTest extends AbstractTestCaseWithSetup
    }
    
    /**
+    * Assert an array is empty or null
+    * 
+    * TODO Move this to the AbstractTestCase
+    * @param array the array
+    */
+   protected static void assertEmpty(Object[] array)
+   {
+      if (array != null)
+         assertEquals(Arrays.asList(array).toString(), 0, array.length);
+   }
+   
+   /**
     * Default setup with security manager enabled
     * 
     * @param clazz the class
@@ -49,7 +63,7 @@ public class ContainerTest extends AbstractTestCaseWithSetup
    public static AbstractTestDelegate getDelegate(Class clazz) throws Exception
    {
       AbstractTestDelegate delegate = new AbstractTestDelegate(clazz);
-      delegate.enableSecurity = true;
+      //delegate.enableSecurity = true;
       return delegate;
    }
 }

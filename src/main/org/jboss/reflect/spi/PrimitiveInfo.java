@@ -84,7 +84,7 @@ public class PrimitiveInfo implements TypeInfo, Serializable
    protected final transient Class<? extends Object> type;
 
    /** The primitives */
-   private static HashMap<String, PrimitiveInfo> map = new HashMap<String, PrimitiveInfo>();
+   private static final HashMap<String, PrimitiveInfo> map = new HashMap<String, PrimitiveInfo>();
 
    static
    {
@@ -139,7 +139,7 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       return name;
    }
    
-   public Class getType()
+   public Class<?> getType()
    {
       return type;
    }
@@ -152,6 +152,16 @@ public class PrimitiveInfo implements TypeInfo, Serializable
    public boolean isArray()
    {
       return false;
+   }
+
+   public boolean isEnum()
+   {
+      return false;
+   }
+
+   public boolean isPrimitive()
+   {
+      return true;
    }
 
    public TypeInfo getArrayType(int depth)

@@ -30,13 +30,6 @@ package org.jboss.reflect.spi;
 public interface ConstructorInfo extends AnnotatedInfo, MemberInfo
 {
    /**
-    * Get the declaring class
-    * 
-    * @return the class
-    */
-   ClassInfo getDeclaringClass();
-
-   /**
     * Get the parameter types
     * 
     * @return the parameters types

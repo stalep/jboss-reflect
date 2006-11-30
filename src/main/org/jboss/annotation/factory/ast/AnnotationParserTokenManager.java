@@ -43,6 +43,7 @@ private final int jjStopAtPos(int pos, int kind)
    jjmatchedPos = pos;
    return pos + 1;
 }
+/*
 private final int jjStartNfaWithStates_0(int pos, int kind, int state)
 {
    jjmatchedKind = kind;
@@ -51,6 +52,7 @@ private final int jjStartNfaWithStates_0(int pos, int kind, int state)
    catch(java.io.IOException e) { return pos + 1; }
    return jjMoveNfa_0(state, pos + 1);
 }
+*/
 private final int jjMoveStringLiteralDfa0_0()
 {
    switch(curChar)
@@ -120,22 +122,25 @@ private final void jjCheckNAddStates(int start, int end)
       jjCheckNAdd(jjnextStates[start]);
    } while (start++ != end);
 }
+/*
 private final void jjCheckNAddStates(int start)
 {
    jjCheckNAdd(jjnextStates[start]);
    jjCheckNAdd(jjnextStates[start + 1]);
 }
+*/
 static final long[] jjbitVec0 = {
    0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
 };
 private final int jjMoveNfa_0(int startState, int curPos)
 {
-   int[] nextStates;
+   //int[] nextStates;
    int startsAt = 0;
    jjnewStateCnt = 27;
    int i = 1;
    jjstateSet[0] = startState;
-   int j, kind = 0x7fffffff;
+   //int j;
+   int kind = 0x7fffffff;
    for (;;)
    {
       if (++jjround == 0x7fffffff)
@@ -143,7 +148,8 @@ private final int jjMoveNfa_0(int startState, int curPos)
       if (curChar < 64)
       {
          long l = 1L << curChar;
-         MatchLoop: do
+         //MatchLoop:
+         do
          {
             switch(jjstateSet[--i])
             {
@@ -249,7 +255,8 @@ private final int jjMoveNfa_0(int startState, int curPos)
       else if (curChar < 128)
       {
          long l = 1L << (curChar & 077);
-         MatchLoop: do
+         //MatchLoop: 
+         do
          {
             switch(jjstateSet[--i])
             {
@@ -317,7 +324,8 @@ private final int jjMoveNfa_0(int startState, int curPos)
       {
          int i2 = (curChar & 0xff) >> 6;
          long l2 = 1L << (curChar & 077);
-         MatchLoop: do
+         //MatchLoop: 
+         do
          {
             switch(jjstateSet[--i])
             {
@@ -426,8 +434,8 @@ int jjmatchedKind;
 
 public Token getNextToken() 
 {
-  int kind;
-  Token specialToken = null;
+  //int kind;
+  //Token specialToken = null;
   Token matchedToken;
   int curPos = 0;
 

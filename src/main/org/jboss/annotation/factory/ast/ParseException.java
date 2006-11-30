@@ -45,6 +45,10 @@ public class ParseException extends Exception {
    * to force the "toString" method of parent class "Throwable" to
    * print the error message in the form:
    *     ParseException: <result of getMessage>
+   *     
+   * @param currentTokenVal
+   * @param expectedTokenSequencesVal
+   * @param tokenImageVal
    */
   public ParseException(Token currentTokenVal,
                         int[][] expectedTokenSequencesVal,
@@ -165,6 +169,9 @@ public class ParseException extends Exception {
    * Used to convert raw characters to their escaped version
    * when these raw version cannot be used as part of an ASCII
    * string literal.
+   * 
+   * @param str 
+   * @return the escaped string 
    */
   protected String add_escapes(String str) {
       StringBuffer retval = new StringBuffer();

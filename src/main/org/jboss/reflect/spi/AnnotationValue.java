@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.spi;
 
+import java.util.Map;
+
 
 /**
  * An annotation value
@@ -44,4 +46,11 @@ public interface AnnotationValue extends Value
     * @return the value
     */
    Value getValue(String attributeName);
+   
+   /**
+    * Get the values
+    * 
+    * @return the values
+    */
+   Map<String, Value> getValues();
 }

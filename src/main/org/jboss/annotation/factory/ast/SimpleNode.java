@@ -70,7 +70,11 @@ public class SimpleNode implements Node {
     return visitor.visit(this, data);
   }
 
-  /** Accept the visitor. **/
+  /** Accept the visitor.
+   * @param visitor 
+   * @param data 
+   * @return ? 
+   */
   public Object childrenAccept(AnnotationParserVisitor visitor, Object data) {
     if (children != null) {
       for (int i = 0; i < children.length; ++i) {

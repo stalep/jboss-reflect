@@ -42,8 +42,9 @@ public interface KernelRepository
    public Map getAllMetaData(Key key);
 
    /**
-    @param key
-    @param data
+    * @param key the key
+    * @param data thje data
+    * @return the meta data
     */
    public MetaData addMetaData(Key key, MetaData data);
 

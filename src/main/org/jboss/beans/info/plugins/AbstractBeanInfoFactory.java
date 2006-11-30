@@ -35,6 +35,7 @@ import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.beans.info.spi.EventInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.classadapter.spi.ClassAdapter;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
@@ -212,15 +213,14 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
     * @param methods the methods
     * @return the properties
     */
-   protected Set<PropertyInfo> getProperties(Set methods)
+   protected Set<PropertyInfo> getProperties(Set<MethodInfo> methods)
    {
       HashMap<String, MethodInfo> getters = new HashMap<String, MethodInfo>();
       HashMap<String, List<MethodInfo>> setters = new HashMap<String, List<MethodInfo>>();
       if (methods.isEmpty() == false)
       {
-         for (Iterator i = methods.iterator(); i.hasNext();)
+         for (MethodInfo methodInfo : methods)
          {
-            MethodInfo methodInfo = (MethodInfo) i.next();
             if (methodInfo.isPublic() && methodInfo.isStatic() == false)
             {
                String name = methodInfo.getName();
@@ -231,7 +231,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
                }
                else if (isSetter(methodInfo))
                {
-                  ArrayList<MethodInfo> list = (ArrayList<MethodInfo>) setters.get(upperName);
+                  List<MethodInfo> list = setters.get(upperName);
                   if (list == null)
                   {
                      list = new ArrayList<MethodInfo>();
@@ -246,18 +246,18 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       HashSet<PropertyInfo> properties = new HashSet<PropertyInfo>();
       if (getters.isEmpty() == false)
       {
-         for (Iterator i = getters.entrySet().iterator(); i.hasNext();)
+         for (Iterator<Map.Entry<String, MethodInfo>> i = getters.entrySet().iterator(); i.hasNext();)
          {
-            Map.Entry entry = (Map.Entry) i.next();
-            String name = (String) entry.getKey();
-            MethodInfo getter = (MethodInfo) entry.getValue();
+            Map.Entry<String, MethodInfo> entry = i.next();
+            String name = entry.getKey();
+            MethodInfo getter = entry.getValue();
             MethodInfo setter = null;
-            ArrayList setterList = (ArrayList) setters.remove(name);
+            List<MethodInfo> setterList = setters.remove(name);
             if (setterList != null && setterList.size() != 0)
             {
                for (int j = 0; j < setterList.size(); ++j)
                {
-                  MethodInfo thisSetter = (MethodInfo) setterList.get(j);
+                  MethodInfo thisSetter = setterList.get(j);
                   TypeInfo pinfo = thisSetter.getParameterTypes()[0];
                   if (getter.getReturnType().equals(pinfo) == true)
                   {
@@ -267,23 +267,42 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
                }
             }
             String lowerName = getLowerPropertyName(name);
-            properties.add(new AbstractPropertyInfo(lowerName, name, getter.getReturnType(), getter, setter));
+            
+            // Merge the annotations between the getters and setters
+            AnnotationValue[] annotations = getter.getAnnotations();
+            AnnotationValue[] setterAnnotations = null;
+            if (setter != null)
+               setter.getAnnotations();
+            if (annotations == null || annotations.length == 0)
+               annotations = setterAnnotations;
+            else if (setterAnnotations != null && setterAnnotations.length > 0)
+            {
+               HashSet<AnnotationValue> merged = new HashSet<AnnotationValue>();
+               for (AnnotationValue annotation : annotations)
+                  merged.add(annotation);
+               for (AnnotationValue annotation : setterAnnotations)
+                  merged.add(annotation);
+               annotations = merged.toArray(new AnnotationValue[merged.size()]);
+            }
+            
+            properties.add(new AbstractPropertyInfo(lowerName, name, getter.getReturnType(), getter, setter, annotations));
          }
       }
       if (setters.isEmpty() == false)
       {
-         for (Iterator i = setters.entrySet().iterator(); i.hasNext();)
+         for (Iterator<Map.Entry<String, List<MethodInfo>>> i = setters.entrySet().iterator(); i.hasNext();)
          {
-            Map.Entry entry = (Map.Entry) i.next();
-            String name = (String) entry.getKey();
-            ArrayList setterList = (ArrayList) entry.getValue();
+            Map.Entry<String, List<MethodInfo>> entry = i.next();
+            String name = entry.getKey();
+            List<MethodInfo> setterList = entry.getValue();
             // Review: Maybe should just create duplicate propertyInfo and let the configurator guess?
             if (setterList.size() == 1)
             {
-               MethodInfo setter = (MethodInfo) setterList.get(0);
+               MethodInfo setter = setterList.get(0);
                TypeInfo pinfo = setter.getParameterTypes()[0];
                String lowerName = getLowerPropertyName(name);
-               properties.add(new AbstractPropertyInfo(lowerName, name, pinfo, null, setter));
+               AnnotationValue[] annotations = setter.getAnnotations();
+               properties.add(new AbstractPropertyInfo(lowerName, name, pinfo, null, setter, annotations));
             }
          }
       }

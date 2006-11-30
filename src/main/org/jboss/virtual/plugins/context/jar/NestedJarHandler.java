@@ -27,8 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -54,6 +52,7 @@ public class NestedJarHandler extends AbstractJarHandler
    /** The temporary file */
    private transient File temp;
 
+   /** TODO WHAT DOES THIS DO? It is unused */
    private transient URL original;
 
    /**
@@ -127,6 +126,9 @@ public class NestedJarHandler extends AbstractJarHandler
     * @param parent the parent
     * @param parentJar the parent jar file
     * @param entry the jar entry
+    * @param original the original url
+    * @param temp the temporary file
+    * @param entryName the entry name
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url or vfsPath
     */

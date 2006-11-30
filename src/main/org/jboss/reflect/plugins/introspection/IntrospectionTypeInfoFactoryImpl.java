@@ -37,6 +37,7 @@ import org.jboss.reflect.plugins.ArrayInfoImpl;
 import org.jboss.reflect.plugins.ClassInfoHelper;
 import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.plugins.ConstructorInfoImpl;
+import org.jboss.reflect.plugins.EnumConstantInfoImpl;
 import org.jboss.reflect.plugins.EnumInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
@@ -153,6 +154,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          infos[i] = new ReflectFieldInfoImpl(annotations, fields[i].getName(), getTypeInfo(fields[i].getType()), fields[i].getModifiers(), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
          infos[i].setField(fields[i]);
       }
+      
       return infos;
    }
 
@@ -237,6 +239,11 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
    {
       if (name == null)
          throw new IllegalArgumentException("Null class name");
+
+      TypeInfo primitive = PrimitiveInfo.valueOf(name);
+      if (primitive != null)
+         return primitive;
+
       if (cl == null)
          cl = Thread.currentThread().getContextClassLoader();
 
@@ -254,7 +261,14 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       }
       else if (clazz.isEnum())
       {
-         result = new EnumInfoImpl(clazz.getName(), clazz.getModifiers());
+         EnumInfoImpl enumInfoImpl = new EnumInfoImpl(clazz.getName(), clazz.getModifiers()); 
+         result = enumInfoImpl; 
+         Field[] fields = clazz.getFields();
+         EnumConstantInfoImpl[] constants = new EnumConstantInfoImpl[fields.length];
+         int i = 0;
+         for (Field field : fields)
+            constants[i++] = new EnumConstantInfoImpl(field.getName(), enumInfoImpl);
+         enumInfoImpl.setEnumConstants(constants);
       }
       else if (clazz.isAnnotation())
       {

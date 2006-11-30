@@ -145,6 +145,7 @@ public abstract class AbstractVFSContext implements VFSContext
     * @param leavesOnly whether to visit leaves only
     * @param ignoreErrors whether to ignore errors
     * @param includeHidden whether to include hidden files
+    * @param recurseFilter the recurse filter
     * @throws IOException for any problem accessing the virtual file system
     */
    protected void visit(VirtualFileHandler handler, VirtualFileHandlerVisitor visitor,

@@ -51,7 +51,7 @@ public class BasicAttributeComparator
       CommonNames.CLUSTER,
       CommonNames.DOMAIN
    };
-   private static HashMap BASIC_ORDER_INDEXES = new HashMap();
+   private static HashMap<String, Integer> BASIC_ORDER_INDEXES = new HashMap<String, Integer>();
    static
    {
       for(int n = 0; n < BASIC_ORDERING.length; n ++)
@@ -62,8 +62,8 @@ public class BasicAttributeComparator
    {
       String name1 = (String) obj1;
       String name2 = (String) obj2;
-      Integer index1 = (Integer) BASIC_ORDER_INDEXES.get(name1);
-      Integer index2 = (Integer) BASIC_ORDER_INDEXES.get(name2);
+      Integer index1 = BASIC_ORDER_INDEXES.get(name1);
+      Integer index2 = BASIC_ORDER_INDEXES.get(name2);
       int compare = 0;
       if( index1 != null )
       {

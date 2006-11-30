@@ -29,7 +29,7 @@ public class ClassInJar1
 {
    public static final java.lang.String VERSION = "1.0.0";
 
-   private int i;
+   int i;
 
    class InnerClass
    {

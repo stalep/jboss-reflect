@@ -21,10 +21,10 @@
 */
 package org.jboss.reflect.plugins;
 
+import java.util.HashMap;
+
 import org.jboss.reflect.spi.EnumConstantInfo;
 import org.jboss.reflect.spi.EnumInfo;
-
-import java.util.HashMap;
 
 /**
  * Enumeration info
@@ -58,7 +58,7 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
     */
    public EnumInfoImpl(String name, int modifiers)
    {
-      super(name, modifiers, null, null);
+      super(name, modifiers);
    }
    
    /**
@@ -70,6 +70,7 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
    {
       for (int i = 0; i < enumConstants.length; i++)
          constants.put(enumConstants[i].getName(), enumConstants[i]);
+      this.enumConstants = enumConstants;
    }
 
    public EnumConstantInfo[] getEnumConstants()
@@ -80,5 +81,18 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
    public EnumConstantInfo getEnumConstant(String name)
    {
       return constants.get(name);
+   }
+
+   public boolean equals(Object o)
+   {
+      if (this == o) return true;
+      if (o == null || !(o instanceof EnumInfo)) return false;
+      if (!super.equals(o)) return false;
+      
+      final EnumInfo enumInfo = (EnumInfo) o;
+
+      if (!getName().equals(enumInfo.getName())) return false;
+
+      return true;
    }
 }

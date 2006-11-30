@@ -25,6 +25,7 @@ import java.lang.annotation.Annotation;
 
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtField;
 import javassist.CtMember;
 import javassist.CtMethod;
 import javassist.CtPrimitiveType;
@@ -34,6 +35,7 @@ import org.jboss.reflect.plugins.AnnotationAttributeImpl;
 import org.jboss.reflect.plugins.AnnotationHelper;
 import org.jboss.reflect.plugins.AnnotationValueFactory;
 import org.jboss.reflect.plugins.AnnotationValueImpl;
+import org.jboss.reflect.plugins.EnumConstantInfoImpl;
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.PrimitiveInfo;
@@ -125,7 +127,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          if (clazz.isArray())
          {
             TypeInfo componentType = getTypeInfo(clazz.getComponentType());
-            return new JavassistArrayInfoImpl(componentType);
+            return new JavassistArrayInfoImpl(this, ctClass, clazz, componentType);
          }
 
          if (ctClass.isAnnotation())
@@ -143,7 +145,14 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          }
          else if (ctClass.isEnum())
          {
-            return new JavassistEnumInfo(this, ctClass, clazz);
+            JavassistEnumInfo enumInfo = new JavassistEnumInfo(this, ctClass, clazz);
+            CtField[] fields = ctClass.getFields();
+            EnumConstantInfoImpl[] constants = new EnumConstantInfoImpl[fields.length];
+            int i = 0;
+            for (CtField field : fields)
+               constants[i++] = new EnumConstantInfoImpl(field.getName(), enumInfo);
+            enumInfo.setEnumConstants(constants);
+            return enumInfo;
          }
 
          

@@ -26,6 +26,7 @@ import java.io.Serializable;
 import org.jboss.reflect.spi.EnumConstantInfo;
 import org.jboss.reflect.spi.EnumInfo;
 import org.jboss.util.JBossObject;
+import org.jboss.util.JBossStringBuilder;
 
 /**
  * An enumeration constant
@@ -90,19 +91,22 @@ public class EnumConstantInfoImpl extends JBossObject implements EnumConstantInf
    public boolean equals(Object o)
    {
       if (this == o) return true;
-      if (!(o instanceof EnumConstantInfoImpl)) return false;
+      if (o == null || !(o instanceof EnumConstantInfo)) return false;
 
-      final EnumConstantInfoImpl enumConstantInfo = (EnumConstantInfoImpl) o;
+      final EnumConstantInfo enumConstantInfo = (EnumConstantInfo) o;
 
-      if (name != enumConstantInfo.name)
+      if (name.equals(enumConstantInfo.getName()) == false)
          return false;
-      if (!declaring.equals(enumConstantInfo.declaring))
+      if (!declaring.equals(enumConstantInfo.getDeclaring()))
          return false;
 
       return true;
    }
 
-   public int hashCode() { return hash; }
+   public int hashCode()
+   {
+      return hash;
+   }
 
    /**
     * Calculate the hash code
@@ -112,5 +116,16 @@ public class EnumConstantInfoImpl extends JBossObject implements EnumConstantInf
       int result = name.hashCode();
       result = 29 * result + declaring.hashCode();
       hash = result;
+   }
+
+   public void toShortString(JBossStringBuilder buffer)
+   {
+      buffer.append(name);
+   }
+
+   protected void toString(JBossStringBuilder buffer)
+   {
+      buffer.append("name=").append(name);
+      buffer.append(" declaring=").append(declaring);
    }
 }

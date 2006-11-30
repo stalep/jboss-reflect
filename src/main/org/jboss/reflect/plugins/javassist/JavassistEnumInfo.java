@@ -58,6 +58,7 @@ public class JavassistEnumInfo extends JavassistTypeInfo implements EnumInfo
    {
       for (int i = 0; i < enumConstants.length; i++)
          constants.put(enumConstants[i].getName(), enumConstants[i]);
+      this.enumConstants = enumConstants;
    }
 
    public EnumConstantInfo[] getEnumConstants()
@@ -73,9 +74,10 @@ public class JavassistEnumInfo extends JavassistTypeInfo implements EnumInfo
    public boolean equals(Object o)
    {
       if (this == o) return true;
-      if (!(o instanceof JavassistEnumInfo)) return false;
-
-      final JavassistEnumInfo enumInfo = (JavassistEnumInfo) o;
+      if (o == null || !(o instanceof EnumInfo)) return false;
+      if (!super.equals(o)) return false;
+      
+      final EnumInfo enumInfo = (EnumInfo) o;
 
       if (!getName().equals(enumInfo.getName())) return false;
 

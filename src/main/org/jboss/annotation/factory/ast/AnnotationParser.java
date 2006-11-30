@@ -211,7 +211,7 @@ public class AnnotationParser/*@bgen(jjtree)*/implements AnnotationParserTreeCon
  /*@bgen(jjtree) MemberValuePair */
   ASTMemberValuePair jjtn000 = new ASTMemberValuePair(JJTMEMBERVALUEPAIR);
   boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);Token specialToken;
+  jjtree.openNodeScope(jjtn000); //Token specialToken;
     try {
       Identifier();
       jj_consume_token(13);
@@ -238,7 +238,7 @@ public class AnnotationParser/*@bgen(jjtree)*/implements AnnotationParserTreeCon
   }
 
   final public void MemberValue() throws ParseException {
-  Token tok;
+  //Token tok;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case 9:
       Annotation();
@@ -484,7 +484,7 @@ public class AnnotationParser/*@bgen(jjtree)*/implements AnnotationParserTreeCon
   private Token jj_scanpos, jj_lastpos;
   private int jj_la;
   public boolean lookingAhead = false;
-  private boolean jj_semLA;
+  //private boolean jj_semLA;
   private int jj_gen;
   final private int[] jj_la1 = new int[8];
   static private int[] jj_la1_0;
@@ -583,7 +583,11 @@ public class AnnotationParser/*@bgen(jjtree)*/implements AnnotationParserTreeCon
     throw generateParseException();
   }
 
-  static private final class LookaheadSuccess extends java.lang.Error {}
+  static private final class LookaheadSuccess extends java.lang.Error {
+
+   /** The serialVersionUID */
+   private static final long serialVersionUID = 1L;
+  }
   final private LookaheadSuccess jj_ls = new LookaheadSuccess();
   final private boolean jj_scan_token(int kind) {
     if (jj_scanpos == jj_lastpos) {
@@ -636,6 +640,7 @@ public class AnnotationParser/*@bgen(jjtree)*/implements AnnotationParserTreeCon
   private int[] jj_lasttokens = new int[100];
   private int jj_endpos;
 
+  @SuppressWarnings("unchecked")
   private void jj_add_error_token(int kind, int pos) {
     if (pos >= 100) return;
     if (pos == jj_endpos + 1) {
@@ -664,6 +669,7 @@ public class AnnotationParser/*@bgen(jjtree)*/implements AnnotationParserTreeCon
     }
   }
 
+  @SuppressWarnings("unchecked")
   public ParseException generateParseException() {
     jj_expentries.removeAllElements();
     boolean[] la1tokens = new boolean[16];

@@ -78,7 +78,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    protected FieldInfo[] fields = UNKNOWN_FIELDS;
    
    /** Field map Map<String, FieldInfo> */
-   protected HashMap fieldMap;
+   protected HashMap<String, FieldInfo> fieldMap;
 
    /** The super class */
    protected ClassInfo superclass = UNKNOWN_CLASS;
@@ -122,6 +122,36 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       }
       return null;
    }
+   
+   /**
+    * Find a constructor
+    * 
+    * @param constructors the constructors
+    * @param parameters the parameters
+    * @return the constructor info
+    */
+   public static ConstructorInfo findConstructor(ConstructorInfo[] constructors, TypeInfo[] parameters)
+   {
+      if (constructors == null) return null;
+      for (int i = 0; i < constructors.length; i++)
+      {
+         final int length = (parameters != null) ? parameters.length : 0;
+         if (constructors[i].getParameterTypes().length == length)
+         {
+            boolean ok = true;
+            for (int j = 0; j < length; j++)
+            {
+               if (!parameters[j].equals(constructors[i].getParameterTypes()[j]))
+               {
+                  ok = false;
+                  break;
+               }
+            }
+            if (ok) return constructors[i];
+         }
+      }
+      return null;
+   }
 
    /**
     * Get an array class
@@ -151,6 +181,18 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public ClassInfoImpl(String name)
    {
       this.name = name;
+   }
+
+   /**
+    * Create a new abstract ClassInfo.
+    * 
+    * @param name the class name
+    * @param modifiers the class modifiers
+    */
+   public ClassInfoImpl(String name, int modifiers)
+   {
+      this.name = name;
+      this.modifiers = modifiers;
    }
 
    /**
@@ -188,6 +230,8 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public void setType(Class type)
    {
       setAnnotatedElement(type);
+      if (type != null)
+         modifiers = type.getModifiers();
    }
    
    /**
@@ -225,8 +269,12 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       this.fields = fields;
       if (fields != null)
       {
-         for (int i = 0; i < fields.length; i++)
+         fieldMap = new HashMap<String, FieldInfo>();
+         for (int i = 0; i < fields.length; ++i)
+         {
             fields[i].declaringClass = this;
+            fieldMap.put(fields[i].getName(), fields[i]);
+         }
       }
    }
 
@@ -286,7 +334,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    {
       if (fields == UNKNOWN_FIELDS)
          setDeclaredFields(classInfoHelper.getFields(this));
-      return (FieldInfo) fieldMap.get(name);
+      if (fieldMap == null)
+         return null;
+      return fieldMap.get(name);
    }
 
    public FieldInfo[] getDeclaredFields()
@@ -294,6 +344,13 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       if (fields == UNKNOWN_FIELDS)
          setDeclaredFields(classInfoHelper.getFields(this));
       return fields;
+   }
+   
+   public ConstructorInfo getDeclaredConstructor(TypeInfo[] parameters)
+   {
+      if (methods == UNKNOWN_METHODS)
+         setDeclaredConstructors(classInfoHelper.getConstructors(this));
+      return findConstructor(constructors, parameters);
    }
 
    public ConstructorInfo[] getDeclaredConstructors()
@@ -345,6 +402,16 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return getType().isArray();
    }
 
+   public boolean isEnum()
+   {
+      return getType().isEnum();
+   }
+
+   public boolean isPrimitive()
+   {
+      return false;
+   }
+
    public TypeInfo getArrayType(int depth)
    {
       Class arrayClass = getArrayClass(getType(), depth);
@@ -378,6 +445,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
 
       final ClassInfo other = (ClassInfo) obj;
 
+      String name = getName();
       if (name != null ? name.equals(other.getName()) == false : other.getName() != null)
          return false;
       return true;
@@ -390,7 +458,15 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    
    static class UnknownClassInfo implements ClassInfo
    {
+      /** The serialVersionUID */
+      private static final long serialVersionUID = 1L;
+
       public ConstructorInfo[] getDeclaredConstructors()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public ConstructorInfo getDeclaredConstructor(TypeInfo[] parameters)
       {
          throw new UnreachableStatementException();
       }
@@ -476,6 +552,16 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       }
 
       public boolean isArray()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public boolean isEnum()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public boolean isPrimitive()
       {
          throw new UnreachableStatementException();
       }

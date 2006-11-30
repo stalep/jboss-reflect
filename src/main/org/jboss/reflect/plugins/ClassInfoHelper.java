@@ -27,7 +27,6 @@ import org.jboss.reflect.spi.TypeInfo;
 /**
  * ClassInfoHelper.
  * 
- * @todo fix the introspection assumption
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */

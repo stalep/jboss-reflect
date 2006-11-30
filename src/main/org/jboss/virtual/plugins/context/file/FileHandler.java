@@ -33,7 +33,6 @@ import java.util.List;
 
 import org.jboss.virtual.plugins.context.AbstractURLHandler;
 import org.jboss.virtual.plugins.context.StructuredVirtualFileHandler;
-import org.jboss.virtual.plugins.context.jar.JarUtils;
 import org.jboss.virtual.spi.VirtualFileHandler;
 
 /**

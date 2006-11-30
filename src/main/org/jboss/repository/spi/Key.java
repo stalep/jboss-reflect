@@ -41,7 +41,7 @@ import org.jboss.util.JBossStringBuilder;
 public class Key implements Comparable
 {
    private String[] name;
-   private Map attributes;
+   private Map<String, String> attributes;
    private int level;
 
    public Key(String nameExpr)
@@ -50,14 +50,14 @@ public class Key implements Comparable
       parseName(nameExpr);
       defineLevel();
    }
-   public Key(String[] name, Map attributes)
+   public Key(String[] name, Map<String, String> attributes)
    {
       this.name = name;
       this.attributes = attributes;
       defineLevel();
    }
 
-   public Key(String name, Map attributes)
+   public Key(String name, Map<String, String> attributes)
    {
       this.name = new String[] {name};
       this.attributes = attributes;
@@ -101,21 +101,21 @@ public class Key implements Comparable
       
       if( compare == 0 )
       {
-         Map keyAttrs = key.attributes;
+         Map<String, String> keyAttrs = key.attributes;
          if( attributes == null )
             compare = keyAttrs == null ? 0 : keyAttrs.size();
          else if( keyAttrs == null )
             compare = attributes == null ? 0 : attributes.size();
          else
          {
-            TreeSet set = new TreeSet(attributes.keySet());
+            TreeSet<String> set = new TreeSet<String>(attributes.keySet());
             set.addAll(keyAttrs.keySet());
             Iterator keys = set.iterator();
             while( keys.hasNext() && compare == 0 )
             {
                String key1 = (String) keys.next();
-               String value1 = (String) attributes.get(key1);
-               String value2 = (String) keyAttrs.get(key1);
+               String value1 = attributes.get(key1);
+               String value2 = keyAttrs.get(key1);
                
                if (value1 == null && value2 == null)
                   compare = 0;
@@ -183,7 +183,7 @@ public class Key implements Comparable
             
             if (attributes == null)
             {
-               attributes = new HashMap();
+               attributes = new HashMap<String, String>();
             }
             attributes.put(key, value);
          }
@@ -192,13 +192,13 @@ public class Key implements Comparable
    
    private void parseNamePart(String namePart)
    {
-      ArrayList names = new ArrayList();
+      ArrayList<String> names = new ArrayList<String>();
       StringTokenizer tokenizer = new StringTokenizer(namePart, ",");
       while (tokenizer.hasMoreTokens())
       {
          names.add(tokenizer.nextToken());
       }
-      name = (String[])names.toArray(new String[names.size()]);
+      name = names.toArray(new String[names.size()]);
    }
    
    public String toString()

@@ -21,13 +21,15 @@
 */
 package org.jboss.reflect.spi;
 
+import java.io.Serializable;
+
 /**
  * A type info
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface TypeInfo
+public interface TypeInfo extends Serializable
 {
    /**
     * Get the type name
@@ -59,6 +61,20 @@ public interface TypeInfo
     * @return true when an array
     */
    boolean isArray();
+   
+   /**
+    * Whether this type is an enum
+    * 
+    * @return true when an enum
+    */
+   boolean isEnum();
+   
+   /**
+    * Whether this type is a primitive
+    * 
+    * @return true when a primtive
+    */
+   boolean isPrimitive();
    
    /**
     * Whether this type is an array

@@ -60,6 +60,7 @@ class JJTAnnotationParserState {
   }
 
   /* Pushes a node on to the stack. */
+  @SuppressWarnings("unchecked")
   void pushNode(Node n) {
     nodes.push(n);
     ++sp;
@@ -94,6 +95,7 @@ class JJTAnnotationParserState {
   }
 
 
+  @SuppressWarnings("unchecked")
   void openNodeScope(Node n) {
     marks.push(new Integer(mk));
     mk = sp;

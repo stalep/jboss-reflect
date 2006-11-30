@@ -42,13 +42,6 @@ public interface FieldInfo extends AnnotatedInfo, MemberInfo
     * @return the field type
     */
    TypeInfo getType();
-
-   /**
-    * Get the declaring class
-    * 
-    * @return the declaring class
-    */
-   ClassInfo getDeclaringClass();
    
    /**
     * Get the value of the field

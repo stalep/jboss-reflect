@@ -49,7 +49,6 @@ import org.jboss.virtual.VFS;
 import org.jboss.virtual.VFSUtils;
 import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.VisitorAttributes;
-import org.jboss.virtual.plugins.context.jar.JarUtils;
 import org.jboss.virtual.plugins.context.jar.NestedJarFromStream;
 import org.jboss.virtual.plugins.vfs.helpers.SuffixMatchFilter;
 import org.jboss.virtual.spi.LinkInfo;
@@ -965,6 +964,8 @@ public class FileVFSUnitTestCase extends BaseTestCase
 
    /**
     * Tests that we can find the META-INF/some-data.xml in an unpacked deployment
+    * 
+    * @throws Exception for any error
     */
    public void testGetMetaDataUnpackedJar() throws Exception
    {
@@ -973,6 +974,8 @@ public class FileVFSUnitTestCase extends BaseTestCase
    
    /**
     * Tests that we can find the META-INF/some-data.xml in a packed deployment
+    * 
+    * @throws Exception for any error
     */
    public void testGetMetaDataPackedJar() throws Exception
    {

@@ -37,8 +37,9 @@ public interface MetaDataLoader
    public Iterator getKeys();
 
    /**
-
-    @param key the key to load the metadata for
+    *
+    * @param key the key to load the metadata for
+    * @return the metadata
     */
    public MetaData load(Key key);
 }

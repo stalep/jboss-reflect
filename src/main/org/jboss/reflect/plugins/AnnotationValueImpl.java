@@ -23,12 +23,14 @@ package org.jboss.reflect.plugins;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.Value;
 import org.jboss.util.JBossObject;
+import org.jboss.util.JBossStringBuilder;
 
 /**
  * An annotation value
@@ -45,7 +47,7 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
    protected AnnotationInfo annotationType;
    
    /** The attribute values */
-   protected HashMap attributeValues;
+   protected HashMap<String, Value> attributeValues;
    
    /** The hash code */
    protected int hash = -1;
@@ -63,7 +65,7 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
     * @param annotationType the annotation info
     * @param attributeValues the attribute values
     */
-   public AnnotationValueImpl(AnnotationInfo annotationType, HashMap attributeValues)
+   public AnnotationValueImpl(AnnotationInfo annotationType, HashMap<String, Value> attributeValues)
    {
       this.annotationType = annotationType;
       this.attributeValues = attributeValues;
@@ -77,7 +79,12 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
    
    public Value getValue(String attributeName)
    {
-      return (Value) attributeValues.get(attributeName);
+      return attributeValues.get(attributeName);
+   }
+
+   public Map<String, Value> getValues()
+   {
+      return attributeValues;
    }
 
    public TypeInfo getType()
@@ -88,12 +95,12 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
    public boolean equals(Object o)
    {
       if (this == o) return true;
-      if (!(o instanceof AnnotationValueImpl)) return false;
+      if (!(o instanceof AnnotationValue)) return false;
 
-      final AnnotationValueImpl annotationValue = (AnnotationValueImpl) o;
+      final AnnotationValue annotationValue = (AnnotationValue) o;
 
-      if (!annotationType.equals(annotationValue.annotationType)) return false;
-      if (!attributeValues.equals(annotationValue.attributeValues)) return false;
+      if (!annotationType.equals(annotationValue.getAnnotationType())) return false;
+      if (!attributeValues.equals(annotationValue.getValues())) return false;
 
       return true;
    }
@@ -112,5 +119,17 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
       result = (annotationType != null) ? annotationType.hashCode() : 0;
       result = 29 * result + attributeValues.hashCode();
       hash = result;
+   }
+
+   public void toShortString(JBossStringBuilder buffer)
+   {
+      buffer.append(annotationType.getName());
+   }
+
+   protected void toString(JBossStringBuilder buffer)
+   {
+      buffer.append("name=").append(annotationType.getName());
+      if (attributeValues != null && attributeValues.size() > 0)
+         buffer.append(" values=").append(attributeValues);
    }
 }

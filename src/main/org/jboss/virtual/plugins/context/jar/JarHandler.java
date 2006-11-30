@@ -21,9 +21,8 @@
 */
 package org.jboss.virtual.plugins.context.jar;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.JarURLConnection;
 import java.net.URL;

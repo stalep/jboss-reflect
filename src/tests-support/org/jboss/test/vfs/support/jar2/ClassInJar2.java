@@ -29,6 +29,6 @@ public class ClassInJar2
 {
    public static final java.lang.String VERSION = "1.0.0";
 
-   private int i;
+   int i;
 
 }

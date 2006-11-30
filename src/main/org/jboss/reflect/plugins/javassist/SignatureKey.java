@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
+import java.util.Arrays;
+
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
 
@@ -68,7 +70,8 @@ class SignatureKey
    public SignatureKey(String name, String[] params)
    {
       this.name = name;
-      this.params = params;
+      if (params != null && params.length > 0)
+         this.params = params;
    }
    
    public boolean equals(Object obj)
@@ -120,5 +123,12 @@ class SignatureKey
          cachedHashCode = builder.toString().hashCode();
       }
       return cachedHashCode;
+   }
+   
+   public String toString()
+   {
+      if (params == null)
+         return name + "[]";
+      return name + Arrays.asList(params);
    }
 }

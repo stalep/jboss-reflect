@@ -19,26 +19,21 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */ 
-package org.jboss.test.classinfo.test;
+package org.jboss.test.classinfo.support;
 
 import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 
-import org.jboss.test.classinfo.support.ComplexAnnotation;
-import org.jboss.test.classinfo.support.SimpleAnnotation;
-import org.jboss.test.classinfo.support.ValueAnnotation;
 
 /**
  * 
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  * @version $Revision$
  */
-public class JDK50ExpectedAnnotations extends ExpectedAnnotations
+public class JDK14ExpectedAnnotations extends ExpectedAnnotations
 {
    final static Class[] EXPECTED_ANNOTATIONS = {SimpleAnnotation.class, ComplexAnnotation.class};
-   final static Class[] ANNOTATION_EXPECTED_ANNOTATIONS = {Target.class, Retention.class, Inherited.class};   
-   final static Class[] COMPLEXANNOTATION_EXPECTED_ANNOTATIONS = {Target.class, Retention.class, SimpleAnnotation.class, ValueAnnotation.class};
+   final static Class[] ANNOTATION_EXPECTED_ANNOTATIONS = {Inherited.class};   
+   final static Class[] COMPLEXANNOTATION_EXPECTED_ANNOTATIONS = {SimpleAnnotation.class, ValueAnnotation.class};
    final static Class[] FIRST_PARAM_EXPECTED_ANNOTATIONS = {ValueAnnotation.class, ComplexAnnotation.class};
    final static Class[] SECOND_PARAM_EXPECTED_ANNOTATIONS = {ValueAnnotation.class, SimpleAnnotation.class};
    
@@ -50,7 +45,7 @@ public class JDK50ExpectedAnnotations extends ExpectedAnnotations
    {
       return COMPLEXANNOTATION_EXPECTED_ANNOTATIONS;
    }
-   public Class[] getEspectedAnnotations()
+   public Class[] getExpectedAnnotations()
    {
       return EXPECTED_ANNOTATIONS;
    }

@@ -54,13 +54,12 @@ public abstract class JavassistAnnotatedParameterInfo extends JavassistAnnotated
       super(annotationHelper);
    }
 
-   
    protected void setupParameterAnnotations(Object[][] annotations)
    {
       for (int param = 0 ; param < annotations.length ; param++)
       {
          AnnotationValue[] annotationValues = new AnnotationValue[annotations[param].length];
-         for (int ann = 0 ; ann < annotations.length ; ann++)
+         for (int ann = 0 ; ann < annotationValues.length ; ann++)
          {
             Class clazz = ((Annotation)annotations[param][ann]).annotationType();
 

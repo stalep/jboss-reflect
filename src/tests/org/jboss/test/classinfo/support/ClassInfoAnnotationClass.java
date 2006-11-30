@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -18,24 +18,17 @@
 * License along with this software; if not, write to the Free
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
-*/ 
-package org.jboss.test.classinfo.test;
+*/
+package org.jboss.test.classinfo.support;
 
 /**
+ * ClassInfoAnnotationClass
  * 
- * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
- * @version $Revision$
+ * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @version $Revision: 1.1 $
  */
-public abstract class ExpectedAnnotations
+@ClassInfoAnnotation1
+@ClassInfoAnnotation2
+public class ClassInfoAnnotationClass
 {
-   public abstract Class[] getAnnotationExpectedAnnotations();
-
-   public abstract Class[] getComplexExpectedAnnotations();
-
-   public abstract Class[] getEspectedAnnotations();
-
-   public abstract Class[] getFirstParamExpectedAnnotations();
-
-   public abstract Class[] getSecondParamExpectedAnnotations();
-   
 }

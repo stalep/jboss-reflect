@@ -25,6 +25,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javassist.CtClass;
 import javassist.CtConstructor;
@@ -40,7 +41,6 @@ import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.util.collection.CollectionsFactory;
 import org.jboss.util.JBossStringBuilder;
 
 /**
@@ -51,26 +51,32 @@ import org.jboss.util.JBossStringBuilder;
  */
 public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder implements ClassInfo, InterfaceInfo
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = -5072033691434335775L;
+
    /** The factory */
    private JavassistTypeInfoFactoryImpl factory;
 
+   /** The name */
+   private String name;
+   
    /** The class */
    private Class<? extends Object> clazz;
 
    /** The constructors */
-   private Map<SignatureKey, JavassistConstructorInfo> constructors = CollectionsFactory.createLazyMap();
+   private Map<SignatureKey, JavassistConstructorInfo> constructors = new ConcurrentHashMap<SignatureKey, JavassistConstructorInfo>();
 
    /** The constructors */
    private ConstructorInfo[] constructorArray;
 
    /** The fields */
-   private Map<String, JavassistFieldInfo> fields = CollectionsFactory.createLazyMap();
+   private Map<String, JavassistFieldInfo> fields = new ConcurrentHashMap<String, JavassistFieldInfo>();
 
    /** The fields */
    private FieldInfo[] fieldArray;
 
    /** The methods */
-   private Map<SignatureKey, JavassistMethodInfo> methods = CollectionsFactory.createLazyMap();
+   private Map<SignatureKey, JavassistMethodInfo> methods = new ConcurrentHashMap<SignatureKey, JavassistMethodInfo>();
 
    /** The methods */
    private MethodInfo[] methodArray;
@@ -84,14 +90,28 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
     */
    JavassistTypeInfo(JavassistTypeInfoFactoryImpl factory, CtClass ctClass, Class<? extends Object> clazz)
    {
+      this(factory, ctClass.getName(), ctClass, clazz);
+   }
+
+   /**
+    * Create a new JavassistTypeInfo.
+    * 
+    * @param factory the factory
+    * @param ctClass the ctClass
+    * @param clazz the class
+    * @param name the name
+    */
+   JavassistTypeInfo(JavassistTypeInfoFactoryImpl factory, String name, CtClass ctClass, Class<? extends Object> clazz)
+   {
       super(ctClass, factory);
       this.factory = factory;
       this.clazz = clazz;
+      this.name = name;
    }
 
    public String getName()
    {
-      return ctClass.getName();
+      return name;
    }
 
    public boolean isInterface()
@@ -121,6 +141,8 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
 
    public ClassInfo getSuperclass()
    {
+      if (isInterface())
+         return null;
       try
       {
          CtClass superclass = ctClass.getSuperclass();
@@ -171,6 +193,20 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
          }
       }
       return constructorArray;
+   }
+
+   public ConstructorInfo getDeclaredConstructor(TypeInfo[] parameters)
+   {
+      SignatureKey key = new SignatureKey(null, parameters);
+      synchronized (constructors)
+      {
+         ConstructorInfo constructor = constructors.get(key);
+         if (constructor != null)
+            return constructor;
+      }
+      if (constructorArray != null)
+         return null;
+      return generateConstructorInfo(key);
    }
 
    public FieldInfo getDeclaredField(String name)
@@ -255,6 +291,16 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    public boolean isArray()
    {
       return getType().isArray();
+   }
+
+   public boolean isEnum()
+   {
+      return getType().isEnum();
+   }
+
+   public boolean isPrimitive()
+   {
+      return getType().isPrimitive();
    }
 
    /**
@@ -351,6 +397,26 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       catch (NotFoundException e)
       {
          throw JavassistTypeInfoFactoryImpl.raiseClassNotFound("for constructor of " + getName(), e);
+      }
+   }
+
+   /**
+    * Generate constructor info
+    * 
+    * @param key the key
+    * @return the constructor info
+    */
+   protected ConstructorInfo generateConstructorInfo(SignatureKey key)
+   {
+      CtClass[] params = getParameterTypes(key);
+      try
+      {
+         CtConstructor ctConstructor = ctClass.getDeclaredConstructor(params);
+         return generateConstructorInfo(ctConstructor);
+      }
+      catch (NotFoundException e)
+      {
+         throw JavassistTypeInfoFactoryImpl.raiseMethodNotFound("for constructor " + getName(), e);
       }
    }
 

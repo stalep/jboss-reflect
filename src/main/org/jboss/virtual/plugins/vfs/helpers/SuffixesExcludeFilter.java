@@ -22,7 +22,6 @@
 package org.jboss.virtual.plugins.vfs.helpers;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.VirtualFileFilter;

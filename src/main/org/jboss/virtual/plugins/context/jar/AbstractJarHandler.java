@@ -332,6 +332,7 @@ public class AbstractJarHandler extends AbstractURLHandler
     *
     * @param parent the parent
     * @param entry  the entry
+    * @param entryName the entry name
     * @return the handler
     * @throws IOException              for any error accessing the file system
     * @throws IllegalArgumentException for a null parent or entry

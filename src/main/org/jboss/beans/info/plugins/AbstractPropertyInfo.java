@@ -23,9 +23,10 @@ package org.jboss.beans.info.plugins;
 
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
+import org.jboss.reflect.plugins.AnnotationHolder;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
 /**
@@ -34,8 +35,11 @@ import org.jboss.util.JBossStringBuilder;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class AbstractPropertyInfo extends JBossObject implements PropertyInfo
+public class AbstractPropertyInfo extends AnnotationHolder implements PropertyInfo
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = 6558910165211748079L;
+
    /** The bean info */
    protected BeanInfo beanInfo;
    
@@ -83,6 +87,26 @@ public class AbstractPropertyInfo extends JBossObject implements PropertyInfo
     */
    public AbstractPropertyInfo(String name, String upperName, TypeInfo type, MethodInfo getter, MethodInfo setter)
    {
+      this.name = name;
+      this.upperName = upperName;
+      this.type = type;
+      this.getter = getter;
+      this.setter = setter;
+   }
+
+   /**
+    * Create a new property info
+    * 
+    * @param name the name
+    * @param upperName the upper case version of the name
+    * @param type the type
+    * @param getter the getter
+    * @param setter the setter
+    * @param annotations the annotations
+    */
+   public AbstractPropertyInfo(String name, String upperName, TypeInfo type, MethodInfo getter, MethodInfo setter, AnnotationValue[] annotations)
+   {
+      super(annotations);
       this.name = name;
       this.upperName = upperName;
       this.type = type;

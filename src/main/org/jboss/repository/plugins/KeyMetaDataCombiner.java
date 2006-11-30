@@ -53,10 +53,11 @@ public class KeyMetaDataCombiner
    }
 
    /**
-    Go through the 
-    @param attributeLevels
-    @param data
-    @return
+    * Go through the
+    *  
+    * @param key the key
+    * @param levelData the data
+    * @return the combination
     */
    public Object combine(Key key, MetaData[] levelData)
    {

@@ -33,21 +33,37 @@ public interface Node {
   public void jjtClose();
 
   /** This pair of methods are used to inform the node of its
-    parent. */
+   * parent.
+   * 
+   * @param n 
+   */
   public void jjtSetParent(Node n);
   public Node jjtGetParent();
 
   /** This method tells the node to add its argument to the node's
-    list of children.  */
+   *  list of children.
+   * @param n 
+   * @param i 
+   */
   public void jjtAddChild(Node n, int i);
 
   /** This method returns a child node.  The children are numbered
-     from zero, left to right. */
+   *  from zero, left to right.
+   *  
+   * @param i 
+   * @return the node
+   */
   public Node jjtGetChild(int i);
 
-  /** Return the number of children the node has. */
+  /** Return the number of children the node has.
+   * @return the number of children
+   */
   public int jjtGetNumChildren();
 
-  /** Accept the visitor. **/
+  /** Accept the visitor.
+   * @param visitor the visitor
+   * @param data the data
+   * @return ? 
+   */
   public Object jjtAccept(AnnotationParserVisitor visitor, Object data);
 }

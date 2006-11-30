@@ -58,17 +58,22 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
    public ArrayInfoImpl(TypeInfo componentType)
    {
       this.componentType = componentType;
+      StringBuilder builder = new StringBuilder();
+      builder.append("[");
+      TypeInfo temp = componentType;
+      while (temp.isArray())
+      {
+         builder.append("[");
+         temp = ((ArrayInfo) temp).getComponentType();
+      }
+      builder.append("L").append(temp.getName()).append(";");
+      name = builder.toString();
       calculateHash();
    }
 
    public TypeInfo getComponentType()
    {
       return componentType;
-   }
-
-   public String getName()
-   {
-      return "[L" + componentType.getName() + ";";
    }
    
    public AnnotationValue getAnnotation(String name)
@@ -110,12 +115,12 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
    public boolean equals(Object o)
    {
       if (this == o) return true;
-      if (!(o instanceof ArrayInfoImpl)) return false;
+      if (!(o instanceof ArrayInfo)) return false;
       if (!super.equals(o)) return false;
 
-      final ArrayInfoImpl arrayInfo = (ArrayInfoImpl) o;
+      final ArrayInfo arrayInfo = (ArrayInfo) o;
 
-      if (!componentType.equals(arrayInfo.componentType)) return false;
+      if (!componentType.equals(arrayInfo.getComponentType())) return false;
 
       return true;
    }

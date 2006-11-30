@@ -95,6 +95,10 @@ public class ExtensibleFilter implements VirtualFileFilter
     * Create using a custom set of matches, prefixes, and suffixes.  If any of
     * these arrays are null, then the corresponding default will be
     * substituted.
+    * 
+    * @param matches the matches
+    * @param prefixes the prefixes
+    * @param suffixes the suffixes
     */
    public ExtensibleFilter(String[] matches, String[] prefixes, String[] suffixes)
    {
@@ -220,7 +224,7 @@ public class ExtensibleFilter implements VirtualFileFilter
       {
          // The < 0 index gives the first index greater than name
          int firstLessIndex = -2 - index;
-         String prefix = (String) prefixes.get(firstLessIndex);
+         String prefix = prefixes.get(firstLessIndex);
          // If name starts with an ingored prefix ignore name
          if( name.startsWith(prefix) )
             return false;
@@ -234,7 +238,7 @@ public class ExtensibleFilter implements VirtualFileFilter
       {
          // The < 0 index gives the first index greater than name
          int firstLessIndex = -2 - index;
-         String suffix = (String) suffixes.get(firstLessIndex);
+         String suffix = suffixes.get(firstLessIndex);
          // If name ends with an ingored suffix ignore name
          if( name.endsWith(suffix) )
             return false;

@@ -89,6 +89,14 @@ public interface ClassInfo extends AnnotatedInfo, ModifierInfo, TypeInfo
    ConstructorInfo[] getDeclaredConstructors();
 
    /**
+    * Get a declared constructor
+    * 
+    * @param parameters the parameters
+    * @return the constructor
+    */
+   ConstructorInfo getDeclaredConstructor(TypeInfo[] parameters);
+
+   /**
     * Get the super class
     * 
     * @return the super class

@@ -46,6 +46,9 @@ import org.jboss.test.classinfo.support.ComplexAnnotation;
 import org.jboss.test.classinfo.support.AnnotatedClass;
 import org.jboss.test.classinfo.support.AnnotatedSubClass;
 import org.jboss.test.classinfo.support.AnotherAnnotation;
+import org.jboss.test.classinfo.support.ExpectedAnnotations;
+import org.jboss.test.classinfo.support.JDK14ExpectedAnnotations;
+import org.jboss.test.classinfo.support.JDK50ExpectedAnnotations;
 import org.jboss.test.classinfo.support.SimpleAnnotation;
 import org.jboss.test.classinfo.support.TestEnum;
 import org.jboss.test.classinfo.support.ValueAnnotation;
@@ -80,7 +83,7 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
          expected = new JDK14ExpectedAnnotations();
       }
    }
-   final static Class[] EXPECTED_ANNOTATIONS = expected.getEspectedAnnotations();
+   final static Class[] EXPECTED_ANNOTATIONS = expected.getExpectedAnnotations();
    final static Class[] ANNOTATION_EXPECTED_ANNOTATIONS = expected.getAnnotationExpectedAnnotations();   
    final static Class[] COMPLEXANNOTATION_EXPECTED_ANNOTATIONS = expected.getComplexExpectedAnnotations();
    final static Class[] FIRST_PARAM_EXPECTED_ANNOTATIONS = expected.getFirstParamExpectedAnnotations();

@@ -44,13 +44,6 @@ public interface MethodInfo extends AnnotatedInfo, MemberInfo
     * @return the method name
     */
    String getName();
-   
-   /**
-    * Get the declaring class
-    * 
-    * @return the declaring class
-    */
-   ClassInfo getDeclaringClass();
 
    /**
     * Get the parameter types

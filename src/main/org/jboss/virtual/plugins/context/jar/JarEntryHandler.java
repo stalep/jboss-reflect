@@ -66,6 +66,7 @@ public class JarEntryHandler extends AbstractURLHandler
     * @param parent the parent
     * @param jar the jar file
     * @param entry the entry
+    * @param entryName the entry name
     * @param url the url
     * @throws IOException for an error accessing the file system
     * @throws IllegalArgumentException for a null context, url, jar or entry

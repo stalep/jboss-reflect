@@ -89,6 +89,7 @@ public class VisitorAttributes
     * 
     * Default: false
     * 
+    * @param file the file
     * @return the recurse flag.
     */
    public boolean isRecurse(VirtualFile file)

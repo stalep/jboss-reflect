@@ -21,9 +21,9 @@
 */
 package org.jboss.beans.info.spi;
 
+import org.jboss.reflect.spi.AnnotatedInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.util.JBossInterface;
 
 /**
  * Description of a property.
@@ -31,7 +31,7 @@ import org.jboss.util.JBossInterface;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public interface PropertyInfo extends JBossInterface
+public interface PropertyInfo extends AnnotatedInfo
 {
    /**
     * Get the BeanInfo

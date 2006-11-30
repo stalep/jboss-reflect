@@ -344,11 +344,11 @@ public class VFSUtils
    /**
     * Deal with urls that may include spaces.
     * 
-    * @param url
-    * @return uri
+    * @param url the url
+    * @return uri the uri
+    * @throws URISyntaxException for any error
     */
-   public static URI toURI(URL url)
-      throws URISyntaxException
+   public static URI toURI(URL url) throws URISyntaxException
    {
       String urispec = url.toExternalForm();
       // Escape any spaces

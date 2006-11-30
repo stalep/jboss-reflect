@@ -64,6 +64,7 @@ public class ValueConvertor
     * @return the value or null if there is no editor
     * @throws Throwable for any error
     */
+   @SuppressWarnings("unchecked")
    public static Object convertValue(Class<? extends Object> clazz, Object value) throws Throwable
    {
       if (clazz == null)

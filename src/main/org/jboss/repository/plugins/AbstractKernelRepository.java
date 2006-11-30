@@ -41,13 +41,13 @@ import org.jboss.repository.spi.CommonNames;
 public class AbstractKernelRepository
    implements KernelRepository
 {
-   private Map repository = new HashMap(103);
-   private Map domainMap = new HashMap(103);
-   private Map clusterMap = new HashMap(103);
-   private Map serverMap = new HashMap(103);
-   private Map appMap = new HashMap(103);
-   private Map deployMap = new HashMap(103);
-   private Map sessionMap = new HashMap(103);
+   private Map<Key, MetaData> repository = new HashMap<Key, MetaData>(103);
+   private Map<Key, MetaData> domainMap = new HashMap<Key, MetaData>(103);
+   private Map<Key, MetaData> clusterMap = new HashMap<Key, MetaData>(103);
+   private Map<Key, MetaData> serverMap = new HashMap<Key, MetaData>(103);
+   private Map<Key, MetaData> appMap = new HashMap<Key, MetaData>(103);
+   private Map<Key, MetaData> deployMap = new HashMap<Key, MetaData>(103);
+   private Map<Key, MetaData> sessionMap = new HashMap<Key, MetaData>(103);
    private Map maps[] = {
       domainMap,
       clusterMap,
@@ -83,7 +83,7 @@ public class AbstractKernelRepository
    {
       // Should the loader be used here?
       Map attributes = key.getAttributes();
-      HashMap tmp = new HashMap();
+      HashMap<String, String> tmp = new HashMap<String, String>();
       MetaData[] levelData = new MetaData[CommonNames.N_LEVELS];
       int level = key.getLevel();
       for(int n = 0; n <= level; n ++)
@@ -105,9 +105,9 @@ public class AbstractKernelRepository
     */
    public Map getAllMetaData(Key key)
    {
-       HashMap levelData = new HashMap();
+       HashMap<Key, MetaData> levelData = new HashMap<Key, MetaData>();
        Map attributes = key.getAttributes();
-       HashMap tmp = new HashMap();
+       HashMap<String, String> tmp = new HashMap<String, String>();
        int level = key.getLevel();
        for(int n = 0; n <= level; n ++)
        {
@@ -123,9 +123,10 @@ public class AbstractKernelRepository
        return levelData;
    }
 
+   @SuppressWarnings("unchecked")
    public synchronized MetaData addMetaData(Key key, MetaData data)
    {
-      MetaData prev = (MetaData) repository.put(key, data);
+      MetaData prev = repository.put(key, data);
       // Add 
       int level = key.getLevel();
       maps[level].put(key, data);
@@ -139,6 +140,7 @@ public class AbstractKernelRepository
       return prev;
    }
 
+   @SuppressWarnings("unchecked")
    public void loadMetaData(MetaDataLoader loader)
    {
       Iterator keys = loader.getKeys();
