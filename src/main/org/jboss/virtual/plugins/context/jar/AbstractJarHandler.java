@@ -411,7 +411,7 @@ public class AbstractJarHandler extends AbstractURLHandler
       String jarAsString = jarURL.toString();
       if (jarAsString.startsWith("file:"))
       {
-         File fp = new File(jarAsString.substring(6));
+         File fp = new File(jarAsString.substring(5));
          jar = new JarFile(fp);
       }
       else
