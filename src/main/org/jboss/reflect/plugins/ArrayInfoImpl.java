@@ -78,38 +78,17 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
    
    public AnnotationValue getAnnotation(String name)
    {
-      if (componentType instanceof AnnotatedInfo)
-      {
-         return ((AnnotatedInfo)componentType).getAnnotation(name);
-      }
-      else
-      {
-         return null;
-      }
+      return null;
    }
 
    public AnnotationValue[] getAnnotations()
    {
-      if (componentType instanceof AnnotatedInfo)
-      {
-         return ((AnnotatedInfo)componentType).getAnnotations();
-      }
-      else
-      {
-         return UNKNOWN_ANNOTATIONS;
-      }
+      return UNKNOWN_ANNOTATIONS;
    }
 
    public boolean isAnnotationPresent(String name)
    {
-      if (componentType instanceof AnnotatedInfo)
-      {
-         return ((AnnotatedInfo)componentType).isAnnotationPresent(name);
-      }
-      else
-      {
-         return false;
-      }
+      return false;
    }
 
    public boolean equals(Object o)

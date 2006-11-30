@@ -21,6 +21,7 @@
 */ 
 package org.jboss.test.classinfo.test;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 import org.jboss.reflect.spi.AnnotatedInfo;
@@ -195,22 +196,36 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       
       ClassInfo info = getClassInfo(classArray);
       assertTrue(ArrayInfo.class.isAssignableFrom(info.getClass()));
-      checkAnnotations(info, CLASS_DATA);
+      
+      assertTrue(info.getAnnotations().length == 0);
+      for (Class annotation : EXPECTED_ANNOTATIONS)
+      {
+         assertNull(info.getAnnotation(annotation.getName()));
+         assertFalse(info.isAnnotationPresent(annotation.getName()));
+      }
+      
+      ClassInfo componentInfo = (ClassInfo)((ArrayInfo)info).getComponentType();
+      checkAnnotations(componentInfo, CLASS_DATA);
    }
    
    public void testSubClassArrayAnnotations() throws Exception
    {
       Class classArray = new AnnotatedSubClass[0].getClass();
       
-      System.out.println(classArray.getAnnotations());
-      
       ClassInfo info = getClassInfo(classArray);
       assertTrue(ArrayInfo.class.isAssignableFrom(info.getClass()));
 
-      AnnotationValue[] annotations = info.getAnnotations();
+      assertTrue(info.getAnnotations().length == 0);
+      assertNull(info.getAnnotation(AnotherAnnotation.class.getName()));
+      assertFalse(info.isAnnotationPresent(AnotherAnnotation.class.getName()));
+      assertNull(info.getAnnotation(SimpleAnnotation.class.getName()));
+      assertFalse(info.isAnnotationPresent(SimpleAnnotation.class.getName()));
+      
+      ClassInfo componentInfo = (ClassInfo)((ArrayInfo)info).getComponentType();
+      AnnotationValue[] annotations = componentInfo.getAnnotations();
       assertEquals(2, annotations.length);
-      AnnotationValue anotherAnnotation = getAnnotationCheckTypeAndName(info, AnotherAnnotation.class.getName());
-      AnnotationValue simpleAnnotation = getAnnotationCheckTypeAndName(info, SimpleAnnotation.class.getName());
+      AnnotationValue anotherAnnotation = getAnnotationCheckTypeAndName(componentInfo, AnotherAnnotation.class.getName());
+      AnnotationValue simpleAnnotation = getAnnotationCheckTypeAndName(componentInfo, SimpleAnnotation.class.getName());
       
       HashSet<AnnotationValue> set = new HashSet<AnnotationValue>();
       set.add(anotherAnnotation);
