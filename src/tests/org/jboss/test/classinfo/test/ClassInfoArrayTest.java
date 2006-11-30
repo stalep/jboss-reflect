@@ -25,6 +25,7 @@ import org.jboss.reflect.plugins.ArrayInfoImpl;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.test.classinfo.support.ClassInfoAnnotationClass;
 
 /**
  * ClassInfoArrayTest.
@@ -48,6 +49,12 @@ public abstract class ClassInfoArrayTest extends AbstractClassInfoTest
    public void testDeepArray() throws Throwable
    {
       String[][][][][] array = new String[1][2][3][4][0];
+      testArray(array);
+   }
+   
+   public void testAnnotationArray() throws Throwable
+   {
+      ClassInfoAnnotationClass[] array = new ClassInfoAnnotationClass[0];
       testArray(array);
    }
    

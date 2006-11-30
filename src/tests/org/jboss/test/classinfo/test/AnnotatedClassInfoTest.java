@@ -21,7 +21,6 @@
 */ 
 package org.jboss.test.classinfo.test;
 
-import java.util.Arrays;
 import java.util.HashSet;
 
 import org.jboss.reflect.spi.AnnotatedInfo;
@@ -43,10 +42,10 @@ import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.reflect.spi.Value;
 import org.jboss.test.ContainerTest;
-import org.jboss.test.classinfo.support.ComplexAnnotation;
 import org.jboss.test.classinfo.support.AnnotatedClass;
 import org.jboss.test.classinfo.support.AnnotatedSubClass;
 import org.jboss.test.classinfo.support.AnotherAnnotation;
+import org.jboss.test.classinfo.support.ComplexAnnotation;
 import org.jboss.test.classinfo.support.ExpectedAnnotations;
 import org.jboss.test.classinfo.support.JDK14ExpectedAnnotations;
 import org.jboss.test.classinfo.support.JDK50ExpectedAnnotations;
