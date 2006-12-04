@@ -42,7 +42,7 @@ import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
-import org.jboss.util.collection.WeakValueHashMap;
+import org.jboss.util.collection.temp.WeakValueHashMap;
 
 /**
  * A bean info factory.
@@ -140,7 +140,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          BeanInfo result = createBeanInfo(classAdapter, properties, constructors, methods, events);
          if (map == null)
          {
-            map = new WeakValueHashMap();
+            map = new WeakValueHashMap<String, BeanInfo>();
             cache.put(cl, map);
          }
          map.put(className, result);

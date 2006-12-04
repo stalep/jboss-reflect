@@ -22,6 +22,7 @@
 package org.jboss.reflect.plugins.javassist;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -273,6 +274,15 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       return getTypeInfo(clazz);
    }
    
+   public TypeInfo getTypeInfo(Type type)
+   {
+      if (type instanceof Class)
+         return getTypeInfo((Class) type);
+
+      // TODO getTypeInfo
+      throw new org.jboss.util.NotImplementedException("getTypeInfo");
+   }
+
    public AnnotationValue[] getAnnotations(Object obj)
    {
       try

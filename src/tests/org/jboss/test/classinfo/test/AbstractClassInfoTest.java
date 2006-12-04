@@ -26,6 +26,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -187,7 +188,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       Set<FieldInfo> expected = new HashSet<FieldInfo>();
       for (Field field : clazz.getDeclaredFields())
       {
-         TypeInfo type = factory.getTypeInfo(field.getType());
+         TypeInfo type = factory.getTypeInfo(field.getGenericType());
          FieldInfo f = new FieldInfoImpl(null, field.getName(), type, field.getModifiers(), classInfo);
          expected.add(f);
       }
@@ -218,8 +219,8 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       
       FieldInfo fieldInfo = classInfo.getDeclaredField(field.getName());
       assertNotNull(field.getName(), fieldInfo);
-      TypeInfo type = factory.getTypeInfo(field.getType());
-      assertEquals(type, fieldInfo.getType());
+      TypeInfo type = factory.getTypeInfo(field.getGenericType());
+      assertTypeEquals(field.getName(), type, fieldInfo.getType());
       assertEquals(classInfo, fieldInfo.getDeclaringClass());
       assertEquals(field.getModifiers(), fieldInfo.getModifiers());
       assertFieldAnnotations(field, fieldInfo);
@@ -266,24 +267,24 @@ public abstract class AbstractClassInfoTest extends ContainerTest
 
       TypeInfoFactory factory = getTypeInfoFactory();
       
-      Class[] paramClasses = method.getParameterTypes();
+      Type[] paramClasses = method.getGenericParameterTypes();
       TypeInfo[] paramTypes = new TypeInfo[paramClasses.length];
       for (int i = 0; i < paramClasses.length; ++i)
          paramTypes[i] = factory.getTypeInfo(paramClasses[i]);
       MethodInfo methodInfo = classInfo.getDeclaredMethod(method.getName(), paramTypes);
       assertNotNull(method.getName(), methodInfo);
-      TypeInfo returnType = factory.getTypeInfo(method.getReturnType());
+      TypeInfo returnType = factory.getTypeInfo(method.getGenericReturnType());
       TypeInfo[] actualParamTypes = methodInfo.getParameterTypes();
       for (int i = 0; i < paramTypes.length; ++i)
-         assertEquals(paramTypes[i], actualParamTypes[i]);
+         assertTypeEquals(method.getName() + " param" + i, paramTypes[i], actualParamTypes[i]);
       Class[] exceptionClasses = method.getExceptionTypes();
       TypeInfo[] expectedExceptionTypes = new TypeInfo[exceptionClasses.length];
       for (int i = 0; i < exceptionClasses.length; ++i)
          expectedExceptionTypes[i] = factory.getTypeInfo(exceptionClasses[i]);
       TypeInfo[] actualExceptionTypes = methodInfo.getExceptionTypes();
       for (int i = 0; i < exceptionClasses.length; ++i)
-         assertEquals(expectedExceptionTypes[i], actualExceptionTypes[i]);
-      assertEquals(returnType, methodInfo.getReturnType());
+         assertTypeEquals(method.getName() + " exception" + i, expectedExceptionTypes[i], actualExceptionTypes[i]);
+      assertTypeEquals(method.getName() + " returnType", returnType, methodInfo.getReturnType());
       assertEquals(classInfo, methodInfo.getDeclaringClass());
       assertEquals(method.getModifiers(), methodInfo.getModifiers());
       assertMethodAnnotations(method, methodInfo);
@@ -330,7 +331,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
 
       TypeInfoFactory factory = getTypeInfoFactory();
       
-      Class[] paramClasses = constructor.getParameterTypes();
+      Type[] paramClasses = constructor.getGenericParameterTypes();
       TypeInfo[] paramTypes = new TypeInfo[paramClasses.length];
       for (int i = 0; i < paramClasses.length; ++i)
          paramTypes[i] = factory.getTypeInfo(paramClasses[i]);
@@ -338,14 +339,14 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       assertNotNull(constructorInfo);
       TypeInfo[] actualParamTypes = constructorInfo.getParameterTypes();
       for (int i = 0; i < paramTypes.length; ++i)
-         assertEquals(paramTypes[i], actualParamTypes[i]);
+         assertTypeEquals(clazz + " constructorParameter" + i, paramTypes[i], actualParamTypes[i]);
       Class[] exceptionClasses = constructor.getExceptionTypes();
       TypeInfo[] expectedExceptionTypes = new TypeInfo[exceptionClasses.length];
       for (int i = 0; i < exceptionClasses.length; ++i)
          expectedExceptionTypes[i] = factory.getTypeInfo(exceptionClasses[i]);
       TypeInfo[] actualExceptionTypes = constructorInfo.getExceptionTypes();
       for (int i = 0; i < exceptionClasses.length; ++i)
-         assertEquals(expectedExceptionTypes[i], actualExceptionTypes[i]);
+         assertTypeEquals(clazz + " constructorException" + i, expectedExceptionTypes[i], actualExceptionTypes[i]);
       assertEquals(classInfo, constructorInfo.getDeclaringClass());
       assertEquals(constructor.getModifiers(), constructorInfo.getModifiers());
       assertConstructorAnnotations(constructor, constructorInfo);
@@ -475,6 +476,30 @@ public abstract class AbstractClassInfoTest extends ContainerTest
          expected.add(a);
       }
       return expected;
+   }
+
+   protected void assertTypeEquals(String context, TypeInfo expected, TypeInfo actual) throws Exception
+   {
+      assertEquals(expected, actual);
+      if (expected instanceof ClassInfo)
+      {
+         ClassInfo expectedClassInfo = (ClassInfo) expected;
+         ClassInfo actualClassInfo = (ClassInfo) actual;
+         assertEquals(context, expectedClassInfo.getOwnerType(), actualClassInfo.getOwnerType());
+         assertEquals(context, expectedClassInfo.getRawType(), actualClassInfo.getRawType());
+         TypeInfo[] expectedTypeArgs = expectedClassInfo.getActualTypeArguments();
+         TypeInfo[] actualTypeArgs = expectedClassInfo.getActualTypeArguments();
+         if (expectedTypeArgs == null)
+            assertNull(context, actualTypeArgs);
+         else
+         {
+            assertNotNull(context, actualTypeArgs);
+            getLog().debug("Checking type args for " + context + " expected: " + Arrays.asList(expectedTypeArgs) + " actual: " + Arrays.asList(actualTypeArgs));
+            assertEquals(expectedTypeArgs.length, actualTypeArgs.length);
+            for (int i = 0; i < expectedTypeArgs.length; ++i)
+               assertTypeEquals(context + "arg" + i, expectedTypeArgs[i], actualTypeArgs[i]);
+         }
+      }
    }
    
    protected abstract TypeInfoFactory getTypeInfoFactory();

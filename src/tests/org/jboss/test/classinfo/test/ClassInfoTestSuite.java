@@ -56,6 +56,8 @@ public class ClassInfoTestSuite extends TestSuite
       suite.addTest(JavassistClassInfoTestCase.suite());
       suite.addTest(IntrospectionAnnotatedClassInfoTestCase.suite());
       suite.addTest(JavassistAnnotatedClassInfoTestCase.suite());
+      suite.addTest(IntrospectionGenericInterfaceUnitTestCase.suite());
+      suite.addTest(IntrospectionGenericClassUnitTestCase.suite());
       
       return suite;
    }

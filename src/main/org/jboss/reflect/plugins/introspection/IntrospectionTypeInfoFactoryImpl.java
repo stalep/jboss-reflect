@@ -26,6 +26,8 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
@@ -43,20 +45,20 @@ import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.util.collection.WeakClassCache;
+import org.jboss.util.collection.temp.WeakTypeCache;
 
 /**
  * An introspection type factory.
  *
- * FIXME: use lazy loading to avoid reading the entire class model
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory, AnnotationHelper, ClassInfoHelper
+public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> implements TypeInfoFactory, AnnotationHelper, ClassInfoHelper
 {
    final static AnnotationValue[] NO_ANNOTATIONS = new AnnotationValue[0];
 
@@ -80,6 +82,19 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
          Class superClazz = clazz.getSuperclass();
          if (superClazz != null)
             superType = (ClassInfoImpl) getTypeInfo(superClazz);
+      }
+      return superType;
+   }
+
+   public ClassInfo getGenericSuperClass(ClassInfoImpl classInfo)
+   {
+      Class clazz = classInfo.getType();
+      ClassInfo superType = null;
+      if (clazz.isInterface() == false)
+      {
+         Type superClazz = clazz.getGenericSuperclass();
+         if (superClazz != null)
+            superType = (ClassInfo) getTypeInfo(superClazz);
       }
       return superType;
    }
@@ -132,7 +147,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
             for (int i = 0; i < constructors.length; ++i)
             {
                AnnotationValue[] annotations = getAnnotations(constructors[i]);
-               infos[i] = new ReflectConstructorInfoImpl(annotations, getTypeInfos(constructors[i].getParameterTypes()), getParameterAnnotations(constructors[i].getParameterAnnotations()), getClassInfos(constructors[i].getExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
+               infos[i] = new ReflectConstructorInfoImpl(annotations, getTypeInfos(constructors[i].getGenericParameterTypes()), getParameterAnnotations(constructors[i].getParameterAnnotations()), getClassInfos(constructors[i].getGenericExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
                infos[i].setConstructor(constructors[i]);
             }
          }
@@ -151,7 +166,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       for (int i = 0; i < fields.length; ++i)
       {
          AnnotationValue[] annotations = getAnnotations(fields[i]);
-         infos[i] = new ReflectFieldInfoImpl(annotations, fields[i].getName(), getTypeInfo(fields[i].getType()), fields[i].getModifiers(), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
+         infos[i] = new ReflectFieldInfoImpl(annotations, fields[i].getName(), getTypeInfo(fields[i].getGenericType()), fields[i].getModifiers(), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
          infos[i].setField(fields[i]);
       }
       
@@ -169,7 +184,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       for (int i = 0; i < methods.length; ++i)
       {
          AnnotationValue[] annotations = getAnnotations(methods[i]);
-         infos[i] = new ReflectMethodInfoImpl(annotations, methods[i].getName(), getTypeInfo(methods[i].getReturnType()), getTypeInfos(methods[i].getParameterTypes()), getParameterAnnotations(methods[i].getParameterAnnotations()), getClassInfos(methods[i].getExceptionTypes()), methods[i].getModifiers(), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
+         infos[i] = new ReflectMethodInfoImpl(annotations, methods[i].getName(), getTypeInfo(methods[i].getGenericReturnType()), getTypeInfos(methods[i].getGenericParameterTypes()), getParameterAnnotations(methods[i].getParameterAnnotations()), getClassInfos(methods[i].getGenericExceptionTypes()), methods[i].getModifiers(), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
          infos[i].setMethod(methods[i]);
       }
       return infos;
@@ -189,13 +204,27 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       return infos;
    }
 
+   public InterfaceInfo[] getGenericInterfaces(ClassInfoImpl classInfo)
+   {
+      Class clazz = classInfo.getType();
+      Type[] interfaces = clazz.getGenericInterfaces();
+      if (interfaces == null || interfaces.length == 0)
+         return null;
+
+      InterfaceInfo[] infos = new InterfaceInfo[interfaces.length];
+      for (int i = 0; i < interfaces.length; ++i)
+         infos[i] = (InterfaceInfo) getTypeInfo(interfaces[i]);
+
+      return infos;
+   }
+
    /**
     * Get the type infos for some classes
     *
     * @param classes the classes
     * @return the type infos
     */
-   public TypeInfo[] getTypeInfos(Class[] classes)
+   public TypeInfo[] getTypeInfos(Type[] classes)
    {
       if (classes == null || classes.length == 0)
          return null;
@@ -212,7 +241,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
     * @param classes the classes
     * @return the class infos
     */
-   public ClassInfo[] getClassInfos(Class[] classes)
+   public ClassInfo[] getClassInfos(Type[] classes)
    {
       if (classes == null || classes.length == 0)
          return null;
@@ -232,7 +261,25 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       if (primitive != null)
          return primitive;
 
-      return (TypeInfo) get(clazz);
+      return get(clazz);
+   }
+
+   public TypeInfo getTypeInfo(Type type)
+   {
+      if (type == null)
+         throw new IllegalArgumentException("Null type");
+
+      String name = null;
+      if (type instanceof Class)
+         name = ((Class) type).getName();
+      if (name != null)
+      {
+         TypeInfo primitive = PrimitiveInfo.valueOf(((Class) type).getName());
+         if (primitive != null)
+            return primitive;
+      }
+
+      return get(type);
    }
 
    public TypeInfo getTypeInfo(String name, ClassLoader cl) throws ClassNotFoundException
@@ -251,7 +298,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       return getTypeInfo(clazz);
    }
 
-   protected Object instantiate(Class clazz)
+   protected TypeInfo instantiate(Class<?> clazz)
    {
       ClassInfoImpl result;
       if (clazz.isArray())
@@ -295,9 +342,23 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       return result;
    }
 
-   protected void generate(Class clazz, Object result)
+   protected TypeInfo instantiate(ParameterizedType type)
+   {
+      Class rawType = (Class) type.getRawType();
+      ClassInfo rawTypeInfo = (ClassInfo) getTypeInfo(rawType);
+      if (rawTypeInfo instanceof ArrayInfo)
+         return new ParameterizedArrayInfo(this, (ArrayInfo) rawTypeInfo, type);
+      return new ParameterizedClassInfo(this, rawTypeInfo, type);
+   }
+
+   protected void generate(Class<?> clazz, TypeInfo result)
    {
       generateTypeInfo(clazz, (ClassInfoImpl) result);
+   }
+
+   protected void generate(ParameterizedType type, TypeInfo result)
+   {
+      // Everything is lazy
    }
 
    protected Constructor[] getDeclaredConstructors(final Class clazz)
@@ -402,4 +463,27 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakClassCache implements 
       return annotationValues;
    }
 
+   public TypeInfo[] getActualTypeArguments(ParameterizedClassInfo classInfo)
+   {
+      ParameterizedType type = classInfo.parameterizedType;
+      Type[] types = type.getActualTypeArguments();
+      if (types == null)
+         return null;
+      
+      TypeInfo[] result = new TypeInfo[types.length];
+      for (int i = 0; i < types.length; ++i)
+         result[i] = getTypeInfo(types[i]);
+      
+      return result;
+   }
+   
+   public TypeInfo getOwnerType(ParameterizedClassInfo classInfo)
+   {
+      ParameterizedType type = classInfo.parameterizedType;
+      Type owner = type.getOwnerType();
+      if (owner == null)
+         return null;
+      
+      return getTypeInfo(owner);
+   }
 }

@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,38 +19,33 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.reflect.plugins.introspection;
+package org.jboss.test.classinfo.test;
 
-import java.lang.reflect.Type;
+import junit.framework.Test;
 
-import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
- * An introspection type factory that uses a static delegate.<p>
+ * IntrospectionGenericInterfaceUnitTestCase.
  * 
- * This avoids recalculating things everytime a factory is
- * constructed inside the same classloader
- * 
- * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
+ * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @version $Revision: 1.1 $
  */
-public class IntrospectionTypeInfoFactory implements TypeInfoFactory
+public class IntrospectionGenericInterfaceUnitTestCase extends ClassInfoGenericInterfaceTest
 {
-   /** The delegate */
-   private static IntrospectionTypeInfoFactoryImpl delegate = new IntrospectionTypeInfoFactoryImpl();
-
-   public TypeInfo getTypeInfo(Class clazz)
+   public IntrospectionGenericInterfaceUnitTestCase(String name)
    {
-      return delegate.getTypeInfo(clazz);
-   }
-   
-   public TypeInfo getTypeInfo(String name, ClassLoader cl) throws ClassNotFoundException
-   {
-      return delegate.getTypeInfo(name, cl);
+      super(name);
    }
 
-   public TypeInfo getTypeInfo(Type type)
+   public static Test suite()
    {
-      return delegate.getTypeInfo(type);
+      return suite(IntrospectionGenericInterfaceUnitTestCase.class);
+   }
+
+   protected TypeInfoFactory getTypeInfoFactory()
+   {
+      return new IntrospectionTypeInfoFactory();
    }
 }

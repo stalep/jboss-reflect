@@ -48,19 +48,28 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    private static final long serialVersionUID = 3545798779904340792L;
 
    /** Marker for generation */
-   static final ClassInfo UNKNOWN_CLASS = new UnknownClassInfo();
+   public static final ClassInfo UNKNOWN_CLASS = new UnknownClassInfo();
 
    /** Marker for generation */
-   static final InterfaceInfo[] UNKNOWN_INTERFACES = new InterfaceInfo[0];
+   public static final ClassInfo[] UNKNOWN_CLASSES = new UnknownClassInfo[0];
 
    /** Marker for generation */
-   static final ConstructorInfo[] UNKNOWN_CONSTRUCTORS = new ConstructorInfo[0];
+   public static final TypeInfo UNKNOWN_TYPE = new UnknownTypeInfo();
 
    /** Marker for generation */
-   static final MethodInfo[] UNKNOWN_METHODS = new MethodInfo[0];
+   public static final TypeInfo[] UNKNOWN_TYPES = new UnknownTypeInfo[0];
 
    /** Marker for generation */
-   private static final FieldInfo[] UNKNOWN_FIELDS = new FieldInfo[0];
+   public static final InterfaceInfo[] UNKNOWN_INTERFACES = new InterfaceInfo[0];
+
+   /** Marker for generation */
+   public static final ConstructorInfo[] UNKNOWN_CONSTRUCTORS = new ConstructorInfo[0];
+
+   /** Marker for generation */
+   public static final MethodInfo[] UNKNOWN_METHODS = new MethodInfo[0];
+
+   /** Marker for generation */
+   public static final FieldInfo[] UNKNOWN_FIELDS = new FieldInfo[0];
    
    /** The class name */
    protected String name;
@@ -70,6 +79,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    
    /** The interfaces */
    protected InterfaceInfo[] interfaces = UNKNOWN_INTERFACES;
+   
+   /** The generic interfaces */
+   protected InterfaceInfo[] genericInterfaces = UNKNOWN_INTERFACES;
    
    /** The methods */
    protected MethodInfo[] methods = UNKNOWN_METHODS;
@@ -82,6 +94,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
 
    /** The super class */
    protected ClassInfo superclass = UNKNOWN_CLASS;
+
+   /** The generic super class */
+   protected ClassInfo genericSuperclass = UNKNOWN_CLASS;
 
    /** The constructor info */
    protected ConstructorInfo[] constructors = UNKNOWN_CONSTRUCTORS; 
@@ -243,6 +258,16 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    {
       this.interfaces = interfaces;
    }
+   
+   /**
+    * Set the generic interfaces
+    * 
+    * @param interfaces the interfaces
+    */
+   public void setGenericInterfaces(InterfaceInfo[] interfaces)
+   {
+      this.genericInterfaces = interfaces;
+   }
 
    /**
     * Set the declared methods
@@ -303,6 +328,15 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       this.superclass = superInfo;
    }
 
+   /**
+    * Set the generic super class
+    * 
+    * @param superInfo the super class
+    */
+   public void setGenericSuperclass(ClassInfo superInfo)
+   {
+      this.genericSuperclass = superInfo;
+   }
 
    public boolean isInterface()
    {
@@ -314,6 +348,13 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       if (interfaces == UNKNOWN_INTERFACES)
          setInterfaces(classInfoHelper.getInterfaces(this));
       return interfaces;
+   }
+
+   public InterfaceInfo[] getGenericInterfaces()
+   {
+      if (genericInterfaces == UNKNOWN_INTERFACES)
+         setGenericInterfaces(classInfoHelper.getGenericInterfaces(this));
+      return genericInterfaces;
    }
    
    public MethodInfo getDeclaredMethod(String name, TypeInfo[] parameters)
@@ -365,6 +406,13 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       if (superclass == UNKNOWN_CLASS)
          setSuperclass(classInfoHelper.getSuperClass(this));
       return superclass;
+   }
+
+   public ClassInfo getGenericSuperclass()
+   {
+      if (genericSuperclass == UNKNOWN_CLASS)
+         setGenericSuperclass(classInfoHelper.getGenericSuperClass(this));
+      return genericSuperclass;
    }
    
    public int getModifiers()
@@ -426,6 +474,21 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return (Object[]) Array.newInstance(clazz.getComponentType(), size);
    }
 
+   public TypeInfo[] getActualTypeArguments()
+   {
+      return null;
+   }
+
+   public TypeInfo getOwnerType()
+   {
+      return null;
+   }
+
+   public ClassInfo getRawType()
+   {
+      return this;
+   }
+
    protected InheritableAnnotationHolder getSuperHolder()
    {
       return (ClassInfoImpl) getSuperclass();
@@ -456,7 +519,53 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return (name != null ? name.hashCode() : 0);
    }
    
-   static class UnknownClassInfo implements ClassInfo
+   public static class UnknownTypeInfo implements TypeInfo
+   {
+      /** The serialVersionUID */
+      private static final long serialVersionUID = 1L;
+
+      public Object convertValue(Object value) throws Throwable
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public TypeInfo getArrayType(int depth)
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public String getName()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public Class getType()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public boolean isArray()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public boolean isEnum()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public boolean isPrimitive()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public Object[] newArrayInstance(int size) throws Throwable
+      {
+         throw new UnreachableStatementException();
+      }
+   }
+   
+   static class UnknownClassInfo extends UnknownTypeInfo implements ClassInfo
    {
       /** The serialVersionUID */
       private static final long serialVersionUID = 1L;
@@ -496,12 +605,17 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
          throw new UnreachableStatementException();
       }
 
-      public String getName()
+      public InterfaceInfo[] getGenericInterfaces()
       {
          throw new UnreachableStatementException();
       }
 
       public ClassInfo getSuperclass()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public ClassInfo getGenericSuperclass()
       {
          throw new UnreachableStatementException();
       }
@@ -536,41 +650,6 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
          throw new UnreachableStatementException();
       }
 
-      public Class getType()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public Object convertValue(Object value) throws Throwable
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public TypeInfo getArrayType(int depth)
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isArray()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isEnum()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isPrimitive()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public Object[] newArrayInstance(int size) throws Throwable
-      {
-         throw new UnreachableStatementException();
-      }
-
       public int getModifiers()
       {
          throw new UnreachableStatementException();
@@ -587,6 +666,21 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       }
       
       public Object clone()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public TypeInfo[] getActualTypeArguments()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public TypeInfo getOwnerType()
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public ClassInfo getRawType()
       {
          throw new UnreachableStatementException();
       }

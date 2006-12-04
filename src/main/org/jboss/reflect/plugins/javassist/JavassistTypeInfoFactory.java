@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
+import java.lang.reflect.Type;
+
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 
@@ -46,4 +48,10 @@ public class JavassistTypeInfoFactory implements TypeInfoFactory
    {
       return delegate.getTypeInfo(name, cl);
    }
+   
+   public TypeInfo getTypeInfo(Type type)
+   {
+      return delegate.getTypeInfo(type);
+   }
+
 }

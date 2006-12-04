@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.plugins;
 
-import org.jboss.reflect.spi.AnnotatedInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.TypeInfo;

@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins;
 
+import org.jboss.reflect.plugins.introspection.ParameterizedClassInfo;
+import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.TypeInfo;
 
@@ -41,12 +43,28 @@ public interface ClassInfoHelper
    ClassInfoImpl getSuperClass(ClassInfoImpl classInfo);
 
    /**
+    * Get the generic super class
+    * 
+    * @param classInfo the class info
+    * @return the super class info
+    */
+   ClassInfo getGenericSuperClass(ClassInfoImpl classInfo);
+
+   /**
     * Get the interfaces
     * 
     * @param classInfo the class info
     * @return the interface info
     */
    InterfaceInfo[] getInterfaces(ClassInfoImpl classInfo);
+
+   /**
+    * Get the generic interfaces
+    * 
+    * @param classInfo the class info
+    * @return the interface info
+    */
+   InterfaceInfo[] getGenericInterfaces(ClassInfoImpl classInfo);
 
    /**
     * Get the constructors
@@ -79,4 +97,20 @@ public interface ClassInfoHelper
     * @return the type info
     */
    TypeInfo getTypeInfo(Class clazz);
+   
+   /**
+    * Get the actual type parameters
+    * 
+    * @param classInfo the parameterized class info
+    * @return the type parameters
+    */
+   TypeInfo[] getActualTypeArguments(ParameterizedClassInfo classInfo);
+   
+   /**
+    * Get the owner type
+    * 
+    * @param classInfo the parameterized class info
+    * @return the owner type
+    */
+   TypeInfo getOwnerType(ParameterizedClassInfo classInfo);
 }

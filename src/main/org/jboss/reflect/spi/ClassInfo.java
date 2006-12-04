@@ -51,6 +51,13 @@ public interface ClassInfo extends AnnotatedInfo, ModifierInfo, TypeInfo
    InterfaceInfo[] getInterfaces();
    
    /**
+    * Get the generic interfaces
+    *
+    * @return the generic interfaces
+    */
+   InterfaceInfo[] getGenericInterfaces();
+   
+   /**
     * Get the declared method
     * 
     * @param name the method name
@@ -102,4 +109,32 @@ public interface ClassInfo extends AnnotatedInfo, ModifierInfo, TypeInfo
     * @return the super class
     */
    ClassInfo getSuperclass();
+
+   /**
+    * Get the generic super class
+    * 
+    * @return the super class
+    */
+   ClassInfo getGenericSuperclass();
+   
+   /**
+    * Get the actual type parameters
+    * 
+    * @return the type parameters
+    */
+   TypeInfo[] getActualTypeArguments();
+   
+   /**
+    * Get the raw type
+    * 
+    * @return the raw type
+    */
+   ClassInfo getRawType();
+   
+   /**
+    * Get the owner type
+    * 
+    * @return the owner type
+    */
+   TypeInfo getOwnerType();
 }

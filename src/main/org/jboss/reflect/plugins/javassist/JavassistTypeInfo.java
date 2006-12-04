@@ -156,6 +156,12 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       }
    }
 
+   public ClassInfo getGenericSuperclass()
+   {
+      // TODO getGenericSuperclass
+      throw new org.jboss.util.NotImplementedException("getGenericSuperclass");
+   }
+
    public InterfaceInfo[] getInterfaces()
    {
       try
@@ -172,6 +178,12 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       {
          throw JavassistTypeInfoFactoryImpl.raiseClassNotFound("for interfaces of " + getName(), e);
       }
+   }
+
+   public InterfaceInfo[] getGenericInterfaces()
+   {
+      // TODO getGenericInterfaces
+      throw new org.jboss.util.NotImplementedException("getGenericInterfaces");
    }
 
    public ConstructorInfo[] getDeclaredConstructors()
@@ -540,6 +552,21 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       {
          throw new RuntimeException(e);
       }
+   }
+
+   public TypeInfo[] getActualTypeArguments()
+   {
+      return null;
+   }
+
+   public TypeInfo getOwnerType()
+   {
+      return null;
+   }
+
+   public ClassInfo getRawType()
+   {
+      return this;
    }
 
 }

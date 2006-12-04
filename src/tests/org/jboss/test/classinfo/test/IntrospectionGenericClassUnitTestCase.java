@@ -19,38 +19,34 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.reflect.plugins.introspection;
+package org.jboss.test.classinfo.test;
 
-import java.lang.reflect.Type;
+import junit.framework.Test;
 
-import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
- * An introspection type factory that uses a static delegate.<p>
+ * Introspection ClassInfo Test Case.
  * 
- * This avoids recalculating things everytime a factory is
- * constructed inside the same classloader
- * 
- * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
+ * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @version $Revision: 45663 $
  */
-public class IntrospectionTypeInfoFactory implements TypeInfoFactory
+public class IntrospectionGenericClassUnitTestCase extends ClassInfoGenericClassTest
 {
-   /** The delegate */
-   private static IntrospectionTypeInfoFactoryImpl delegate = new IntrospectionTypeInfoFactoryImpl();
-
-   public TypeInfo getTypeInfo(Class clazz)
+   public static Test suite()
    {
-      return delegate.getTypeInfo(clazz);
+      return suite(IntrospectionGenericClassUnitTestCase.class);
    }
    
-   public TypeInfo getTypeInfo(String name, ClassLoader cl) throws ClassNotFoundException
+   public IntrospectionGenericClassUnitTestCase(String name)
    {
-      return delegate.getTypeInfo(name, cl);
+      super(name);
    }
 
-   public TypeInfo getTypeInfo(Type type)
+   protected TypeInfoFactory getTypeInfoFactory()
    {
-      return delegate.getTypeInfo(type);
+      return new IntrospectionTypeInfoFactory();
    }
+
 }
