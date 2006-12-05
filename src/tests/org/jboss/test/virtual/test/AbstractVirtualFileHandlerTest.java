@@ -166,7 +166,9 @@ public abstract class AbstractVirtualFileHandlerTest extends AbstractVFSTest
       long realLastModified = getRealLastModified("simple", null);
       // strip any milliseconds
       realLastModified = realLastModified / 1000 * 1000;
-      assertEquals(realLastModified, root.getLastModified());
+      long fileLastModified = root.getLastModified();
+      fileLastModified = fileLastModified / 1000 * 1000;
+      assertEquals(realLastModified, fileLastModified);
    }
    
    public void testChildLastModified() throws Exception
