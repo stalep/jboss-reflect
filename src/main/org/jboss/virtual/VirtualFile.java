@@ -383,10 +383,5 @@ public class VirtualFile implements Serializable
       VirtualFile other = (VirtualFile) obj;
       return handler.equals(other.handler);
    }
-   
-   @Override
-   protected void finalize() throws Throwable
-   {
-      close();
-   }
+
 }
