@@ -202,6 +202,82 @@ public class FileVFSUnitTestCase extends BaseTestCase
       mfIS.close();
    }
 
+   /**
+    * Basic tests of accessing resources in a jar
+    * @throws Exception
+    */
+   public void testFindResourceUsingURLStream()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile jar = vfs.findChild("outer.jar");
+      assertTrue("outer.jar != null", jar != null);
+
+      /*
+      ArrayList<String> searchCtx = new ArrayList<String>();
+      searchCtx.add("outer.jar");
+      VirtualFile metaInf = vfs.resolveFile("META-INF/MANIFEST.MF", searchCtx);
+      */
+      VirtualFile metaInf = jar.findChild("META-INF/MANIFEST.MF");
+      assertTrue("META-INF/MANIFEST.MF != null", metaInf != null);
+      InputStream mfIS = metaInf.toURL().openStream();
+      assertTrue("META-INF/MANIFEST.MF.openStream != null", mfIS != null);
+      Manifest mf = new Manifest(mfIS);
+      Attributes mainAttrs = mf.getMainAttributes();
+      String version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_VERSION);
+      assertEquals("1.0.0.GA", version);
+      mfIS.close();
+
+      String urlString = metaInf.toURL().toString();
+      URL mfURL = new URL(urlString);
+      mfIS = mfURL.openStream();
+      assertTrue("META-INF/MANIFEST.MF.openStream != null", mfIS != null);
+      mf = new Manifest(mfIS);
+      mainAttrs = mf.getMainAttributes();
+      version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_VERSION);
+      assertEquals("1.0.0.GA", version);
+      mfIS.close();
+   }
+
+   /**
+    * Basic tests of accessing resources in a jar that does not
+    * have parent directory entries.
+    * @throws Exception
+    */
+   public void testFindResourceInFilesOnlyJar()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile jar = vfs.findChild("jar1-filesonly.jar");
+      assertTrue("jar1-filesonly.jar != null", jar != null);
+
+      VirtualFile metaInf = jar.findChild("META-INF/MANIFEST.MF");
+      assertTrue("META-INF/MANIFEST.MF != null", metaInf != null);
+      InputStream mfIS = metaInf.toURL().openStream();
+      assertTrue("META-INF/MANIFEST.MF.openStream != null", mfIS != null);
+      Manifest mf = new Manifest(mfIS);
+      Attributes mainAttrs = mf.getMainAttributes();
+      String version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_VERSION);
+      assertEquals("1.0.0.GA-jboss", version);
+      String title = mf.getMainAttributes().getValue(Attributes.Name.SPECIFICATION_TITLE);
+      assertEquals("jar1-filesonly", title);
+      mfIS.close();
+
+      String urlString = metaInf.toURL().toString();
+      URL mfURL = new URL(urlString);
+      mfIS = mfURL.openStream();
+      assertTrue("META-INF/MANIFEST.MF.openStream != null", mfIS != null);
+      mf = new Manifest(mfIS);
+      mainAttrs = mf.getMainAttributes();
+      version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_VERSION);
+      assertEquals("1.0.0.GA-jboss", version);
+      title = mf.getMainAttributes().getValue(Attributes.Name.SPECIFICATION_TITLE);
+      assertEquals("jar1-filesonly", title);
+      mfIS.close();
+   }
+
    public void testFindResourceUnpackedJar()
       throws Exception
    {
@@ -345,6 +421,31 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VirtualFile vf = vfs.findChild("outer.jar/jar1.jar");
       VirtualFile jar1MF = vf.findChild("META-INF/MANIFEST.MF");
       InputStream mfIS = jar1MF.openStream();
+      Manifest mf = new Manifest(mfIS);
+      Attributes mainAttrs = mf.getMainAttributes();
+      String version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_TITLE);
+      assertEquals(Attributes.Name.SPECIFICATION_TITLE.toString(), "jar1", version);
+      mfIS.close();
+   }
+
+   public void testInnerJarUsingURLStream()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile inner = vfs.findChild("outer.jar/jar1.jar");
+      log.info("IsFile: "+inner.isLeaf());
+      log.info(inner.getLastModified());
+      List<VirtualFile> contents = inner.getChildren();
+      // META-INF/*, org/jboss/test/vfs/support/jar1/* at least
+      assertTrue("jar1.jar children.length("+contents.size()+") >= 2", contents.size() >= 2);
+      for(VirtualFile vf : contents)
+      {
+         log.info("  "+vf.getName());
+      }
+      VirtualFile vf = vfs.findChild("outer.jar/jar1.jar");
+      VirtualFile jar1MF = vf.findChild("META-INF/MANIFEST.MF");
+      InputStream mfIS = jar1MF.toURL().openStream();
       Manifest mf = new Manifest(mfIS);
       Attributes mainAttrs = mf.getMainAttributes();
       String version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_TITLE);
