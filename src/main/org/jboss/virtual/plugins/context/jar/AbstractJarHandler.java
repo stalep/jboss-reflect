@@ -240,7 +240,7 @@ public class AbstractJarHandler extends AbstractURLHandler
          catch (IOException e)
          {
             // Create a synthetic parent
-            URL url = getURL(parent, path);
+            URL url = getURL(parent, path, true);
             next = new SynthenticDirEntryHandler(getVFSContext(), parent, path,
                     entry.getTime(), url);
             parentMap.put(pathName.toString(), next);
@@ -268,13 +268,30 @@ public class AbstractJarHandler extends AbstractURLHandler
       return parent;
    }
 
-   protected URL getURL(VirtualFileHandler parent, String path)
+   /**
+    * Create the URL for the entry represented by path.
+    * 
+    * @param parent - the parent handler
+    * @param path - the simple path to the entry without any trailing '/'
+    * @return the jar entry URL
+    * @throws MalformedURLException
+    */
+   protected URL getURL(VirtualFileHandler parent, String path, boolean isDirEntry)
            throws MalformedURLException
    {
       StringBuilder buffer = new StringBuilder();
       try
       {
-         buffer.append(parent.toURL());
+         String parentUrl = parent.toURL().toString();
+         if (parent instanceof JarEntryHandler || parent instanceof SynthenticDirEntryHandler)
+         {
+            buffer.append(parentUrl);
+         }
+         else
+         {
+            buffer.append("jar:").append(parentUrl).append("!/");
+         }
+
          if (buffer.charAt(buffer.length() - 1) != '/')
             buffer.append('/');
          buffer.append(path);
@@ -284,6 +301,9 @@ public class AbstractJarHandler extends AbstractURLHandler
          // Should not happen
          throw new MalformedURLException(e.getMessage());
       }
+      // Jar directory URLs must end in /
+      if( isDirEntry && buffer.charAt(buffer.length() - 1) != '/')
+         buffer.append('/');
       URL url = new URL(buffer.toString());
       return url;
    }
@@ -332,13 +352,13 @@ public class AbstractJarHandler extends AbstractURLHandler
     *
     * @param parent the parent
     * @param entry  the entry
-    * @param entryName the entry name
+    * @param entryName - the entry name without any trailing '/'
     * @return the handler
     * @throws IOException              for any error accessing the file system
     * @throws IllegalArgumentException for a null parent or entry
     */
-   protected VirtualFileHandler createVirtualFileHandler(VirtualFileHandler parent, JarEntry entry,
-                                                         String entryName)
+   protected VirtualFileHandler createVirtualFileHandler(VirtualFileHandler parent,
+         JarEntry entry, String entryName)
            throws IOException
    {
       if (parent == null)
@@ -346,31 +366,7 @@ public class AbstractJarHandler extends AbstractURLHandler
       if (entry == null)
          throw new IllegalArgumentException("Null entry");
 
-
-      StringBuilder buffer = new StringBuilder();
-      try
-      {
-         String parentUrl = parent.toURL().toString();
-         if (parent instanceof JarEntryHandler || parent instanceof SynthenticDirEntryHandler)
-         {
-            buffer.append(parentUrl);
-         }
-         else
-         {
-            buffer.append("jar:").append(parentUrl).append("!/");
-         }
-
-         if (buffer.charAt(buffer.length() - 1) != '/')
-            buffer.append('/');
-         buffer.append(entryName);
-      }
-      catch (URISyntaxException e)
-      {
-         // Should not happen
-         throw new MalformedURLException(e.getMessage());
-      }
-      URL url = new URL(buffer.toString());
-
+      URL url = getURL(parent, entryName, entry.isDirectory());
       VFSContext context = parent.getVFSContext();
 
       VirtualFileHandler vfh;
@@ -386,9 +382,6 @@ public class AbstractJarHandler extends AbstractURLHandler
       }
       else
       {
-         // Jar directory URLs must end in /
-         if (entry.isDirectory())
-            url = new URL(url.toString() + "/");
          vfh = new JarEntryHandler(context, parent, jar, entry, entryName, url);
       }
 
