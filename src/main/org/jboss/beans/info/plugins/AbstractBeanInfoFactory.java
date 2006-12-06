@@ -62,6 +62,9 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       TypeInfo[] parameters = minfo.getParameterTypes();
       if ((name.length() > 3 && name.startsWith("get")) || (name.length() > 2 && name.startsWith("is")))
       {
+         // isBoolean() is not a getter for java.lang.Boolean
+         if (name.startsWith("is") && returnType.equals(PrimitiveInfo.BOOLEAN) == false)
+            return false;
          if (parameters.length == 0 && PrimitiveInfo.VOID.equals(returnType) == false)
             return true;
       }
@@ -177,7 +180,10 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
 
       HashSet<ConstructorInfo> result = new HashSet<ConstructorInfo>();
       for (int i = 0; i < cinfos.length; ++i)
-         result.add(cinfos[i]);
+      {
+         if (cinfos[i].isPublic() && cinfos[i].isStatic() == false)
+            result.add(cinfos[i]);
+      }
       return result;
    }
    
@@ -197,7 +203,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          {
             for (int i = 0; i < minfos.length; ++i)
             {
-               if (result.contains(minfos[i]) == false)
+               if (result.contains(minfos[i]) == false && minfos[i].isPublic() && minfos[i].isStatic() == false)
                   result.add(minfos[i]);
             }
          }
@@ -221,24 +227,21 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       {
          for (MethodInfo methodInfo : methods)
          {
-            if (methodInfo.isPublic() && methodInfo.isStatic() == false)
+            String name = methodInfo.getName();
+            String upperName = getUpperPropertyName(name);
+            if (isGetter(methodInfo))
             {
-               String name = methodInfo.getName();
-               String upperName = getUpperPropertyName(name);
-               if (isGetter(methodInfo))
+               getters.put(upperName, methodInfo);
+            }
+            else if (isSetter(methodInfo))
+            {
+               List<MethodInfo> list = setters.get(upperName);
+               if (list == null)
                {
-                  getters.put(upperName, methodInfo);
+                  list = new ArrayList<MethodInfo>();
+                  setters.put(upperName, list);
                }
-               else if (isSetter(methodInfo))
-               {
-                  List<MethodInfo> list = setters.get(upperName);
-                  if (list == null)
-                  {
-                     list = new ArrayList<MethodInfo>();
-                     setters.put(upperName, list);
-                  }
-                  list.add(methodInfo);
-               }
+               list.add(methodInfo);
             }
          }
       }
@@ -272,7 +275,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
             AnnotationValue[] annotations = getter.getAnnotations();
             AnnotationValue[] setterAnnotations = null;
             if (setter != null)
-               setter.getAnnotations();
+               setterAnnotations = setter.getAnnotations();
             if (annotations == null || annotations.length == 0)
                annotations = setterAnnotations;
             else if (setterAnnotations != null && setterAnnotations.length > 0)

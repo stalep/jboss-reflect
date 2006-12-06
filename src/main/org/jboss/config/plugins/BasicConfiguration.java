@@ -56,7 +56,9 @@ public class BasicConfiguration extends AbstractConfiguration
 
    protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable
    {
-      return new BasicClassAdapterFactory();
+      BasicClassAdapterFactory result = new BasicClassAdapterFactory();
+      result.setConfiguration(this);
+      return result;
    }
 
    protected TypeInfoFactory createDefaultTypeInfoFactory() throws Throwable

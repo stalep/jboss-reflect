@@ -233,10 +233,28 @@ public class ParameterizedClassInfo extends JBossObject implements ClassInfo, In
          return false;
       
       ClassInfo other = (ClassInfo) obj;
+      ClassInfo otherDelegate = other;
       if (other instanceof ParameterizedClassInfo)
-         other = ((ParameterizedClassInfo) other).delegate;
+         otherDelegate = ((ParameterizedClassInfo) other).delegate;
       
-      return delegate.equals(other);
+      if (delegate.equals(otherDelegate) == false)
+         return false;
+      
+      // We are equal to the raw type (seems hacky?)
+      if (other instanceof ParameterizedClassInfo == false)
+         return true;
+      
+      TypeInfo[] typeArguments = getActualTypeArguments();
+      TypeInfo[] otherTypeArguments = other.getActualTypeArguments();
+      if (typeArguments.length != otherTypeArguments.length)
+         return false;
+      
+      for (int i = 0; i < typeArguments.length; ++i)
+      {
+         if (typeArguments[i].equals(otherTypeArguments[i]) == false)
+            return false;
+      }
+      return true;
    }
 
    public void toShortString(JBossStringBuilder buffer)

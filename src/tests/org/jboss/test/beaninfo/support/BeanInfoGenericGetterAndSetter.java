@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,41 +19,22 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
-import org.jboss.test.beaninfo.test.BeanInfoTestSuite;
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
-import org.jboss.test.virtual.test.VFSAllTestSuite;
+package org.jboss.test.beaninfo.support;
 
 /**
- * All Test Suite.
+ * BeanInfoGetterAndSetter.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision$
+ * @version $Revision: 1.1 $
  */
-public class ContainerAllTestSuite extends TestSuite
+public class BeanInfoGenericGetterAndSetter
 {
-   public static void main(String[] args)
+   public BeanInfoGenericClass<String> getSomething()
    {
-      TestRunner.run(suite());
+      return null;
    }
 
-   public static Test suite()
+   public void setSomething(BeanInfoGenericClass<String> x)
    {
-      TestSuite suite = new TestSuite("All Tests");
-
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(BeanInfoTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
-      suite.addTest(VFSAllTestSuite.suite());
-      
-      return suite;
    }
 }
