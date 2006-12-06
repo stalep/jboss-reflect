@@ -260,7 +260,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       Manifest mf = new Manifest(mfIS);
       Attributes mainAttrs = mf.getMainAttributes();
       String version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_VERSION);
-      assertEquals("1.0.0.GA-jboss", version);
+      assertEquals("1.0.0.GA", version);
       String title = mf.getMainAttributes().getValue(Attributes.Name.SPECIFICATION_TITLE);
       assertEquals("jar1-filesonly", title);
       mfIS.close();
@@ -272,7 +272,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       mf = new Manifest(mfIS);
       mainAttrs = mf.getMainAttributes();
       version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_VERSION);
-      assertEquals("1.0.0.GA-jboss", version);
+      assertEquals("1.0.0.GA", version);
       title = mf.getMainAttributes().getValue(Attributes.Name.SPECIFICATION_TITLE);
       assertEquals("jar1-filesonly", title);
       mfIS.close();
