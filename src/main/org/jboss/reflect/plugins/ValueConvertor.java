@@ -34,7 +34,7 @@ import org.jboss.util.propertyeditor.PropertyEditors;
 /**
  * PropertyEditorHelper.
  *
- * @todo fix the introspection assumption
+ * TODO JBMICROCONT-118 fix the introspection assumption
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
@@ -58,7 +58,7 @@ public class ValueConvertor
    /**
     * Convert a value
     * 
-    * @todo look at integer progression, e.g. Integer.longValue()
+    * TODO JBMICROCONT-119 look at integer progression, e.g. Integer.longValue()
     * @param clazz the class
     * @param value the value
     * @return the value or null if there is no editor
@@ -108,7 +108,7 @@ public class ValueConvertor
       }
       
 
-      // TODO improve <init>(String) might not be relevent?
+      // TODO JBMICROCONT-132 improve <init>(String) might not be relevent?
       if (valueClass == String.class)
       {
          try

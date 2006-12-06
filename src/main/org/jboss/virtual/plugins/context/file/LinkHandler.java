@@ -83,7 +83,6 @@ public class LinkHandler extends AbstractURLHandler
 
       public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
       {
-         // TODO Auto-generated method stub
          return null;
       }
 

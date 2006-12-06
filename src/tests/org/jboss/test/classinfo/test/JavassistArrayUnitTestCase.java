@@ -47,12 +47,12 @@ public class JavassistArrayUnitTestCase extends ClassInfoArrayTest
 
    protected void assertInterfaces(Class<?> clazz, ClassInfo classInfo) throws Throwable
    {
-      // TODO this is broken for javassist
+      // TODO JBMICROCONT-130 this is broken for javassist
    }
 
    protected void assertModifiers(Class<?> clazz, ClassInfo classInfo) throws Throwable
    {
-      // TODO this is broken for javassist
+      // TODO JBMICROCONT-130 this is broken for javassist
    }
 
    protected TypeInfoFactory getTypeInfoFactory()

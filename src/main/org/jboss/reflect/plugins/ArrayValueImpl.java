@@ -103,7 +103,6 @@ public class ArrayValueImpl extends JBossObject implements ArrayValue, Serializa
     */
    protected void calculateHash()
    {
-      // FIXME java5 hash = Arrays.hashCode(values);
-      hash = hash * 29 +  type.hashCode();
+      hash = Arrays.hashCode(values);
    }
 }

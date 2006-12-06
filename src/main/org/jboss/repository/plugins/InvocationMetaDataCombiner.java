@@ -56,7 +56,7 @@ public class InvocationMetaDataCombiner
 
    public Object combine(Key key, MetaData[] levelData)
    {
-      Object value = null; // @todo Some function of context
+      Object value = null;
       if( value != null )
          return value;
       value = next.combine(key, levelData);

@@ -126,7 +126,6 @@ public class NoCopyNestedJarHandler extends AbstractJarHandler
    @Override
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
    {
-      // TODO Auto-generated method stub
       return super.getChildren(ignoreErrors);
    }
    

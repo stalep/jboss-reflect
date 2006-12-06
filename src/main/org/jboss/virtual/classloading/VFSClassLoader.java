@@ -150,7 +150,6 @@ public class VFSClassLoader extends SecureClassLoader
     */
    public String[] getPackageNames()
    {
-      // TODO Auto-generated method stub
       return null;
    }
 

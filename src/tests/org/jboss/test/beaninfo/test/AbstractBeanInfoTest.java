@@ -263,7 +263,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
             Map.Entry<String, List<Method>> entry = i.next();
             String name = entry.getKey();
             List<Method> setterList = entry.getValue();
-            // Review: Maybe should just create duplicate propertyInfo and let the configurator guess?
+            // TODO JBMICROCONT-125 Maybe should just create duplicate propertyInfo and let the configurator guess?
             if (setterList.size() == 1)
             {
                Method setter = setterList.get(0);

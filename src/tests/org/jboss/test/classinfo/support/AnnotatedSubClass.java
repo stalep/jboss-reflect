@@ -32,7 +32,7 @@ public class AnnotatedSubClass extends AnnotatedClass
 
    public AnnotatedSubClass(int i, String x)
    {
-      // FIXME AnnotatedSubClass constructor
+      // TODO JBMICROCONT-124 AnnotatedSubClass constructor
       super(i, x);
    }
 

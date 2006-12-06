@@ -77,7 +77,8 @@ public class AnnotationValueFactory
       }
       else if (type instanceof ClassInfo)
       {
-         rtnValue = new ClassValueImpl(((Class)value).getName(), type); //FixMe - do not depend on Class
+         // TODO JBMICROCONT-118 do not depend on Class
+         rtnValue = new ClassValueImpl(((Class)value).getName(), type);
       }
       
       return rtnValue;

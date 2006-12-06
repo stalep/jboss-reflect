@@ -42,8 +42,8 @@ import EDU.oswego.cs.dl.util.concurrent.SynchronizedInt;
 /**
  * JavassistReflectionFactory.
  * 
- * @todo proper classpool with pruning
- * @todo non compiler based implementation
+ * TODO JBMICROCONT-122 proper classpool with pruning
+ * TODO JBMICROCONT-121 non compiler based implementation
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
@@ -604,7 +604,7 @@ public class JavassistReflectionFactory
    /**
     * Get the boxed type
     * 
-    * @todo integer progression?
+    * TODO JBMICROCONT-119 integer progression?
     * @param type the type to box
     * @return the boxed type name
     */

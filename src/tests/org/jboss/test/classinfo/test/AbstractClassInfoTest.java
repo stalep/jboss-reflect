@@ -84,7 +84,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       getLog().debug("Type: " + info.getType());
       assertEquals(clazz, info.getType());
       
-      // TODO fix the serialization
+      // TODO JBMICROCONT-128 fix the serialization
       //byte[] bytes = serialize(info);
       //Object deserialized = deserialize(bytes);
       //assertEquals(info, deserialized);
@@ -471,7 +471,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       {
          Class type = annotation.annotationType();
          AnnotationInfoImpl info = new AnnotationInfoImpl(type.getName(), type.getModifiers());
-         // TODO attributes
+         // TODO JBMICROCONT-127 attributes
          AnnotationValue a = new AnnotationValueImpl(info, new HashMap<String, Value>());
          expected.add(a);
       }

@@ -279,7 +279,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       if (type instanceof Class)
          return getTypeInfo((Class) type);
 
-      // TODO getTypeInfo
+      // TODO JBMICROCONT-129 getTypeInfo
       throw new org.jboss.util.NotImplementedException("getTypeInfo");
    }
 

@@ -37,7 +37,7 @@ import org.jboss.metadata.spi.retrieval.MetaDatasItem;
 /**
  * CachingMetaDataContext.
  * 
- * @TODO LRU Cache
+ * TODO JBMICROCONT-120 LRU Cache
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */

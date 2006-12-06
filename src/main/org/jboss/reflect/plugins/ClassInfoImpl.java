@@ -38,7 +38,7 @@ import org.jboss.util.UnreachableStatementException;
 /**
  * Class info
  *
- * @todo fix the introspection assumption
+ * TODO JBMICROCONT-118 fix the introspection assumption
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
@@ -171,7 +171,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    /**
     * Get an array class
     * 
-    * @todo there must be a better way to do this!
+    * TODO JBMICROCONT-123 there must be a better way to do this!
     * @param clazz the class
     * @param depth the depth
     * @return the array class

@@ -48,14 +48,6 @@ import org.jboss.util.JBossInterface;
  * <li> Obtain the JoinpointFactory so the instance can be
  *       constructed.
  * </ol>
- *
- * FIXME: This class deals with too many concerns
- * FIXME: Need a mechanism to allow different use cases
- *              for the unadvised case.
- *              i.e. whether in the absence of aop requirements 
- *              the adapter should give a proxy advisor,
- *              instrument the class for aop anyway
- *              or default back to reflection (most likely!)
  * 
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */

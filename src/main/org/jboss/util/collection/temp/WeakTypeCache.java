@@ -153,7 +153,7 @@ public abstract class WeakTypeCache<T>
     */
    private T getTypeVariable(TypeVariable type)
    {
-      // TODO improve this
+      // TODO JBMICROCONT-131 improve this
       return get(type.getBounds()[0]);
    }
 
@@ -165,7 +165,7 @@ public abstract class WeakTypeCache<T>
     */
    private T getGenericArrayType(GenericArrayType type)
    {
-      // TODO this needs implementing properly
+      // TODO JBMICROCONT-131 this needs implementing properly
       return get(Object[].class);
    }
 
@@ -199,7 +199,7 @@ public abstract class WeakTypeCache<T>
 
       synchronized (classLoaderCache)
       {
-         // TODO something better than toString()?
+         // TODO JBMICROCONT-131 something better than toString()?
          classLoaderCache.put(type.toString(), result);
       }
    }

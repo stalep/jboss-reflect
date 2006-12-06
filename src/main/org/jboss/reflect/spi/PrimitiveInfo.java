@@ -32,7 +32,7 @@ import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 /**
  * Primitive info
  *
- * @todo fix the introspection assumption
+ * TODO JBMICROCONT-118 fix the introspection assumption
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */

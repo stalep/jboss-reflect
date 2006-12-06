@@ -33,7 +33,6 @@ import org.jboss.repository.spi.MetaDataLoader;
 import org.jboss.repository.spi.CommonNames;
 
 /**
- @todo update for synchronization and concurrent reader maps
 
  @author Scott.Stark@jboss.org
  @version $Revision$
@@ -72,8 +71,6 @@ public class AbstractKernelRepository
    }
 
    /**
-    @todo should the loader be used to attempt to load data if the requested
-      name does not currently exist?
 
     @param key
     @param combiner
@@ -159,7 +156,6 @@ public class AbstractKernelRepository
    }
 
    /**
-    @todo Not implemented.
     @param nameRE
     @param attributes
     @return null currently

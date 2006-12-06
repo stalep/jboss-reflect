@@ -230,7 +230,7 @@ public class ProxyMapCreator implements MemberValueVisitor
 
    public static Map<String, Object> createProxyMap(Class annotation, javassist.bytecode.annotation.Annotation info)
    {
-      //TODO: Need to handle default values for annotations in jdk 1.5
+      // TODO JBMICROCONT-126 Need to handle default values for annotations in jdk 1.5
       Map<String, Object> map = new HashMap<String, Object>();
 
       if (info.getMemberNames() == null) return map;

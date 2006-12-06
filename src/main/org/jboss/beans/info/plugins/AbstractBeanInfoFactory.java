@@ -298,7 +298,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
             Map.Entry<String, List<MethodInfo>> entry = i.next();
             String name = entry.getKey();
             List<MethodInfo> setterList = entry.getValue();
-            // Review: Maybe should just create duplicate propertyInfo and let the configurator guess?
+            // TODO JBMICROCONT-125 Maybe should just create duplicate propertyInfo and let the configurator guess?
             if (setterList.size() == 1)
             {
                MethodInfo setter = setterList.get(0);

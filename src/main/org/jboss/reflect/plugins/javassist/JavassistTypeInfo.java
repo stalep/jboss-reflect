@@ -158,7 +158,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
 
    public ClassInfo getGenericSuperclass()
    {
-      // TODO getGenericSuperclass
+      // TODO JBMICROCONT-129 getGenericSuperclass
       throw new org.jboss.util.NotImplementedException("getGenericSuperclass");
    }
 
@@ -182,7 +182,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
 
    public InterfaceInfo[] getGenericInterfaces()
    {
-      // TODO getGenericInterfaces
+      // TODO JBMICROCONT-129 getGenericInterfaces
       throw new org.jboss.util.NotImplementedException("getGenericInterfaces");
    }
 
@@ -318,7 +318,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    /**
     * Get an array class
     * 
-    * @todo there must be a better way to do this!
+    * TODO JBMICROCONT-123 there must be a better way to do this!
     * @param clazz the class
     * @param depth the depth
     * @return the array class
