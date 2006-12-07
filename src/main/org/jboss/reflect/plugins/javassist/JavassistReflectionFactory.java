@@ -76,6 +76,7 @@ public class JavassistReflectionFactory
    {
       ClassPool pool = JavassistTypeInfoFactoryImpl.pool;
       final CtClass result = pool.makeClass(JavassistMethod.class.getName() + counter.increment());
+      /* TODO JBMICROCONT-133 figure out how to do this on all JDKs
       try
       {
          CtClass magic = pool.get("sun.reflect.MagicAccessorImpl");
@@ -83,7 +84,7 @@ public class JavassistReflectionFactory
       }
       catch (NotFoundException ignored)
       {
-      }
+      }*/
       result.addInterface(pool.get(JavassistMethod.class.getName()));
       
       CtConstructor constructor = new CtConstructor(null, result);
