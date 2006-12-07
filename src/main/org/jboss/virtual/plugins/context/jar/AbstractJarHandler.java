@@ -273,6 +273,7 @@ public class AbstractJarHandler extends AbstractURLHandler
     * 
     * @param parent - the parent handler
     * @param path - the simple path to the entry without any trailing '/'
+    * @param isDirEntry - whether this is a directory entry
     * @return the jar entry URL
     * @throws MalformedURLException
     */
