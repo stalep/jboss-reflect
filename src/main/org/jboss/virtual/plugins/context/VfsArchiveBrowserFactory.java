@@ -19,43 +19,39 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.net.protocol.vfsfile;
+package org.jboss.virtual.plugins.context;
 
+import org.jboss.util.file.ArchiveBrowserFactory;
+import org.jboss.util.file.ArchiveBrowser;
 import org.jboss.virtual.VirtualFile;
+import org.jboss.virtual.VFS;
+import org.jboss.virtual.plugins.vfs.VirtualFileURLConnection;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Iterator;
 import java.net.URL;
-import java.net.URLConnection;
+import java.io.IOException;
 
 /**
- * Implements basic URLConnection for a VirtualFile
+ * This is a bridge to an older, crappier API written by myself.
+ *
+ * @deprecated
  *
  * @author <a href="bill@jboss.com">Bill Burke</a>
  * @version $Revision: 1.1 $
  */
-public class VirtualFileURLConnection extends URLConnection
+public class VfsArchiveBrowserFactory implements ArchiveBrowserFactory
 {
-   protected VirtualFile file;
-
-   public VirtualFileURLConnection(URL url, VirtualFile file)
+   public Iterator create(URL url, ArchiveBrowser.Filter filter)
    {
-      super(url);
-      this.file = file;
-   }
-
-   public void connect() throws IOException
-   {
-   }
-
-   public VirtualFile getVirtualFile()
-   {
-      return file;
-   }
-
-
-   public InputStream getInputStream() throws IOException
-   {
-      return file.openStream();
+      try
+      {
+         VirtualFileURLConnection conn = (VirtualFileURLConnection)url.openConnection();
+         VirtualFile vf = conn.getVirtualFile();
+         return new VfsArchiveBrowser(filter, vf);
+      }
+      catch (IOException e)
+      {               
+         throw new RuntimeException("Unable to browse URL: " + url, e);
+      }
    }
 }

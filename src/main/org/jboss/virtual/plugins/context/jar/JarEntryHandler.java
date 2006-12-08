@@ -24,7 +24,10 @@ package org.jboss.virtual.plugins.context.jar;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -76,6 +79,21 @@ public class JarEntryHandler extends AbstractURLHandler
       throws IOException
    {
       super(context, parent, url, entryName);
+      try
+      {
+         URL parentVfsUrl = parent.toVfsUrl();
+         String vfsParentUrl = parentVfsUrl.toString();
+         String vfsUrlString = null;
+         if (vfsParentUrl.endsWith("/")) vfsUrlString = vfsParentUrl + entryName;
+         else vfsUrlString = vfsParentUrl + "/" + entryName;
+         if (entry.isDirectory()) vfsUrlString += "/";
+         vfsUrl = new URL(vfsUrlString);
+      }
+      catch (URISyntaxException e)
+      {
+         throw new RuntimeException(e);
+      }
+
       if (jar == null)
          throw new IllegalArgumentException("Null jar");
       
@@ -128,12 +146,6 @@ public class JarEntryHandler extends AbstractURLHandler
       return false;
    }
 
-   @Override
-   public InputStream openStream() throws IOException
-   {
-      return jar.getInputStream(getEntry());
-   }
-
    public List<VirtualFileHandler> getChildren(boolean ignoreErrors) throws IOException
    {
       checkClosed();
@@ -147,6 +159,14 @@ public class JarEntryHandler extends AbstractURLHandler
    {
       return super.structuredFindChild(path);
    }
+
+   @Override
+   public InputStream openStream() throws IOException
+   {
+      return jar.getInputStream(getEntry());
+   }
+
+
 
    /**
     * TODO: synchronization on lazy entryMap creation

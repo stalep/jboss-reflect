@@ -24,10 +24,12 @@ package org.jboss.virtual ;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -41,7 +43,7 @@ import org.jboss.virtual .spi.VirtualFileHandler;
 
 /**
  * A virtual file as seen by the user
- * 
+ *
  * @author Scott.Stark@jboss.org
  * @author adrian@jboss.org
  * @version $Revision: 44334 $
@@ -54,14 +56,14 @@ public class VirtualFile implements Serializable
    private final VirtualFileHandler handler;
 
    /** Whether we are closed */
-   private AtomicBoolean closed = new AtomicBoolean(false); 
-   
+   private AtomicBoolean closed = new AtomicBoolean(false);
+
    /** The open streams */
    private transient final Set<InputStream> streams = Collections.synchronizedSet(new WeakSet());
-   
+
    /**
     * Create a new VirtualFile.
-    * 
+    *
     * @param handler the handler
     * @throws IllegalArgumentException if the handler is null
     */
@@ -74,20 +76,20 @@ public class VirtualFile implements Serializable
 
    /**
     * Get the virtual file handler
-    * 
+    *
     * @return the handler
     * @throws IllegalStateException if the file is closed
     */
-   protected VirtualFileHandler getHandler()
+   public VirtualFileHandler getHandler()
    {
       if (closed.get())
          throw new IllegalStateException("The virtual file is closed");
       return handler;
    }
-   
+
    /**
     * Get the simple VF name (X.java)
-    * 
+    *
     * @return the simple file name
     * @throws IllegalStateException if the file is closed
     */
@@ -98,7 +100,7 @@ public class VirtualFile implements Serializable
 
    /**
     * Get the VFS relative path name (org/jboss/X.java)
-    * 
+    *
     * @return the VFS relative path name
     * @throws IllegalStateException if the file is closed
     */
@@ -109,7 +111,7 @@ public class VirtualFile implements Serializable
 
    /**
     * Get the VF URL (file://root/org/jboss/X.java)
-    * 
+    *
     * @return the full URL to the VF in the VFS.
     * @throws MalformedURLException if a url cannot be parsed
     * @throws URISyntaxException if a uri cannot be parsed
@@ -117,24 +119,24 @@ public class VirtualFile implements Serializable
     */
    public URL toURL() throws MalformedURLException, URISyntaxException
    {
-      return getHandler().toURL();
+      return getHandler().toVfsUrl();
    }
-   
+
    /**
     * Get the VF URI (file://root/org/jboss/X.java)
-    * 
+    *
     * @return the full URI to the VF in the VFS.
     * @throws URISyntaxException if a uri cannot be parsed
     * @throws IllegalStateException if the file is closed
     */
-   public URI toURI() throws URISyntaxException
+   public URI toURI() throws MalformedURLException, URISyntaxException
    {
-      return getHandler().toURI();
+      return VFSUtils.toURI(toURL());
    }
 
    /**
     * When the file was last modified
-    * 
+    *
     * @return the last modified time
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalStateException if the file is closed
@@ -143,10 +145,10 @@ public class VirtualFile implements Serializable
    {
       return getHandler().getLastModified();
    }
-   
+
    /**
     * Get the size
-    * 
+    *
     * @return the size
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalStateException if the file is closed
@@ -159,7 +161,7 @@ public class VirtualFile implements Serializable
    /**
     * Whether it is a simple leaf of the VFS,
     * i.e. whether it can contain other files
-    * 
+    *
     * @return true if a simple file.
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalStateException if the file is closed
@@ -168,10 +170,10 @@ public class VirtualFile implements Serializable
    {
       return getHandler().isLeaf();
    }
-   
+
    /**
     * Whether it is hidden
-    * 
+    *
     * @return true when hidden
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalStateException if the file is closed
@@ -183,9 +185,9 @@ public class VirtualFile implements Serializable
 
    /**
     * Access the file contents.
-    * 
+    *
     * @return an InputStream for the file contents.
-    * @throws IOException for any error accessing the file system 
+    * @throws IOException for any error accessing the file system
     * @throws IllegalStateException if the file is closed
     */
    public InputStream openStream() throws IOException
@@ -228,10 +230,10 @@ public class VirtualFile implements Serializable
          handler.close();
       }
    }
-   
+
    /**
     * Get the VFS instance for this virtual file
-    * 
+    *
     * @return the VFS
     * @throws IllegalStateException if the file is closed
     */
@@ -240,10 +242,10 @@ public class VirtualFile implements Serializable
       VFSContext context = getHandler().getVFSContext();
       return context.getVFS();
    }
-   
+
    /**
     * Get the parent
-    * 
+    *
     * @return the parent or null if there is no parent
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalStateException if the file is closed
@@ -255,10 +257,10 @@ public class VirtualFile implements Serializable
          return parent.getVirtualFile();
       return null;
    }
-   
+
    /**
     * Get the children
-    * 
+    *
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalStateException if the file is closed
@@ -270,7 +272,7 @@ public class VirtualFile implements Serializable
 
    /**
     * Get the children
-    * 
+    *
     * @param filter to filter the children
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
@@ -287,12 +289,12 @@ public class VirtualFile implements Serializable
       visit(visitor);
       return visitor.getMatched();
    }
-   
+
    /**
     * Get all the children recursively<p>
-    * 
+    *
     * This always uses {@link VisitorAttributes#RECURSE}
-    * 
+    *
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalStateException if the file is closed
@@ -301,12 +303,12 @@ public class VirtualFile implements Serializable
    {
       return getChildrenRecursively(null);
    }
-   
+
    /**
     * Get all the children recursively<p>
-    * 
+    *
     * This always uses {@link VisitorAttributes#RECURSE}
-    * 
+    *
     * @param filter to filter the children
     * @return the children
     * @throws IOException for any problem accessing the virtual file system
@@ -323,10 +325,10 @@ public class VirtualFile implements Serializable
       visit(visitor);
       return visitor.getMatched();
    }
-   
+
    /**
     * Visit the virtual file system
-    * 
+    *
     * @param visitor the visitor
     * @throws IOException for any problem accessing the virtual file system
     * @throws IllegalArgumentException if the visitor is null
@@ -342,8 +344,8 @@ public class VirtualFile implements Serializable
 
    /**
     * Find a child
-    * 
-    * @param path the path 
+    *
+    * @param path the path
     * @return the child
     * @throws IOException for any problem accessing the VFS (including the child does not exist)
     * @throws IllegalArgumentException if the path is null
@@ -352,7 +354,7 @@ public class VirtualFile implements Serializable
    public VirtualFile findChild(String path) throws IOException
    {
       VirtualFileHandler handler = getHandler();
-      
+
       if (handler.isLeaf())
          throw new IllegalStateException("File cannot contain children: " + this);
 
@@ -372,7 +374,7 @@ public class VirtualFile implements Serializable
    {
       return handler.hashCode();
    }
-   
+
    @Override
    public boolean equals(Object obj)
    {

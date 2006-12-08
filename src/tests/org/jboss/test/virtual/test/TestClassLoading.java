@@ -29,8 +29,7 @@ public class TestClassLoading extends BaseTestCase
       log.info(mf);
       
       URL expected = new URL(url, "jar1.jar");
-      expected = JarUtils.createJarURL(expected);
-      expected = new URL(expected, "META-INF/MANIFEST.MF");
+      expected = new URL("vfs" + expected + "/META-INF/MANIFEST.MF");
       assertEquals(expected, mf);
 
       Class c = cl.loadClass("org.jboss.test.vfs.support.jar1.ClassInJar1");

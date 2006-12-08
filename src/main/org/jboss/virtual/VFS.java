@@ -27,10 +27,12 @@ import java.net.URL;
 import java.util.List;
 
 import org.jboss.virtual.plugins.vfs.helpers.WrappingVirtualFileHandlerVisitor;
+import org.jboss.virtual.plugins.context.VfsArchiveBrowserFactory;
 import org.jboss.virtual.spi.VFSContext;
 import org.jboss.virtual.spi.VFSContextFactory;
 import org.jboss.virtual.spi.VFSContextFactoryLocator;
 import org.jboss.virtual.spi.VirtualFileHandler;
+import org.jboss.util.file.ArchiveBrowser;
 
 /**
  * Virtual File System
@@ -43,6 +45,23 @@ public class VFS
 {
    /** The VFS Context */
    private final VFSContext context;
+
+   static
+   {
+      String pkgs = System.getProperty("java.protocol.handler.pkgs");
+      if (pkgs == null || pkgs.trim().length() == 0)
+      {
+         pkgs = "org.jboss.virtual.protocol";
+         System.setProperty("java.protocol.handler.pkgs", pkgs);
+      }
+      else if (!pkgs.contains("org.jboss.virtual.protocol"))
+      {
+         pkgs += "|org.jboss.virtual.protocol";
+         System.setProperty("java.protocol.handler.pkgs", pkgs);
+      }
+      // keep this until AOP and HEM uses VFS internally instead of the stupid ArchiveBrowser crap.
+      ArchiveBrowser.factoryFinder.put("vfsfile", new VfsArchiveBrowserFactory());
+   }
 
    /**
     * Get the virtual file system for a root uri

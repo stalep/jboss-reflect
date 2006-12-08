@@ -27,13 +27,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URI;
 import java.net.URL;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.jboss.virtual.plugins.context.AbstractURLHandler;
 import org.jboss.virtual.plugins.context.StructuredVirtualFileHandler;
 import org.jboss.virtual.spi.VirtualFileHandler;
+import org.jboss.virtual.VFS;
 
 /**
  * FileHandler.
@@ -49,6 +54,8 @@ public class FileHandler extends AbstractURLHandler
    /** The file */
    private transient File file;
    
+   private transient Map<String, VirtualFileHandler> childCache = Collections.synchronizedMap(new HashMap<String, VirtualFileHandler>());
+
    /**
     * Create a new FileHandler.
     * 
@@ -66,6 +73,7 @@ public class FileHandler extends AbstractURLHandler
       this.file = file;
       if (file.exists() == false)
          throw new FileNotFoundException("File does not exist: " + file.getCanonicalPath());
+      this.vfsUrl = new URL("vfs" + url.toString());
    }
    /**
     * Create a new FileHandler
@@ -80,6 +88,16 @@ public class FileHandler extends AbstractURLHandler
    public FileHandler(FileSystemContext context, VirtualFileHandler parent, File file, URI uri) throws IOException
    {
       this(context, parent, file, uri.toURL());
+   }
+
+
+   public URL toVfsUrl() throws MalformedURLException, URISyntaxException
+   {
+      if (vfsUrl == null)
+      {
+         vfsUrl = new URL("vfs" + getURL().toString());
+      }
+      return vfsUrl;
    }
 
    @Override
@@ -133,12 +151,24 @@ public class FileHandler extends AbstractURLHandler
       FileSystemContext context = getVFSContext();
       
       List<VirtualFileHandler> result = new ArrayList<VirtualFileHandler>();
+      Map<String, VirtualFileHandler> newCache = Collections.synchronizedMap(new HashMap<String, VirtualFileHandler>());
+      Map<String, VirtualFileHandler> oldCache = childCache;
       for (File file : files)
       {
          try
          {
-            VirtualFileHandler handler = context.createVirtualFileHandler(this, file);
+            VirtualFileHandler handler = null;
+            handler = oldCache.get(file.getName());
+            if (handler != null && file.lastModified() != handler.getLastModified())
+            {
+               handler = null;
+            }
+            if (handler == null)
+            {
+               handler = context.createVirtualFileHandler(this, file);
+            }
             result.add(handler);
+            newCache.put(file.getName(), handler);
          }
          catch (IOException e)
          {
@@ -148,6 +178,8 @@ public class FileHandler extends AbstractURLHandler
                throw e;
          }
       }
+      // cleanup old entries
+      childCache = newCache;
       return result;
    }
 
@@ -161,7 +193,17 @@ public class FileHandler extends AbstractURLHandler
       FileSystemContext context = getVFSContext();
       File parentFile = getFile();
       File child = new File(parentFile, name);
-      return context.createVirtualFileHandler(this, child);
+      VirtualFileHandler handler = childCache.get(name);
+      if (handler != null)
+      {
+         if (handler.getLastModified() != child.lastModified()) handler = null;
+      }
+      if (handler == null)
+      {
+         handler = context.createVirtualFileHandler(this, child);
+         childCache.put(name, handler);
+      }
+      return handler;
    }
 
    private void readObject(ObjectInputStream in)

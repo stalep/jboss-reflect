@@ -56,7 +56,7 @@ public class FileSystemContext extends AbstractVFSContext
    /**
     * Get the file for a url
     * 
-    * @param url the url
+    * @param uri the url
     * @return the file
     * @throws IOException for any error accessing the file system
     * @throws IllegalArgumentException for a null url

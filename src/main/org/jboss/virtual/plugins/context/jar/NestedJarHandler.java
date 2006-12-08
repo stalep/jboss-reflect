@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.URL;
+import java.net.URISyntaxException;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -137,6 +138,17 @@ public class NestedJarHandler extends AbstractJarHandler
       throws IOException
    {
       super(context, parent, temp.toURL(), entryName);
+
+      try
+      {
+         String vfsParentUrl = parent.toVfsUrl().toString();
+         if (vfsParentUrl.endsWith("/")) vfsUrl = new URL(vfsParentUrl + entryName);
+         else vfsUrl = new URL(vfsParentUrl + "/" + entryName);
+      }
+      catch (URISyntaxException e)
+      {
+         throw new RuntimeException(e);
+      }
 
       this.temp = temp;
       this.original = original;

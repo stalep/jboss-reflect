@@ -39,6 +39,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.jboss.logging.Logger;
 import org.jboss.virtual.plugins.context.file.FileSystemContextFactory;
 import org.jboss.virtual.plugins.context.jar.JarContextFactory;
+import org.jboss.virtual.plugins.context.VfsArchiveBrowserFactory;
+import org.jboss.util.file.ArchiveBrowser;
 
 /**
  * A singleton factory for locating VFSContextFactory instances given VFS root URIs.
@@ -63,6 +65,24 @@ public class VFSContextFactoryLocator
    
    /** Has the default initialzation been performed */
    private static boolean initialized;
+
+   static
+   {
+      String pkgs = System.getProperty("java.protocol.handler.pkgs");
+      if (pkgs == null || pkgs.trim().length() == 0)
+      {
+         pkgs = "org.jboss.virtual.protocol";
+         System.setProperty("java.protocol.handler.pkgs", pkgs);
+      }
+      else if (!pkgs.contains("org.jboss.virtual.protocol"))
+      {
+         pkgs += "|org.jboss.virtual.protocol";
+         System.setProperty("java.protocol.handler.pkgs", pkgs);
+      }
+      // keep this until AOP and HEM uses VFS internally instead of the stupid ArchiveBrowser crap.
+      ArchiveBrowser.factoryFinder.put("vfsfile", new VfsArchiveBrowserFactory());
+   }
+
 
    /**
     * Register a new VFSContextFactory

@@ -25,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -69,6 +70,17 @@ public class SynthenticDirEntryHandler extends AbstractURLHandler
       throws IOException
    {
       super(context, parent, url, entryName);
+      try
+      {
+         URL parentVfsUrl = parent.toVfsUrl();
+         String vfsParentUrl = parentVfsUrl.toString();
+         if (vfsParentUrl.endsWith("/")) vfsUrl = new URL(vfsParentUrl + entryName);
+         else vfsUrl = new URL(vfsParentUrl + "/" + entryName + "/");
+      }
+      catch (URISyntaxException e)
+      {
+         throw new RuntimeException(e);
+      }
       this.lastModified = lastModified;
    }
 

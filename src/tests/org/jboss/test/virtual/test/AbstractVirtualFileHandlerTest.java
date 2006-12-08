@@ -587,8 +587,10 @@ public abstract class AbstractVirtualFileHandlerTest extends AbstractVFSTest
       assertEquals(handler.isLeaf(), file.isLeaf());
       assertEquals(handler.getLastModified(), file.getLastModified());
       assertEquals(handler.getSize(), file.getSize());
-      assertEquals(handler.toURI(), file.toURI());
-      assertEquals(handler.toURL(), file.toURL());
+
+      // can't do this anymore as VirtualFile.toURL() returns a vfs based url
+      //assertEquals(handler.toURI(), file.toURI());
+      //assertEquals(handler.toURL(), file.toURL());
       
       VirtualFileHandler parent = handler.getParent();
       if (parent == null)

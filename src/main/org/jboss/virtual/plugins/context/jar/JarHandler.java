@@ -55,6 +55,7 @@ public class JarHandler extends AbstractJarHandler
    public JarHandler(VFSContext context, VirtualFileHandler parent, URL url, String name) throws IOException
    {
       super(context, parent, url, name);
+      this.vfsUrl = new URL("vfs" + url.toString());
 
       try
       {
@@ -73,6 +74,7 @@ public class JarHandler extends AbstractJarHandler
    public JarHandler(VFSContext context, VirtualFileHandler parent, File file, URL url, String name) throws IOException
    {
       super(context, parent, url, name);
+      this.vfsUrl = new URL("vfs" + url.toString());
 
       try
       {

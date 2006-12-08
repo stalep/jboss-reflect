@@ -56,6 +56,16 @@ public interface VirtualFileHandler extends Serializable
    String getPathName();
 
    /**
+    * Get a VFS-based URL
+    *
+    * @return
+    * @throws MalformedURLException
+    * @throws URISyntaxException
+    */
+   URL toVfsUrl() throws MalformedURLException, URISyntaxException;
+   
+
+   /**
     * Get the VF URI (file://root/org/jboss/X.java)
     * 
     * @return the full URI to the VF in the VFS.

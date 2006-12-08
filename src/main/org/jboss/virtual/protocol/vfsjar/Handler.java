@@ -19,17 +19,19 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.net.protocol.vfsfile;
+package org.jboss.virtual.protocol.vfsjar;
 
 import org.jboss.virtual.VFS;
 import org.jboss.virtual.VirtualFile;
+import org.jboss.virtual.plugins.vfs.VirtualFileURLConnection;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLStreamHandler;
+import java.net.URLConnection;
+import java.net.URL;
+import java.net.URISyntaxException;
+import java.io.IOException;
+import java.io.File;
+import java.io.InputStream;
 
 /**
  * URLStreamHandler for VFS
@@ -39,37 +41,21 @@ import java.net.URLStreamHandler;
  */
 public class Handler extends URLStreamHandler
 {
-
    protected URLConnection openConnection(URL u) throws IOException
    {
-      String file = u.toString().substring(8); // strip out vfsfile:
-      File fp = new File(file);
-
-      File parent = fp;
-      File curr = fp;
-      String relative = fp.getName();
-      while ((curr = curr.getParentFile()) != null)
-      {
-         parent = curr;
-         if (parent.getParentFile() != null) relative = parent.getName() + "/" + relative;
-      }
-
-      URL url = parent.toURL();
-
-      VFS vfs = VFS.getVFS(url);
-      VirtualFile vf = vfs.findChild(relative);
-
-
-      return new VirtualFileURLConnection(url, vf);
+      String urlString = u.toString();
+      int index = urlString.indexOf("!/");
+      String file = urlString.substring(3, index + 2); // strip out vfs
+      String path = urlString.substring(index + 2);
+      URL url = new URL(file);
+      return new VirtualFileURLConnection(u, url, path);
    }
-
-
    public static void main(String[] args) throws Exception
    {
-      System.setProperty("java.protocol.handler.pkgs", "org.jboss.net.protocol");
+      System.setProperty("java.protocol.handler.pkgs", "org.jboss.virtual.protocol");
       //URL url = new URL("vfsfile:/c:/tmp/urlstream.java");
       //URL url = new URL("vfsfile:/C:\\jboss\\jboss-head\\build\\output\\jboss-5.0.0.Beta\\server\\default\\lib\\jboss.jar\\schema\\xml.xsd");
-      URL url = new URL("vfsfile:/c:/tmp/parent.jar/foo.jar/urlstream.java");
+      URL url = new URL("vfsjar:file:/c:/tmp/parent.jar!/foo.jar/urlstream.java");
       InputStream is = url.openStream();
       while (is.available() != 0)
       {

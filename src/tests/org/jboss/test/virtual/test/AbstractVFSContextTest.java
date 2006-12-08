@@ -61,7 +61,7 @@ public abstract class AbstractVFSContextTest extends AbstractVFSTest
       VFS vfs = context.getVFS();
       VirtualFile rootFile = vfs.getRoot();
       
-      assertEquals(rootURI, rootFile.toURI());
+      assertEquals(new URI("vfs" + rootURI), rootFile.toURI());
    }
    
    public void testGetRoot() throws Exception

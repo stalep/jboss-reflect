@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +67,14 @@ public class LinkHandler extends AbstractURLHandler
       public ParentOfLink(VFSContext context, VirtualFileHandler parent, URL url, String name)
       {
          super(context, parent, url, name);
+         try
+         {
+            this.vfsUrl = new URL("vfs" + url.toString());
+         }
+         catch (MalformedURLException e)
+         {
+            throw new RuntimeException(e);
+         }
       }
       void addChild(VirtualFileHandler child, String name)
       {
@@ -90,6 +99,8 @@ public class LinkHandler extends AbstractURLHandler
       {
          return false;
       }
+
+
    }
 
    /**
@@ -111,7 +122,8 @@ public class LinkHandler extends AbstractURLHandler
       // TODO: This URL is not consistent with the getName, but does point to the raw link file
       super(context, parent, uri.toURL(), name);
       this.links = links;
-      // Create handlers for the links and add 
+      this.vfsUrl = new URL("vfs" + uri.toURL().toString());
+      // Create handlers for the links and add
       for(LinkInfo link : links)
       {
          String linkName = link.getName();
@@ -211,4 +223,5 @@ public class LinkHandler extends AbstractURLHandler
       // TODO: if the factory caches contexts the root handler may not point to the link
       return new DelegatingHandler(this.getVFSContext(), parent, name, rootHandler);
    }
+
 }

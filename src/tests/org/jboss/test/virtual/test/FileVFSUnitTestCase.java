@@ -625,7 +625,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       String name = tmp.getName();
       String vfsPath = tmp.getPath();
       vfsPath = vfsPath.substring(tmpRoot.getPath().length()+1);
-      URL url = tmp.toURL();
+      URL url = new URL("vfs" + tmp.toURL());
       log.debug("name: "+name);
       log.debug("vfsPath: "+vfsPath);
       log.debug("url: "+url);
@@ -693,7 +693,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       String name = tmpJar.getName();
       String vfsPath = tmpJar.getPath();
       vfsPath = vfsPath.substring(tmpRoot.getPath().length()+1);
-      URL url = tmpJar.toURL();
+      URL url = new URL("vfs" + tmpJar.toURL());
       //url = JarUtils.createJarURL(url);
       log.debug("name: "+name);
       log.debug("vfsPath: "+vfsPath);
@@ -1042,8 +1042,17 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VirtualFile tstjar = vfs.findChild("path with spaces/tst.jar");
       assertNotNull("tstjar != null", tstjar);
       URI uri = tstjar.toURI();
-      URI expectedURI = new URI(rootURL.toString()+"/path%20with%20spaces/tst.jar");
+      URI expectedURI = new URI("vfs"+rootURL.toString()+"/path%20with%20spaces/tst.jar");
       assertEquals(uri, expectedURI);
+   }
+
+   public static void main(String[] args) throws Exception
+   {
+      File file = new File("C:\\Documents and Settings");
+      System.out.println(file.toURI());
+      System.out.println(file.toURL().getHost());
+      URI uri = new URI("file", null, "/Document and Settings", null);
+      System.out.println(uri);
    }
 
    /**
@@ -1059,7 +1068,7 @@ public class FileVFSUnitTestCase extends BaseTestCase
       VirtualFile tstjar = vfs.findChild("path with spaces/unpacked-tst.jar");
       assertNotNull("tstjar != null", tstjar);
       URI uri = tstjar.toURI();
-      URI expectedURI = new URI(rootURL.toString()+"/path%20with%20spaces/unpacked-tst.jar/");
+      URI expectedURI = new URI("vfs" + rootURL.toString()+"/path%20with%20spaces/unpacked-tst.jar/");
       assertEquals(uri, expectedURI);
    }
 

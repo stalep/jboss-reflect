@@ -390,6 +390,44 @@ public class AbstractJarHandler extends AbstractURLHandler
    }
 
    /**
+    * Convert a URL into a JarFIle
+    *
+    * @param url
+    * @return
+    * @throws IOException
+    */
+   public static JarFile fromURL(URL url) throws IOException
+   {
+      try
+      {
+         URLConnection connection = url.openConnection();
+         JarURLConnection jarConnection;
+         if (connection instanceof JarURLConnection)
+         {
+            jarConnection = (JarURLConnection)connection;
+         }
+         else
+         {
+            // try wrapping it in jar:
+            URL jarUrl = new URL("jar:" + url + "!/");
+            jarConnection = (JarURLConnection)jarUrl.openConnection();
+         }
+         jarConnection.setUseCaches(false);
+         return jarConnection.getJarFile();
+      }
+      catch (IOException original)
+      {
+         // Fix the context of the error message
+         IOException e = new IOException("Error opening jar file: " + url + " reason=" + original.getMessage());
+         e.setStackTrace(original.getStackTrace());
+         throw e;
+
+      }
+
+   }
+
+
+   /**
     * Restore the jar file from the jar URL
     *
     * @param in

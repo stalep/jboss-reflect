@@ -244,6 +244,12 @@ public abstract class AbstractMockVirtualFileHandler extends AbstractVirtualFile
       return uri;
    }
 
+
+   public URL toVfsUrl() throws MalformedURLException, URISyntaxException
+   {
+      return toURL();
+   }
+
    @Override
    public URL toURL() throws MalformedURLException, URISyntaxException
    {

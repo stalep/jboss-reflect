@@ -60,7 +60,8 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
    private static final ObjectStreamField[] serialPersistentFields = {
       new ObjectStreamField("rootURI", URI.class),
       new ObjectStreamField("parent", VirtualFileHandler.class),
-      new ObjectStreamField("name", String.class)
+           new ObjectStreamField("name", String.class),
+           new ObjectStreamField("vfsUrl", URL.class)
    };
 
    /** The VFS context
@@ -80,6 +81,8 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
 
    /** The vfsPath */
    private transient String vfsPath;
+
+   protected URL vfsUrl;
 
    /** The reference count */
    private transient AtomicInteger references = new AtomicInteger(0);
@@ -122,6 +125,12 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
    public URL toURL() throws MalformedURLException, URISyntaxException
    {
       return toURI().toURL();
+   }
+
+
+   public URL toVfsUrl() throws MalformedURLException, URISyntaxException
+   {
+      return vfsUrl;
    }
 
    /**
@@ -344,6 +353,7 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
       fields.put("rootURI", this.getVFSContext().getRootURI());
       fields.put("parent", parent);
       fields.put("name", name);
+      fields.put("vfsUrl", vfsUrl);
       out.writeFields();
    }
    private void readObject(ObjectInputStream in)
@@ -357,6 +367,7 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
       VFSContextFactory factory = VFSContextFactoryLocator.getFactory(rootURI);
       this.context = factory.getVFS(rootURI);
       this.references = new AtomicInteger(0);
+      this.vfsUrl = (URL)fields.get("vfsUrl", null);
       // Restore the log
       log = Logger.getLogger(getClass());
    }
