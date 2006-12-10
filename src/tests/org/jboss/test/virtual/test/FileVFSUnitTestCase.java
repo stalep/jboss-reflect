@@ -897,6 +897,36 @@ public class FileVFSUnitTestCase extends BaseTestCase
    }
 
    /**
+    * Test that the URI of a VFS corresponding to a directory ends in '/' so that
+    * URIs created relative to it are under the directory. This requires that
+    * build-test.xml artifacts exist.
+    * 
+    * @throws Exception
+    */
+   public void testDirURIs() throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+
+      VirtualFile outerJar = vfs.findChild("unpacked-outer.jar");
+      URI outerURI = outerJar.toURI();
+      log.debug("outerURI: "+outerURI);
+      assertTrue(outerURI+" ends in '/'", outerURI.getPath().endsWith("/"));
+      // Validate that jar1 is under unpacked-outer.jar
+      URI jar1URI = new URI(outerURI+"jar1.jar");
+      log.debug("jar1URI: "+jar1URI+", path="+jar1URI.getPath());
+      assertTrue("jar1URI path ends in unpacked-outer.jar/jar1.jar!/",
+            jar1URI.getPath().endsWith("unpacked-outer.jar/jar1.jar"));
+      VirtualFile jar1 = outerJar.findChild("jar1.jar");
+      assertEquals(jar1URI, jar1.toURI());
+
+      VirtualFile packedJar = vfs.findChild("jar1.jar");
+      jar1URI = packedJar.findChild("org/jboss/test/vfs/support").toURI();
+      assertTrue("Jar directory entry URLs must end in /: " + jar1URI.toString(),
+            jar1URI.toString().endsWith("/"));
+   }
+
+   /**
     * Test copying a jar
     * 
     * @throws Exception
