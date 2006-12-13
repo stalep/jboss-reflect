@@ -25,6 +25,7 @@ import java.lang.annotation.Annotation;
 
 import org.jboss.metadata.spi.MetaData;
 import org.jboss.metadata.spi.MutableMetaData;
+import org.jboss.metadata.spi.signature.Signature;
 
 /**
  * MetaDataAndMutableMetaDataImpl.
@@ -136,5 +137,10 @@ public class MetaDataAndMutableMetaDataImpl implements MetaDataAndMutableMetaDat
    public <T> T removeMetaData(String name, Class<T> type)
    {
       return mutable.removeMetaData(name, type);
+   }
+
+   public MetaData getComponentMetaData(Signature signature)
+   {
+      return metaData.getComponentMetaData(signature);
    }
 }

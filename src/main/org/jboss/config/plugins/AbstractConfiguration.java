@@ -31,7 +31,6 @@ import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.NestedRuntimeException;
 
 /**
@@ -53,9 +52,6 @@ public abstract class AbstractConfiguration implements Configuration
    
    /** The default type joinpoint factory builder */
    private JoinpointFactoryBuilder joinpointFactoryBuilder;
-   
-   /** The default metadata context factory */
-   private MetaDataContextFactory metaDataContextFactory;
    
    /** The dependency builder */
    private DependencyBuilder dependencyBuilder;
@@ -145,30 +141,6 @@ public abstract class AbstractConfiguration implements Configuration
       return joinpointFactoryBuilder;
    }
 
-   public MetaDataContextFactory getMetaDataContextFactory()
-   {
-      if (metaDataContextFactory == null)
-      {
-         try
-         {
-            metaDataContextFactory = createDefaultMetaDataContextFactory();
-         }
-         catch (RuntimeException e)
-         {
-            throw e;
-         }
-         catch (Error e)
-         {
-            throw e;
-         }
-         catch (Throwable t)
-         {
-            throw new NestedRuntimeException("Cannot create MetaDataContextFactory", t);
-         }
-      }
-      return metaDataContextFactory;
-   }
-
    public DependencyBuilder getDependencyBuilder()
    {
       if (dependencyBuilder == null)
@@ -250,14 +222,6 @@ public abstract class AbstractConfiguration implements Configuration
     * @throws Throwable for any error
     */
    protected abstract JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable;
-
-   /**
-    * Create the default metadata context factory
-    * 
-    * @return the metadata context factory
-    * @throws Throwable for any error
-    */
-   protected abstract MetaDataContextFactory createDefaultMetaDataContextFactory() throws Throwable;
 
    /**
     * Create the default dependency builder

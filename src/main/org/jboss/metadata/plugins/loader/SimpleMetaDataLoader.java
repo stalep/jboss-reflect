@@ -23,53 +23,42 @@ package org.jboss.metadata.plugins.loader;
 
 import java.lang.annotation.Annotation;
 
-import org.jboss.metadata.annotation.AnnotationMatcher;
-import org.jboss.metadata.generic.GenericMatcher;
 import org.jboss.metadata.spi.retrieval.AnnotationItem;
-import org.jboss.metadata.spi.retrieval.MetaDataItem;
-import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
-import org.jboss.metadata.spi.scope.ScopeKey;
-import org.jboss.metadata.spi.signature.Signature;
+import org.jboss.metadata.spi.retrieval.AnnotationsItem;
+import org.jboss.metadata.spi.retrieval.simple.SimpleAnnotationItem;
+import org.jboss.metadata.spi.retrieval.simple.SimpleAnnotationsItem;
 
 /**
- * BasicMetaDataLoader.
+ * SimpleMetaDataLoader.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision$
+ * @version $Revision: 46146 $
  */
-public abstract class BasicMetaDataLoader extends AbstractMetaDataLoader
+public class SimpleMetaDataLoader extends BasicMetaDataLoader
 {
+   /** The annotations */
+   private AnnotationsItem annotationsItem;
+   
    /**
-    * Create a new BasicMetaDataLoader.
-    */
-   public BasicMetaDataLoader()
-   {
-   }
-
-   /**
-    * Create a new BasicMetaDataLoader.
+    * Create a new SimpleMetaDataLoader.
     * 
-    * @param key the scope key
+    * @param annotations the annoations
     */
-   public BasicMetaDataLoader(ScopeKey key)
+   @SuppressWarnings("unchecked")
+   public SimpleMetaDataLoader(Annotation[] annotations)
    {
-      super(key);
+      if (annotations == null)
+         throw new IllegalArgumentException("Null annotations");
+      
+      AnnotationItem[] annotationItems = new AnnotationItem[annotations.length];
+      for (int i = 0; i < annotations.length; ++i)
+         annotationItems[i] = new SimpleAnnotationItem(annotations[i]);
+      
+      annotationsItem = new SimpleAnnotationsItem(annotationItems);
    }
 
-   public <T extends Annotation> AnnotationItem<T> retrieveAnnotation(Class<T> annotationType)
+   public AnnotationsItem retrieveAnnotations()
    {
-      AnnotationItem[] annotations = retrieveAnnotations().getAnnotations();
-      return AnnotationMatcher.matchAnnotationItem(annotations, annotationType);
-   }
-
-   public MetaDataItem retrieveMetaData(String name)
-   {
-      MetaDataItem[] metaDatas = retrieveMetaData().getMetaDatas();
-      return GenericMatcher.matchMetaDataItem(metaDatas, name);
-   }
-
-   public MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature)
-   {
-      return null;
+      return annotationsItem;
    }
 }

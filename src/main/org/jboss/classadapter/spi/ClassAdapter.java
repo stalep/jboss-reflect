@@ -24,9 +24,8 @@ package org.jboss.classadapter.spi;
 import java.util.List;
 
 import org.jboss.joinpoint.spi.JoinpointFactory;
+import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.repository.spi.MetaDataContext;
-import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossInterface;
 
 /**
@@ -61,21 +60,6 @@ public interface ClassAdapter extends JBossInterface
    ClassInfo getClassInfo();
 
    /**
-    * Get an instance adapter.
-    * 
-    * @param classInfo the changed class info
-    * @return instance adapter
-    */
-   ClassAdapter getInstanceAdapter(ClassInfo classInfo);
-
-   /**
-    * Get the dependencies of this adapter
-    *
-    * @return the list of dependencies
-    */
-   List<Object> getDependencies();
-
-   /**
     * Get the Joinpoint Factory for this adapter.
     * 
     * @return the joinpoint factory
@@ -88,25 +72,13 @@ public interface ClassAdapter extends JBossInterface
     * @return the classloader
     */
    ClassLoader getClassLoader();
-   
-   /**
-    * Get the MetaDataContextFactory for this adpater
-    * 
-    * @return the metadata context factory
-    */
-   MetaDataContextFactory getMetaDataContextFactory();
 
    /**
-    * Get the metadata context
-    * 
-    * @return the metadata context
+    * Bean may have additional dependencies
+    * that the kernel cannot initially resolve. (currently defined by ClassAdapter)
+    *
+    * @param metaData the metadata
+    * @return the list of dependencies
     */
-   MetaDataContext getMetaDataContext();
-   
-   /**
-    * Set the metadata context
-    * 
-    * @param metaCtx a metadata context
-    */
-   void setMetaDataContext(MetaDataContext metaCtx);
+   List<Object> getDependencies(MetaData metaData);
 }

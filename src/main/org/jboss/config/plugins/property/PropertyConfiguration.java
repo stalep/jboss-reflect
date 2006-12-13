@@ -31,7 +31,6 @@ import org.jboss.config.plugins.AbstractConfiguration;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.logging.Logger;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.repository.spi.MetaDataContextFactory;
 
 /**
  * PropertyConfiguration.
@@ -97,11 +96,6 @@ public class PropertyConfiguration extends AbstractConfiguration
    protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
    {
       return (JoinpointFactoryBuilder) loadFromProperties(PropertyConfigurationConstants.JOIN_POINT_FACTORY_BUILDER_NAME, PropertyConfigurationConstants.JOIN_POINT_FACTORY_BUILDER_DEFAULT, JoinpointFactoryBuilder.class);
-   }
-
-   protected MetaDataContextFactory createDefaultMetaDataContextFactory() throws Throwable
-   {
-      return (MetaDataContextFactory) loadFromProperties(PropertyConfigurationConstants.META_DATA_CONTEXT_FACTORY_BUILDER_NAME, PropertyConfigurationConstants.META_DATA_CONTEXT_FACTORY_BUILDER_DEFAULT, MetaDataContextFactory.class);
    }
 
    protected DependencyBuilder createDefaultDependencyBuilder() throws Throwable

@@ -28,9 +28,8 @@ import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
+import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.repository.spi.MetaDataContext;
-import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossObject;
 
 /**
@@ -45,9 +44,6 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
    
    /** The class info */
    protected ClassInfo classInfo;
-
-   /** The metadata context */
-   protected MetaDataContext metaDataContext;
    
    /**
     * Create a new reflected class adapter
@@ -66,23 +62,10 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
       return classInfo;
    }
 
-   public ClassAdapter getInstanceAdapter(ClassInfo classInfo)
-   {
-      BasicClassAdapter clone = (BasicClassAdapter) clone();
-      clone.classInfo = classInfo;
-      return clone;
-   }
-
-   public List<Object> getDependencies()
-   {
-      DependencyBuilder builder = classAdapterFactory.getConfiguration().getDependencyBuilder();
-      return builder.getDependencies(this);
-   }
-
    public JoinpointFactory getJoinpointFactory()
    {
       JoinpointFactoryBuilder builder = classAdapterFactory.getConfiguration().getJoinpointFactoryBuilder();
-      return builder.createJoinpointFactory(classInfo, metaDataContext);
+      return builder.createJoinpointFactory(classInfo);
    }
 
    public ClassLoader getClassLoader()
@@ -90,19 +73,9 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
       return classInfo.getType().getClassLoader();
    }
 
-   public MetaDataContextFactory getMetaDataContextFactory()
+   public List<Object> getDependencies(MetaData metaData)
    {
-      return classAdapterFactory.getConfiguration().getMetaDataContextFactory();
-   }
-
-
-   public MetaDataContext getMetaDataContext()
-   {
-      return metaDataContext;
-   }
-
-   public void setMetaDataContext(MetaDataContext metaCtx)
-   {
-      metaDataContext = metaCtx;
+      DependencyBuilder builder = classAdapterFactory.getConfiguration().getDependencyBuilder();
+      return builder.getDependencies(this, metaData);
    }
 }

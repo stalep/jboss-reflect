@@ -117,7 +117,7 @@ public abstract class JoinpointTest extends ContainerTest
    {
       TypeInfoFactory typeFactory = getTypeInfoFactory();
       ClassInfo info = (ClassInfo) typeFactory.getTypeInfo(clazz);
-      return new BasicJoinpointFactory(info, null);
+      return new BasicJoinpointFactory(info);
    }
    
    protected abstract TypeInfoFactory getTypeInfoFactory();

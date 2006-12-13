@@ -58,7 +58,7 @@ public interface VirtualFileHandler extends Serializable
    /**
     * Get a VFS-based URL
     *
-    * @return
+    * @return the url
     * @throws MalformedURLException
     * @throws URISyntaxException
     */

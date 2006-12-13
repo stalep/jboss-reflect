@@ -28,16 +28,19 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jboss.metadata.plugins.loader.AbstractMutableMetaDataLoader;
+import org.jboss.metadata.spi.ComponentMutableMetaData;
 import org.jboss.metadata.spi.retrieval.AnnotationItem;
 import org.jboss.metadata.spi.retrieval.AnnotationsItem;
 import org.jboss.metadata.spi.retrieval.Item;
 import org.jboss.metadata.spi.retrieval.MetaDataItem;
+import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
 import org.jboss.metadata.spi.retrieval.MetaDatasItem;
 import org.jboss.metadata.spi.retrieval.basic.BasicAnnotationItem;
 import org.jboss.metadata.spi.retrieval.basic.BasicAnnotationsItem;
 import org.jboss.metadata.spi.retrieval.basic.BasicMetaDataItem;
 import org.jboss.metadata.spi.retrieval.basic.BasicMetaDatasItem;
 import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.signature.Signature;
 
 /**
  * MemoryMetaDataLoader.
@@ -45,7 +48,7 @@ import org.jboss.metadata.spi.scope.ScopeKey;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader
+public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader implements ComponentMutableMetaData
 {
    /** The annotations */
    private volatile Map<String, BasicAnnotationItem> annotations;
@@ -53,12 +56,15 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader
    /** MetaData by name */
    private volatile Map<String, BasicMetaDataItem> metaDataByName;
 
+   /** The component metadata */
+   private volatile Map<Signature, MetaDataRetrieval> components; 
+
    /** All annotations */
    private volatile BasicAnnotationsItem cachedAnnotationsItem;
 
    /** All meta data */
    private volatile BasicMetaDatasItem cachedMetaDatasItem;
-
+   
    /** Whether we should cache items */
    private final boolean cachable;
    
@@ -356,6 +362,36 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader
       result.invalidate();
       invalidateMetaDatasItem();
       return result.getValue();
+   }
+
+   public MetaDataRetrieval addComponentMetaDataRetrieval(Signature signature, MetaDataRetrieval component)
+   {
+      if (signature == null)
+         throw new IllegalArgumentException("Null signature");
+      
+      if (components == null)
+         components = new ConcurrentHashMap<Signature, MetaDataRetrieval>();
+      
+      return components.put(signature, component);
+   }
+
+   public MetaDataRetrieval removeComponentMetaDataRetrieval(Signature signature)
+   {
+      if (signature == null)
+         throw new IllegalArgumentException("Null signature");
+      
+      if (components == null)
+         return null;
+      
+      return components.remove(signature);
+   }
+
+   public MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature)
+   {
+      if (components == null)
+         return null;
+      
+      return components.get(signature);
    }
 
    /**

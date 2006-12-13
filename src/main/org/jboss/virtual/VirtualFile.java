@@ -34,10 +34,10 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jboss.util.collection.WeakSet;
-import org.jboss.virtual .plugins.vfs.helpers.FilterVirtualFileVisitor;
-import org.jboss.virtual .plugins.vfs.helpers.MatchAllVirtualFileFilter;
-import org.jboss.virtual .spi.VFSContext;
-import org.jboss.virtual .spi.VirtualFileHandler;
+import org.jboss.virtual.plugins.vfs.helpers.FilterVirtualFileVisitor;
+import org.jboss.virtual.plugins.vfs.helpers.MatchAllVirtualFileFilter;
+import org.jboss.virtual.spi.VFSContext;
+import org.jboss.virtual.spi.VirtualFileHandler;
 
 /**
  * A virtual file as seen by the user
@@ -126,6 +126,7 @@ public class VirtualFile implements Serializable
     * @return the full URI to the VF in the VFS.
     * @throws URISyntaxException if a uri cannot be parsed
     * @throws IllegalStateException if the file is closed
+    * @throws MalformedURLException for a bad url
     */
    public URI toURI() throws MalformedURLException, URISyntaxException
    {

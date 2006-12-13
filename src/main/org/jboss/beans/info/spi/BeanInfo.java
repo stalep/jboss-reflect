@@ -25,11 +25,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.jboss.joinpoint.spi.JoinpointFactory;
+import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
-import org.jboss.repository.spi.MetaDataContext;
-import org.jboss.repository.spi.MetaDataContextFactory;
 import org.jboss.util.JBossInterface;
 
 /**
@@ -55,33 +54,11 @@ public interface BeanInfo extends JBossInterface
    ClassInfo getClassInfo();
 
    /**
-    * Return a BeanInfo for this bean instance
-    * 
-    * @return an instance info for this bean
-    */
-   BeanInfo getInstanceInfo();
-
-   /**
-    * Bean may have additional dependencies
-    * that the kernel cannot initially resolve. (currently defined by ClassAdapter)
-    *
-    * @return the list of dependencies
-    */
-   List<Object> getDependencies();
-
-   /**
     * Get the joinpoint factory
     * 
     * @return the joinpoint factory
     */
    JoinpointFactory getJoinpointFactory();
-   
-   /**
-    * Get the metadata context factory
-    * 
-    * @return the metadata context factory
-    */
-   MetaDataContextFactory getMetaDataContextFactory();
    
    /**
     * Get the property information.
@@ -145,19 +122,13 @@ public interface BeanInfo extends JBossInterface
     * @return the factory
     */
    BeanInfoFactory getBeanInfoFactory();
-   
-   
+
    /**
-    * Get the metadata context
-    * 
-    * @return the metadata context
+    * Bean may have additional dependencies
+    * that the kernel cannot initially resolve. (currently defined by ClassAdapter)
+    *
+    * @param metaData the metadata
+    * @return the list of dependencies
     */
-   MetaDataContext getMetaDataContext();
-   
-   /**
-    * Set the metadata context
-    * 
-    * @param metaCtx a metadata context
-    */
-   void setMetaDataContext(MetaDataContext metaCtx);
+   List<Object> getDependencies(MetaData metaData);
 }

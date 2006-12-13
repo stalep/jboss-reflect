@@ -299,11 +299,14 @@ public class ScopeKey implements Serializable, Cloneable
       return scopes.hashCode();
    }
 
-   protected ScopeKey clone()
+   public ScopeKey clone()
    {
       try
       {
-         return (ScopeKey) super.clone();
+         ScopeKey result = (ScopeKey) super.clone();
+         result.scopes = Collections.synchronizedSortedMap(new TreeMap<ScopeLevel, Scope>(scopes));
+         result.frozen = false;
+         return result;
       }
       catch (CloneNotSupportedException e)
       {

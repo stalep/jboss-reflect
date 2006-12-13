@@ -21,18 +21,17 @@
 */
 package org.jboss.virtual.plugins.context;
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+
 import org.jboss.util.file.ArchiveBrowser;
 import org.jboss.virtual.VirtualFile;
 import org.jboss.virtual.VirtualFileFilter;
 import org.jboss.virtual.VisitorAttributes;
-import org.jboss.virtual.plugins.vfs.helpers.SuffixesExcludeFilter;
-import org.jboss.virtual.plugins.vfs.helpers.FilterVirtualFileVisitor;
 import org.jboss.virtual.plugins.context.jar.JarUtils;
-
-import java.util.Iterator;
-import java.util.List;
-import java.io.InputStream;
-import java.io.IOException;
+import org.jboss.virtual.plugins.vfs.helpers.FilterVirtualFileVisitor;
+import org.jboss.virtual.plugins.vfs.helpers.SuffixesExcludeFilter;
 
 /**
  * This is a bridge to an older, crappier API written by myself.
@@ -44,6 +43,7 @@ import java.io.IOException;
  */
 public class VfsArchiveBrowser implements Iterator
 {
+   /** TODO WHAT DOES THIS DO? It is unused */
    private ArchiveBrowser.Filter filter;
    private VirtualFile vf;
    private Iterator<VirtualFile> it;

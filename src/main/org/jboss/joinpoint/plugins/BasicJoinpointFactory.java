@@ -31,7 +31,6 @@ import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.MethodInfo;
-import org.jboss.repository.spi.MetaDataContext;
 import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
@@ -45,13 +44,9 @@ public class BasicJoinpointFactory extends JBossObject implements JoinpointFacto
    /** The class info */
    protected ClassInfo classInfo;
    
-   /** The metadata context */
-   protected MetaDataContext metaDataContext;
-   
-   public BasicJoinpointFactory(ClassInfo classInfo, MetaDataContext metaDataContext)
+   public BasicJoinpointFactory(ClassInfo classInfo)
    {
       this.classInfo = classInfo;
-      this.metaDataContext = metaDataContext;
    }
    
    public ClassInfo getClassInfo()

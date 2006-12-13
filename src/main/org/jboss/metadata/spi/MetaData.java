@@ -23,6 +23,8 @@ package org.jboss.metadata.spi;
 
 import java.lang.annotation.Annotation;
 
+import org.jboss.metadata.spi.signature.Signature;
+
 /**
  * MetaData.
  * 
@@ -140,4 +142,12 @@ public interface MetaData
     * @return true when the metadata is present
     */
    boolean isMetaDataPresent(String name, Class<?> type);
+   
+   /**
+    * Get the component metadata
+    * 
+    * @param signature the signature
+    * @return the component metadata
+    */
+   MetaData getComponentMetaData(Signature signature);
 }

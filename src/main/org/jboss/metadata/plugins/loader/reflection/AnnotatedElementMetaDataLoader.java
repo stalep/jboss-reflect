@@ -23,16 +23,26 @@ package org.jboss.metadata.plugins.loader.reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 
 import org.jboss.metadata.plugins.loader.BasicMetaDataLoader;
+import org.jboss.metadata.plugins.loader.SimpleMetaDataLoader;
 import org.jboss.metadata.spi.retrieval.AnnotationItem;
 import org.jboss.metadata.spi.retrieval.AnnotationsItem;
+import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
 import org.jboss.metadata.spi.retrieval.simple.SimpleAnnotationItem;
 import org.jboss.metadata.spi.retrieval.simple.SimpleAnnotationsItem;
 import org.jboss.metadata.spi.scope.CommonLevels;
 import org.jboss.metadata.spi.scope.Scope;
 import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.signature.ConstructorSignature;
+import org.jboss.metadata.spi.signature.FieldSignature;
+import org.jboss.metadata.spi.signature.MethodParametersSignature;
+import org.jboss.metadata.spi.signature.MethodSignature;
+import org.jboss.metadata.spi.signature.Signature;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.Strings;
 
@@ -99,6 +109,69 @@ public class AnnotatedElementMetaDataLoader extends BasicMetaDataLoader
       if (annotation == null)
          return null;
       return new SimpleAnnotationItem<T>(annotation);
+   }
+
+   public MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature)
+   {
+      if (signature == null)
+         return null;
+
+      if (annotated instanceof Class)
+      {
+         Class clazz = (Class) annotated;
+         if (signature instanceof ConstructorSignature)
+         {
+            try
+            {
+               Constructor constructor = clazz.getConstructor(signature.getParametersTypes(clazz));
+               return new AnnotatedElementMetaDataLoader(constructor);
+            }
+            catch (NoSuchMethodException e)
+            {
+               return null;
+            }
+         }
+         else if (signature instanceof MethodSignature)
+         {
+            try
+            {
+               Method method = clazz.getMethod(signature.getName(), signature.getParametersTypes(clazz));
+               return new AnnotatedElementMetaDataLoader(method);
+            }
+            catch (NoSuchMethodException e)
+            {
+               return null;
+            }
+         }
+         else if (signature instanceof MethodParametersSignature)
+         {
+            try
+            {
+               Method method = clazz.getMethod(signature.getName(), signature.getParametersTypes(clazz));
+               Annotation[][] paramAnnotations = method.getParameterAnnotations();
+               MethodParametersSignature sig = (MethodParametersSignature) signature;
+               return new SimpleMetaDataLoader(paramAnnotations[sig.getParam()]);
+            }
+            catch (NoSuchMethodException e)
+            {
+               return null;
+            }
+         }
+         else if (signature instanceof FieldSignature)
+         {
+            try
+            {
+               Field field = clazz.getField(signature.getName());
+               return new AnnotatedElementMetaDataLoader(field);
+            }
+            catch (NoSuchFieldException e)
+            {
+               return null;
+            }
+         }
+      }
+      
+      return null;
    }
 
    public String toString()

@@ -43,6 +43,7 @@ public class ReflectionMetaDataLoaderTestSuite extends TestSuite
       TestSuite suite = new TestSuite("Reflection MetaDataLoader Tests");
 
       suite.addTest(new TestSuite(AnnotatedElementLoaderBasicAnnotationsUnitTestCase.class));
+      suite.addTest(new TestSuite(AnnotatedElementLoaderComponentBasicAnnotationsUnitTestCase.class));
       suite.addTest(new TestSuite(AnnotatedElementLoaderScopeUnitTestCase.class));
       
       return suite;

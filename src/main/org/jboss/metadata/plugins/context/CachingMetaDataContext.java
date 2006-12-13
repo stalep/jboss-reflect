@@ -33,6 +33,7 @@ import org.jboss.metadata.spi.retrieval.AnnotationsItem;
 import org.jboss.metadata.spi.retrieval.MetaDataItem;
 import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
 import org.jboss.metadata.spi.retrieval.MetaDatasItem;
+import org.jboss.metadata.spi.signature.Signature;
 
 /**
  * CachingMetaDataContext.
@@ -55,6 +56,8 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
    /** All meta data */
    private volatile MetaDatasItem cachedMetaDatasItem;
 
+   private volatile Map<Signature, MetaDataRetrieval> cachedComponents;
+   
    /** The valid time */
    private volatile long validTime;
    
@@ -220,5 +223,47 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
       }
       
       return result;
+   }
+   
+   public void append(MetaDataRetrieval retrieval)
+   {
+      super.append(retrieval);
+      cachedComponents = null;
+   }
+
+   public void prepend(MetaDataRetrieval retrieval)
+   {
+      super.prepend(retrieval);
+      cachedComponents = null;
+   }
+
+   public void remove(MetaDataRetrieval retrieval)
+   {
+      super.remove(retrieval);
+      cachedComponents = null;
+   }
+
+   public MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature)
+   {
+      if (signature == null)
+         return null;
+
+      if (cachedComponents != null)
+      {
+         MetaDataRetrieval retrieval = cachedComponents.get(signature);
+         if (retrieval != null)
+            return retrieval;
+      }
+      
+      MetaDataRetrieval retrieval = super.getComponentMetaDataRetrieval(signature);
+      
+      if (retrieval != null)
+      {
+         if (cachedComponents == null)
+            cachedComponents = new ConcurrentHashMap<Signature, MetaDataRetrieval>();
+         cachedComponents.put(signature, retrieval);
+      }
+      
+      return retrieval;
    }
 }

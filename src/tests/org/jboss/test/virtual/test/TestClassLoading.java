@@ -5,7 +5,6 @@ import java.net.URL;
 import org.jboss.test.BaseTestCase;
 import org.jboss.virtual.VFS;
 import org.jboss.virtual.classloading.VFSClassLoader;
-import org.jboss.virtual.plugins.context.jar.JarUtils;
 
 public class TestClassLoading extends BaseTestCase
 {

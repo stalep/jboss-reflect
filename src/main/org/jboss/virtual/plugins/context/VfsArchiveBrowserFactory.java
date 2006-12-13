@@ -21,15 +21,14 @@
 */
 package org.jboss.virtual.plugins.context;
 
-import org.jboss.util.file.ArchiveBrowserFactory;
-import org.jboss.util.file.ArchiveBrowser;
-import org.jboss.virtual.VirtualFile;
-import org.jboss.virtual.VFS;
-import org.jboss.virtual.plugins.vfs.VirtualFileURLConnection;
-
-import java.util.Iterator;
-import java.net.URL;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Iterator;
+
+import org.jboss.util.file.ArchiveBrowser;
+import org.jboss.util.file.ArchiveBrowserFactory;
+import org.jboss.virtual.VirtualFile;
+import org.jboss.virtual.plugins.vfs.VirtualFileURLConnection;
 
 /**
  * This is a bridge to an older, crappier API written by myself.

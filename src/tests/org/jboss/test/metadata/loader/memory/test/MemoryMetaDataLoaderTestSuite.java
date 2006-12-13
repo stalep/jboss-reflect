@@ -43,6 +43,7 @@ public class MemoryMetaDataLoaderTestSuite extends TestSuite
       TestSuite suite = new TestSuite("Memory MetaDataLoader Tests");
 
       suite.addTest(new TestSuite(MemoryLoaderBasicAnnotationsUnitTestCase.class));
+      suite.addTest(new TestSuite(MemoryLoaderComponentBasicAnnotationsUnitTestCase.class));
       suite.addTest(new TestSuite(MemoryLoaderMutableAnnotationsUnitTestCase.class));
       suite.addTest(new TestSuite(MemoryLoaderMutableAnnotationsInvalidationUnitTestCase.class));
       suite.addTest(new TestSuite(MemoryLoaderBasicMetaDataUnitTestCase.class));

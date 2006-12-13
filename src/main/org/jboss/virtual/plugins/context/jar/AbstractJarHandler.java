@@ -392,8 +392,8 @@ public class AbstractJarHandler extends AbstractURLHandler
    /**
     * Convert a URL into a JarFIle
     *
-    * @param url
-    * @return
+    * @param url the url to convert
+    * @return the jar file
     * @throws IOException
     */
    public static JarFile fromURL(URL url) throws IOException

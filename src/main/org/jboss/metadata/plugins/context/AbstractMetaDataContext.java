@@ -39,6 +39,7 @@ import org.jboss.metadata.spi.retrieval.cummulative.CummulativeAnnotationsItem;
 import org.jboss.metadata.spi.retrieval.cummulative.CummulativeMetaDatasItem;
 import org.jboss.metadata.spi.scope.Scope;
 import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.signature.Signature;
 
 /**
  * AbstractMetaDataContext.
@@ -265,5 +266,33 @@ public class AbstractMetaDataContext implements MetaDataContext
          return parent.retrieveMetaData(name);
       
       return null;
+   }
+
+   public MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature)
+   {
+      if (signature == null)
+         return null;
+      
+      List<MetaDataRetrieval> componentRetrievals = null;
+      for (int i = 0; i < retrievals.size(); ++i)
+      {
+         MetaDataRetrieval retrieval = retrievals.get(i);
+         retrieval = retrieval.getComponentMetaDataRetrieval(signature);
+         if (retrieval != null)
+         {
+            if (componentRetrievals == null)
+               componentRetrievals = new ArrayList<MetaDataRetrieval>();
+            componentRetrievals.add(retrieval);
+         }
+      }
+      
+      MetaDataContext parentComponent = null;
+      if (parent != null)
+         parentComponent = (MetaDataContext) parent.getComponentMetaDataRetrieval(signature);
+
+      if (componentRetrievals == null)
+         return parentComponent;
+      
+      return new AbstractMetaDataContext(parentComponent, componentRetrievals);
    }
 }

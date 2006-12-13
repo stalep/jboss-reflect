@@ -31,8 +31,6 @@ import org.jboss.joinpoint.plugins.BasicJoinpointFactoryBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.repository.plugins.basic.BasicMetaDataContextFactory;
-import org.jboss.repository.spi.MetaDataContextFactory;
 
 /**
  * Basic configuration.
@@ -69,11 +67,6 @@ public class BasicConfiguration extends AbstractConfiguration
    protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
    {
       return new BasicJoinpointFactoryBuilder();
-   }
-
-   protected MetaDataContextFactory createDefaultMetaDataContextFactory() throws Throwable
-   {
-      return new BasicMetaDataContextFactory();
    }
 
    protected DependencyBuilder createDefaultDependencyBuilder() throws Throwable

@@ -19,24 +19,45 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.classadapter.plugins.dependency;
+package org.jboss.metadata.spi.signature;
 
-import java.util.List;
-
-import org.jboss.classadapter.spi.ClassAdapter;
-import org.jboss.classadapter.spi.DependencyBuilder;
-import org.jboss.metadata.spi.MetaData;
+import java.lang.reflect.Constructor;
 
 /**
- * AbstractDependencyBuilder.
+ * Constructor Signature.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision$
+ * @version $Revision: 1.1 $
  */
-public class AbstractDependencyBuilder implements DependencyBuilder
+public class ConstructorSignature extends Signature
 {
-   public List<Object> getDependencies(ClassAdapter classAdapter, MetaData metaData)
+   /**
+    * Create a new Signature.
+    * 
+    * @param parameters the parameters
+    */
+   public ConstructorSignature(String[] parameters)
    {
-      return null;
+      super(parameters);
+   }
+
+   /**
+    * Create a new Signature.
+    * 
+    * @param parameters the parameters
+    */
+   public ConstructorSignature(Class... parameters)
+   {
+      super(parameters);
+   }
+
+   /**
+    * Create a new Signature.
+    * 
+    * @param constructor the constructor
+    */
+   public ConstructorSignature(Constructor<?> constructor)
+   {
+      super(constructor.getParameterTypes());
    }
 }

@@ -32,6 +32,7 @@ import org.jboss.metadata.spi.retrieval.ValidTime;
 import org.jboss.metadata.spi.scope.Scope;
 import org.jboss.metadata.spi.scope.ScopeKey;
 import org.jboss.metadata.spi.scope.ScopeLevel;
+import org.jboss.metadata.spi.signature.Signature;
 
 /**
  * TestMetaDataRetrieval.
@@ -96,6 +97,11 @@ public class TestMetaDataRetrieval implements MetaDataRetrieval
    public MetaDataItem retrieveMetaData(String name)
    {
       lastMethod = "retrieveMetaData(String)";
+      return null;
+   }
+
+   public MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature)
+   {
       return null;
    }
 }

@@ -19,24 +19,32 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.classadapter.plugins.dependency;
+package org.jboss.test.metadata.loader.reflection.support;
 
-import java.util.List;
-
-import org.jboss.classadapter.spi.ClassAdapter;
-import org.jboss.classadapter.spi.DependencyBuilder;
-import org.jboss.metadata.spi.MetaData;
+import org.jboss.test.metadata.shared.support.TestAnnotation;
+import org.jboss.test.metadata.shared.support.TestAnnotation1;
+import org.jboss.test.metadata.shared.support.TestAnnotation2;
 
 /**
- * AbstractDependencyBuilder.
+ * MethodBean.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision$
+ * @version $Revision: 45742 $
  */
-public class AbstractDependencyBuilder implements DependencyBuilder
+public class MethodBean
 {
-   public List<Object> getDependencies(ClassAdapter classAdapter, MetaData metaData)
+   public void empty()
    {
-      return null;
+   }
+
+   @TestAnnotation
+   public void testAnnotation(String p1)
+   {
+   }
+
+   @TestAnnotation1
+   @TestAnnotation2
+   public void testAnnotation12(String p1, Class p2)
+   {
    }
 }

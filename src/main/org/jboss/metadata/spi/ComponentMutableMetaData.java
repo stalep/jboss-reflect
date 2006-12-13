@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -18,24 +18,34 @@
 * License along with this software; if not, write to the Free
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
-*/ 
-package org.jboss.repository.plugins.basic;
+*/
+package org.jboss.metadata.spi;
 
-import org.jboss.metadata.spi.repository.MetaDataRepository;
-import org.jboss.repository.spi.MetaDataContext;
-import org.jboss.repository.spi.MetaDataContextFactory;
+import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
+import org.jboss.metadata.spi.signature.Signature;
 
 /**
+ * ComponentMutableMetaData.
  * 
- * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
- * @version $Revision$
+ * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @version $Revision: 57133 $
  */
-public class BasicMetaDataContextFactory implements MetaDataContextFactory
+public interface ComponentMutableMetaData
 {
+   /**
+    * Add a component metadata
+    * 
+    * @param signature the signature
+    * @param component the component
+    * @return any previous component at that signature
+    */
+   MetaDataRetrieval addComponentMetaDataRetrieval(Signature signature, MetaDataRetrieval component);
 
-   public MetaDataContext getMetaDataContext(ClassLoader beanLoader, MetaDataRepository repository, String beanName)
-   {
-      return null;
-   }
-
+   /**
+    * Remove a component metadata
+    * 
+    * @param signature the signature
+    * @return any previous component at that signature
+    */
+   MetaDataRetrieval removeComponentMetaDataRetrieval(Signature signature);
 }

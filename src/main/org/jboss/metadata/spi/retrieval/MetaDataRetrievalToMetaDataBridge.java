@@ -24,6 +24,7 @@ package org.jboss.metadata.spi.retrieval;
 import java.lang.annotation.Annotation;
 
 import org.jboss.metadata.spi.MetaData;
+import org.jboss.metadata.spi.signature.Signature;
 
 /**
  * MetaDataRetrievalToMetaDataBridge.
@@ -36,6 +37,11 @@ public class MetaDataRetrievalToMetaDataBridge implements MetaData
    /** The meta data retrieval method */
    private MetaDataRetrieval retrieval;
    
+   /**
+    * Create a new MetaDataRetrievalToMetaDataBridge.
+    * 
+    * @param retrieval the retrieval
+    */
    public MetaDataRetrievalToMetaDataBridge(MetaDataRetrieval retrieval)
    {
       if (retrieval == null)
@@ -146,6 +152,35 @@ public class MetaDataRetrievalToMetaDataBridge implements MetaData
    public boolean isMetaDataPresent(String name)
    {
       return getMetaData(name) != null;
+   }
+
+   public MetaData getComponentMetaData(Signature signature)
+   {
+      MetaDataRetrieval component = retrieval.getComponentMetaDataRetrieval(signature);
+      if (component == null)
+         return null;
+      return new MetaDataRetrievalToMetaDataBridge(component);
+   }
+
+   public boolean equals(Object obj)
+   {
+      if (obj == this)
+         return true;
+      if (obj == null || obj instanceof MetaDataRetrievalToMetaDataBridge == false)
+         return false;
+      
+      MetaDataRetrievalToMetaDataBridge other = (MetaDataRetrievalToMetaDataBridge) obj;
+      return retrieval.equals(other.retrieval);
+   }
+
+   public int hashCode()
+   {
+      return retrieval.hashCode();
+   }
+
+   public String toString()
+   {
+      return super.toString() + "{" + retrieval.getScope() + "}";
    }
 
    /**

@@ -22,7 +22,6 @@
 package org.jboss.joinpoint.spi;
 
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.repository.spi.MetaDataContext;
 
 /**
  * JoinpointFactoryBuilder.
@@ -39,13 +38,4 @@ public interface JoinpointFactoryBuilder
     * @return the joinpoint factory
     */
    JoinpointFactory createJoinpointFactory(ClassInfo classInfo);
-
-   /**
-    * Create a joinpoint factory
-    * 
-    * @param classInfo the class info
-    * @param metaDataContext the metadata context
-    * @return the joinpoint factory
-    */
-   JoinpointFactory createJoinpointFactory(ClassInfo classInfo, MetaDataContext metaDataContext);
 }

@@ -26,7 +26,6 @@ import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.repository.spi.MetaDataContextFactory;
 
 /**
  * Constants.
@@ -59,12 +58,6 @@ public interface PropertyConfigurationConstants
    
    /** The JoinpointFactoryBuiylder default value */
    static final String JOIN_POINT_FACTORY_BUILDER_DEFAULT="org.jboss.aop.microcontainer.integration.AOPJoinpointFactoryBuilder:org.jboss.joinpoint.plugins.BasicJoinpointFactoryBuilder";
-
-   /** The MetaDataContextFactory property name */
-   static final String META_DATA_CONTEXT_FACTORY_BUILDER_NAME = MetaDataContextFactory.class.getName();
-   
-   /** The MetaDataContextFactory default value */
-   static final String META_DATA_CONTEXT_FACTORY_BUILDER_DEFAULT="org.jboss.aop.microcontainer.integration.AOPMetaDataContextFactory:org.jboss.repository.plugins.basic.BasicMetaDataContextFactory";
 
    /** The TypeInfoFactory property name */
    static final String TYPE_INFO_FACTORY_NAME = TypeInfoFactory.class.getName();

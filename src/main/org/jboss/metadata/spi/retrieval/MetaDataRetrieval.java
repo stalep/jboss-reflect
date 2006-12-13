@@ -24,6 +24,7 @@ package org.jboss.metadata.spi.retrieval;
 import java.lang.annotation.Annotation;
 
 import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.signature.Signature;
 
 /**
  * MetaDataRetrieval.
@@ -100,4 +101,12 @@ public interface MetaDataRetrieval
     * @return the metadata or null if not present
     */
    MetaDataItem retrieveMetaData(String name);
+   
+   /**
+    * Get the component metadata retrieval
+    * 
+    * @param signature the signature
+    * @return the component metadata retrieval
+    */
+   MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature);
 }

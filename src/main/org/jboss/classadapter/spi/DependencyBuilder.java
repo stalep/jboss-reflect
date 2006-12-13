@@ -23,6 +23,8 @@ package org.jboss.classadapter.spi;
 
 import java.util.List;
 
+import org.jboss.metadata.spi.MetaData;
+
 /**
  * DependencyBuilder.
  * 
@@ -35,7 +37,8 @@ public interface DependencyBuilder
     * Get the dependencies for this instance
     *
     * @param classAdapter the class adapter
+    * @param metaData the metadata
     * @return the dependencies
     */
-   List<Object> getDependencies(ClassAdapter classAdapter);
+   List<Object> getDependencies(ClassAdapter classAdapter, MetaData metaData);
 }
