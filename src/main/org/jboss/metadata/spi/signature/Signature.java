@@ -32,7 +32,7 @@ import java.util.Arrays;
 public class Signature
 {
    /** No Name */
-   public static final String NO_NAME = new String("?%NO_NAME%?");
+   public static final String NO_NAME = "?%NO_NAME%?";
 
    /** No Parameters */
    public static final String[] NO_PARAMETERS = new String[0];
@@ -89,7 +89,7 @@ public class Signature
       if (cl == null)
          cl = Class.class.getClassLoader();
       
-      return stringstoClasses(cl, parameters);
+      return stringsToClasses(cl, parameters);
    }
 
    /**
@@ -99,7 +99,7 @@ public class Signature
     * @param parameters the parameters as strings
     * @return the parameters as classes
     */
-   private static Class[] stringstoClasses(ClassLoader cl, String... parameters)
+   private static Class[] stringsToClasses(ClassLoader cl, String... parameters)
    {
       if (cl == null)
          throw new IllegalArgumentException("Null classloader");

@@ -34,20 +34,20 @@ import org.jboss.metadata.spi.repository.MetaDataRepository;
 public interface MetaDataContext
 {
 
-   public abstract <T extends Annotation> boolean hasAnnotation(Class<T> ann);
+   <T extends Annotation> boolean hasAnnotation(Class<T> ann);
 
-   public abstract <T extends Annotation> Annotation getAnnotation(Class<T> ann);
+   <T extends Annotation> Annotation getAnnotation(Class<T> ann);
 
-   public abstract <T extends Annotation> boolean hasAnnotationForMethod(long methodHash, Class<T> ann);
+   <T extends Annotation> boolean hasAnnotationForMethod(long methodHash, Class<T> ann);
 
-   public abstract <T extends Annotation> Annotation getAnnotationForMethod(long methodHash, Class<T> ann);
+   <T extends Annotation> Annotation getAnnotationForMethod(long methodHash, Class<T> ann);
 
-   public abstract List<Annotation> getAnnotations();
+   List<Annotation> getAnnotations();
 
-   public abstract List<Annotation> getAnnotationsForMethod(long methodHash);
+   List<Annotation> getAnnotationsForMethod(long methodHash);
 
-   public abstract List<Annotation> getAnnotationsForMethods(long[] methodHashes);
+   List<Annotation> getAnnotationsForMethods(long[] methodHashes);
 
-   public abstract MetaDataRepository getRepository();
+   MetaDataRepository getRepository();
 
 }
