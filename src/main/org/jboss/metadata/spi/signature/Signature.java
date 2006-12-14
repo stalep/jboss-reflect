@@ -80,7 +80,7 @@ public class Signature
     * @param parameters the parameters as strings
     * @return the parameters as classes
     */
-   private static Class[] stringstoClasses(Class clazz, String... parameters)
+   private static Class[] stringsToClasses(Class clazz, String... parameters)
    {
       if (clazz == null)
          throw new IllegalArgumentException("Null clazz");
@@ -234,7 +234,7 @@ public class Signature
    public Class[] getParametersTypes(Class clazz)
    {
       if (parameterTypes == null)
-         return stringstoClasses(clazz, parameters);
+         return stringsToClasses(clazz, parameters);
       return parameterTypes;
    }
    
