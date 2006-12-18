@@ -74,8 +74,14 @@ public class SynthenticDirEntryHandler extends AbstractURLHandler
       {
          URL parentVfsUrl = parent.toVfsUrl();
          String vfsParentUrl = parentVfsUrl.toString();
-         if (vfsParentUrl.endsWith("/")) vfsUrl = new URL(vfsParentUrl + entryName);
-         else vfsUrl = new URL(vfsParentUrl + "/" + entryName + "/");
+         if (vfsParentUrl.endsWith("/"))
+         {
+            vfsUrl = new URL(vfsParentUrl + entryName);
+         }
+         else
+         {
+            vfsUrl = new URL(vfsParentUrl + "/" + entryName + "/");
+         }
       }
       catch (URISyntaxException e)
       {
@@ -88,11 +94,13 @@ public class SynthenticDirEntryHandler extends AbstractURLHandler
     * Add a child to an entry
     * @param child
     */
-   public void addChild(VirtualFileHandler child)
+   public synchronized void addChild(VirtualFileHandler child)
    {
       if( entryChildren == null )
          entryChildren = new ArrayList<VirtualFileHandler>();
       entryChildren.add(child);
+      if( entryMap != null )
+         entryMap.put(child.getName(), child);
    }
 
    @Override
@@ -139,9 +147,15 @@ public class SynthenticDirEntryHandler extends AbstractURLHandler
    }
 
    /**
-    * TODO: synchronization on lazy entryMap creation
+    * Create a child handler for the given name. This looks to the entryMap
+    * for an existing child.
+    * @param name - the simple name of an immeadiate child.
+    * @return the VirtualFileHandler previously added via addChild.
+    * @throws IOException - thrown if there are no children or the
+    *  name does not match a child
     */
-   public VirtualFileHandler createChildHandler(String name) throws IOException
+   public synchronized VirtualFileHandler createChildHandler(String name)
+      throws IOException
    {
       if( entryChildren == null )
          throw new FileNotFoundException(this+" has no children");

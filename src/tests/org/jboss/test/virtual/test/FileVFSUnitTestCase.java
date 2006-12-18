@@ -1,3 +1,4 @@
+
 /*
  * JBoss, Home of Professional Open Source
  * Copyright 2006, Red Hat Middleware LLC, and individual contributors
@@ -275,6 +276,43 @@ public class FileVFSUnitTestCase extends BaseTestCase
       assertEquals("1.0.0.GA", version);
       title = mf.getMainAttributes().getValue(Attributes.Name.SPECIFICATION_TITLE);
       assertEquals("jar1-filesonly", title);
+      mfIS.close();
+   }
+
+   /**
+    * Basic tests of accessing resources in a war that does not
+    * have parent directory entries.
+    * @throws Exception
+    */
+   public void testFindResourceInFilesOnlyWar()
+      throws Exception
+   {
+      URL rootURL = getResource("/vfs/test");
+      VFS vfs = VFS.getVFS(rootURL);
+      VirtualFile war = vfs.findChild("filesonly.war");
+      assertTrue("filesonly.war != null", war != null);
+
+      VirtualFile classes = war.findChild("WEB-INF/classes");
+      assertTrue("WEB-INF/classes != null", classes != null);
+      assertTrue("WEB-INF/classes is not a leaf", classes.isLeaf()==false);
+
+      VirtualFile jar1 = war.findChild("WEB-INF/lib/jar1.jar");
+      assertTrue("WEB-INF/lib/jar1.jar != null", jar1 != null);
+      assertTrue("WEB-INF/lib/jar1.jar is not a leaf", jar1.isLeaf()==false);
+      VirtualFile ClassInJar1 = jar1.findChild("org/jboss/test/vfs/support/jar1/ClassInJar1.class");
+      assertTrue("ClassInJar1.class != null", ClassInJar1 != null);
+      assertTrue("ClassInJar1.class is a leaf", ClassInJar1.isLeaf());
+
+      VirtualFile metaInf = war.findChild("META-INF/MANIFEST.MF");
+      assertTrue("META-INF/MANIFEST.MF != null", metaInf != null);
+      InputStream mfIS = metaInf.toURL().openStream();
+      assertTrue("META-INF/MANIFEST.MF.openStream != null", mfIS != null);
+      Manifest mf = new Manifest(mfIS);
+      Attributes mainAttrs = mf.getMainAttributes();
+      String version = mainAttrs.getValue(Attributes.Name.SPECIFICATION_VERSION);
+      assertEquals("1.0.0.GA", version);
+      String title = mf.getMainAttributes().getValue(Attributes.Name.SPECIFICATION_TITLE);
+      assertEquals("filesonly-war", title);
       mfIS.close();
    }
 
