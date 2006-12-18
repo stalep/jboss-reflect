@@ -280,6 +280,21 @@
             <include name="inner-container.jar" />
          </zipfileset>
       </jar>
+
+      <!-- src/resources/tests/vfs/test/filesonly.war -->
+      <zip destfile="${source.resources}/vfs/test/filesonly.war"
+          filesonly="true">
+          <zipfileset dir="${source.resources}/vfs/test" fullpath="META-INF/MANIFEST.MF">
+             <include name="filesonly.mf"/>
+          </zipfileset>
+          <zipfileset dir="${build.classes.support}" prefix="WEB-INF/classes">
+             <include name="org/jboss/test/vfs/support/jar1/**"/>
+          </zipfileset>
+ 	      <zipfileset dir="${source.resources}/vfs/test" prefix="WEB-INF/lib">
+ 	         <include name="jar1.jar"/>
+ 	      </zipfileset>
+       </zip>
+
    </target>
 
   <!-- ================================================================== -->
