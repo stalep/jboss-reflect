@@ -99,6 +99,19 @@ public class JarEntryHandler extends AbstractURLHandler
       this.entry = entry;
    }
 
+
+   @Override
+   protected void initCacheLastModified()
+   {
+      // complete
+   }
+
+   @Override
+   public boolean hasBeenModified() throws IOException
+   {
+      return false; // right now, jar entries should always 
+   }
+
    /**
     * Add a child to an entry
     * @param child

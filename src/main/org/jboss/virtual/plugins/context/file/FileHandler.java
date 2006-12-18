@@ -152,13 +152,17 @@ public class FileHandler extends AbstractURLHandler
       List<VirtualFileHandler> result = new ArrayList<VirtualFileHandler>();
       Map<String, VirtualFileHandler> newCache = Collections.synchronizedMap(new HashMap<String, VirtualFileHandler>());
       Map<String, VirtualFileHandler> oldCache = childCache;
+      // fill up a new cache with old entries
+      // old entries no longer existing in directory are purged by not being added to new cache
+      // we cache handlers so that things like JARs are recreated (optimization)
       for (File file : files)
       {
          try
          {
             VirtualFileHandler handler = null;
             handler = oldCache.get(file.getName());
-            if (handler != null && file.lastModified() != handler.getLastModified())
+            // if underlying file has been modified then create a new handler instead of using the cached one
+            if (handler != null && handler.hasBeenModified())
             {
                handler = null;
             }
@@ -193,9 +197,11 @@ public class FileHandler extends AbstractURLHandler
       File parentFile = getFile();
       File child = new File(parentFile, name);
       VirtualFileHandler handler = childCache.get(name);
-      if (handler != null)
+      // if a child has already been created use that
+      // if the child has been modified on disk then create a new handler
+      if (handler != null && handler.hasBeenModified())
       {
-         if (handler.getLastModified() != child.lastModified()) handler = null;
+         handler = null;
       }
       if (handler == null)
       {

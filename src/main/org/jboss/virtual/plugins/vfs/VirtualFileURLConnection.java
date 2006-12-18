@@ -38,7 +38,7 @@ import java.util.HashMap;
  * @author <a href="bill@jboss.com">Bill Burke</a>
  * @version $Revision: 1.1 $
  */
-public class   VirtualFileURLConnection extends URLConnection
+public class VirtualFileURLConnection extends URLConnection
 {
    public static Map<URL, VFS> urlCache = Collections.synchronizedMap(new HashMap<URL, VFS>());
 
@@ -65,6 +65,17 @@ public class   VirtualFileURLConnection extends URLConnection
       {
          vfs = VFS.getVFS(vfsurl);
          urlCache.put(vfsurl, vfs);
+      }
+      else
+      {
+         // if the root of VFS has changed on disk, lets purge it
+         // this is important for Jar files as we don't want stale jars as the
+         // root of the VFS (i.e., on redeployment)
+         if (vfs.getRoot().getHandler().hasBeenModified())
+         {
+            vfs = VFS.getVFS(vfsurl);
+            urlCache.put(vfsurl, vfs);
+         }
       }
       return vfs.findChild(relativePath);
 

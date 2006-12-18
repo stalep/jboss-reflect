@@ -21,19 +21,23 @@
 */
 package org.jboss.virtual.protocol.vfsfile;
 
+import org.jboss.virtual.VFS;
+import org.jboss.virtual.plugins.vfs.VirtualFileURLConnection;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
-import java.util.Enumeration;
-import java.util.HashSet;
+import java.net.URLClassLoader;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
-import org.jboss.virtual.plugins.vfs.VirtualFileURLConnection;
+import java.util.HashSet;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * URLStreamHandler for VFS

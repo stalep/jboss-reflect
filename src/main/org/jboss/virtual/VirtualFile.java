@@ -146,6 +146,18 @@ public class VirtualFile implements Serializable
    }
 
    /**
+    * Returns true if the file has been modified since this method was last called
+    * Last modified time is initialized at handler instantiation.
+    *
+    * @return
+    * @throws IOException
+    */
+   public boolean hasBeenModified() throws IOException
+   {
+      return getHandler().hasBeenModified();
+   }
+
+   /**
     * Get the size
     *
     * @return the size

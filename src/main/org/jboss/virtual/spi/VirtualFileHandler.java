@@ -90,6 +90,15 @@ public interface VirtualFileHandler extends Serializable
     * @throws IllegalStateException if closed
     */
    long getLastModified() throws IOException;
+
+   /**
+    * Returns true if the file has been modified since this method was last called
+    * Last modified time is initialized at handler instantiation.
+    *
+    * @return
+    * @throws IOException
+    */
+   boolean hasBeenModified() throws IOException;
    
    /**
     * Get the size

@@ -87,6 +87,8 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
    /** The reference count */
    private transient AtomicInteger references = new AtomicInteger(0);
 
+   protected transient long cachedLastModified;
+
    /**
     * Create a new handler
     * 
@@ -105,6 +107,18 @@ public abstract class AbstractVirtualFileHandler implements VirtualFileHandler
       this.parent = parent;
       this.name = VFSUtils.fixName(name);
    }
+
+   public boolean hasBeenModified() throws IOException
+   {
+      long last = getLastModified();
+      if (cachedLastModified != last)
+      {
+         cachedLastModified = last;
+         return true;
+      }
+      return false;
+   }
+
 
    public String getName()
    {

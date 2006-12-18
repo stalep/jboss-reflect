@@ -63,6 +63,18 @@ public abstract class AbstractURLHandler extends AbstractVirtualFileHandler
          throw new IllegalArgumentException("Null url");
       this.url = url;
    }
+
+   protected void initCacheLastModified()
+   {
+      try
+      {
+         this.cachedLastModified = url.openConnection().getLastModified();
+      }
+      catch (IOException e)
+      {
+         throw new RuntimeException(e);
+      }
+   }
    
    /**
     * Get the url
