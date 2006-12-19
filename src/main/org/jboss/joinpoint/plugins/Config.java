@@ -259,6 +259,8 @@ public class Config
     */
    public static FieldInfo findFieldInfo(ClassInfo classInfo, String name) throws JoinpointException
    {
+      if (classInfo == null)
+         throw new IllegalArgumentException("ClassInfo cannot be null!");
       ClassInfo current = classInfo;
       while (current != null)
       {
@@ -273,7 +275,7 @@ public class Config
    /**
     * Find field info
     *
-    * @param fieldInfo the field info
+    * @param classInfo the class info
     * @param name the field name
     * @return the field info or null if not found
     */
@@ -318,6 +320,9 @@ public class Config
     */
    public static MethodInfo findMethodInfo(ClassInfo classInfo, String name, String[] paramTypes, boolean isStatic, boolean isPublic) throws JoinpointException
    {
+      if (classInfo == null)
+         throw new IllegalArgumentException("ClassInfo cannot be null!");
+
       if (paramTypes == null)
          paramTypes = NO_PARAMS_TYPES;
 
