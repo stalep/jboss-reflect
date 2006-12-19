@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="/thirdparty/javassist/lib/javassist.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/jboss/profiler/jvmti/lib/jboss-profiler-jvmti.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/jboss/test/lib/jboss-test.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-vfs/lib/jboss-vfs.jar" sourcepath="/thirdparty/jboss/jboss-vfs/lib/jboss-vfs-sources.jar"/>
 	<classpathentry kind="output" path="output/eclipse-classes"/>
 </classpath>
