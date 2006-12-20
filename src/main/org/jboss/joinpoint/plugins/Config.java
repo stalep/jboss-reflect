@@ -373,10 +373,9 @@ public class Config
     */
    public static boolean equals(String[] typeNames, TypeInfo[] typeInfos)
    {
-      if (typeNames == null || typeInfos == null)
+      if (simpleCheck(typeNames, typeInfos) == false)
          return false;
-      if (typeNames.length != typeInfos.length)
-         return false;
+
       for (int i = 0; i < typeNames.length; ++i)
       {
          if (typeNames[i] != null && typeNames[i].equals(typeInfos[i].getName()) == false)
@@ -384,4 +383,21 @@ public class Config
       }
       return true;
    }
+
+   /**
+    * A simple null and length check.
+    *
+    * @param typeNames
+    * @param typeInfos
+    * @return false if either argument is null or lengths differ, else true
+    */
+   protected static boolean simpleCheck(String[] typeNames, TypeInfo[] typeInfos)
+   {
+      if (typeNames == null || typeInfos == null)
+      {
+         return false;
+      }
+      return typeNames.length == typeInfos.length;
+   }
+
 }
