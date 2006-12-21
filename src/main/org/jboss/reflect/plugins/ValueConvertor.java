@@ -33,16 +33,19 @@ import org.jboss.util.propertyeditor.PropertyEditors;
 
 /**
  * PropertyEditorHelper.
- *
+ * <p/>
  * TODO JBMICROCONT-118 fix the introspection assumption
+ *
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
 public class ValueConvertor
 {
-   /** The log */
+   /**
+    * The log
+    */
    private static final Logger log = Logger.getLogger(ValueConvertor.class);
-   
+
    static
    {
       try
@@ -54,11 +57,11 @@ public class ValueConvertor
          log.debug("Unable to initialise property editors", t);
       }
    }
-   
+
    /**
     * Convert a value
-    * 
-    * TODO JBMICROCONT-119 look at integer progression, e.g. Integer.longValue()
+    * <p/>
+    *
     * @param clazz the class
     * @param value the value
     * @return the value or null if there is no editor
@@ -71,7 +74,7 @@ public class ValueConvertor
          throw new IllegalArgumentException("Null class");
       if (value == null)
          return null;
-      
+
       Class<? extends Object> valueClass = value.getClass();
       if (clazz.isAssignableFrom(valueClass))
          return value;
@@ -97,31 +100,57 @@ public class ValueConvertor
       // Try a static clazz.valueOf(value)
       try
       {
-         Method method = clazz.getMethod("valueOf", new Class[] { valueClass });
+         Method method = clazz.getMethod("valueOf", valueClass);
          int modifiers = method.getModifiers();
-         if (Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) 
+         if (Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers)
                && clazz.isAssignableFrom(method.getReturnType()))
-            return ReflectionUtils.invoke(null, method, new Object[] { value });
+            return ReflectionUtils.invoke(null, method, new Object[]{value});
       }
       catch (Exception ignored)
       {
       }
-      
 
       // TODO JBMICROCONT-132 improve <init>(String) might not be relevent?
       if (valueClass == String.class)
       {
          try
          {
-            Constructor constructor = clazz.getConstructor(new Class[] { String.class });
+            Constructor constructor = clazz.getConstructor(valueClass);
             if (Modifier.isPublic(constructor.getModifiers()))
-               return ReflectionUtils.newInstance(constructor, new Object[] { value });
+               return ReflectionUtils.newInstance(constructor, new Object[]{value});
          }
          catch (Exception ignored)
          {
          }
       }
-      
+
       return value;
    }
+
+   /**
+    * Progress a value
+    * <p/>
+    *
+    * @param clazz the class
+    * @param value the value
+    * @return the progressed value or null if unsupported
+    * @throws Throwable for any error
+    */
+   public static Object progressValue(Class<? extends Object> clazz, Object value) throws Throwable
+   {
+      if (value != null)
+      {
+         ProgressionConvertor convertor = ProgressionConvertorFactory.getInstance().getConvertor();
+         if (convertor.canProgress(clazz, value.getClass()))
+         {
+            return convertor.doProgression(clazz, value);
+         }
+         else
+         {
+            return null;
+         }
+      }
+      return value;
+   }
+
 }

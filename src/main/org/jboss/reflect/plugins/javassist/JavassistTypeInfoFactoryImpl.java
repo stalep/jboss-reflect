@@ -37,11 +37,7 @@ import org.jboss.reflect.plugins.AnnotationHelper;
 import org.jboss.reflect.plugins.AnnotationValueFactory;
 import org.jboss.reflect.plugins.AnnotationValueImpl;
 import org.jboss.reflect.plugins.EnumConstantInfoImpl;
-import org.jboss.reflect.spi.AnnotationInfo;
-import org.jboss.reflect.spi.AnnotationValue;
-import org.jboss.reflect.spi.PrimitiveInfo;
-import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.reflect.spi.*;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.collection.WeakClassCache;
 
@@ -57,11 +53,11 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
    static final AnnotationValue[] NO_ANNOTATIONS = new AnnotationValue[0];
    /**
     * Raise NoClassDefFoundError for javassist not found
-    * 
+    *
     * @param name the name
     * @param e the not found error
     * @return never
-    * @throws NoClassDefFoundError always 
+    * @throws NoClassDefFoundError always
     */
    public static NoClassDefFoundError raiseClassNotFound(String name, NotFoundException e) throws NoClassDefFoundError
    {
@@ -73,11 +69,11 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
    /**
     * Raise NoClassDefFoundError for javassist not found
-    * 
+    *
     * @param name the name
     * @param e the not found error
     * @return never
-    * @throws NoClassDefFoundError always 
+    * @throws NoClassDefFoundError always
     */
    public static NoClassDefFoundError raiseClassNotFound(String name, ClassNotFoundException e) throws NoClassDefFoundError
    {
@@ -88,11 +84,11 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
    /**
     * Raise NoClassDefFoundError for javassist not found
-    * 
+    *
     * @param name the name
     * @param e the not found error
     * @return never
-    * @throws NoClassDefFoundError always 
+    * @throws NoClassDefFoundError always
     */
    public static NoClassDefFoundError raiseMethodNotFound(String name, NotFoundException e) throws NoClassDefFoundError
    {
@@ -104,11 +100,11 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
    /**
     * Raise NoClassDefFoundError for javassist not found
-    * 
+    *
     * @param name the name
     * @param e the not found error
     * @return never
-    * @throws NoClassDefFoundError always 
+    * @throws NoClassDefFoundError always
     */
    public static NoClassDefFoundError raiseFieldNotFound(String name, NotFoundException e) throws NoClassDefFoundError
    {
@@ -156,7 +152,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
             return enumInfo;
          }
 
-         
+
          return new JavassistTypeInfo(this, ctClass, clazz);
       }
       catch (NotFoundException e)
@@ -167,7 +163,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
    /**
     * Get the type info
-    * 
+    *
     * @param ctClass the ctClass
     * @return the typeinfo
     */
@@ -186,7 +182,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
    /**
     * Convert name
-    * 
+    *
     * @param clazz the class
     * @return the converted name
     */
@@ -226,7 +222,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
    /**
     * Get the CtClass
-    * 
+    *
     * @param name the name
     * @return the CtClass
     */
@@ -256,6 +252,16 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       if (primitive != null)
          return primitive;
 
+      NumberInfo number = NumberInfo.valueOf(clazz.getName());
+      if (number != null)
+      {
+         if (number.isInitialized() == false)
+         {
+            number.setDelegate((TypeInfo) get(clazz));
+         }
+         return number;
+      }
+
       return (TypeInfo) get(clazz);
    }
 
@@ -270,6 +276,16 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       if (primitive != null)
          return primitive;
 
+      NumberInfo number = NumberInfo.valueOf(name);
+      if (number != null)
+      {
+         if (number.isInitialized() == false)
+         {
+            number.setDelegate((TypeInfo) get(cl.loadClass(name)));
+         }
+         return number;
+      }
+
       Class clazz = cl.loadClass(name);
       return getTypeInfo(clazz);
    }
@@ -279,7 +295,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       if (type instanceof Class)
          return getTypeInfo((Class) type);
 
-      // TODO JBMICROCONT-129 getTypeInfo
+      // TODO JBMICROCONT-129 getTypeInfo + NumberInfo
       throw new org.jboss.util.NotImplementedException("getTypeInfo");
    }
 

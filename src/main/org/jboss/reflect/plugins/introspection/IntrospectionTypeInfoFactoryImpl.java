@@ -43,14 +43,7 @@ import org.jboss.reflect.plugins.EnumConstantInfoImpl;
 import org.jboss.reflect.plugins.EnumInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
-import org.jboss.reflect.spi.AnnotationInfo;
-import org.jboss.reflect.spi.AnnotationValue;
-import org.jboss.reflect.spi.ArrayInfo;
-import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.InterfaceInfo;
-import org.jboss.reflect.spi.PrimitiveInfo;
-import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.reflect.spi.*;
 import org.jboss.util.collection.temp.WeakTypeCache;
 
 /**
@@ -169,7 +162,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          infos[i] = new ReflectFieldInfoImpl(annotations, fields[i].getName(), getTypeInfo(fields[i].getGenericType()), fields[i].getModifiers(), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
          infos[i].setField(fields[i]);
       }
-      
+
       return infos;
    }
 
@@ -261,6 +254,16 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       if (primitive != null)
          return primitive;
 
+      NumberInfo number = NumberInfo.valueOf(clazz.getName());
+      if (number != null)
+      {
+         if (number.isInitialized() == false)
+         {
+            number.setDelegate(get(clazz));
+         }
+         return number;
+      }
+
       return get(clazz);
    }
 
@@ -277,6 +280,16 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          TypeInfo primitive = PrimitiveInfo.valueOf(((Class) type).getName());
          if (primitive != null)
             return primitive;
+
+         NumberInfo number = NumberInfo.valueOf(((Class) type).getName());
+         if (number != null)
+         {
+            if (number.isInitialized() == false)
+            {
+               number.setDelegate(get(type));
+            }
+            return number;
+         }
       }
 
       return get(type);
@@ -291,6 +304,22 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       if (primitive != null)
          return primitive;
 
+      NumberInfo number = NumberInfo.valueOf(name);
+      if (number != null)
+      {
+         if (number.isInitialized() == false)
+         {
+            number.setDelegate(resolveComplexTypeInfo(cl, name));
+         }
+         return number;
+      }
+
+      return resolveComplexTypeInfo(cl, name);
+   }
+
+   private TypeInfo resolveComplexTypeInfo(ClassLoader cl, String name)
+         throws ClassNotFoundException
+   {
       if (cl == null)
          cl = Thread.currentThread().getContextClassLoader();
 
@@ -308,8 +337,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       }
       else if (clazz.isEnum())
       {
-         EnumInfoImpl enumInfoImpl = new EnumInfoImpl(clazz.getName(), clazz.getModifiers()); 
-         result = enumInfoImpl; 
+         EnumInfoImpl enumInfoImpl = new EnumInfoImpl(clazz.getName(), clazz.getModifiers());
+         result = enumInfoImpl;
          Field[] fields = clazz.getFields();
          EnumConstantInfoImpl[] constants = new EnumConstantInfoImpl[fields.length];
          int i = 0;

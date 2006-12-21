@@ -146,6 +146,11 @@ public class PrimitiveInfo implements TypeInfo, Serializable
    
    public Object convertValue(Object value) throws Throwable
    {
+      Object progressResult = ValueConvertor.progressValue(type, value);
+      if (progressResult != null)
+      {
+         return progressResult;
+      }
       return ValueConvertor.convertValue(type, value);
    }
 
