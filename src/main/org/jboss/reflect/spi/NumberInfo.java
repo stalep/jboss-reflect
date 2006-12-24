@@ -117,7 +117,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
    {
       if (info instanceof ClassInfo == false)
       {
-         throw new IllegalArgumentException("Should be of classType instance: " + info);
+         throw new IllegalArgumentException("Should be of ClassInfo instance: " + info);
       }
       delegate = (ClassInfo) info;
    }
