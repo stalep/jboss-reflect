@@ -49,6 +49,7 @@ public class ProgressionConvertorFactory
 
    public ProgressionConvertor getConvertor() throws Throwable
    {
+      // TODO - some more config options; by deployment, app, server, cluster, ...
       if (convertor == null)
       {
          ConvertorLookup lookup = new ConvertorLookup();
