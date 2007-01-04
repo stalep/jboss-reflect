@@ -22,6 +22,8 @@
 package org.jboss.metadata.spi.signature;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Signature.
@@ -52,6 +54,20 @@ public class Signature
    /** The cached hashcode */
    private transient int cachedHashCode = Integer.MIN_VALUE;
 
+   /** The primitive types indexed by names */
+   private static final Map<String, Class> primitiveTypes = new HashMap<String, Class>();
+   static
+   {
+      primitiveTypes.put(Byte.TYPE.getName(), Byte.TYPE);
+      primitiveTypes.put(Boolean.TYPE.getName(), Boolean.TYPE);
+      primitiveTypes.put(Character.TYPE.getName(), Character.TYPE);
+      primitiveTypes.put(Double.TYPE.getName(), Double.TYPE);
+      primitiveTypes.put(Float.TYPE.getName(), Float.TYPE);
+      primitiveTypes.put(Integer.TYPE.getName(), Integer.TYPE);
+      primitiveTypes.put(Long.TYPE.getName(), Long.TYPE);
+      primitiveTypes.put(Short.TYPE.getName(), Short.TYPE);
+   }
+   
    /**
     * Convert classes to string
     * 
@@ -110,6 +126,13 @@ public class Signature
       Class[] result = new Class[parameters.length];
       for (int i = 0; i < result.length; ++i)
       {
+         Class primitive = primitiveTypes.get(parameters[i]);
+         if (primitive != null)
+         {
+            result[i] = primitive;
+            continue;
+         }
+         
          try
          {
             result[i] = cl.loadClass(parameters[i]);
