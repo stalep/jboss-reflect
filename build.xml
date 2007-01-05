@@ -56,7 +56,7 @@
     <!-- Module name(s) & version -->
     <property name="module.name" value="container"/>
     <property name="module.Name" value="JBoss Container"/>
-    <property name="module.version" value="M1"/>
+    <property name="module.version" value="snapshot"/>
 
     <!-- ========= -->
     <!-- Libraries -->
@@ -96,7 +96,7 @@
        <path refid="jboss/backport.concurrent.classpath"/>
     </path>
 
-     
+
     <!-- ===== -->
     <!-- Tasks -->
     <!-- ===== -->
@@ -139,7 +139,7 @@
               retro"
   />
 
-   
+
   <target name="retro">
      <mkdir dir="${build.lib.retro}"/>
      <taskdef name="retro" classname="org.jboss.ant.tasks.retro.Retro" classpathref="jbossretro.classpath"/>
@@ -151,9 +151,9 @@
            <pathelement path="${build.classes}"/>
         </classpath>
         <src path="${build.classes}"/>
-     </retro>      
-  </target> 
-   
+     </retro>
+  </target>
+
   <!-- ================================================================== -->
   <!-- Archives                                                           -->
   <!-- ================================================================== -->
@@ -176,6 +176,6 @@
         </fileset>
      </zip>
   </target>
-   
+
 
 </project>
