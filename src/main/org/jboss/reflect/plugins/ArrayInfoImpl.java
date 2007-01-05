@@ -23,6 +23,7 @@ package org.jboss.reflect.plugins;
 
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ArrayInfo;
+import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 
 /**
@@ -65,7 +66,14 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
          builder.append("[");
          temp = ((ArrayInfo) temp).getComponentType();
       }
-      builder.append("L").append(temp.getName()).append(";");
+      if (temp.getClass().equals(PrimitiveInfo.class))
+      {
+         builder.append(temp.getName());
+      }
+      else
+      {
+         builder.append("L").append(temp.getName()).append(";");
+      }
       name = builder.toString();
       calculateHash();
    }

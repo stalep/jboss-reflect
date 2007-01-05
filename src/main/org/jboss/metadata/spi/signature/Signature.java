@@ -56,6 +56,7 @@ public class Signature
 
    /** The primitive types indexed by names */
    private static final Map<String, Class> primitiveTypes = new HashMap<String, Class>();
+   private static final Map<String, String> primitiveArrayTypes = new HashMap<String, String>();
    static
    {
       primitiveTypes.put(Byte.TYPE.getName(), Byte.TYPE);
@@ -66,6 +67,15 @@ public class Signature
       primitiveTypes.put(Integer.TYPE.getName(), Integer.TYPE);
       primitiveTypes.put(Long.TYPE.getName(), Long.TYPE);
       primitiveTypes.put(Short.TYPE.getName(), Short.TYPE);
+      
+      primitiveArrayTypes.put(Byte.TYPE.getName(), "B");
+      primitiveArrayTypes.put(Boolean.TYPE.getName(), "Z");
+      primitiveArrayTypes.put(Character.TYPE.getName(), "C");
+      primitiveArrayTypes.put(Double.TYPE.getName(), "D");
+      primitiveArrayTypes.put(Float.TYPE.getName(), "F");
+      primitiveArrayTypes.put(Integer.TYPE.getName(), "I");
+      primitiveArrayTypes.put(Long.TYPE.getName(), "J");
+      primitiveArrayTypes.put(Short.TYPE.getName(), "S");
    }
    
    /**
@@ -126,16 +136,31 @@ public class Signature
       Class[] result = new Class[parameters.length];
       for (int i = 0; i < result.length; ++i)
       {
-         Class primitive = primitiveTypes.get(parameters[i]);
-         if (primitive != null)
+         String param = parameters[i]; 
+         int index = param.lastIndexOf('[');
+         if (index >= 0)
          {
-            result[i] = primitive;
-            continue;
+            //For arrays we will want to load the class, the ArrayInfoImpl generates names in an invalid format, resolve this here
+            String primitiveCandidate = param.substring(index + 1);
+            String componentType = primitiveArrayTypes.get(primitiveCandidate);
+            if (componentType != null)
+            {
+               param = param.substring(0, index + 1) + componentType;
+            }
+         }
+         else
+         {
+            Class primitive = primitiveTypes.get(param);
+            if (primitive != null)
+            {
+               result[i] = primitive;
+               continue;
+            }
          }
          
          try
          {
-            result[i] = cl.loadClass(parameters[i]);
+            result[i] = cl.loadClass(param);
          }
          catch (ClassNotFoundException e)
          {
