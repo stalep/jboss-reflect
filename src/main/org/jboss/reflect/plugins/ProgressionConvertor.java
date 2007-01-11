@@ -45,6 +45,7 @@ public interface ProgressionConvertor
     * @param target class type
     * @param value to progress
     * @return progressed value - it's class type now equals to target
+    * @throws Throwable for any error
     */
    Object doProgression(Class<? extends Object> target, Object value) throws Throwable;
 
