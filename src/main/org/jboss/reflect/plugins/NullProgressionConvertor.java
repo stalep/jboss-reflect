@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins;
 
+import org.jboss.reflect.spi.ProgressionConvertor;
+
 /**
  * Null progression implementation - doesn't progress at all.
  *

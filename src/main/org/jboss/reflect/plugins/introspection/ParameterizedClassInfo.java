@@ -200,6 +200,11 @@ public class ParameterizedClassInfo extends JBossObject implements ClassInfo, In
       return delegate.newArrayInstance(size);
    }
 
+   public boolean isAssignableFrom(TypeInfo info)
+   {
+      return delegate.isAssignableFrom(info);
+   }
+
    public TypeInfo[] getActualTypeArguments()
    {
       if (typeArguments == ClassInfoImpl.UNKNOWN_TYPES)

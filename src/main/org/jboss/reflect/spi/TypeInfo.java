@@ -92,4 +92,17 @@ public interface TypeInfo extends Serializable
     * @throws Throwable for any error
     */
    Object[] newArrayInstance(int size) throws Throwable;
+
+   /**
+    * Mostly using
+    * @see java.lang.Class#isAssignableFrom
+    * NumberInfo tests for progression
+    *
+    * @param info
+    * @return the boolean value indicating whether objects of the
+    *         TypeInfo info can be assigned to objects of this TypeInfo
+    * @exception NullPointerException if the specified TypeInfo parameter is
+    *            null.
+    */
+   boolean isAssignableFrom(TypeInfo info);
 }

@@ -474,6 +474,15 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return (Object[]) Array.newInstance(clazz.getComponentType(), size);
    }
 
+   public boolean isAssignableFrom(TypeInfo info)
+   {
+      if (info == null)
+      {
+         throw new NullPointerException("Parameter info cannot be null!");
+      }
+      return getType().isAssignableFrom(info.getType());
+   }
+
    public TypeInfo[] getActualTypeArguments()
    {
       return null;
@@ -560,6 +569,11 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       }
 
       public Object[] newArrayInstance(int size) throws Throwable
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public boolean isAssignableFrom(TypeInfo info)
       {
          throw new UnreachableStatementException();
       }

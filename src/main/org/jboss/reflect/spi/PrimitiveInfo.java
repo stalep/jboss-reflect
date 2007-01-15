@@ -180,6 +180,11 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       throw new UnsupportedOperationException("Not an array " + name);
    }
 
+   public boolean isAssignableFrom(TypeInfo info)
+   {
+      return (info == this);
+   }
+
    public String toString()
    {
       return name;

@@ -26,6 +26,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 
+import org.jboss.reflect.spi.ProgressionConvertor;
+
 /**
  * Simple progression code.
  * @see javax.management.monitor.GaugeMonitor

@@ -146,6 +146,23 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return values[ordinal];
    }
 
+   public boolean isAssignableFrom(TypeInfo info)
+   {
+      if (super.isAssignableFrom(info))
+      {
+         return true;
+      }
+      try
+      {
+         ProgressionConvertor pc = ProgressionConvertorFactory.getInstance().getConvertor();
+         return pc.canProgress(getType(), info.getType());
+      }
+      catch (Throwable throwable)
+      {
+         return false;
+      }
+   }
+
    // --- delegate
 
    public ConstructorInfo getDeclaredConstructor(TypeInfo[] parameters)
@@ -267,7 +284,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
    {
       builder.append(name);
    }
-  
+
    public Object clone()
    {
       return this;

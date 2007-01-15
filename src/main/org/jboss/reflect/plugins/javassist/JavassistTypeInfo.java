@@ -342,6 +342,15 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return (Object[]) Array.newInstance(clazz.getComponentType(), size);
    }
 
+   public boolean isAssignableFrom(TypeInfo info)
+   {
+      if (info == null)
+      {
+         throw new NullPointerException("Parameter info cannot be null!");
+      }
+      return getType().isAssignableFrom(info.getType());
+   }
+
    public Object convertValue(Object value) throws Throwable
    {
       return ValueConvertor.convertValue(getType(), value);

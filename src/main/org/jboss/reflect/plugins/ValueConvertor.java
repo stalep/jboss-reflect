@@ -29,6 +29,8 @@ import java.lang.reflect.Modifier;
 
 import org.jboss.logging.Logger;
 import org.jboss.reflect.plugins.introspection.ReflectionUtils;
+import org.jboss.reflect.spi.ProgressionConvertor;
+import org.jboss.reflect.spi.ProgressionConvertorFactory;
 import org.jboss.util.propertyeditor.PropertyEditors;
 
 /**
