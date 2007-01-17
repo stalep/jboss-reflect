@@ -34,13 +34,7 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 
 import org.jboss.reflect.plugins.ValueConvertor;
-import org.jboss.reflect.spi.AnnotationValue;
-import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.ConstructorInfo;
-import org.jboss.reflect.spi.FieldInfo;
-import org.jboss.reflect.spi.InterfaceInfo;
-import org.jboss.reflect.spi.MethodInfo;
-import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.*;
 import org.jboss.util.JBossStringBuilder;
 
 /**
@@ -349,6 +343,11 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
          throw new NullPointerException("Parameter info cannot be null!");
       }
       return getType().isAssignableFrom(info.getType());
+   }
+
+   public TypeInfoFactory getTypeInfoFactory()
+   {
+      return factory;
    }
 
    public Object convertValue(Object value) throws Throwable

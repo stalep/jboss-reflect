@@ -23,15 +23,8 @@ package org.jboss.reflect.plugins.introspection;
 
 import java.lang.reflect.ParameterizedType;
 
-import org.jboss.reflect.plugins.ClassInfoHelper;
 import org.jboss.reflect.plugins.ClassInfoImpl;
-import org.jboss.reflect.spi.AnnotationValue;
-import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.ConstructorInfo;
-import org.jboss.reflect.spi.FieldInfo;
-import org.jboss.reflect.spi.InterfaceInfo;
-import org.jboss.reflect.spi.MethodInfo;
-import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.*;
 import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
@@ -46,8 +39,8 @@ public class ParameterizedClassInfo extends JBossObject implements ClassInfo, In
    /** The serialVersionUID */
    private static final long serialVersionUID = -8739806147734002603L;
    
-   /** The helper */
-   protected ClassInfoHelper helper;
+   /** The factory */
+   protected IntrospectionTypeInfoFactoryImpl factory;
    
    /** The raw class info */
    protected ClassInfo delegate;
@@ -64,15 +57,20 @@ public class ParameterizedClassInfo extends JBossObject implements ClassInfo, In
    /**
     * Create a new ParameterizedClassInfo.
     *
-    * @param helper the helper
+    * @param factory the factory
     * @param delegate the raw array info
     * @param parameterizedType the parameterized  type
     */
-   public ParameterizedClassInfo(ClassInfoHelper helper, ClassInfo delegate, ParameterizedType parameterizedType)
+   public ParameterizedClassInfo(IntrospectionTypeInfoFactoryImpl factory, ClassInfo delegate, ParameterizedType parameterizedType)
    {
-      this.helper = helper;
+      this.factory = factory;
       this.delegate = delegate;
       this.parameterizedType = parameterizedType;
+   }
+
+   public TypeInfoFactory getTypeInfoFactory()
+   {
+      return factory;
    }
 
    public ConstructorInfo getDeclaredConstructor(TypeInfo[] parameters)
@@ -208,14 +206,14 @@ public class ParameterizedClassInfo extends JBossObject implements ClassInfo, In
    public TypeInfo[] getActualTypeArguments()
    {
       if (typeArguments == ClassInfoImpl.UNKNOWN_TYPES)
-         typeArguments = helper.getActualTypeArguments(this);
+         typeArguments = factory.getActualTypeArguments(this);
       return typeArguments;
    }
 
    public TypeInfo getOwnerType()
    {
       if (ownerType == ClassInfoImpl.UNKNOWN_TYPE)
-         ownerType = helper.getOwnerType(this);
+         ownerType = factory.getOwnerType(this);
       return ownerType;
    }
 

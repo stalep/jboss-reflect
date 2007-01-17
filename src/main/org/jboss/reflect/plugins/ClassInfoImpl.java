@@ -25,13 +25,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
-import org.jboss.reflect.spi.AnnotationValue;
-import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.ConstructorInfo;
-import org.jboss.reflect.spi.FieldInfo;
-import org.jboss.reflect.spi.InterfaceInfo;
-import org.jboss.reflect.spi.MethodInfo;
-import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.*;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.UnreachableStatementException;
 
@@ -103,7 +97,20 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
 
    /** The class info helper */
    protected ClassInfoHelper classInfoHelper;
-   
+
+   /** The type info factory */
+   protected TypeInfoFactory typeInfoFactory;
+
+   public TypeInfoFactory getTypeInfoFactory()
+   {
+      return typeInfoFactory;
+   }
+
+   public void setTypeInfoFactory(TypeInfoFactory typeInfoFactory)
+   {
+      this.typeInfoFactory = typeInfoFactory;
+   }
+
    /**
     * Find a method
     * 
@@ -574,6 +581,11 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       }
 
       public boolean isAssignableFrom(TypeInfo info)
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public TypeInfoFactory getTypeInfoFactory()
       {
          throw new UnreachableStatementException();
       }

@@ -23,7 +23,6 @@ package org.jboss.reflect.plugins.introspection;
 
 import java.lang.reflect.ParameterizedType;
 
-import org.jboss.reflect.plugins.ClassInfoHelper;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.TypeInfo;
 
@@ -41,13 +40,13 @@ public class ParameterizedArrayInfo extends ParameterizedClassInfo implements Ar
    /**
     * Create a new ParameterizedArrayInfo.
     * 
-    * @param helper the helper
+    * @param factory the factory
     * @param delegate the raw array info
     * @param parameterizedType the parameterized  type
     */
-   public ParameterizedArrayInfo(ClassInfoHelper helper, ArrayInfo delegate, ParameterizedType parameterizedType)
+   public ParameterizedArrayInfo(IntrospectionTypeInfoFactoryImpl factory, ArrayInfo delegate, ParameterizedType parameterizedType)
    {
-      super(helper, delegate, parameterizedType);
+      super(factory, delegate, parameterizedType);
    }
 
    public TypeInfo getComponentType()

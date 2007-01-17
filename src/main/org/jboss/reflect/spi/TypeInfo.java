@@ -105,4 +105,11 @@ public interface TypeInfo extends Serializable
     *            null.
     */
    boolean isAssignableFrom(TypeInfo info);
+
+   /**
+    * Get the TypeInfoFactory that created this type info
+    *
+    * @return type info factory
+    */
+   TypeInfoFactory getTypeInfoFactory();
 }

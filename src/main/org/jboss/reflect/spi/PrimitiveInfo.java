@@ -185,6 +185,12 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       return (info == this);
    }
 
+   public TypeInfoFactory getTypeInfoFactory()
+   {
+      // FIXME - fix this once you fix the top TODO
+      return typeInfoFactory;
+   }
+
    public String toString()
    {
       return name;
