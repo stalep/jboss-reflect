@@ -25,7 +25,14 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
-import org.jboss.reflect.spi.*;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ConstructorInfo;
+import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.UnreachableStatementException;
 
@@ -452,6 +459,11 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return ValueConvertor.convertValue(getType(), value);
    }
 
+   public Object convertValue(Object value, boolean replaceProperties) throws Throwable
+   {
+      return ValueConvertor.convertValue(getType(), value, replaceProperties);
+   }
+
    public boolean isArray()
    {
       return getType().isArray();
@@ -541,6 +553,11 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       private static final long serialVersionUID = 1L;
 
       public Object convertValue(Object value) throws Throwable
+      {
+         throw new UnreachableStatementException();
+      }
+
+      public Object convertValue(Object value, boolean replaceProperties) throws Throwable
       {
          throw new UnreachableStatementException();
       }

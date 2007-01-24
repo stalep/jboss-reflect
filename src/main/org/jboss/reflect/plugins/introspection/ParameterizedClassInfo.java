@@ -24,7 +24,14 @@ package org.jboss.reflect.plugins.introspection;
 import java.lang.reflect.ParameterizedType;
 
 import org.jboss.reflect.plugins.ClassInfoImpl;
-import org.jboss.reflect.spi.*;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ConstructorInfo;
+import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
@@ -166,6 +173,11 @@ public class ParameterizedClassInfo extends JBossObject implements ClassInfo, In
    public Object convertValue(Object value) throws Throwable
    {
       return delegate.convertValue(value);
+   }
+
+   public Object convertValue(Object value, boolean replaceProperties) throws Throwable
+   {
+      return delegate.convertValue(value, replaceProperties);
    }
 
    public TypeInfo getArrayType(int depth)

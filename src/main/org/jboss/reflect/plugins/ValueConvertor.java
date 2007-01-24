@@ -31,6 +31,7 @@ import org.jboss.logging.Logger;
 import org.jboss.reflect.plugins.introspection.ReflectionUtils;
 import org.jboss.reflect.spi.ProgressionConvertor;
 import org.jboss.reflect.spi.ProgressionConvertorFactory;
+import org.jboss.util.StringPropertyReplacer;
 import org.jboss.util.propertyeditor.PropertyEditors;
 
 /**
@@ -72,12 +73,34 @@ public class ValueConvertor
    @SuppressWarnings("unchecked")
    public static Object convertValue(Class<? extends Object> clazz, Object value) throws Throwable
    {
+      return convertValue(clazz, value, false);
+   }
+
+   /**
+    * Convert a value
+    *
+    * @param clazz             the class
+    * @param value             the value
+    * @param replaceProperties whether to replace system properties
+    * @return the value or null if there is no editor
+    * @throws Throwable for any error
+    */
+   public static Object convertValue(Class<? extends Object> clazz, Object value, boolean replaceProperties) throws Throwable
+   {
       if (clazz == null)
          throw new IllegalArgumentException("Null class");
       if (value == null)
          return null;
 
       Class<? extends Object> valueClass = value.getClass();
+
+      // If we have a string replace any system properties when requested
+      if (replaceProperties && valueClass == String.class)
+      {
+         String string = (String)value;
+         value = StringPropertyReplacer.replaceProperties(string);
+      }
+
       if (clazz.isAssignableFrom(valueClass))
          return value;
 
@@ -94,7 +117,7 @@ public class ValueConvertor
          PropertyEditor editor = PropertyEditorManager.findEditor(clazz);
          if (editor != null)
          {
-            editor.setAsText((String) value);
+            editor.setAsText((String)value);
             return editor.getValue();
          }
       }

@@ -32,9 +32,15 @@ import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-
 import org.jboss.reflect.plugins.ValueConvertor;
-import org.jboss.reflect.spi.*;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ConstructorInfo;
+import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.JBossStringBuilder;
 
 /**
@@ -353,6 +359,11 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    public Object convertValue(Object value) throws Throwable
    {
       return ValueConvertor.convertValue(getType(), value);
+   }
+
+   public Object convertValue(Object value, boolean replaceProperties) throws Throwable
+   {
+      return ValueConvertor.convertValue(getType(), value, replaceProperties);
    }
 
    protected int getHashCode()

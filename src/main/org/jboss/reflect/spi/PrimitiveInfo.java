@@ -154,6 +154,16 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       return ValueConvertor.convertValue(type, value);
    }
 
+   public Object convertValue(Object value, boolean replaceProperties) throws Throwable
+   {
+      Object progressResult = ValueConvertor.progressValue(type, value);
+      if (progressResult != null)
+      {
+         return progressResult;
+      }
+      return ValueConvertor.convertValue(type, value, replaceProperties);
+   }
+
    public boolean isArray()
    {
       return false;
