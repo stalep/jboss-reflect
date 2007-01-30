@@ -146,6 +146,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return values[ordinal];
    }
 
+   @SuppressWarnings("unchecked")
    public boolean isAssignableFrom(TypeInfo info)
    {
       if (super.isAssignableFrom(info))

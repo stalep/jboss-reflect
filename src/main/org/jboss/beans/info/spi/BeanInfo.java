@@ -29,6 +29,7 @@ import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossInterface;
 
 /**
@@ -131,4 +132,108 @@ public interface BeanInfo extends JBossInterface
     * @return the list of dependencies
     */
    List<Object> getDependencies(MetaData metaData);
+   
+   /**
+    * Create a new instance
+    * 
+    * @return the new instance
+    * @throws Throwable for any error
+    */
+   Object newInstance() throws Throwable;
+   
+   /**
+    * Create a new instance
+    *
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @return the new instance
+    * @throws Throwable for any error
+    */
+   Object newInstance(String[] paramTypes, Object[] params) throws Throwable;
+   
+   /**
+    * Create a new instance
+    *
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @return the new instance
+    * @throws Throwable for any error
+    */
+   Object newInstance(Class[] paramTypes, Object[] params) throws Throwable;
+   
+   /**
+    * Create a new instance
+    *
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @return the new instance
+    * @throws Throwable for any error
+    */
+   Object newInstance(TypeInfo[] paramTypes, Object[] params) throws Throwable;
+   
+   /**
+    * Get a property
+    * 
+    * @param bean the bean
+    * @param name the property name
+    * @return the property value
+    * @throws Throwable for any error
+    */
+   Object getProperty(Object bean, String name) throws Throwable;
+   
+   /**
+    * Get a property
+    * 
+    * @param bean the bean
+    * @param name the property name
+    * @param value the property value
+    * @throws Throwable for any error
+    */
+   void setProperty(Object bean, String name, Object value) throws Throwable;
+   
+   /**
+    * Invoke a method with no parameters
+    *
+    * @param bean the bean
+    * @param name the method name
+    * @return the result
+    * @throws Throwable for any error
+    */
+   Object invoke(Object bean, String name) throws Throwable;
+   
+   /**
+    * Invoke a method
+    *
+    * @param bean the bean
+    * @param name the method name
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @return the result
+    * @throws Throwable for any error
+    */
+   Object invoke(Object bean, String name, String[] paramTypes, Object[] params) throws Throwable;
+   
+   /**
+    * Invoke a method
+    *
+    * @param bean the bean
+    * @param name the method name
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @return the result
+    * @throws Throwable for any error
+    */
+   Object invoke(Object bean, String name, Class[] paramTypes, Object[] params) throws Throwable;
+   
+   /**
+    * Invoke a method
+    *
+    * @param bean the bean
+    * @param name the method name
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @return the result
+    * @throws Throwable for any error
+    */
+   Object invoke(Object bean, String name, TypeInfo[] paramTypes, Object[] params) throws Throwable;
 }

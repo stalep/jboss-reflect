@@ -332,6 +332,13 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       TypeInfoFactory factory = getTypeInfoFactory();
       
       Type[] paramClasses = constructor.getGenericParameterTypes();
+      
+      // HACK: This is to workaround a bug in Sun's compiler related to enum constructors
+      //       having no generic parameters?
+      Type[] parameterTypes = constructor.getParameterTypes();
+      if (paramClasses.length != parameterTypes.length)
+         paramClasses = parameterTypes;
+      
       TypeInfo[] paramTypes = new TypeInfo[paramClasses.length];
       for (int i = 0; i < paramClasses.length; ++i)
          paramTypes[i] = factory.getTypeInfo(paramClasses[i]);

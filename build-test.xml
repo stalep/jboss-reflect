@@ -41,12 +41,10 @@
   <!-- ================================================================== -->
 
    <property name="source.java" value="src/tests"/>
-   <property name="source.java.support" value="src/tests-support"/>
    <property name="source.resources" value="src/resources/tests"/>
    <property name="javac.target" value="1.5"/>
    <property name="javac.source" value="1.5"/>
    <property name="build.classes" value="output/classes-tests"/>
-   <property name="build.classes.support" value="output/classes-tests-support"/>
    <property name="build.testlog" value="output/log"/>
    <property name="build-bypass.disabled" value="true"/>
 
@@ -141,14 +139,8 @@
 
   <target name="compile"
 	  description="Compile all source files."
-	  depends="_default:compile-classes, compile-tests-support"
+	  depends="_default:compile-classes"
   />
-  <target name="compile-tests-support" description="Compile the tests-support tree">
-        <antcall target="_default:compile-classes">
-       	 <param name="build.classes" value="${build.classes.support}"/>
-       	 <param name="source.java" value="${source.java.support}"/>
-        </antcall>
-  </target>
 
   <!-- ================================================================== -->
   <!-- Archives                                                           -->
@@ -164,138 +156,6 @@
     </jar>
 
   </target>
-   <target name="test-resource-jars" depends="compile-tests-support"
-   	description="Rebuild the src/resources/tests jars">
-      <!-- src/resources/tests/vfs/test/jar1.jar -->
-      <jar destfile="${source.resources}/vfs/test/jar1.jar">
-      	<manifest>
-      		<attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
-      		<attribute name="Specification-Title" value="jar1"/>
-      		<attribute name="Specification-Version" value="1.0.0.GA"/>
-      		<attribute name="Specification-Vendor" value="JBoss Inc."/>
-      		<attribute name="Implementation-Title" value="jar1"/>
-      		<attribute name="Implementation-URL" value="http://www.jboss.org"/>
-      		<attribute name="Implementation-Version" value="1.0.0.GA-jboss"/>
-      		<attribute name="Implementation-Vendor" value="JBoss Inc."/>
-      	</manifest>
-      	<fileset dir="${build.classes.support}">
-      		<include name="org/jboss/test/vfs/support/jar1/**"/>
-      	</fileset>
-   	</jar>
-      <!-- src/resources/tests/vfs/test/jar1-filesonly.jar -->
-      <zip destfile="${source.resources}/vfs/test/jar1-filesonly.jar"
-      	filesonly="true">
-      	<zipfileset dir="${source.resources}/vfs/test" fullpath="META-INF/MANIFEST.MF">
-      		<include name="jar1-filesonly.mf"/>
-      	</zipfileset>
-      	<fileset dir="${build.classes.support}">
-      		<include name="org/jboss/test/vfs/support/jar1/**"/>
-      	</fileset>
-   	</zip>
-
-      <!-- src/resources/tests/vfs/test/jar2.jar -->
-      <jar destfile="${source.resources}/vfs/test/jar2.jar">
-      	<manifest>
-      		<attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
-      		<attribute name="Specification-Title" value="jar2"/>
-      		<attribute name="Specification-Version" value="1.0.0.GA"/>
-      		<attribute name="Specification-Vendor" value="JBoss Inc."/>
-      		<attribute name="Implementation-Title" value="jar2"/>
-      		<attribute name="Implementation-URL" value="http://www.jboss.org"/>
-      		<attribute name="Implementation-Version" value="1.0.0.GA-jboss"/>
-      		<attribute name="Implementation-Vendor" value="JBoss Inc."/>
-      	</manifest>
-      	<fileset dir="${build.classes.support}">
-      		<include name="org/jboss/test/vfs/support/jar2/**"/>
-      	</fileset>
-   	</jar>
-      <!-- src/resources/tests/vfs/test/outer.jar -->
-      <jar destfile="${source.resources}/vfs/test/outer.jar">
-      	<manifest>
-      		<attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
-      		<attribute name="Specification-Title" value="outer.jar"/>
-      		<attribute name="Specification-Version" value="1.0.0.GA"/>
-      		<attribute name="Specification-Vendor" value="JBoss Inc."/>
-      		<attribute name="Implementation-Title" value="outer.jar"/>
-      		<attribute name="Implementation-URL" value="http://www.jboss.org"/>
-      		<attribute name="Implementation-Version" value="1.0.0.GA-jboss"/>
-      		<attribute name="Implementation-Vendor" value="JBoss Inc."/>
-      	</manifest>
-      	<fileset dir="${build.classes.support}">
-      		<include name="org/jboss/test/vfs/support/*"/>
-      	</fileset>
-      	<fileset dir="${source.resources}/vfs/test/">
-      		<include name="jar1.jar" />
-      		<include name="jar2.jar" />
-      	</fileset>
-   	</jar>
-      <!-- src/resources/tests/vfs/test/p0.jar -->
-      <jar destfile="${source.resources}/vfs/test/p0.jar">
-      	<manifest>
-      		<attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
-      		<attribute name="Specification-Title" value="profile0-jar"/>
-      		<attribute name="Specification-Version" value="1.0.0.GA"/>
-      		<attribute name="Specification-Vendor" value="JBoss Inc."/>
-      		<attribute name="Implementation-Title" value="p0-jar-test"/>
-      		<attribute name="Implementation-URL" value="http://www.jboss.org"/>
-      		<attribute name="Implementation-Version" value="1.0.0.GA-jboss"/>
-      		<attribute name="Implementation-Vendor" value="JBoss Inc."/>
-      	</manifest>
-   	</jar>
-      <!-- src/resources/tests/vfs/test/innermf.jar -->
-      <jar destfile="${source.resources}/vfs/test/innermf.jar">
-         <manifest>
-            <attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
-            <attribute name="Specification-Title" value="innermf.jar"/>
-            <attribute name="Class-Path" value="jar1.jar"/>
-         </manifest>
-      </jar>
-      <!-- src/resources/tests/vfs/test/inner-container.jar -->
-      <jar destfile="${source.resources}/vfs/test/inner-container.jar">
-         <fileset dir="${source.resources}/vfs/test">
-            <include name="innermf.jar" />
-         </fileset>
-      </jar>
-      <!-- src/resources/tests/vfs/test/outermf.jar -->
-      <jar destfile="${source.resources}/vfs/test/outermf.jar">
-         <manifest>
-            <attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
-            <attribute name="Specification-Title" value="outermf.jar"/>
-            <attribute name="Class-Path" value="jar1.jar ./jar2.jar"/>
-         </manifest>
-         <zipfileset dir="${source.resources}/vfs/test">
-            <include name="innermf.jar" />
-         </zipfileset>
-      </jar>
-      <!-- src/resources/tests/vfs/test/outermf.jar -->
-      <mkdir dir="${source.resources}/vfs/test/withalong/rootprefix" />
-      <jar destfile="${source.resources}/vfs/test/withalong/rootprefix/outermf.jar">
-         <manifest>
-            <attribute name="Created-By" value="${java.runtime.version} (${java.vendor})"/>
-            <attribute name="Specification-Title" value="outermf.jar"/>
-            <attribute name="Class-Path" value="jar1.jar ./jar2.jar"/>
-         </manifest>
-         <zipfileset dir="${source.resources}/vfs/test">
-            <include name="innermf.jar" />
-            <include name="inner-container.jar" />
-         </zipfileset>
-      </jar>
-
-      <!-- src/resources/tests/vfs/test/filesonly.war -->
-      <zip destfile="${source.resources}/vfs/test/filesonly.war"
-          filesonly="true">
-          <zipfileset dir="${source.resources}/vfs/test" fullpath="META-INF/MANIFEST.MF">
-             <include name="filesonly.mf"/>
-          </zipfileset>
-          <zipfileset dir="${build.classes.support}" prefix="WEB-INF/classes">
-             <include name="org/jboss/test/vfs/support/jar1/**"/>
-          </zipfileset>
- 	      <zipfileset dir="${source.resources}/vfs/test" prefix="WEB-INF/lib">
- 	         <include name="jar1.jar"/>
- 	      </zipfileset>
-       </zip>
-
-   </target>
 
   <!-- ================================================================== -->
   <!-- Tests                                                              -->

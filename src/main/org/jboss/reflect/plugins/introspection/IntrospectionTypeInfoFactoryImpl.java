@@ -43,7 +43,15 @@ import org.jboss.reflect.plugins.EnumConstantInfoImpl;
 import org.jboss.reflect.plugins.EnumInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
-import org.jboss.reflect.spi.*;
+import org.jboss.reflect.spi.AnnotationInfo;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.ArrayInfo;
+import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.NumberInfo;
+import org.jboss.reflect.spi.PrimitiveInfo;
+import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.collection.temp.WeakTypeCache;
 
 /**
@@ -140,7 +148,16 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
             for (int i = 0; i < constructors.length; ++i)
             {
                AnnotationValue[] annotations = getAnnotations(constructors[i]);
-               infos[i] = new ReflectConstructorInfoImpl(annotations, getTypeInfos(constructors[i].getGenericParameterTypes()), getParameterAnnotations(constructors[i].getParameterAnnotations()), getClassInfos(constructors[i].getGenericExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
+               
+               Type[] genericParameterTypes = constructors[i].getGenericParameterTypes();
+
+               // HACK: This is to workaround a bug in Sun's compiler related to enum constructors
+               //       having no generic parameters?
+               Type[] parameterTypes = constructors[i].getParameterTypes(); 
+               if (genericParameterTypes.length != parameterTypes.length)
+                  genericParameterTypes = parameterTypes;
+
+               infos[i] = new ReflectConstructorInfoImpl(annotations, getTypeInfos(genericParameterTypes), getParameterAnnotations(constructors[i].getParameterAnnotations()), getClassInfos(constructors[i].getGenericExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
                infos[i].setConstructor(constructors[i]);
             }
          }

@@ -21,6 +21,7 @@
 */
 package org.jboss.beans.info.plugins;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -30,11 +31,17 @@ import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.beans.info.spi.EventInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.classadapter.spi.ClassAdapter;
+import org.jboss.joinpoint.plugins.Config;
+import org.jboss.joinpoint.spi.ConstructorJoinpoint;
+import org.jboss.joinpoint.spi.FieldGetJoinpoint;
+import org.jboss.joinpoint.spi.FieldSetJoinpoint;
 import org.jboss.joinpoint.spi.JoinpointFactory;
+import org.jboss.joinpoint.spi.MethodJoinpoint;
 import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
@@ -163,6 +170,61 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return classAdapter.getDependencies(metaData);
    }
 
+   public Object newInstance() throws Throwable
+   {
+      return newInstance((String[]) null, null);
+   }
+
+   public Object newInstance(String[] paramTypes, Object[] params) throws Throwable
+   {
+      ConstructorJoinpoint joinpoint = Config.getConstructorJoinpoint(getJoinpointFactory(), paramTypes, params);
+      return joinpoint.dispatch();
+   }
+
+   public Object newInstance(Class[] paramTypes, Object[] params) throws Throwable
+   {
+      return newInstance(classesToStrings(paramTypes), params);
+   }
+
+   public Object newInstance(TypeInfo[] paramTypes, Object[] params) throws Throwable
+   {
+      return newInstance(typeInfosToStrings(paramTypes), params);
+   }
+
+   public Object getProperty(Object bean, String name) throws Throwable
+   {
+      FieldGetJoinpoint joinpoint = Config.getFieldGetJoinpoint(bean, getJoinpointFactory(), name);
+      return joinpoint.dispatch();
+   }
+
+   public void setProperty(Object bean, String name, Object value) throws Throwable
+   {
+      FieldSetJoinpoint joinpoint = Config.getFieldSetJoinpoint(bean, getJoinpointFactory(), name, value);
+      joinpoint.dispatch();
+   }
+
+   public Object invoke(Object bean, String name) throws Throwable
+   {
+      return invoke(bean, name, (String[]) null, null);
+
+   }
+
+   public Object invoke(Object bean, String name, String[] paramTypes, Object[] params) throws Throwable
+   {
+      MethodJoinpoint joinpoint = Config.getMethodJoinpoint(bean, getJoinpointFactory(), name, paramTypes, params);
+      return joinpoint.dispatch();
+   }
+
+   public Object invoke(Object bean, String name, Class[] paramTypes, Object[] params) throws Throwable
+   {
+      return invoke(bean, name, classesToStrings(paramTypes), params);
+   }
+
+   public Object invoke(Object bean, String name, TypeInfo[] paramTypes, Object[] params) throws Throwable
+   {
+      return invoke(bean, name, typeInfosToStrings(paramTypes), params);
+   }
+
    public boolean equals(Object object)
    {
       if (object == null || object instanceof AbstractBeanInfo == false)
@@ -207,5 +269,47 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    public int getHashCode()
    {
       return name.hashCode();
+   }
+   
+   /**
+    * Convert classes to strings
+    * 
+    * @param classes the classes
+    * @return the strings
+    */
+   private static String[] classesToStrings(Class[] classes)
+   {
+      if (classes == null || classes.length == 0)
+         return null;
+      
+      String[] result = new String[classes.length];
+      for (int i = 0; i < classes.length; ++i)
+      {
+         if (classes[i] == null)
+            throw new IllegalArgumentException("Null class in parameter types: " + Arrays.asList(classes));
+         result[i] = classes[i].getName();
+      }
+      return result;
+   }
+   
+   /**
+    * Convert typeInfos to strings
+    * 
+    * @param typeInfos the typeInfos
+    * @return the strings
+    */
+   private static String[] typeInfosToStrings(TypeInfo[] typeInfos)
+   {
+      if (typeInfos == null || typeInfos.length == 0)
+         return null;
+      
+      String[] result = new String[typeInfos.length];
+      for (int i = 0; i < typeInfos.length; ++i)
+      {
+         if (typeInfos[i] == null)
+            throw new IllegalArgumentException("Null class in parameter types: " + Arrays.asList(typeInfos));
+         result[i] = typeInfos[i].getName();
+      }
+      return result;
    }
 }

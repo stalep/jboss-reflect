@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main"/>
-	<classpathentry kind="src" output="output/eclipse-classes-tests-support" path="src/tests-support"/>
 	<classpathentry kind="src" output="output/eclipse-classes-tests" path="src/tests"/>
-	<classpathentry kind="lib" path="src/resources/tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/thirdparty/jboss/common-core/lib/jboss-common-core.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/jboss/common-logging-spi/lib/jboss-logging-spi.jar"/>
@@ -14,6 +12,5 @@
 	<classpathentry kind="lib" path="/thirdparty/javassist/lib/javassist.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/jboss/profiler/jvmti/lib/jboss-profiler-jvmti.jar"/>
 	<classpathentry kind="lib" path="/thirdparty/jboss/test/lib/jboss-test.jar"/>
-	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-vfs/lib/jboss-vfs.jar" sourcepath="/thirdparty/jboss/jboss-vfs/lib/jboss-vfs-sources.jar"/>
 	<classpathentry kind="output" path="output/eclipse-classes"/>
 </classpath>
