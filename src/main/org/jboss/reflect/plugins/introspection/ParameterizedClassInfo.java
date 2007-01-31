@@ -24,15 +24,10 @@ package org.jboss.reflect.plugins.introspection;
 import java.lang.reflect.ParameterizedType;
 
 import org.jboss.reflect.plugins.ClassInfoImpl;
-import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.ConstructorInfo;
-import org.jboss.reflect.spi.FieldInfo;
-import org.jboss.reflect.spi.InterfaceInfo;
-import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.DelegateClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
 /**
@@ -41,16 +36,13 @@ import org.jboss.util.JBossStringBuilder;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public class ParameterizedClassInfo extends JBossObject implements ClassInfo, InterfaceInfo
+public class ParameterizedClassInfo extends DelegateClassInfo
 {
    /** The serialVersionUID */
    private static final long serialVersionUID = -8739806147734002603L;
    
    /** The factory */
    protected IntrospectionTypeInfoFactoryImpl factory;
-   
-   /** The raw class info */
-   protected ClassInfo delegate;
    
    /** The parameterized type */
    ParameterizedType parameterizedType;
@@ -70,6 +62,7 @@ public class ParameterizedClassInfo extends JBossObject implements ClassInfo, In
     */
    public ParameterizedClassInfo(IntrospectionTypeInfoFactoryImpl factory, ClassInfo delegate, ParameterizedType parameterizedType)
    {
+      super(delegate);
       this.factory = factory;
       this.delegate = delegate;
       this.parameterizedType = parameterizedType;
@@ -80,141 +73,7 @@ public class ParameterizedClassInfo extends JBossObject implements ClassInfo, In
       return factory;
    }
 
-   public ConstructorInfo getDeclaredConstructor(TypeInfo[] parameters)
-   {
-      return delegate.getDeclaredConstructor(parameters);
-   }
-
-   public ConstructorInfo[] getDeclaredConstructors()
-   {
-      return delegate.getDeclaredConstructors();
-   }
-
-   public FieldInfo getDeclaredField(String name)
-   {
-      return delegate.getDeclaredField(name);
-   }
-
-   public FieldInfo[] getDeclaredFields()
-   {
-      return delegate.getDeclaredFields();
-   }
-
-   public MethodInfo getDeclaredMethod(String name, TypeInfo[] parameters)
-   {
-      return delegate.getDeclaredMethod(name, parameters);
-   }
-
-   public MethodInfo[] getDeclaredMethods()
-   {
-      return delegate.getDeclaredMethods();
-   }
-
-   public InterfaceInfo[] getGenericInterfaces()
-   {
-      return delegate.getGenericInterfaces();
-   }
-
-   public ClassInfo getGenericSuperclass()
-   {
-      return delegate.getGenericSuperclass();
-   }
-
-   public InterfaceInfo[] getInterfaces()
-   {
-      return delegate.getInterfaces();
-   }
-
-   public String getName()
-   {
-      return delegate.getName();
-   }
-
-   public ClassInfo getSuperclass()
-   {
-      return delegate.getSuperclass();
-   }
-
-   public boolean isInterface()
-   {
-      return delegate.isInterface();
-   }
-
-   public AnnotationValue getAnnotation(String name)
-   {
-      return delegate.getAnnotation(name);
-   }
-
-   public AnnotationValue[] getAnnotations()
-   {
-      return delegate.getAnnotations();
-   }
-
-   public boolean isAnnotationPresent(String name)
-   {
-      return delegate.isAnnotationPresent(name);
-   }
-
-   public int getModifiers()
-   {
-      return delegate.getModifiers();
-   }
-
-   public boolean isPublic()
-   {
-      return delegate.isPublic();
-   }
-
-   public boolean isStatic()
-   {
-      return delegate.isStatic();
-   }
-
-   public Object convertValue(Object value) throws Throwable
-   {
-      return delegate.convertValue(value);
-   }
-
-   public Object convertValue(Object value, boolean replaceProperties) throws Throwable
-   {
-      return delegate.convertValue(value, replaceProperties);
-   }
-
-   public TypeInfo getArrayType(int depth)
-   {
-      return delegate.getArrayType(depth);
-   }
-   
-   public Class getType()
-   {
-      return delegate.getType();
-   }
-
-   public boolean isArray()
-   {
-      return delegate.isArray();
-   }
-
-   public boolean isEnum()
-   {
-      return delegate.isEnum();
-   }
-
-   public boolean isPrimitive()
-   {
-      return delegate.isPrimitive();
-   }
-
-   public Object[] newArrayInstance(int size) throws Throwable
-   {
-      return delegate.newArrayInstance(size);
-   }
-
-   public boolean isAssignableFrom(TypeInfo info)
-   {
-      return delegate.isAssignableFrom(info);
-   }
-
+   @Override
    public TypeInfo[] getActualTypeArguments()
    {
       if (typeArguments == ClassInfoImpl.UNKNOWN_TYPES)
@@ -222,6 +81,7 @@ public class ParameterizedClassInfo extends JBossObject implements ClassInfo, In
       return typeArguments;
    }
 
+   @Override
    public TypeInfo getOwnerType()
    {
       if (ownerType == ClassInfoImpl.UNKNOWN_TYPE)
@@ -229,54 +89,19 @@ public class ParameterizedClassInfo extends JBossObject implements ClassInfo, In
       return ownerType;
    }
 
+   @Override
    public ClassInfo getRawType()
    {
       return delegate;
    }
 
-   protected int getHashCode()
-   {
-      return delegate.hashCode();
-   }
-
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-         return true;
-      
-      if (obj == null || obj instanceof ClassInfo == false)
-         return false;
-      
-      ClassInfo other = (ClassInfo) obj;
-      ClassInfo otherDelegate = other;
-      if (other instanceof ParameterizedClassInfo)
-         otherDelegate = ((ParameterizedClassInfo) other).delegate;
-      
-      if (delegate.equals(otherDelegate) == false)
-         return false;
-      
-      // We are equal to the raw type (seems hacky?)
-      if (other instanceof ParameterizedClassInfo == false)
-         return true;
-      
-      TypeInfo[] typeArguments = getActualTypeArguments();
-      TypeInfo[] otherTypeArguments = other.getActualTypeArguments();
-      if (typeArguments.length != otherTypeArguments.length)
-         return false;
-      
-      for (int i = 0; i < typeArguments.length; ++i)
-      {
-         if (typeArguments[i].equals(otherTypeArguments[i]) == false)
-            return false;
-      }
-      return true;
-   }
-
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(parameterizedType);
    }
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append(parameterizedType);

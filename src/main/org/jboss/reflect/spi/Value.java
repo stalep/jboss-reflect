@@ -34,4 +34,94 @@ public interface Value
     * @return the type
     */
    TypeInfo getType();
+   
+   /**
+    * Is this value a primitive
+    * 
+    * @return true when a primitive
+    */
+   boolean isPrimitive();
+   
+   /**
+    * Get the value as a primitive
+    * 
+    * @return the value
+    * @throws IllegalStateException when not a primitive value
+    */
+   PrimitiveValue asPrimitive();
+   
+   /**
+    * Is this value a class
+    * 
+    * @return true when a class
+    */
+   boolean isClass();
+   
+   /**
+    * Get the value as a class
+    * 
+    * @return the value
+    * @throws IllegalStateException when not a class value
+    */
+   ClassValue asClass();
+   
+   /**
+    * Is this value a string
+    * 
+    * @return true when a string
+    */
+   boolean isString();
+   
+   /**
+    * Get the value as a string
+    * 
+    * @return the value
+    * @throws IllegalStateException when not a string value
+    */
+   StringValue asString();
+   
+   /**
+    * Is this value an enum
+    * 
+    * @return true when an enum
+    */
+   boolean isEnum();
+   
+   /**
+    * Get the value as an enum
+    * 
+    * @return the value
+    * @throws IllegalStateException when not an enum
+    */
+   EnumValue asEnum();
+   
+   /**
+    * Is this value an annotation
+    * 
+    * @return true when an annotation
+    */
+   boolean isAnnotation();
+   
+   /**
+    * Get the value as an annotation
+    * 
+    * @return the value
+    * @throws IllegalStateException when not an annotation value
+    */
+   AnnotationValue asAnnotation();
+   
+   /**
+    * Is this value an array
+    * 
+    * @return true when an array
+    */
+   boolean isArray();
+   
+   /**
+    * Get the value as an annotation
+    * 
+    * @return the value
+    * @throws IllegalStateException when not an array value
+    */
+   ArrayValue asArray();
 }

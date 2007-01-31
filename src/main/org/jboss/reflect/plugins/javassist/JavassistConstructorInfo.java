@@ -44,6 +44,9 @@ import org.jboss.util.JBossStringBuilder;
  */
 public class JavassistConstructorInfo extends JavassistAnnotatedParameterInfo implements ConstructorInfo
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = -2255405601790592604L;
+
    /** The reflection factory */
    private static final JavassistReflectionFactory reflectionFactory = new JavassistReflectionFactory(true);
  

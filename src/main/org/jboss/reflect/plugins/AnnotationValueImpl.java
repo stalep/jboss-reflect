@@ -21,15 +21,15 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jboss.reflect.spi.AbstractValue;
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.Value;
-import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
 /**
@@ -38,7 +38,7 @@ import org.jboss.util.JBossStringBuilder;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class AnnotationValueImpl extends JBossObject implements AnnotationValue, Serializable
+public class AnnotationValueImpl extends AbstractValue implements AnnotationValue
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3257290210164289843L;
@@ -48,6 +48,9 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
    
    /** The attribute values */
    protected HashMap<String, Value> attributeValues;
+   
+   /** The underlying annotation */
+   protected Annotation underlying;
    
    /** The hash code */
    protected int hash = -1;
@@ -65,13 +68,38 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
     * @param annotationType the annotation info
     * @param attributeValues the attribute values
     */
+   @Deprecated
    public AnnotationValueImpl(AnnotationInfo annotationType, HashMap<String, Value> attributeValues)
    {
+      this(annotationType, attributeValues, null);
+   }
+
+   /**
+    * Create a new Annotation value
+    * 
+    * @param annotationType the annotation info
+    * @param attributeValues the attribute values
+    * @param underlying the underlying annotation
+    */
+   public AnnotationValueImpl(AnnotationInfo annotationType, HashMap<String, Value> attributeValues, Annotation underlying)
+   {
+      if (annotationType == null)
+         throw new IllegalArgumentException("Null annotationType");
+      if (attributeValues == null)
+         throw new IllegalArgumentException("Null attribute values");
+
       this.annotationType = annotationType;
       this.attributeValues = attributeValues;
+      this.underlying = underlying;
       calculateHash();
    }
 
+   @Override
+   public boolean isAnnotation()
+   {
+      return true;
+   }
+   
    public AnnotationInfo getAnnotationType()
    {
       return annotationType;
@@ -92,17 +120,32 @@ public class AnnotationValueImpl extends JBossObject implements AnnotationValue,
       return annotationType;
    }
 
+   public Annotation getUnderlyingAnnotation()
+   {
+      return underlying;
+   }
+
+   public <T extends Annotation> T getUnderlyingAnnotation(Class<T> annotationType)
+   {
+      return annotationType.cast(underlying);
+   }
+
    public boolean equals(Object o)
    {
       if (this == o) return true;
-      if (!(o instanceof AnnotationValue)) return false;
+      if (o == null || !(o instanceof AnnotationValue)) return false;
 
       final AnnotationValue annotationValue = (AnnotationValue) o;
 
       if (!annotationType.equals(annotationValue.getAnnotationType())) return false;
       if (!attributeValues.equals(annotationValue.getValues())) return false;
 
-      return true;
+      Annotation otherUnderlying = annotationValue.getUnderlyingAnnotation();
+      if (underlying == null && otherUnderlying != null)
+         return false;
+      if (underlying != null && otherUnderlying == null)
+         return false;
+      return underlying.equals(otherUnderlying);
    }
 
    public int hashCode()

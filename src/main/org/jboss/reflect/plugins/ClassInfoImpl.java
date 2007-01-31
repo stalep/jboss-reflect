@@ -25,16 +25,15 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
-import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
+import org.jboss.reflect.spi.DelegateClassInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.JBossStringBuilder;
-import org.jboss.util.UnreachableStatementException;
 
 /**
  * Class info
@@ -49,16 +48,16 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    private static final long serialVersionUID = 3545798779904340792L;
 
    /** Marker for generation */
-   public static final ClassInfo UNKNOWN_CLASS = new UnknownClassInfo();
+   public static final ClassInfo UNKNOWN_CLASS = new DelegateClassInfo(null, true);
 
    /** Marker for generation */
-   public static final ClassInfo[] UNKNOWN_CLASSES = new UnknownClassInfo[0];
+   public static final ClassInfo[] UNKNOWN_CLASSES = new ClassInfo[0];
 
    /** Marker for generation */
-   public static final TypeInfo UNKNOWN_TYPE = new UnknownTypeInfo();
+   public static final TypeInfo UNKNOWN_TYPE = UNKNOWN_CLASS;
 
    /** Marker for generation */
-   public static final TypeInfo[] UNKNOWN_TYPES = new UnknownTypeInfo[0];
+   public static final TypeInfo[] UNKNOWN_TYPES = new TypeInfo[0];
 
    /** Marker for generation */
    public static final InterfaceInfo[] UNKNOWN_INTERFACES = new InterfaceInfo[0];
@@ -517,16 +516,19 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return this;
    }
 
+   @Override
    protected InheritableAnnotationHolder getSuperHolder()
    {
       return (ClassInfoImpl) getSuperclass();
    }
    
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(getName());
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (this == obj)
@@ -542,190 +544,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return true;
    }
 
+   @Override
    public int hashCode()
    {
       return (name != null ? name.hashCode() : 0);
-   }
-   
-   public static class UnknownTypeInfo implements TypeInfo
-   {
-      /** The serialVersionUID */
-      private static final long serialVersionUID = 1L;
-
-      public Object convertValue(Object value) throws Throwable
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public Object convertValue(Object value, boolean replaceProperties) throws Throwable
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public TypeInfo getArrayType(int depth)
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public String getName()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public Class getType()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isArray()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isEnum()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isPrimitive()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public Object[] newArrayInstance(int size) throws Throwable
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isAssignableFrom(TypeInfo info)
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public TypeInfoFactory getTypeInfoFactory()
-      {
-         throw new UnreachableStatementException();
-      }
-   }
-   
-   static class UnknownClassInfo extends UnknownTypeInfo implements ClassInfo
-   {
-      /** The serialVersionUID */
-      private static final long serialVersionUID = 1L;
-
-      public ConstructorInfo[] getDeclaredConstructors()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public ConstructorInfo getDeclaredConstructor(TypeInfo[] parameters)
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public FieldInfo getDeclaredField(String name)
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public FieldInfo[] getDeclaredFields()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public MethodInfo getDeclaredMethod(String name, TypeInfo[] parameters)
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public MethodInfo[] getDeclaredMethods()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public InterfaceInfo[] getInterfaces()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public InterfaceInfo[] getGenericInterfaces()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public ClassInfo getSuperclass()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public ClassInfo getGenericSuperclass()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isInterface()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public AnnotationValue getAnnotation(String name)
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public AnnotationValue[] getAnnotations()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isAnnotationPresent(String name)
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public String toShortString()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public void toShortString(JBossStringBuilder buffer)
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public int getModifiers()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isPublic()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public boolean isStatic()
-      {
-         throw new UnreachableStatementException();
-      }
-      
-      public Object clone()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public TypeInfo[] getActualTypeArguments()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public TypeInfo getOwnerType()
-      {
-         throw new UnreachableStatementException();
-      }
-
-      public ClassInfo getRawType()
-      {
-         throw new UnreachableStatementException();
-      }
    }
 }

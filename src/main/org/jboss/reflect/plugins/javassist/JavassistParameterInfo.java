@@ -35,6 +35,9 @@ import org.jboss.util.JBossStringBuilder;
  */
 public class JavassistParameterInfo extends JavassistAnnotatedInfo implements ParameterInfo
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = 7388866103874412735L;
+
    /** The annotated info */
    private JavassistAnnotatedParameterInfo annotated;
    

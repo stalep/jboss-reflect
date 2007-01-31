@@ -41,6 +41,9 @@ import javassist.NotFoundException;
  */
 public class JavassistFieldInfo extends JavassistAnnotatedInfo implements FieldInfo
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = -104555531831318930L;
+
    /** The reflection factory */
    private static final JavassistReflectionFactory reflectionFactory = new JavassistReflectionFactory(true);
 

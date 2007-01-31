@@ -21,11 +21,9 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.io.Serializable;
-
+import org.jboss.reflect.spi.AbstractValue;
 import org.jboss.reflect.spi.EnumValue;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.util.JBossObject;
 
 /**
  * An enumeration value
@@ -33,7 +31,7 @@ import org.jboss.util.JBossObject;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class EnumValueImpl extends JBossObject implements EnumValue, Serializable
+public class EnumValueImpl extends AbstractValue implements EnumValue
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 4120848858889662517L;
@@ -65,6 +63,12 @@ public class EnumValueImpl extends JBossObject implements EnumValue, Serializabl
       this.type = type;
       this.value = value;
       calculateHash();
+   }
+
+   @Override
+   public boolean isEnum()
+   {
+      return true;
    }
 
    public String getValue()

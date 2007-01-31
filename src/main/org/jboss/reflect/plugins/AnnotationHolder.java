@@ -21,13 +21,10 @@
 */
 package org.jboss.reflect.plugins;
 
-import org.jboss.reflect.spi.AnnotatedInfo;
-import org.jboss.reflect.spi.AnnotationValue;
-import org.jboss.reflect.spi.AnnotationInfo;
-import org.jboss.util.JBossObject;
-
-import java.io.Serializable;
 import java.util.HashMap;
+
+import org.jboss.reflect.spi.AnnotationInfo;
+import org.jboss.reflect.spi.AnnotationValue;
 
 /**
  * An annotation holder
@@ -35,11 +32,11 @@ import java.util.HashMap;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class AnnotationHolder extends JBossObject implements AnnotatedInfo, Serializable
+public class AnnotationHolder extends AbstractAnnotatedInfo
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3546645408219542832L;
-
+   
    /** The annotations */
    protected AnnotationValue[] annotationsArray;
 

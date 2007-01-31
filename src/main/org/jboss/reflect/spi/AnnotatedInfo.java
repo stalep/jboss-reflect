@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.spi;
 
+import java.lang.annotation.Annotation;
+
 import org.jboss.util.JBossInterface;
 
 /**
@@ -53,4 +55,28 @@ public interface AnnotatedInfo extends JBossInterface
     * @return true when the annotation is present
     */
    boolean isAnnotationPresent(String name);
+
+   /**
+    * Get the underlying annotations
+    * 
+    * @return the annotations
+    */
+   Annotation[] getUnderlyingAnnotations();
+   
+   /**
+    * Get an underlying annotation
+    *
+    * @param <T> the annotation type
+    * @param annotationType the annotationType
+    * @return the annotation
+    */
+   <T extends Annotation> T getUnderlyingAnnotation(Class<T> annotationType);
+   
+   /**
+    * Test whether an annotation is present
+    * 
+    * @param annotationType
+    * @return true when the annotation is present
+    */
+   boolean isAnnotationPresent(Class<? extends Annotation> annotationType);
 }

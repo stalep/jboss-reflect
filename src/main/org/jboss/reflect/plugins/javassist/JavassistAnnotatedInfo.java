@@ -23,11 +23,10 @@ package org.jboss.reflect.plugins.javassist;
 
 import java.util.HashMap;
 
+import org.jboss.reflect.plugins.AbstractAnnotatedInfo;
 import org.jboss.reflect.plugins.AnnotationHelper;
-import org.jboss.reflect.spi.AnnotatedInfo;
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
-import org.jboss.util.JBossObject;
 
 /**
  * JavassistAnnotatedInfo.
@@ -35,7 +34,7 @@ import org.jboss.util.JBossObject;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public abstract class JavassistAnnotatedInfo extends JBossObject implements AnnotatedInfo
+public abstract class JavassistAnnotatedInfo extends AbstractAnnotatedInfo
 {
    final static AnnotationValue[] NOT_CONFIGURED = new AnnotationValue[0];
 

@@ -21,6 +21,7 @@
 */
 package org.jboss.reflect.spi;
 
+import java.lang.annotation.Annotation;
 import java.util.Map;
 
 
@@ -53,4 +54,20 @@ public interface AnnotationValue extends Value
     * @return the values
     */
    Map<String, Value> getValues();
+   
+   /**
+    * Get the underlying annotation
+    *
+    * @return the annotation
+    */
+   Annotation getUnderlyingAnnotation();
+   
+   /**
+    * Get the underlying annotation
+    *
+    * @param <T> the annotation type
+    * @param annotationType the annotationType
+    * @return the annotation
+    */
+   <T extends Annotation> T getUnderlyingAnnotation(Class<T> annotationType);
 }

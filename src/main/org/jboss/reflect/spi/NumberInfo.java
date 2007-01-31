@@ -22,6 +22,7 @@
 package org.jboss.reflect.spi;
 
 import java.io.ObjectStreamException;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -113,20 +114,32 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       super(type.getName(), ordinal, type);
    }
 
+   /**
+    * Set the delegate
+    * 
+    * @param info the delegate info
+    * @throws IllegalArgumentException if the delegate is null or not a class info
+    */
    public void setDelegate(TypeInfo info)
    {
+      if (info == null)
+         throw new IllegalArgumentException("Null info");
       if (info instanceof ClassInfo == false)
-      {
-         throw new IllegalArgumentException("Should be of ClassInfo instance: " + info);
-      }
+         throw new IllegalArgumentException("Should be of ClassInfo instance: " + info.getClass().getName());
       delegate = (ClassInfo) info;
    }
 
+   /**
+    * Whether the delegate is initialized
+    * 
+    * @return true when there is a delegate
+    */
    public boolean isInitialized()
    {
       return (delegate != null);
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (obj == this)
@@ -134,8 +147,6 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       if (obj == null)
          return false;
       if (!(obj instanceof NumberInfo))
-         return false;
-      if (!obj.getClass().equals(this.getClass()))
          return false;
       NumberInfo other = (NumberInfo) obj;
       return other.ordinal == this.ordinal;
@@ -147,6 +158,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
    }
 
    @SuppressWarnings("unchecked")
+   @Override
    public boolean isAssignableFrom(TypeInfo info)
    {
       if (super.isAssignableFrom(info))
@@ -236,6 +248,21 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return delegate.isAnnotationPresent(name);
    }
 
+   public <T extends Annotation> T getUnderlyingAnnotation(Class<T> annotationType)
+   {
+      return delegate.getUnderlyingAnnotation(annotationType);
+   }
+
+   public Annotation[] getUnderlyingAnnotations()
+   {
+      return delegate.getUnderlyingAnnotations();
+   }
+
+   public boolean isAnnotationPresent(Class<? extends Annotation> annotationType)
+   {
+      return delegate.isAnnotationPresent(annotationType);
+   }
+
    public int getModifiers()
    {
       return delegate.getModifiers();
@@ -271,9 +298,10 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return delegate;
    }
 
-   protected int getHashCode()
+   @Override
+   public Object clone()
    {
-      return delegate.hashCode();
+      return this;
    }
 
    public String toShortString()
@@ -281,14 +309,8 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return name;
    }
 
-   public void toShortString(JBossStringBuilder builder)
+   public void toShortString(JBossStringBuilder buffer)
    {
-      builder.append(name);
+      buffer.append(name);
    }
-
-   public Object clone()
-   {
-      return this;
-   }
-
 }

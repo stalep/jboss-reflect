@@ -21,11 +21,9 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.io.Serializable;
-
+import org.jboss.reflect.spi.AbstractValue;
 import org.jboss.reflect.spi.StringValue;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.util.JBossObject;
 
 /**
  * A string value
@@ -33,7 +31,7 @@ import org.jboss.util.JBossObject;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class StringValueImpl extends JBossObject implements StringValue, Serializable
+public class StringValueImpl extends AbstractValue implements StringValue
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3977862864859836468L;
@@ -61,6 +59,12 @@ public class StringValueImpl extends JBossObject implements StringValue, Seriali
    {
       this.value = value;
       this.type = type;
+   }
+
+   @Override
+   public boolean isString()
+   {
+      return true;
    }
 
    public String getValue()

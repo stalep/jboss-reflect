@@ -39,6 +39,9 @@ import org.jboss.util.JBossStringBuilder;
 
 public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo implements MethodInfo
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = 101183748227690112L;
+
    /** The reflection factory */
    private static final JavassistReflectionFactory reflectionFactory = new JavassistReflectionFactory(true);
    

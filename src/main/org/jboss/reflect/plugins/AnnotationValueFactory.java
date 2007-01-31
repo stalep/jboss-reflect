@@ -22,9 +22,6 @@
 package org.jboss.reflect.plugins;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.HashMap;
 
 import org.jboss.reflect.spi.AnnotationInfo;
@@ -32,6 +29,7 @@ import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.EnumInfo;
+import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.PrimitiveValue;
 import org.jboss.reflect.spi.TypeInfo;
@@ -88,30 +86,29 @@ public class AnnotationValueFactory
    {
       Annotation annotation = (Annotation)ann;
       Class clazz = annotation.annotationType();
-      
-      Method[] methods = getDeclaredMethods(clazz);
+      ClassInfo clazzInfo = (ClassInfo) typeInfoFactory.getTypeInfo(clazz);
       
       HashMap<String, Value> attributes = new HashMap<String, Value>();
       
-      for (int j = 0 ; j < methods.length ; j++)
+      MethodInfo[] methods = clazzInfo.getDeclaredMethods();
+      if (methods != null)
       {
-         try
+         for (int j = 0 ; j < methods.length ; j++)
          {
-            Class typeClass = methods[j].getReturnType();
-            Object val = methods[j].invoke(annotation, new Object[0]);
-
-            TypeInfo typeInfo = typeInfoFactory.getTypeInfo(typeClass);
-
-            Value value = createValue(annotationHelper, typeInfo, val);
-            
-            attributes.put(methods[j].getName(), value);
-         }
-         catch (Throwable e)
-         {
-            throw new RuntimeException(e);
+            try
+            {
+               Object val = methods[j].invoke(annotation, null);
+               TypeInfo typeInfo = methods[j].getReturnType();
+               Value value = createValue(annotationHelper, typeInfo, val);
+               attributes.put(methods[j].getName(), value);
+            }
+            catch (Throwable e)
+            {
+               throw new RuntimeException("Error retrieving annotation attribute values", e);
+            }
          }
       }
-      return new AnnotationValueImpl(info, attributes);
+      return new AnnotationValueImpl(info, attributes, annotation);
    }
 
    
@@ -201,23 +198,6 @@ public class AnnotationValueFactory
          }
           
          return ret;
-      }
-   }
-   
-   private static Method[] getDeclaredMethods(final Class clazz)
-   {
-      if (System.getSecurityManager() == null)
-         return clazz.getDeclaredMethods();
-      else
-      {
-         PrivilegedAction<Method[]> action = new PrivilegedAction<Method[]>()
-         {
-            public Method[] run()
-            {
-               return clazz.getDeclaredMethods();
-            }
-         };
-         return AccessController.doPrivileged(action);
       }
    }
 }

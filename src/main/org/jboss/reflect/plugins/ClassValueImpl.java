@@ -21,11 +21,9 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.io.Serializable;
-
+import org.jboss.reflect.spi.AbstractValue;
 import org.jboss.reflect.spi.ClassValue;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.util.JBossObject;
 
 /**
  * Class value
@@ -33,7 +31,7 @@ import org.jboss.util.JBossObject;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ClassValueImpl extends JBossObject implements ClassValue, Serializable
+public class ClassValueImpl extends AbstractValue implements ClassValue
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3256721801307566649L;
@@ -65,6 +63,12 @@ public class ClassValueImpl extends JBossObject implements ClassValue, Serializa
       this.value = value;
       this.type = type;
       calculateHash();
+   }
+
+   @Override
+   public boolean isArray()
+   {
+      return true;
    }
 
    public String getValue()

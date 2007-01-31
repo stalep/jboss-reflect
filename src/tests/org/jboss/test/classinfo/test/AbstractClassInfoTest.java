@@ -479,7 +479,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
          Class type = annotation.annotationType();
          AnnotationInfoImpl info = new AnnotationInfoImpl(type.getName(), type.getModifiers());
          // TODO JBMICROCONT-127 attributes
-         AnnotationValue a = new AnnotationValueImpl(info, new HashMap<String, Value>());
+         AnnotationValue a = new AnnotationValueImpl(info, new HashMap<String, Value>(), annotation);
          expected.add(a);
       }
       return expected;

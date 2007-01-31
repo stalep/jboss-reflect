@@ -21,13 +21,12 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
+import org.jboss.reflect.spi.AbstractValue;
 import org.jboss.reflect.spi.ArrayValue;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.Value;
-import org.jboss.util.JBossObject;
 
 /**
  * Annotation value
@@ -35,7 +34,7 @@ import org.jboss.util.JBossObject;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class ArrayValueImpl extends JBossObject implements ArrayValue, Serializable
+public class ArrayValueImpl extends AbstractValue implements ArrayValue
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3979266949899367475L;
@@ -68,6 +67,12 @@ public class ArrayValueImpl extends JBossObject implements ArrayValue, Serializa
       this.values = values;
       calculateHash();
 
+   }
+
+   @Override
+   public boolean isArray()
+   {
+      return true;
    }
 
    public Value[] getValues()
