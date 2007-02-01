@@ -58,7 +58,7 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
     */
    public AnnotationInfoImpl(String name, int modifiers)
    {
-      super(name, modifiers, null);
+      super(name, modifiers);
    }
 
    /**
@@ -85,6 +85,11 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
       return name;
    }
 
+   public boolean isAnnotation()
+   {
+      return true;
+   }
+   
    public int getModifiers()
    {
       return modifiers;

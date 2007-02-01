@@ -21,6 +21,8 @@
 */
 package org.jboss.config.plugins;
 
+import java.lang.reflect.Type;
+
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.classadapter.spi.ClassAdapter;
@@ -63,34 +65,39 @@ public abstract class AbstractConfiguration implements Configuration
    {
    }
    
-   public BeanInfo getBeanInfo(String className, ClassLoader cl) throws Throwable
+   public BeanInfo getBeanInfo(String className, ClassLoader cl) throws ClassNotFoundException
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(className, cl);
       return getBeanInfoFactory().getBeanInfo(classAdapter);
    }
    
-   public BeanInfo getBeanInfo(Class clazz) throws Throwable
+   public BeanInfo getBeanInfo(Class clazz)
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(clazz);
       return getBeanInfoFactory().getBeanInfo(classAdapter);
    }
    
-   public BeanInfo getBeanInfo(TypeInfo typeInfo) throws Throwable
+   public BeanInfo getBeanInfo(TypeInfo typeInfo)
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(typeInfo);
       return getBeanInfoFactory().getBeanInfo(classAdapter);
    }
    
-   public ClassInfo getClassInfo(String className, ClassLoader cl) throws Throwable
+   public ClassInfo getClassInfo(String className, ClassLoader cl) throws ClassNotFoundException
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(className, cl);
       return classAdapter.getClassInfo();
    }
    
-   public ClassInfo getClassInfo(Class clazz) throws Throwable
+   public ClassInfo getClassInfo(Class clazz)
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(clazz);
       return classAdapter.getClassInfo();
+   }
+   
+   public TypeInfo getTypeInfo(Type type)
+   {
+      return getTypeInfoFactory().getTypeInfo(type);
    }
 
    public TypeInfoFactory getTypeInfoFactory()
@@ -169,12 +176,28 @@ public abstract class AbstractConfiguration implements Configuration
     * Get the BeanInfoFactory
     * 
     * @return the BeanInfoFactory
-    * @throws Throwable for any error
     */
-   protected BeanInfoFactory getBeanInfoFactory() throws Throwable
+   protected BeanInfoFactory getBeanInfoFactory()
    {
       if (beanInfoFactory == null)
-         beanInfoFactory = createDefaultBeanInfoFactory();
+      {
+         try
+         {
+            beanInfoFactory = createDefaultBeanInfoFactory();
+         }
+         catch (RuntimeException e)
+         {
+            throw e;
+         }
+         catch (Error e)
+         {
+            throw e;
+         }
+         catch (Throwable t)
+         {
+            throw new RuntimeException("Error creating bean info factory");
+         }
+      }
       return beanInfoFactory;
    }
 
@@ -182,12 +205,28 @@ public abstract class AbstractConfiguration implements Configuration
     * Get the class adapter factory
     * 
     * @return the ClassAdapterFactory
-    * @throws Throwable for any error
     */
-   protected ClassAdapterFactory getClassAdapterFactory() throws Throwable
+   protected ClassAdapterFactory getClassAdapterFactory()
    {
       if (classAdapterFactory == null)
-         classAdapterFactory = createDefaultClassAdapterFactory();
+      {
+         try
+         {
+            classAdapterFactory = createDefaultClassAdapterFactory();
+         }
+         catch (RuntimeException e)
+         {
+            throw e;
+         }
+         catch (Error e)
+         {
+            throw e;
+         }
+         catch (Throwable t)
+         {
+            throw new RuntimeException("Error creating class adapter");
+         }
+      }
       return classAdapterFactory;
    }
    

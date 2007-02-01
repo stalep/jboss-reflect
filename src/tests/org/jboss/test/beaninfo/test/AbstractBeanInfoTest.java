@@ -94,7 +94,8 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
       Set<ConstructorInfo> actual = beanInfo.getConstructors();
       if (expected.isEmpty())
       {
-         assertEmpty(actual);
+         if (actual != null)
+            assertEmpty(actual);
          return;
       }
       assertNotNull(actual);
@@ -107,7 +108,13 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       Set<MethodInfo> expected = new HashSet<MethodInfo>();
-      for (Method method : clazz.getMethods())
+
+      Method[] methods = null;
+      if (clazz.isAnnotation())
+         methods = clazz.getDeclaredMethods();
+      else
+         methods = clazz.getMethods();
+      for (Method method : methods)
       {
          TypeInfo returnType = factory.getTypeInfo(method.getReturnType());
          Class[] paramClasses = method.getParameterTypes();
@@ -133,7 +140,11 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
    
    protected void assertBeanProperties(BeanInfo beanInfo, Class<?> clazz) throws Throwable
    {
-      Set<PropertyInfo> expected = getExpectedProperties(clazz);
+      Set<PropertyInfo> expected = null;
+      if (clazz.isAnnotation())
+         expected = getExpectedAnnotationProperties(clazz);
+      else
+         expected = getExpectedProperties(clazz);
       
       Set<PropertyInfo> actual = beanInfo.getProperties();
       if (expected.isEmpty())
@@ -279,6 +290,29 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
                MethodInfo setterInfo = new MethodInfoImpl(null, setter.getName(), PrimitiveInfo.VOID, new TypeInfo[] { type }, paramAnnotations, null, setter.getModifiers(), declaringType);
                properties.add(new AbstractPropertyInfo(lowerName, name, type, null, setterInfo, annotations));
             }
+         }
+      }
+      return properties;
+   }
+   
+   protected Set<PropertyInfo> getExpectedAnnotationProperties(Class<?> clazz)
+   {
+      TypeInfoFactory factory = getTypeInfoFactory();
+      HashSet<PropertyInfo> properties = new HashSet<PropertyInfo>();
+
+      Method[] methods  = clazz.getDeclaredMethods();
+      for (Method method : methods)
+      {
+         TypeInfo returnType = factory.getTypeInfo(method.getGenericReturnType());
+         Class[] parameters = method.getParameterTypes();
+         if (parameters.length == 0 && PrimitiveInfo.VOID.equals(returnType) == false)
+         {
+            String name = method.getName();
+            ClassInfo declaringType = (ClassInfo) factory.getTypeInfo(method.getDeclaringClass());
+            Set<AnnotationValue> getterAnnotations = getExpectedAnnotations(method.getAnnotations()); 
+            AnnotationValue[] annotations = getterAnnotations.toArray(new AnnotationValue[getterAnnotations.size()]);
+            MethodInfo getter = new MethodInfoImpl(null, name, returnType, new TypeInfo[0], new AnnotationValue[0][], null, method.getModifiers(), declaringType);
+            properties.add(new AbstractPropertyInfo(name, name, returnType, getter, null, annotations));
          }
       }
       return properties;

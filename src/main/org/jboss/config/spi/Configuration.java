@@ -21,6 +21,8 @@
 */
 package org.jboss.config.spi;
 
+import java.lang.reflect.Type;
+
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
@@ -44,27 +46,25 @@ public interface Configuration
     * @param className the class name
     * @param cl the classloader
     * @return the bean info
-    * @throws Throwable for any error
+    * @throws ClassNotFoundException when the class could not be loaded
     */
-   BeanInfo getBeanInfo(String className, ClassLoader cl) throws Throwable;
+   BeanInfo getBeanInfo(String className, ClassLoader cl) throws ClassNotFoundException;
 
    /**
     * Get the bean info
     * 
     * @param clazz the class
     * @return the bean info
-    * @throws Throwable for any error
     */
-   BeanInfo getBeanInfo(Class clazz) throws Throwable;
+   BeanInfo getBeanInfo(Class clazz);
 
    /**
     * Get the bean info
     * 
     * @param type the type info
     * @return the bean info
-    * @throws Throwable for any error
     */
-   BeanInfo getBeanInfo(TypeInfo type) throws Throwable;
+   BeanInfo getBeanInfo(TypeInfo type);
    
    /**
     * Get the class info for a class
@@ -72,18 +72,26 @@ public interface Configuration
     * @param className the class name
     * @param cl the classloader
     * @return the class info
-    * @throws Throwable for any error
+    * @throws ClassNotFoundException when the class could not be loaded
     */
-   ClassInfo getClassInfo(String className, ClassLoader cl) throws Throwable;
+   ClassInfo getClassInfo(String className, ClassLoader cl) throws ClassNotFoundException;
    
    /**
     * Get the class info for a class
     * 
     * @param clazz the class
     * @return the class info
-    * @throws Throwable for any error
     */
-   ClassInfo getClassInfo(Class clazz) throws Throwable;
+   ClassInfo getClassInfo(Class clazz);
+   
+   /**
+    * Get the type info for a type
+    * 
+    * @param type the type
+    * @return the type info
+    * @throws IllegalArgumentException for a null type
+    */
+   TypeInfo getTypeInfo(Type type);
 
    /**
     * Get the type info factory

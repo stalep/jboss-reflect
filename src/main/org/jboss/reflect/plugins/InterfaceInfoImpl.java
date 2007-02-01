@@ -56,6 +56,17 @@ public class InterfaceInfoImpl extends ClassInfoImpl implements InterfaceInfo
     * 
     * @param name the interface name
     * @param modifiers the interface modifier
+    */
+   public InterfaceInfoImpl(String name, int modifiers)
+   {
+      super(name, modifiers);
+   }
+
+   /**
+    * Create a new InterfaceInfo.
+    * 
+    * @param name the interface name
+    * @param modifiers the interface modifier
     * @param interfaces the interfaces
     */
    public InterfaceInfoImpl(String name, int modifiers, InterfaceInfo[] interfaces)

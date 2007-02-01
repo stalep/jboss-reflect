@@ -132,12 +132,13 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
                return info;
          }
 
-         if (classInfo.isInterface())
-            throw new IllegalArgumentException(classInfo.getName() + " is an interface");
-
          Set<ConstructorInfo> constructors = getConstructors(classInfo);
          Set<MethodInfo> methods = getMethods(classInfo);
-         Set<PropertyInfo> properties = getProperties(methods);
+         Set<PropertyInfo> properties = null;
+         if (classInfo.isAnnotation())
+            properties = getAnnotationProperties(methods);
+         else
+            properties = getBeanProperties(methods);
          Set<EventInfo> events = getEvents(classInfo);
          
          BeanInfo result = createBeanInfo(classAdapter, properties, constructors, methods, events);
@@ -196,6 +197,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
    protected Set<MethodInfo> getMethods(ClassInfo classInfo)
    {
       HashSet<MethodInfo> result = new HashSet<MethodInfo>();
+      
       while (classInfo != null)
       {
          MethodInfo[] minfos = classInfo.getDeclaredMethods();
@@ -210,16 +212,17 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          
          classInfo = classInfo.getSuperclass();
       }
+      
       return result;
    }
    
    /**
-    * Get the properties
+    * Get the properties for a bean
     * 
     * @param methods the methods
     * @return the properties
     */
-   protected Set<PropertyInfo> getProperties(Set<MethodInfo> methods)
+   protected Set<PropertyInfo> getBeanProperties(Set<MethodInfo> methods)
    {
       HashMap<String, MethodInfo> getters = new HashMap<String, MethodInfo>();
       HashMap<String, List<MethodInfo>> setters = new HashMap<String, List<MethodInfo>>();
@@ -304,6 +307,31 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
                String lowerName = getLowerPropertyName(name);
                AnnotationValue[] annotations = setter.getAnnotations();
                properties.add(new AbstractPropertyInfo(lowerName, name, pinfo, null, setter, annotations));
+            }
+         }
+      }
+      return properties;
+   }
+   
+   /**
+    * Get the properties for an annotation
+    * 
+    * @param methods the methods
+    * @return the properties
+    */
+   protected Set<PropertyInfo> getAnnotationProperties(Set<MethodInfo> methods)
+   {
+      HashSet<PropertyInfo> properties = new HashSet<PropertyInfo>();
+      if (methods != null && methods.isEmpty() == false)
+      {
+         for (MethodInfo method : methods)
+         {
+            TypeInfo returnType = method.getReturnType();
+            TypeInfo[] parameters = method.getParameterTypes();
+            if (parameters.length == 0 && PrimitiveInfo.VOID.equals(returnType) == false)
+            {
+               String name = method.getName();
+               properties.add(new AbstractPropertyInfo(name, name, returnType, method, null, method.getAnnotations()));
             }
          }
       }

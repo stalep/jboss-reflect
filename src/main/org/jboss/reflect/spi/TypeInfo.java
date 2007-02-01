@@ -71,6 +71,27 @@ public interface TypeInfo extends Serializable
     * @return true when an array
     */
    boolean isArray();
+
+   /**
+    * Whether this type is a collection
+    * 
+    * @return true when a collection
+    */
+   boolean isCollection();
+
+   /**
+    * Whether this type is a map
+    * 
+    * @return true when a map
+    */
+   boolean isMap();
+
+   /**
+    * Whether this type is an annotation
+    * 
+    * @return true when an annotation
+    */
+   boolean isAnnotation();
    
    /**
     * Whether this type is an enum
@@ -122,4 +143,40 @@ public interface TypeInfo extends Serializable
     * @return type info factory
     */
    TypeInfoFactory getTypeInfoFactory();
+   
+   /**
+    * Get an attachment from the type
+    * 
+    * @param name the name
+    * @return the attachment
+    */
+   Object getAttachment(String name);
+   
+   /**
+    * Get an attachment from the type,
+    * uses the expected type as both the name
+    * and to cast the resulting object.
+    * 
+    * @param <T> the expected type
+    * @param expectedType the expected type
+    * @return the attachment
+    * @throws ClassCastException when the object is not of the expected type
+    */
+   <T> T getAttachment(Class<T> expectedType);
+   
+   /**
+    * Set an attachment against the type.
+    * This is useful for caching information against a type.<p>
+    *
+    * If you add a future object, subsequent gets will wait for the result<p>
+    * 
+    * WARNING: Be careful about what you put in here. Don't create
+    * references across classloaders, if you are not sure add a WeakReference
+    * to the information.
+    * 
+    * @param name the name
+    * @param attachment the attachment, pass null to remove an attachment
+    * @throws IllegalArgumentException for a null name
+    */
+   void setAttachment(String name, Object attachment);
 }

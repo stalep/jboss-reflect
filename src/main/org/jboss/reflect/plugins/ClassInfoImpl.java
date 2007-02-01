@@ -23,7 +23,9 @@ package org.jboss.reflect.plugins;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
@@ -106,6 +108,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
 
    /** The type info factory */
    protected TypeInfoFactory typeInfoFactory;
+
+   /** The attachments */
+   private transient TypeInfoAttachments attachments;
 
    public TypeInfoFactory getTypeInfoFactory()
    {
@@ -468,6 +473,21 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return getType().isArray();
    }
 
+   public boolean isCollection()
+   {
+      return Collection.class.isAssignableFrom(getType());
+   }
+
+   public boolean isMap()
+   {
+      return Map.class.isAssignableFrom(getType());
+   }
+
+   public boolean isAnnotation()
+   {
+      return getType().isAnnotation();
+   }
+
    public boolean isEnum()
    {
       return getType().isEnum();
@@ -514,6 +534,47 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public ClassInfo getRawType()
    {
       return this;
+   }
+
+   public void setAttachment(String name, Object attachment)
+   {
+      if (name == null)
+         throw new IllegalArgumentException("Null name");
+      synchronized (this)
+      {
+         if (attachments == null)
+         {
+            if (attachment == null)
+               return;
+            attachments = new TypeInfoAttachments();;
+         }
+      }
+      if (attachment == null)
+         attachments.removeAttachment(name);
+      else
+         attachments.addAttachment(name, attachment);
+   }
+
+   public <T> T getAttachment(Class<T> expectedType)
+   {
+      if (expectedType == null)
+         throw new IllegalArgumentException("Null expectedType");
+      Object result = getAttachment(expectedType.getName());
+      if (result == null)
+         return null;
+      return expectedType.cast(result);
+   }
+
+   public Object getAttachment(String name)
+   {
+      if (name == null)
+         throw new IllegalArgumentException("Null name");
+      synchronized (this)
+      {
+         if (attachments == null)
+            return null;
+      }
+      return attachments.getAttachment(name);
    }
 
    @Override

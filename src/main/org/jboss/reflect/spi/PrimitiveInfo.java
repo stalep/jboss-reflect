@@ -22,7 +22,6 @@
 package org.jboss.reflect.spi;
 
 import java.io.ObjectStreamException;
-import java.io.Serializable;
 import java.util.HashMap;
 
 import org.jboss.reflect.plugins.ClassInfoImpl;
@@ -36,7 +35,7 @@ import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class PrimitiveInfo implements TypeInfo, Serializable
+public class PrimitiveInfo extends AbstractTypeInfo
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3256718498443835449L;
@@ -164,16 +163,7 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       return ValueConvertor.convertValue(type, value, replaceProperties);
    }
 
-   public boolean isArray()
-   {
-      return false;
-   }
-
-   public boolean isEnum()
-   {
-      return false;
-   }
-
+   @Override
    public boolean isPrimitive()
    {
       return true;
@@ -201,11 +191,19 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       return typeInfoFactory;
    }
 
+   @Override
    public String toString()
    {
       return name;
    }
 
+   @Override
+   public String toShortString()
+   {
+      return name;
+   }
+
+   @Override
    public boolean equals(Object obj)
    {
       if (obj == this)
@@ -220,6 +218,7 @@ public class PrimitiveInfo implements TypeInfo, Serializable
       return other.ordinal == this.ordinal;
    }
 
+   @Override
    public int hashCode()
    {
       return name.hashCode();

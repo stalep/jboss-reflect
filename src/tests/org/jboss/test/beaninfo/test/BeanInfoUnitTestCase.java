@@ -32,6 +32,7 @@ import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterAndSetter;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterAndSetterSimpleMerge;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterOnly;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedSetterOnly;
+import org.jboss.test.beaninfo.support.BeanInfoAnnotation;
 import org.jboss.test.beaninfo.support.BeanInfoBooleanProperties;
 import org.jboss.test.beaninfo.support.BeanInfoConstructors;
 import org.jboss.test.beaninfo.support.BeanInfoDefaultConstructor;
@@ -43,6 +44,7 @@ import org.jboss.test.beaninfo.support.BeanInfoGenericSetterOnly;
 import org.jboss.test.beaninfo.support.BeanInfoGetterAndSetter;
 import org.jboss.test.beaninfo.support.BeanInfoGetterOnly;
 import org.jboss.test.beaninfo.support.BeanInfoInconsistentTypes;
+import org.jboss.test.beaninfo.support.BeanInfoInterface;
 import org.jboss.test.beaninfo.support.BeanInfoParameterConstructor;
 import org.jboss.test.beaninfo.support.BeanInfoProperties;
 import org.jboss.test.beaninfo.support.BeanInfoSetterOnly;
@@ -150,6 +152,16 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
    {
       testBean(BeanInfoAnnotatedGetterAndSetterSimpleMerge.class, new String[] { "something" });
    }
+   
+   public void testBeanInterface() throws Throwable
+   {
+      testBean(BeanInfoInterface.class, new String[] { "something" });
+   }
+   
+   public void testBeanAnnotation() throws Throwable
+   {
+      testBean(BeanInfoAnnotation.class, new String[] { "something" });
+   }
 
    public void testDefaultConstructor() throws Throwable
    {
@@ -225,7 +237,8 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
          Set<String> expected = new HashSet<String>();
          for (String beanName : beanNames)
             expected.add(beanName);
-         expected.add("class");
+         if (clazz.isInterface() == false)
+            expected.add("class");
          assertEquals(expected, props);
       }
    }

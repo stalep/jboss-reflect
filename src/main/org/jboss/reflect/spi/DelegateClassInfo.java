@@ -23,7 +23,6 @@ package org.jboss.reflect.spi;
 
 import java.lang.annotation.Annotation;
 
-import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
 /**
@@ -32,7 +31,7 @@ import org.jboss.util.JBossStringBuilder;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public class DelegateClassInfo extends JBossObject implements ClassInfo, InterfaceInfo
+public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, InterfaceInfo
 {
    /** The serialVersionUID */
    private static final long serialVersionUID = 6830276668550581673L;
@@ -233,16 +232,19 @@ public class DelegateClassInfo extends JBossObject implements ClassInfo, Interfa
       return delegate.getType();
    }
 
+   @Override
    public boolean isArray()
    {
       return delegate.isArray();
    }
 
+   @Override
    public boolean isEnum()
    {
       return delegate.isEnum();
    }
 
+   @Override
    public boolean isPrimitive()
    {
       return delegate.isPrimitive();
