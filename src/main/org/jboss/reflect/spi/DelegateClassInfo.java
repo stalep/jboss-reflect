@@ -156,6 +156,11 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
       return delegate.getName();
    }
 
+   public String getSimpleName()
+   {
+      return delegate.getSimpleName();
+   }
+
    public ClassInfo getSuperclass()
    {
       return delegate.getSuperclass();
@@ -273,6 +278,11 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
    public ClassInfo getRawType()
    {
       return delegate.getRawType();
+   }
+
+   public PackageInfo getPackage()
+   {
+      return delegate.getPackage();
    }
 
    @Override

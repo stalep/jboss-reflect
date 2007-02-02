@@ -21,11 +21,14 @@
 */
 package org.jboss.test.classinfo.test;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.jboss.reflect.plugins.EnumConstantInfoImpl;
 import org.jboss.reflect.plugins.EnumInfoImpl;
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.EnumConstantInfo;
 import org.jboss.reflect.spi.EnumInfo;
 import org.jboss.reflect.spi.TypeInfo;
@@ -61,6 +64,7 @@ public abstract class ClassInfoEnumTest extends AbstractClassInfoTest
       testEnum(ClassInfoEnumFieldAnnotation.class);
    }
    
+   @SuppressWarnings("unchecked")
    private void testEnum(Class enumClass) throws Throwable
    {
       EnumInfoImpl expected = new EnumInfoImpl(enumClass.getName(), Modifier.PUBLIC);
@@ -71,21 +75,20 @@ public abstract class ClassInfoEnumTest extends AbstractClassInfoTest
       assertFalse(info.isPrimitive());
       
       EnumInfo enumInfo = (EnumInfo) info;
-      assertEnumConstants(enumInfo);
+      assertEnumConstants(enumClass, enumInfo);
       
       assertClassInfo(enumInfo, enumClass);
    }
    
-   protected void assertEnumConstants(EnumInfo enumInfo) throws Throwable
+   protected void assertEnumConstants(Class<Enum> enumClass, EnumInfo enumInfo) throws Throwable
    {
       HashSet<EnumConstantInfo> expected = new HashSet<EnumConstantInfo>();
-
-      EnumConstantInfoImpl constant = new EnumConstantInfoImpl("ONE", enumInfo);
-      expected.add(constant);
-      constant = new EnumConstantInfoImpl("TWO", enumInfo);
-      expected.add(constant);
-      constant = new EnumConstantInfoImpl("THREE", enumInfo);
-      expected.add(constant);
+      
+      for (Enum enumeration : enumClass.getEnumConstants())
+      {
+         EnumConstantInfo constant = new EnumConstantInfoImpl(enumeration.name(), enumInfo);
+         expected.add(constant);
+      }
       
       EnumConstantInfo[] constants = enumInfo.getEnumConstants();
       assertNotNull(constants);
@@ -93,5 +96,33 @@ public abstract class ClassInfoEnumTest extends AbstractClassInfoTest
       for (EnumConstantInfo c : constants)
          actual.add(c);
       assertEquals(expected, actual);
+      
+      for (Enum enumeration : enumClass.getEnumConstants())
+      {
+         String name = enumeration.name();
+         Field field = enumClass.getField(name);
+         EnumConstantInfo constant = enumInfo.getEnumConstant(name);
+         assertEnumConstantAnnotations(field, constant);
+      }
    }
+   
+   protected void assertEnumConstantAnnotations(Field field, EnumConstantInfo enumConstantInfo) throws Throwable
+   {
+      Set<AnnotationValue> expected = getExpectedAnnotations(field.getDeclaredAnnotations());
+      
+      AnnotationValue[] result = enumConstantInfo.getAnnotations();
+      if (expected.isEmpty())
+      {
+         assertEmpty(result);
+         return;
+      }
+      assertNotNull(result);
+      assertEquals(expected.size(), result.length);
+      Set<AnnotationValue> actual = new HashSet<AnnotationValue>();
+      for (AnnotationValue f : result)
+         actual.add(f);
+      getLog().debug(field.getName() + " expected annotations=" + expected + " actual=" + actual);
+      assertEquals(expected, actual);
+   }
+
 }

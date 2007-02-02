@@ -159,6 +159,27 @@ public class AbstractPropertyInfo extends AnnotationHolder implements PropertyIn
       this.setter = setter;
    }
    
+   public Object get(Object bean) throws Throwable
+   {
+      if (bean == null)
+         throw new IllegalArgumentException("Null bean");
+      if (getter == null)
+         throw new IllegalArgumentException("Property is not readable: " + getName() + " for " + beanInfo.getName());
+      
+      return getter.invoke(bean, null);
+   }
+
+   public void set(Object bean, Object value) throws Throwable
+   {
+      if (bean == null)
+         throw new IllegalArgumentException("Null bean");
+      if (setter == null)
+         throw new IllegalArgumentException("Property is not writable: " + getName() + " for " + beanInfo.getName());
+      
+      setter.invoke(bean, new Object[] { value });
+   }
+
+   @Override
    public boolean equals(Object object)
    {
       if (object == null || object instanceof AbstractPropertyInfo == false)
@@ -174,6 +195,7 @@ public class AbstractPropertyInfo extends AnnotationHolder implements PropertyIn
       return true;
    }
    
+   @Override
    public void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);
@@ -181,11 +203,13 @@ public class AbstractPropertyInfo extends AnnotationHolder implements PropertyIn
       buffer.append(" setter=").append(setter);
    }
    
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(name);
    }
 
+   @Override
    public int getHashCode()
    {
       return name.hashCode();

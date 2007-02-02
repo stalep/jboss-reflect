@@ -88,4 +88,22 @@ public interface PropertyInfo extends AnnotatedInfo
     * @param setter the setter
     */
    void setSetter(MethodInfo setter);
+   
+   /**
+    * Get the property value
+    * 
+    * @param bean the bean
+    * @return the property value
+    * @throws Throwable for any error
+    */
+   Object get(Object bean) throws Throwable;
+   
+   /**
+    * Set the property value
+    * 
+    * @param bean the bean
+    * @param value the property value
+    * @throws Throwable for any error
+    */
+   void set(Object bean, Object value) throws Throwable;
 }

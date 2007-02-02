@@ -298,6 +298,11 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return delegate;
    }
 
+   public PackageInfo getPackage()
+   {
+      return delegate.getPackage();
+   }
+
    @Override
    public Object clone()
    {

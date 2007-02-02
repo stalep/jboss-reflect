@@ -43,6 +43,7 @@ import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.PackageInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
@@ -127,6 +128,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       assertDeclaredConstructors(clazz, classInfo);
       assertSuperClass(clazz, classInfo);
       assertModifiers(clazz, classInfo);
+      assertPackage(clazz, classInfo);
       assertAnnotations(clazz, classInfo);
       
       testArray(clazz, classInfo);
@@ -138,6 +140,29 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       int actual = classInfo.getModifiers();
       getLog().debug(clazz + " modifier expected=" + expected + " actual=" + actual);
       assertEquals(expected, actual);
+   }
+
+   protected void assertPackage(Class<?> clazz, ClassInfo classInfo) throws Throwable
+   {
+      Package pkg = clazz.getPackage();
+      PackageInfo packageInfo = classInfo.getPackage();
+      getLog().debug(clazz + " package=" + pkg + " packageInfo=" + packageInfo);
+      if (pkg == null)
+      {
+         assertNullPackageInfo(packageInfo);
+         return;
+      }
+      assertNotNull(packageInfo);
+      String expected = pkg.getName();
+      String actual = packageInfo.getName();
+      getLog().debug(clazz + " package expected=" + expected + " actual=" + actual);
+      assertEquals(expected, actual);
+      assertPackageAnnotations(pkg, packageInfo);
+   }
+
+   protected void assertNullPackageInfo(PackageInfo packageInfo)
+   {
+      assertNull(packageInfo);
    }
    
    protected void assertSuperClass(Class<?> clazz, ClassInfo classInfo) throws Throwable
@@ -430,6 +455,25 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       Set<AnnotationValue> expected = getExpectedAnnotations(constructor.getDeclaredAnnotations());
       
       AnnotationValue[] result = constructorInfo.getAnnotations();
+      if (expected.isEmpty())
+      {
+         assertEmpty(result);
+         return;
+      }
+      assertNotNull(result);
+      assertEquals(expected.size(), result.length);
+      Set<AnnotationValue> actual = new HashSet<AnnotationValue>();
+      for (AnnotationValue f : result)
+         actual.add(f);
+      getLog().debug("Expected annotations=" + expected + " actual=" + actual);
+      assertEquals(expected, actual);
+   }
+   
+   protected void assertPackageAnnotations(Package pkg, PackageInfo packageInfo) throws Throwable
+   {
+      Set<AnnotationValue> expected = getExpectedAnnotations(pkg.getDeclaredAnnotations());
+      
+      AnnotationValue[] result = packageInfo.getAnnotations();
       if (expected.isEmpty())
       {
          assertEmpty(result);

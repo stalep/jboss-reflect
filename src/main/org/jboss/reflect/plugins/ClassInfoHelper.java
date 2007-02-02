@@ -24,6 +24,7 @@ package org.jboss.reflect.plugins;
 import org.jboss.reflect.plugins.introspection.ParameterizedClassInfo;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.PackageInfo;
 import org.jboss.reflect.spi.TypeInfo;
 
 /**
@@ -113,4 +114,12 @@ public interface ClassInfoHelper
     * @return the owner type
     */
    TypeInfo getOwnerType(ParameterizedClassInfo classInfo);
+   
+   /**
+    * Get the package for class
+    * 
+    * @param classInfo the class info
+    * @return the package
+    */
+   PackageInfo getPackage(ClassInfoImpl classInfo);
 }

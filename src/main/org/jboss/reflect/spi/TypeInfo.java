@@ -37,6 +37,13 @@ public interface TypeInfo extends Serializable
     * @return the name
     */
    String getName();
+
+   /**
+    * Get the simple name
+    * 
+    * @return the simple name
+    */
+   String getSimpleName();
    
    /**
     * Get the class

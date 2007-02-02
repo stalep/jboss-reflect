@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2006, JBoss Inc., and individual contributors as indicated
+* Copyright 2007, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,39 +19,21 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.classinfo.test;
-
-import junit.framework.Test;
-
-import org.jboss.reflect.plugins.javassist.JavassistTypeInfoFactory;
-import org.jboss.reflect.spi.PackageInfo;
-import org.jboss.reflect.spi.TypeInfoFactory;
+package org.jboss.reflect.spi;
 
 /**
- * JavassistEnumUnitTestCase.
- * 
- * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision: 1.1 $
+ * Package info
+ *
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class JavassistEnumUnitTestCase extends ClassInfoEnumTest
+public interface PackageInfo extends AnnotatedInfo
 {
-   public JavassistEnumUnitTestCase(String name)
-   {
-      super(name);
-   }
-
-   public static Test suite()
-   {
-      return suite(JavassistEnumUnitTestCase.class);
-   }
+   /**
+    * Get the package name
+    * 
+    * @return the name
+    */
+   String getName();
    
-   protected void assertPackageAnnotations(Package pkg, PackageInfo packageInfo) throws Throwable
-   {
-      // TODO JBMICROCONT-130 this is broken for javassist
-   }
-
-   protected TypeInfoFactory getTypeInfoFactory()
-   {
-      return new JavassistTypeInfoFactory();
-   }
+   // TODO other stuff
 }

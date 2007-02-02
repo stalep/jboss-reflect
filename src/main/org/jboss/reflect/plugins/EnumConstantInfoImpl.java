@@ -21,11 +21,9 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.io.Serializable;
-
+import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.EnumConstantInfo;
 import org.jboss.reflect.spi.EnumInfo;
-import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 
 /**
@@ -34,7 +32,7 @@ import org.jboss.util.JBossStringBuilder;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class EnumConstantInfoImpl extends JBossObject implements EnumConstantInfo, Serializable
+public class EnumConstantInfoImpl extends AnnotationHolder implements EnumConstantInfo
 {
    /** serialVersionUID */
    private static final long serialVersionUID = 3761411923568243761L;
@@ -65,29 +63,38 @@ public class EnumConstantInfoImpl extends JBossObject implements EnumConstantInf
    {
       this.name = name;
       this.declaring = declaring;
-      calculateHash();
+   }
+   
+   /**
+    * Create a new constant
+    * 
+    * @param name the name
+    * @param declaring the enumeration
+    * @param annotations the annotations
+    */
+   public EnumConstantInfoImpl(String name, EnumInfo declaring, AnnotationValue[] annotations)
+   {
+      super(annotations);
+      this.name = name;
+      this.declaring = declaring;
    }
 
-   /**
-    * Get the name
-    * 
-    * @return the name
-    */
    public String getName()
    {
       return name;
    }
 
-   /**
-    * Get the declaring enumeration
-    * 
-    * @return the enumeration
-    */
    public EnumInfo getDeclaring()
    {
       return declaring;
    }
 
+   public Object getValue()
+   {
+      return declaring.getEnumValue(getName());
+   }
+
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -103,26 +110,21 @@ public class EnumConstantInfoImpl extends JBossObject implements EnumConstantInf
       return true;
    }
 
-   public int hashCode()
-   {
-      return hash;
-   }
-
-   /**
-    * Calculate the hash code
-    */
-   protected void calculateHash()
+   @Override
+   public int getHashCode()
    {
       int result = name.hashCode();
       result = 29 * result + declaring.hashCode();
-      hash = result;
+      return result;
    }
 
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(name);
    }
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);

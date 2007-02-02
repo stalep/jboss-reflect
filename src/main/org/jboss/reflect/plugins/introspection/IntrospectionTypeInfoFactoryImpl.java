@@ -22,7 +22,7 @@
 package org.jboss.reflect.plugins.introspection;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -43,6 +43,7 @@ import org.jboss.reflect.plugins.EnumConstantInfoImpl;
 import org.jboss.reflect.plugins.EnumInfoImpl;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.plugins.MethodInfoImpl;
+import org.jboss.reflect.plugins.PackageInfoImpl;
 import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ArrayInfo;
@@ -103,14 +104,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
    public AnnotationValue[] getAnnotations(Object obj)
    {
       Annotation[] annotations;
-      if (obj instanceof AccessibleObject)
-      {
-         annotations = readAnnotations((AccessibleObject)obj);
-      }
-      else if (obj instanceof Class)
-      {
-         annotations = readAnnotations((Class)obj);
-      }
+      if (obj instanceof AnnotatedElement)
+         annotations = readAnnotations((AnnotatedElement)obj);
       else
       {
          throw new RuntimeException("Attempt was made to read annotations from unsupported type " + obj.getClass().getName() + ": " + obj);
@@ -226,6 +221,17 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          infos[i] = (InterfaceInfo) getTypeInfo(interfaces[i]);
 
       return infos;
+   }
+
+   public PackageInfoImpl getPackage(ClassInfoImpl classInfo)
+   {
+      Class clazz = classInfo.getType();
+      Package pkg = clazz.getPackage();
+      if (pkg == null)
+         return null;
+
+      AnnotationValue[] annotations = getAnnotations(pkg);
+      return new PackageInfoImpl(pkg.getName(), annotations);
    }
 
    /**
@@ -360,7 +366,10 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          EnumConstantInfoImpl[] constants = new EnumConstantInfoImpl[fields.length];
          int i = 0;
          for (Field field : fields)
-            constants[i++] = new EnumConstantInfoImpl(field.getName(), enumInfoImpl);
+         {
+            AnnotationValue[] annotations = getAnnotations(field);
+            constants[i++] = new EnumConstantInfoImpl(field.getName(), enumInfoImpl, annotations);
+         }
          enumInfoImpl.setEnumConstants(constants);
       }
       else if (clazz.isAnnotation())
@@ -459,7 +468,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       }
    }
 
-   private Annotation[] readAnnotations(final AccessibleObject ao)
+   private Annotation[] readAnnotations(final AnnotatedElement ao)
    {
       if (System.getSecurityManager() == null)
          return ao.getAnnotations();
@@ -476,24 +485,6 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          return AccessController.doPrivileged(action);
       }
    }
-   
-   private Annotation[] readAnnotations(final Class clazz)
-   {
-      if (System.getSecurityManager() == null)
-         return clazz.getAnnotations();
-      else
-      {
-         PrivilegedAction<Annotation[]> action = new PrivilegedAction<Annotation[]>()
-         {
-            public Annotation[] run()
-            {
-               return clazz.getAnnotations();
-            }
-         };
-         return AccessController.doPrivileged(action);
-      }
-   }
-   
 
    protected AnnotationValue[][] getParameterAnnotations(Annotation[][] annotations)
    {

@@ -137,7 +137,13 @@ public class PrimitiveInfo extends AbstractTypeInfo
    {
       return name;
    }
+
+   public String getSimpleName()
+   {
+      return name;
+   }
    
+   @Deprecated
    public Class<?> getType()
    {
       return type;

@@ -22,8 +22,10 @@
 package org.jboss.beans.info.plugins;
 
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jboss.beans.info.spi.BeanInfo;
@@ -33,8 +35,6 @@ import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.joinpoint.plugins.Config;
 import org.jboss.joinpoint.spi.ConstructorJoinpoint;
-import org.jboss.joinpoint.spi.FieldGetJoinpoint;
-import org.jboss.joinpoint.spi.FieldSetJoinpoint;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.joinpoint.spi.MethodJoinpoint;
 import org.jboss.metadata.spi.MetaData;
@@ -61,6 +61,9 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    
    /** The properties */
    protected Set<PropertyInfo> properties;
+
+   /** The properties by name */
+   private transient Map<String, PropertyInfo> propertiesByName = Collections.emptyMap();
    
    /** The constructors */
    protected Set<ConstructorInfo> constructors;
@@ -73,7 +76,6 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    
    /** The BeanInfoFactory */
    protected BeanInfoFactory beanInfoFactory;
-
 
    /**
     * Create a new bean info
@@ -91,15 +93,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       this.beanInfoFactory = beanInfoFactory;
       this.name = classAdapter.getClassInfo().getName();
       this.classAdapter = classAdapter;
-      this.properties = properties;
-      if (properties != null && properties.isEmpty() == false)
-      {
-         for (Iterator i = properties.iterator(); i.hasNext();)
-         {
-            AbstractPropertyInfo ainfo = (AbstractPropertyInfo) i.next();
-            ainfo.beanInfo = this;
-         }
-      }
+      setProperties(properties);
       this.constructors = constructors;
       this.methods = methods;
       this.events = events;
@@ -118,6 +112,37 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    public void setProperties(Set<PropertyInfo> properties)
    {
       this.properties = properties;
+      if (properties != null && properties.isEmpty() == false)
+      {
+         propertiesByName = new HashMap<String, PropertyInfo>(properties.size());
+         for (PropertyInfo property : properties)
+         {
+            propertiesByName.put(property.getName(), property);
+            if (property instanceof AbstractPropertyInfo)
+            {
+               AbstractPropertyInfo ainfo = (AbstractPropertyInfo) property;
+               ainfo.beanInfo = this;
+            }
+         }
+      }
+   }
+
+   /**
+    * Get a property
+    * 
+    * @param name the property name
+    * @return the property
+    * @throws IllegalArgumentException if there is no such property
+    */
+   public PropertyInfo getProperty(String name)
+   {
+      if (name == null)
+         throw new IllegalArgumentException("Null name");
+      
+      PropertyInfo property = propertiesByName.get(name);
+      if (property == null)
+         throw new IllegalArgumentException("No such property " + name + " for bean " + getName() + " available " + propertiesByName.keySet());
+      return property;
    }
    
    public ClassInfo getClassInfo()
@@ -190,17 +215,17 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    {
       return newInstance(typeInfosToStrings(paramTypes), params);
    }
-
+   
    public Object getProperty(Object bean, String name) throws Throwable
    {
-      FieldGetJoinpoint joinpoint = Config.getFieldGetJoinpoint(bean, getJoinpointFactory(), name);
-      return joinpoint.dispatch();
+      PropertyInfo property = getProperty(name);
+      return property.get(bean);
    }
 
    public void setProperty(Object bean, String name, Object value) throws Throwable
    {
-      FieldSetJoinpoint joinpoint = Config.getFieldSetJoinpoint(bean, getJoinpointFactory(), name, value);
-      joinpoint.dispatch();
+      PropertyInfo property = getProperty(name);
+      property.set(bean, value);
    }
 
    public Object invoke(Object bean, String name) throws Throwable

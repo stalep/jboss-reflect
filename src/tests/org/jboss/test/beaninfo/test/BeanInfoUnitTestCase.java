@@ -188,7 +188,7 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
       assertNotNull(beanInfo);
       String invoked = "invoked";
       BeanInfoProperties bean = assertInstanceOf(beanInfo.newInstance(), BeanInfoProperties.class);
-      bean.invoked = invoked;
+      bean.notInvoked = invoked;
       assertTrue(invoked == beanInfo.getProperty(bean, "invoked"));
    }
 
@@ -198,9 +198,9 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
       assertNotNull(beanInfo);
       String invoked = "invoked";
       BeanInfoProperties bean = assertInstanceOf(beanInfo.newInstance(), BeanInfoProperties.class);
-      assertNull(bean.invoked);
+      assertNull(bean.notInvoked);
       beanInfo.setProperty(bean, "invoked", invoked);
-      assertTrue(invoked == bean.invoked);
+      assertTrue(invoked == bean.notInvoked);
    }
 
    public void testInvokeNoParametersAndResult() throws Throwable
@@ -209,7 +209,7 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
       assertNotNull(beanInfo);
       String invoked = "invoked";
       BeanInfoProperties bean = assertInstanceOf(beanInfo.newInstance(), BeanInfoProperties.class);
-      bean.invoked = invoked;
+      bean.notInvoked = invoked;
       assertTrue(invoked == beanInfo.invoke(bean, "getInvoked"));
    }
 
@@ -219,9 +219,9 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
       assertNotNull(beanInfo);
       String invoked = "invoked";
       BeanInfoProperties bean = assertInstanceOf(beanInfo.newInstance(), BeanInfoProperties.class);
-      assertNull(bean.invoked);
+      assertNull(bean.notInvoked);
       beanInfo.invoke(bean, "setInvoked", new String[] { String.class.getName() }, new Object[] { invoked });
-      assertTrue(invoked == bean.invoked);
+      assertTrue(invoked == bean.notInvoked);
    }
    
    protected void testBean(Class clazz, String[] beanNames) throws Throwable

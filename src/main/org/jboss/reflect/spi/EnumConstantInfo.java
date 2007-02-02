@@ -27,7 +27,7 @@ package org.jboss.reflect.spi;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface EnumConstantInfo
+public interface EnumConstantInfo extends AnnotatedInfo
 {
    /**
     * Get the name
@@ -35,6 +35,13 @@ public interface EnumConstantInfo
     * @return the name
     */
    String getName();
+
+   /**
+    * Get the value
+    * 
+    * @return the value
+    */
+   Object getValue();
 
    /**
     * Get the declaring enumeration

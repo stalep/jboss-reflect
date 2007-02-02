@@ -33,6 +33,7 @@ import org.jboss.reflect.spi.DelegateClassInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.PackageInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.JBossStringBuilder;
@@ -103,6 +104,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    /** The constructor info */
    protected ConstructorInfo[] constructors = UNKNOWN_CONSTRUCTORS; 
 
+   /** The package info */
+   protected PackageInfo packageInfo;
+   
    /** The class info helper */
    protected ClassInfoHelper classInfoHelper;
 
@@ -453,6 +457,12 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return name;
    }
 
+   public String getSimpleName()
+   {
+      return getType().getSimpleName();
+   }
+
+   @Deprecated
    public Class<? extends Object> getType()
    {
       return (Class<? extends Object>) annotatedElement;
@@ -534,6 +544,13 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public ClassInfo getRawType()
    {
       return this;
+   }
+
+   public PackageInfo getPackage()
+   {
+      if (packageInfo == null)
+         packageInfo = classInfoHelper.getPackage(this);
+      return packageInfo;
    }
 
    public void setAttachment(String name, Object attachment)

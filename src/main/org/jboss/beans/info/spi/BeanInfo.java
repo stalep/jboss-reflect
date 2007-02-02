@@ -74,7 +74,16 @@ public interface BeanInfo extends JBossInterface
     * @param properties a Set<PropertyInfo> 
     */
    void setProperties(Set<PropertyInfo> properties);
-   
+
+   /**
+    * Get a property
+    * 
+    * @param name the property name
+    * @return the property
+    * @throws IllegalArgumentException for a null name or if there is no such property
+    */
+   PropertyInfo getProperty(String name);
+
    /**
     * Get the constructor info.
     *

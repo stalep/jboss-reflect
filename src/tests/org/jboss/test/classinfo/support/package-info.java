@@ -19,39 +19,5 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.classinfo.test;
-
-import junit.framework.Test;
-
-import org.jboss.reflect.plugins.javassist.JavassistTypeInfoFactory;
-import org.jboss.reflect.spi.PackageInfo;
-import org.jboss.reflect.spi.TypeInfoFactory;
-
-/**
- * JavassistEnumUnitTestCase.
- * 
- * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision: 1.1 $
- */
-public class JavassistEnumUnitTestCase extends ClassInfoEnumTest
-{
-   public JavassistEnumUnitTestCase(String name)
-   {
-      super(name);
-   }
-
-   public static Test suite()
-   {
-      return suite(JavassistEnumUnitTestCase.class);
-   }
-   
-   protected void assertPackageAnnotations(Package pkg, PackageInfo packageInfo) throws Throwable
-   {
-      // TODO JBMICROCONT-130 this is broken for javassist
-   }
-
-   protected TypeInfoFactory getTypeInfoFactory()
-   {
-      return new JavassistTypeInfoFactory();
-   }
-}
+@SimpleAnnotation
+package org.jboss.test.classinfo.support;

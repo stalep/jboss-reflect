@@ -33,6 +33,7 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 
+import org.jboss.reflect.plugins.PackageInfoImpl;
 import org.jboss.reflect.plugins.TypeInfoAttachments;
 import org.jboss.reflect.plugins.ValueConvertor;
 import org.jboss.reflect.spi.AnnotationValue;
@@ -41,6 +42,7 @@ import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.PackageInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.JBossStringBuilder;
@@ -83,6 +85,9 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    /** The methods */
    private MethodInfo[] methodArray;
 
+   /** The package info */
+   private PackageInfo packageInfo;
+   
    /** The attachments */
    private transient TypeInfoAttachments attachments;
 
@@ -124,6 +129,11 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return ctClass.isInterface();
    }
 
+   public String getSimpleName()
+   {
+      return getType().getSimpleName();
+   }
+
    public int getModifiers()
    {
       return ctClass.getModifiers();
@@ -139,6 +149,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return Modifier.isStatic(getModifiers());
    }
 
+   @Deprecated
    public Class<? extends Object> getType()
    {
       return clazz;
@@ -606,6 +617,18 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    public ClassInfo getRawType()
    {
       return this;
+   }
+
+   public PackageInfo getPackage()
+   {
+      if (packageInfo == null)
+      {
+         String name = ctClass.getPackageName();
+         if (name != null)
+            packageInfo = new PackageInfoImpl(ctClass.getPackageName());
+      }
+      // TODO package annotations
+      return packageInfo;
    }
 
    public void setAttachment(String name, Object attachment)

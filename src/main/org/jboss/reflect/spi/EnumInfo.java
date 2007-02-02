@@ -43,4 +43,12 @@ public interface EnumInfo extends ClassInfo
     * @return the constant
     */
    EnumConstantInfo getEnumConstant(String name);
+
+   /**
+    * Get the enum value for a constant
+    * 
+    * @param name the name
+    * @return the value
+    */
+   Object getEnumValue(String name);
 }

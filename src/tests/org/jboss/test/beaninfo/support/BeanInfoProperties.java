@@ -29,7 +29,7 @@ package org.jboss.test.beaninfo.support;
  */
 public class BeanInfoProperties
 {
-   public String invoked = null;
+   public String notInvoked = null;
    
    public BeanInfoProperties()
    {
@@ -37,11 +37,11 @@ public class BeanInfoProperties
    
    public String getInvoked()
    {
-      return invoked;
+      return notInvoked;
    }
    
    public void setInvoked(String invoked)
    {
-      this.invoked = invoked;
+      this.notInvoked = invoked;
    }
 }

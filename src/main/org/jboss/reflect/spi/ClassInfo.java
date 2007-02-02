@@ -137,4 +137,11 @@ public interface ClassInfo extends AnnotatedInfo, ModifierInfo, TypeInfo
     * @return the owner type
     */
    TypeInfo getOwnerType();
+   
+   /**
+    * Get the package
+    * 
+    * @return the package
+    */
+   PackageInfo getPackage();
 }

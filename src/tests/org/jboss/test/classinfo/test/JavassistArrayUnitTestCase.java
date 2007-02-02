@@ -25,6 +25,7 @@ import junit.framework.Test;
 
 import org.jboss.reflect.plugins.javassist.JavassistTypeInfoFactory;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.PackageInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
@@ -51,6 +52,11 @@ public class JavassistArrayUnitTestCase extends ClassInfoArrayTest
    }
 
    protected void assertModifiers(Class<?> clazz, ClassInfo classInfo) throws Throwable
+   {
+      // TODO JBMICROCONT-130 this is broken for javassist
+   }
+   
+   protected void assertNullPackageInfo(PackageInfo packageInfo)
    {
       // TODO JBMICROCONT-130 this is broken for javassist
    }

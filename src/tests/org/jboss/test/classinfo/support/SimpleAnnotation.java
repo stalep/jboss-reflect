@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * @version $Revision$
  */
 @Inherited
-@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.PARAMETER}) 
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.PACKAGE}) 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SimpleAnnotation {
 

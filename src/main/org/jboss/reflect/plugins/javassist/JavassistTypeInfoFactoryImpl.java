@@ -147,7 +147,10 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
             EnumConstantInfoImpl[] constants = new EnumConstantInfoImpl[fields.length];
             int i = 0;
             for (CtField field : fields)
-               constants[i++] = new EnumConstantInfoImpl(field.getName(), enumInfo);
+            {
+               AnnotationValue[] annotations = getAnnotations(field);
+               constants[i++] = new EnumConstantInfoImpl(field.getName(), enumInfo, annotations);
+            }
             enumInfo.setEnumConstants(constants);
             return enumInfo;
          }

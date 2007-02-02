@@ -45,10 +45,18 @@ public class JavassistEnumInfo extends JavassistTypeInfo implements EnumInfo
    /** The constants */
    protected HashMap<String, EnumConstantInfo> constants = new HashMap<String, EnumConstantInfo>();
 
+   /**
+    * Create a new JavassistEnumInfo.
+    * 
+    * @param factory the factory
+    * @param ctClass the ctClass
+    * @param clazz the class
+    */
    public JavassistEnumInfo(JavassistTypeInfoFactoryImpl factory, CtClass ctClass, Class<? extends Object> clazz)
    {
       super(factory, ctClass, clazz);
    }
+   
    /**
     * Set the enumeration constants
     * 
@@ -71,6 +79,13 @@ public class JavassistEnumInfo extends JavassistTypeInfo implements EnumInfo
       return constants.get(name);
    }
 
+   @SuppressWarnings("unchecked")
+   public Object getEnumValue(String name)
+   {
+      return Enum.valueOf((Class<Enum>) getType(), name);
+   }
+
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -84,6 +99,7 @@ public class JavassistEnumInfo extends JavassistTypeInfo implements EnumInfo
       return true;
    }
 
+   @Override
    public int hashCode()
    {
       return getName().hashCode();
