@@ -113,8 +113,15 @@ public class Signature
       
       ClassLoader cl = clazz.getClassLoader();
       if (cl == null)
+      {
          cl = Class.class.getClassLoader();
-      
+         if (cl == null)
+         {
+            //Bootstrap classloader was represented as null, use the tcl
+            cl = Thread.currentThread().getContextClassLoader();
+         }
+      }
+
       return stringsToClasses(cl, parameters);
    }
 
