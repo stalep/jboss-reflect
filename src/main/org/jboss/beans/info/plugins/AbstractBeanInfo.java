@@ -231,7 +231,6 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    public Object invoke(Object bean, String name) throws Throwable
    {
       return invoke(bean, name, (String[]) null, null);
-
    }
 
    public Object invoke(Object bean, String name, String[] paramTypes, Object[] params) throws Throwable
@@ -277,13 +276,13 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       buffer.append(" classInfo=");
       classAdapter.toShortString(buffer);
       buffer.append(" properties=");
-      JBossObject.list(buffer, properties);
+      list(buffer, properties);
       buffer.append(" methods=");
-      JBossObject.list(buffer, methods);
+      list(buffer, methods);
       buffer.append(" constructors=");
-      JBossObject.list(buffer, constructors);
+      list(buffer, constructors);
       buffer.append(" events=");
-      JBossObject.list(buffer, events);
+      list(buffer, events);
    }
    
    public void toShortString(JBossStringBuilder buffer)
