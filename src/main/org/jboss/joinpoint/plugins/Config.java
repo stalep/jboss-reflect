@@ -210,6 +210,23 @@ public class Config
     */
    public static MethodJoinpoint getMethodJoinpoint(Object object, JoinpointFactory jpf, String name, String[] paramTypes, Object[] params) throws Throwable
    {
+      return getMethodJoinpoint(object, jpf, name, paramTypes, params, true);
+   }
+
+   /**
+    * Get a method joinpoint
+    *
+    * @param object the object to invoke
+    * @param jpf the join point factory
+    * @param name the name of the method
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @param strict is strict about method modifiers
+    * @return the join point
+    * @throws Throwable for any error
+    */
+   public static MethodJoinpoint getMethodJoinpoint(Object object, JoinpointFactory jpf, String name, String[] paramTypes, Object[] params, boolean strict) throws Throwable
+   {
       boolean trace = log.isTraceEnabled();
       if (trace)
       {
@@ -219,7 +236,7 @@ public class Config
             log.trace("Get method Joinpoint jpf=" + jpf + " target=" + object + " name=" + name + " paramTypes=()");
       }
 
-      MethodInfo methodInfo = findMethodInfo(jpf.getClassInfo(), name, paramTypes);
+      MethodInfo methodInfo = findMethodInfo(jpf.getClassInfo(), name, paramTypes, strict);
       MethodJoinpoint joinpoint = jpf.getMethodJoinpoint(methodInfo);
       joinpoint.setTarget(object);
       joinpoint.setArguments(params);
@@ -313,12 +330,44 @@ public class Config
     * @param classInfo the class info
     * @param name the method name
     * @param paramTypes the parameter types
+    * @param strict is strict about method modifiers
+    * @return the method info
+    * @throws JoinpointException when no such method
+    */
+   public static MethodInfo findMethodInfo(ClassInfo classInfo, String name, String[] paramTypes, boolean strict) throws JoinpointException
+   {
+      return findMethodInfo(classInfo, name, paramTypes, false, true, strict);
+   }
+
+   /**
+    * Find method info
+    *
+    * @param classInfo the class info
+    * @param name the method name
+    * @param paramTypes the parameter types
     * @param isStatic must the method be static
     * @param isPublic must the method be public
     * @return the method info
     * @throws JoinpointException when no such method
     */
    public static MethodInfo findMethodInfo(ClassInfo classInfo, String name, String[] paramTypes, boolean isStatic, boolean isPublic) throws JoinpointException
+   {
+      return findMethodInfo(classInfo, name, paramTypes, isStatic, isPublic, true);
+   }
+
+   /**
+    * Find method info
+    *
+    * @param classInfo the class info
+    * @param name the method name
+    * @param paramTypes the parameter types
+    * @param isStatic must the method be static
+    * @param isPublic must the method be public
+    * @param strict is strict about method modifiers
+    * @return the method info
+    * @throws JoinpointException when no such method
+    */
+   public static MethodInfo findMethodInfo(ClassInfo classInfo, String name, String[] paramTypes, boolean isStatic, boolean isPublic, boolean strict) throws JoinpointException
    {
       if (classInfo == null)
          throw new IllegalArgumentException("ClassInfo cannot be null!");
@@ -329,7 +378,7 @@ public class Config
       ClassInfo current = classInfo;
       while (current != null)
       {
-         MethodInfo result = locateMethodInfo(current, name, paramTypes, isStatic, isPublic);
+         MethodInfo result = locateMethodInfo(current, name, paramTypes, isStatic, isPublic, strict);
          if (result != null)
             return result;
          current = current.getSuperclass();
@@ -345,9 +394,10 @@ public class Config
     * @param paramTypes the parameter types
     * @param isStatic must the method be static
     * @param isPublic must the method be public
+    * @param strict is strict about method modifiers
     * @return the method info or null if not found
     */
-   private static MethodInfo locateMethodInfo(ClassInfo classInfo, String name, String[] paramTypes, boolean isStatic, boolean isPublic)
+   private static MethodInfo locateMethodInfo(ClassInfo classInfo, String name, String[] paramTypes, boolean isStatic, boolean isPublic, boolean strict)
    {
       MethodInfo[] methods = classInfo.getDeclaredMethods();
       if (methods != null)
@@ -356,8 +406,7 @@ public class Config
          {
             if (name.equals(methods[i].getName()) &&
                 equals(paramTypes, methods[i].getParameterTypes()) &&
-                methods[i].isStatic() == isStatic &&
-                methods[i].isPublic() == isPublic)
+                (strict == false || (methods[i].isStatic() == isStatic && methods[i].isPublic() == isPublic)))
                return methods[i];
          }
       }

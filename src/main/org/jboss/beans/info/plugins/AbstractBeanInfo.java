@@ -235,7 +235,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
 
    public Object invoke(Object bean, String name, String[] paramTypes, Object[] params) throws Throwable
    {
-      MethodJoinpoint joinpoint = Config.getMethodJoinpoint(bean, getJoinpointFactory(), name, paramTypes, params);
+      MethodJoinpoint joinpoint = Config.getMethodJoinpoint(bean, getJoinpointFactory(), name, paramTypes, params, false);
       return joinpoint.dispatch();
    }
 
