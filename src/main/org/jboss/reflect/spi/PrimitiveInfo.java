@@ -140,7 +140,7 @@ public class PrimitiveInfo extends AbstractTypeInfo
 
    public String getSimpleName()
    {
-      return name;
+      return type.getSimpleName();
    }
    
    @Deprecated
