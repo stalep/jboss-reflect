@@ -210,23 +210,6 @@ public class Config
     */
    public static MethodJoinpoint getMethodJoinpoint(Object object, JoinpointFactory jpf, String name, String[] paramTypes, Object[] params) throws Throwable
    {
-      return getMethodJoinpoint(object, jpf, name, paramTypes, params, true);
-   }
-
-   /**
-    * Get a method joinpoint
-    *
-    * @param object the object to invoke
-    * @param jpf the join point factory
-    * @param name the name of the method
-    * @param paramTypes the parameter types
-    * @param params the parameters
-    * @param strict is strict about method modifiers
-    * @return the join point
-    * @throws Throwable for any error
-    */
-   public static MethodJoinpoint getMethodJoinpoint(Object object, JoinpointFactory jpf, String name, String[] paramTypes, Object[] params, boolean strict) throws Throwable
-   {
       boolean trace = log.isTraceEnabled();
       if (trace)
       {
@@ -236,9 +219,36 @@ public class Config
             log.trace("Get method Joinpoint jpf=" + jpf + " target=" + object + " name=" + name + " paramTypes=()");
       }
 
-      MethodInfo methodInfo = findMethodInfo(jpf.getClassInfo(), name, paramTypes, strict);
+      MethodInfo methodInfo = findMethodInfo(jpf.getClassInfo(), name, paramTypes);
       MethodJoinpoint joinpoint = jpf.getMethodJoinpoint(methodInfo);
       joinpoint.setTarget(object);
+      joinpoint.setArguments(params);
+      return joinpoint;
+   }
+
+   /**
+    * Get a static method joinpoint
+    *
+    * @param jpf the join point factory
+    * @param name the name of the method
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @return the join point
+    * @throws Throwable for any error
+    */
+   public static MethodJoinpoint getStaticMethodJoinpoint(JoinpointFactory jpf, String name, String[] paramTypes, Object[] params) throws Throwable
+   {
+      boolean trace = log.isTraceEnabled();
+      if (trace)
+      {
+         if (paramTypes != null)
+            log.trace("Get method Joinpoint jpf=" + jpf + " name=" + name + " paramTypes=" + Arrays.asList(paramTypes));
+         else
+            log.trace("Get method Joinpoint jpf=" + jpf + " name=" + name + " paramTypes=()");
+      }
+
+      MethodInfo methodInfo = findMethodInfo(jpf.getClassInfo(), name, paramTypes, true, true);
+      MethodJoinpoint joinpoint = jpf.getMethodJoinpoint(methodInfo);
       joinpoint.setArguments(params);
       return joinpoint;
    }

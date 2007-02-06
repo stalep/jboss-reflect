@@ -55,31 +55,31 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
 {
    /** The class name */
    protected String name;
-   
+
    /** The class adapter */
    protected ClassAdapter classAdapter;
-   
+
    /** The properties */
    protected Set<PropertyInfo> properties;
 
    /** The properties by name */
    private transient Map<String, PropertyInfo> propertiesByName = Collections.emptyMap();
-   
+
    /** The constructors */
    protected Set<ConstructorInfo> constructors;
-   
+
    /** The methods */
    protected Set<MethodInfo> methods;
-   
+
    /** The events */
    protected Set<EventInfo> events;
-   
+
    /** The BeanInfoFactory */
    protected BeanInfoFactory beanInfoFactory;
 
    /**
     * Create a new bean info
-    * 
+    *
     * @param beanInfoFactory the bean info factory
     * @param classAdapter the class adapter
     * @param properties the properties
@@ -103,12 +103,12 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    {
       return name;
    }
-   
+
    public Set<PropertyInfo> getProperties()
    {
       return properties;
    }
-   
+
    public void setProperties(Set<PropertyInfo> properties)
    {
       this.properties = properties;
@@ -144,7 +144,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
 
    /**
     * Get a property
-    * 
+    *
     * @param name the property name
     * @return the property
     * @throws IllegalArgumentException if there is no such property
@@ -153,13 +153,13 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    {
       if (name == null)
          throw new IllegalArgumentException("Null name");
-      
+
       PropertyInfo property = propertiesByName.get(name);
       if (property == null)
          throw new IllegalArgumentException("No such property " + name + " for bean " + getName() + " available " + propertiesByName.keySet());
       return property;
    }
-   
+
    public ClassInfo getClassInfo()
    {
       return classAdapter.getClassInfo();
@@ -179,7 +179,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    {
       this.constructors = constructors;
    }
-   
+
    public Set<EventInfo> getEvents()
    {
       return events;
@@ -189,7 +189,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    {
       this.events = events;
    }
-   
+
    public Set<MethodInfo> getMethods()
    {
       return methods;
@@ -199,7 +199,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    {
       this.methods = methods;
    }
-   
+
    public BeanInfoFactory getBeanInfoFactory()
    {
       return beanInfoFactory;
@@ -230,7 +230,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    {
       return newInstance(typeInfosToStrings(paramTypes), params);
    }
-   
+
    public Object getProperty(Object bean, String name) throws Throwable
    {
       PropertyInfo property = getProperty(name);
@@ -250,7 +250,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
 
    public Object invoke(Object bean, String name, String[] paramTypes, Object[] params) throws Throwable
    {
-      MethodJoinpoint joinpoint = Config.getMethodJoinpoint(bean, getJoinpointFactory(), name, paramTypes, params, false);
+      MethodJoinpoint joinpoint = Config.getMethodJoinpoint(bean, getJoinpointFactory(), name, paramTypes, params);
       return joinpoint.dispatch();
    }
 
@@ -262,6 +262,27 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    public Object invoke(Object bean, String name, TypeInfo[] paramTypes, Object[] params) throws Throwable
    {
       return invoke(bean, name, typeInfosToStrings(paramTypes), params);
+   }
+
+   public Object invokeStatic(String name) throws Throwable
+   {
+      return invokeStatic(name, (String[]) null, null);
+   }
+
+   public Object invokeStatic(String name, String[] paramTypes, Object[] params) throws Throwable
+   {
+      MethodJoinpoint joinpoint = Config.getStaticMethodJoinpoint(getJoinpointFactory(), name, paramTypes, params);
+      return joinpoint.dispatch();
+   }
+
+   public Object invokeStatic(String name, Class[] paramTypes, Object[] params) throws Throwable
+   {
+      return invokeStatic(name, classesToStrings(paramTypes), params);
+   }
+
+   public Object invokeStatic(String name, TypeInfo[] paramTypes, Object[] params) throws Throwable
+   {
+      return invokeStatic(name, typeInfosToStrings(paramTypes), params);
    }
 
    public boolean equals(Object object)

@@ -245,4 +245,46 @@ public interface BeanInfo extends JBossInterface
     * @throws Throwable for any error
     */
    Object invoke(Object bean, String name, TypeInfo[] paramTypes, Object[] params) throws Throwable;
+
+   /**
+    * Invoke a static method with no parameters
+    *
+    * @param name the method name
+    * @return the result
+    * @throws Throwable for any error
+    */
+   Object invokeStatic(String name) throws Throwable;
+
+   /**
+    * Invoke a static method
+    *
+    * @param name the method name
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @return the result
+    * @throws Throwable for any error
+    */
+   Object invokeStatic(String name, String[] paramTypes, Object[] params) throws Throwable;
+
+   /**
+    * Invoke a static method
+    *
+    * @param name the method name
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @return the result
+    * @throws Throwable for any error
+    */
+   Object invokeStatic(String name, Class[] paramTypes, Object[] params) throws Throwable;
+
+   /**
+    * Invoke a static method
+    *
+    * @param name the method name
+    * @param paramTypes the parameter types
+    * @param params the parameters
+    * @return the result
+    * @throws Throwable for any error
+    */
+   Object invokeStatic(String name, TypeInfo[] paramTypes, Object[] params) throws Throwable;
 }

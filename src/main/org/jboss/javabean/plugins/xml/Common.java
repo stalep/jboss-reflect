@@ -113,7 +113,7 @@ public class Common
          if (factoryMethod != null)
          {
             BeanInfo beanInfo = ConfigurationUtil.getBeanInfo(constructor.getFactoryClass());
-            return beanInfo.invoke(null, factoryMethod, getParamTypes(), getArgs());
+            return beanInfo.invokeStatic(factoryMethod, getParamTypes(), getArgs());
          }
          return ConfigurationUtil.newInstance(getClassName(), getParamTypes(), getArgs());
       }
