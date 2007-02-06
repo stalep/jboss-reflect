@@ -158,7 +158,7 @@ public class NestedPropertyInfo extends JBossObject implements PropertyInfo, Ser
 
    public MethodInfo getGetter()
    {
-      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + name);
    }
 
    public void setGetter(MethodInfo getter)
@@ -168,7 +168,7 @@ public class NestedPropertyInfo extends JBossObject implements PropertyInfo, Ser
 
    public MethodInfo getSetter()
    {
-      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + name);
    }
 
    public void setSetter(MethodInfo setter)
@@ -178,32 +178,32 @@ public class NestedPropertyInfo extends JBossObject implements PropertyInfo, Ser
 
    public AnnotationValue[] getAnnotations()
    {
-      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + name);
    }
 
    public AnnotationValue getAnnotation(String name)
    {
-      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + this.name);
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + this.name);
    }
 
    public boolean isAnnotationPresent(String name)
    {
-      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + this.name);
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + this.name);
    }
 
    public Annotation[] getUnderlyingAnnotations()
    {
-      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + name);
    }
 
    public <T extends Annotation> T getUnderlyingAnnotation(Class<T> annotationType)
    {
-      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + name);
    }
 
    public boolean isAnnotationPresent(Class<? extends Annotation> annotationType)
    {
-      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + name);
    }
 
 }
