@@ -221,10 +221,6 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
 
       if (name.equals(other.getName()) == false)
          return false;
-      if (declaringClass.equals(other.getDeclaringClass()) == false)
-         return false;
-      if (returnType.equals(other.getReturnType()) == false)
-         return false;
       return Arrays.equals(parameterTypes, other.getParameterTypes());
    }
 
