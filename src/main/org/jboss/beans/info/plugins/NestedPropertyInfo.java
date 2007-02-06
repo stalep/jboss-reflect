@@ -51,7 +51,7 @@ public class NestedPropertyInfo extends AbstractPropertyInfo
 
    public Object get(Object bean) throws Throwable
    {
-      throw new IllegalArgumentException("Unable to determine getter!");
+      throw new IllegalArgumentException("Unable to determine getter on " + bean + " for property " + name);
    }
 
    public void set(Object bean, Object value) throws Throwable
@@ -72,7 +72,7 @@ public class NestedPropertyInfo extends AbstractPropertyInfo
             }
          }
       }
-      throw new IllegalArgumentException("Unable to determine setter!");
+      throw new IllegalArgumentException("Unable to determine setter on " + bean + " for property " + name + " with value " + value);
    }
 
 }
