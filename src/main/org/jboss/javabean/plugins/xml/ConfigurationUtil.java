@@ -129,7 +129,8 @@ public class ConfigurationUtil
       TypeInfo type = property.getType();
       if (override != null)
          type = typeInfoFactory.getTypeInfo(override, null);
-      return type.convertValue(value);
+
+      return type != null ? type.convertValue(value) : value;
    }
 
 }

@@ -127,7 +127,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
                }
                else
                {
-                  nestedPropertyInfo = new NestedPropertyInfo(previous.getName());
+                  nestedPropertyInfo = new NestedPropertyInfo(previous.getName(), this);
                   nestedPropertyInfo.addPropertyInfo(previous);
                   propertiesByName.put(previous.getName(), nestedPropertyInfo);
                }

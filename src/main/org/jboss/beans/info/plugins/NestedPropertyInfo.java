@@ -21,27 +21,43 @@
 */
 package org.jboss.beans.info.plugins;
 
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.util.JBossObject;
+import org.jboss.util.JBossStringBuilder;
+import org.jboss.util.NotImplementedException;
 
 /**
  * When bean has more than one property with the same name
- * we try to use this impl to look over all possible setters.
- * In case of getter we cannot determine which one to use
- * since there is insufficient information - only parent bean.
+ * we try to use this impl to look over all possible setters
+ * in order to set the value.
+ *
+ * But for most of other methods there is insufficent information
+ * to invoke the right method - e.g. just property name and parent bean. 
  *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
-public class NestedPropertyInfo extends AbstractPropertyInfo
+public class NestedPropertyInfo extends JBossObject implements PropertyInfo, Serializable
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = 1L;
+
+   private String name;
+   private BeanInfo beanInfo;
    private List<PropertyInfo> propertys = new ArrayList<PropertyInfo>();
 
-   public NestedPropertyInfo(String name)
+   public NestedPropertyInfo(String name, BeanInfo beanInfo)
    {
-      super(name);
+      this.name = name;
+      this.beanInfo = beanInfo;
    }
 
    void addPropertyInfo(PropertyInfo propertyInfo)
@@ -49,9 +65,33 @@ public class NestedPropertyInfo extends AbstractPropertyInfo
       propertys.add(propertyInfo);
    }
 
-   public Object get(Object bean) throws Throwable
+   // can be used
+
+   public BeanInfo getBeanInfo()
    {
-      throw new IllegalArgumentException("Unable to determine getter on " + bean + " for property " + name);
+      return beanInfo;
+   }
+
+   public String getName()
+   {
+      return name;
+   }
+
+   public String getUpperName()
+   {
+      return name;
+   }
+
+   /**
+    * In this case it is better to return null
+    * then to throw an exception, since we might still have
+    * enough information to use this class to set the value.
+    *
+    * @return null
+    */
+   public TypeInfo getType()
+   {
+      return null;
    }
 
    public void set(Object bean, Object value) throws Throwable
@@ -73,6 +113,97 @@ public class NestedPropertyInfo extends AbstractPropertyInfo
          }
       }
       throw new IllegalArgumentException("Unable to determine setter on " + bean + " for property " + name + " with value " + value);
+   }
+
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object == null || object instanceof NestedPropertyInfo == false)
+         return false;
+
+      NestedPropertyInfo other = (NestedPropertyInfo) object;
+      if (notEqual(name, other.name))
+         return false;
+      if (notEqual(beanInfo, other.beanInfo))
+         return false;
+      else if (notEqual(propertys.size(), other.propertys.size()))
+         return false;
+      return true;
+   }
+
+   @Override
+   public void toString(JBossStringBuilder buffer)
+   {
+      buffer.append("name=").append(name);
+   }
+
+   @Override
+   public void toShortString(JBossStringBuilder buffer)
+   {
+      buffer.append(name);
+   }
+
+   @Override
+   public int getHashCode()
+   {
+      return name.hashCode();
+   }
+
+   // ---- undeterminable
+
+   public Object get(Object bean) throws Throwable
+   {
+      throw new IllegalArgumentException("Unable to determine getter on " + bean + " for property " + name);
+   }
+
+   public MethodInfo getGetter()
+   {
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+   }
+
+   public void setGetter(MethodInfo getter)
+   {
+      throw new NotImplementedException("setGetter");
+   }
+
+   public MethodInfo getSetter()
+   {
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+   }
+
+   public void setSetter(MethodInfo setter)
+   {
+      throw new NotImplementedException("setSetter");
+   }
+
+   public AnnotationValue[] getAnnotations()
+   {
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+   }
+
+   public AnnotationValue getAnnotation(String name)
+   {
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + this.name);
+   }
+
+   public boolean isAnnotationPresent(String name)
+   {
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + this.name);
+   }
+
+   public Annotation[] getUnderlyingAnnotations()
+   {
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+   }
+
+   public <T extends Annotation> T getUnderlyingAnnotation(Class<T> annotationType)
+   {
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
+   }
+
+   public boolean isAnnotationPresent(Class<? extends Annotation> annotationType)
+   {
+      throw new IllegalArgumentException("Unable to determine right PropertyInfo by name: " + name);
    }
 
 }
