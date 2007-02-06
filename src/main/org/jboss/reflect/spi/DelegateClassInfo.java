@@ -237,6 +237,21 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
       return delegate.getType();
    }
 
+   public boolean isAnnotation()
+   {
+      return delegate.isAnnotation();
+   }
+
+   public boolean isCollection()
+   {
+      return delegate.isCollection();
+   }
+
+   public boolean isMap()
+   {
+      return delegate.isMap();
+   }
+
    @Override
    public boolean isArray()
    {
