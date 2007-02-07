@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<javabean xmlns="urn:jboss:javabean:2.0" class="org.jboss.test.javabean.support.SimpleBean">
+   <property name="AString">StringValue</property>
+   <property name="AByte">12</property>
+   <property name="ABoolean">true</property>
+   <property name="AShort">123</property>
+   <property name="anInt">1234</property>
+   <property name="ALong">12345</property>
+   <property name="AFloat">3.14</property>
+   <property name="ADouble">3.14e12</property>
+   <!--<property name="ADate">Mon Jan 01 00:00:00 CET 2001</property>-->
+   <property name="ADate">Jan 01 00:00:00 CET 2001</property>
+   <property name="ABigDecimal">12e4</property>
+   <property name="ABigInteger">123456</property>
+   <property name="abyte">12</property>
+   <property name="aboolean">true</property>
+   <property name="ashort">123</property>
+   <property name="anint">1234</property>
+   <property name="along">12345</property>
+   <property name="afloat">3.14</property>
+   <property name="adouble">3.14e12</property>
+   <property name="ANumber" class="java.lang.Long">12345</property>
+   <property name="overloadedProperty">StringValue</property>
+   <property name="XYZ">XYZ</property>
+   <property name="abc">abc</property>
+</javabean>

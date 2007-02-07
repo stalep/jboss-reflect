@@ -75,6 +75,7 @@
       <path refid="oswego.concurrent.classpath"/>
       <path refid="jboss.profiler.jvmti.classpath"/>
       <path refid="jboss.test.classpath"/>
+      <path refid="jboss.jbossxb.classpath"/>
     </path>
 
     <!-- ======= -->
@@ -188,6 +189,9 @@
     <!-- Build jboss-kernel.jar -->
     <jar jarfile="${build.lib.retro}/jboss-container-test14.jar" manifest="${build.etc}/default.mf">
       <fileset dir="${build.classes.retro}"/>
+      <fileset dir="${build.resources}">
+         <include name="org/**"/>
+      </fileset>
     </jar>
   </target>
 

@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,40 +19,43 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.test.javabean.test;
 
 import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-import org.jboss.test.beaninfo.test.BeanInfoTestSuite;
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.javabean.test.JavaBeanTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
+import org.jboss.test.javabean.support.SimpleBean;
 
 /**
- * All Test Suite.
+ * InstantiateTestCase.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public class InstantiateTestCase extends AbstractJavaBeanTest
 {
-   public static void main(String[] args)
+   public void testInstantiate() throws Exception
    {
-      TestRunner.run(suite());
+      SimpleBean bean = unmarshal("TestInstantiate.xml", SimpleBean.class);
+      assertEquals("()", bean.getConstructorUsed());
    }
-
+   
+   /**
+    * Setup the test
+    * 
+    * @return the test
+    */
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("All Tests");
-
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(BeanInfoTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
-      suite.addTest(JavaBeanTestSuite.suite());
-
-      return suite;
+      return suite(InstantiateTestCase.class);
    }
+
+   /**
+    * Create a new InstantiateTestCase.
+    * 
+    * @param name the test name
+    */
+   public InstantiateTestCase(String name)
+   {
+      super(name);
+   }
+
 }

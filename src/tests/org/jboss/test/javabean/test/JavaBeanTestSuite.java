@@ -19,24 +19,19 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.test.javabean.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-import org.jboss.test.beaninfo.test.BeanInfoTestSuite;
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.javabean.test.JavaBeanTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
 
 /**
- * All Test Suite.
+ * JavaBean Test Suite.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public class JavaBeanTestSuite extends TestSuite
 {
    public static void main(String[] args)
    {
@@ -45,13 +40,11 @@ public class ContainerAllTestSuite extends TestSuite
 
    public static Test suite()
    {
-      TestSuite suite = new TestSuite("All Tests");
+      TestSuite suite = new TestSuite("JavaBean Tests");
 
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(BeanInfoTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
-      suite.addTest(JavaBeanTestSuite.suite());
+      suite.addTest(InstantiateTestCase.suite());
+      suite.addTest(PropertyTestCase.suite());
+      suite.addTest(AmbiguityTestCase.suite());
 
       return suite;
    }

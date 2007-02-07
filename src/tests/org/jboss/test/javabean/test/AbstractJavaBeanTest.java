@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2005, JBoss Inc., and individual contributors as indicated
+* Copyright 2006, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,40 +19,39 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test;
+package org.jboss.test.javabean.test;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-import org.jboss.test.beaninfo.test.BeanInfoTestSuite;
-import org.jboss.test.classinfo.test.ClassInfoTestSuite;
-import org.jboss.test.javabean.test.JavaBeanTestSuite;
-import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
+import org.jboss.test.AbstractTestDelegate;
+import org.jboss.test.ioc.test.AbstractIoCTest;
 
 /**
- * All Test Suite.
+ * AbstractJavaBeanTest.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ContainerAllTestSuite extends TestSuite
+public class AbstractJavaBeanTest extends AbstractIoCTest
 {
-   public static void main(String[] args)
+   /**
+    * Create a new AbstractJBossXBTest.
+    * 
+    * @param name the name of the test
+    */
+   public AbstractJavaBeanTest(String name)
    {
-      TestRunner.run(suite());
+      super(name);
    }
 
-   public static Test suite()
+   /**
+    * Setup the test delegate
+    * 
+    * @param clazz the class
+    * @return the delegate
+    * @throws Exception for any error
+    */
+   public static AbstractTestDelegate getDelegate(Class clazz) throws Exception
    {
-      TestSuite suite = new TestSuite("All Tests");
-
-      suite.addTest(ClassInfoTestSuite.suite());
-      suite.addTest(JoinpointTestSuite.suite());
-      suite.addTest(BeanInfoTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
-      suite.addTest(JavaBeanTestSuite.suite());
-
-      return suite;
+      return new JavaBeanTestDelegate(clazz);
    }
+
 }

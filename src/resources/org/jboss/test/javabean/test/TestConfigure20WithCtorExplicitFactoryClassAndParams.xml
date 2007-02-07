@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<javabean xmlns="urn:jboss:javabean:2.0"
+    class="org.jboss.test.javabean.support.SimpleBean">
+    <!--
+        public SimpleBean(Object anObject, String string, Byte byte1,
+        Boolean boolean1, Character character, Short short1,
+        Integer anInt, Long long1, Float float1, Double double1,
+        Date date, BigDecimal bigDecimal, BigInteger bigInteger,
+        byte abyte, boolean aboolean, char achar, short ashort,
+        int anint2, long along, float afloat, double adouble,
+        Number number, String overloadedProperty, String xyz, String abc)      
+    -->
+    <constructor factoryClass="org.jboss.test.javabean.support.SimpleBeanFactory"
+        factoryMethod="newInstance">
+        <!-- The name is not used for parameter matching, its just for info -->
+        <property name="anObject" class="java.lang.Object">anObjectValue</property>
+        <property name="AString">StringValue</property>
+        <property name="AByte">12</property>
+        <property name="ABoolean">true</property>
+        <property name="ACharacter">x</property>      
+        <property name="AShort">123</property>
+        <property name="anInt">1234</property>
+        <property name="ALong">12345</property>
+        <property name="AFloat">3.14</property>
+        <property name="ADouble">3.14e12</property>
+        <property name="ADate">Jan 01 00:00:00 CET 2001</property>
+        <property name="ABigDecimal">12e4</property>
+        <property name="ABigInteger">123456</property>
+        <property name="abyte">12</property>
+        <property name="aboolean">true</property>
+        <property name="achar">y</property>
+        <property name="ashort">123</property>
+        <property name="anint">1234</property>
+        <property name="along">12345</property>
+        <property name="afloat">3.14</property>
+        <property name="adouble">3.14e12</property>
+        <property name="ANumber" class="java.lang.Long">12345</property>
+        <property name="overloadedProperty">StringValue</property>
+        <property name="XYZ">XYZ</property>
+        <property name="abc">abc</property>
+    </constructor>
+</javabean>

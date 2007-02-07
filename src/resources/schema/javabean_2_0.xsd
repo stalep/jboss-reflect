@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- An xsd schema for javabeans
+$Id: javabean_1_0.xsd 59176 2006-12-20 11:56:02Z alesj $
+ -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   targetNamespace="urn:jboss:javabean:2.0"
+   xmlns="urn:jboss:javabean:2.0"
+   elementFormDefault="qualified"
+   attributeFormDefault="unqualified"
+   version="1.0"
+>
+   <xsd:annotation>
+      <xsd:documentation>
+         <![CDATA[
+         A schema for constructing javabeans. This extends the 1.0
+         syntax to support constructor specifications.
+
+         <javabean xmlns="urn:jboss:javabean:2.0"
+                   class="com.acme.MyJavaBean">
+            <property name="someProperty">SomeValue</property>
+         ...
+         ]]>
+      </xsd:documentation>
+   </xsd:annotation>
+
+   <xsd:element name="javabean" type="javabeanType">
+      <xsd:annotation>
+         <xsd:documentation>
+           <![CDATA[
+           The root of the javabean document
+           ]]>
+         </xsd:documentation>
+      </xsd:annotation>
+   </xsd:element>
+
+   <xsd:complexType name="javabeanType">
+      <xsd:annotation>
+         <xsd:documentation>
+           <![CDATA[
+           The javabean contains a set of properties.
+           
+           e.g.
+           <javabean class="com.acme.SomeJavaBean">
+              <constructor .../>
+              <property .../>
+              <property .../>    
+           </javabean>
+           ]]>
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="constructor" type="constructorType" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="property" type="propertyType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="class" type="xsd:token" use="required"/>
+   </xsd:complexType>
+
+   <xsd:complexType name="constructorType">
+      <xsd:annotation>
+         <xsd:documentation>
+            <![CDATA[
+           The constructor for a javabean instance.
+           
+           e.g. simple constructor - new POJO(new String("String value"));
+           <javabean class="com.acme.POJO">
+              <constructor>
+                 <property>String value</property>
+              </constructor>
+           </javabean>
+
+           e.g. static factory - com.acme.Factory.newInstance(new String("String value"));
+           <bean name="MyBean" class="com.acme.POJO">
+              <constructor factoryClass="com.acme.Factory" factoryMethod="newInstance">
+                 <property>String value</property>
+              </constructor>
+           </bean>
+           ]]>
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="property" type="propertyType" minOccurs="1" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="factoryClass" type="classNameType" use="optional"/>
+      <xsd:attribute name="factoryMethod" type="xsd:token" use="optional"/>
+   </xsd:complexType>
+   
+   <xsd:complexType name="propertyType" mixed="true">
+      <xsd:annotation>
+         <xsd:documentation>
+           <![CDATA[
+           A property defines values passed to the setters.
+           
+           e.g. Using the type from the setter argument
+           <javabean ...>
+              <property name="someProperty">Some value</property>
+           </javabean>
+           
+           e.g. Overridding the injected type
+           <javabean ...>
+              <property name="someProperty" class="java.lang.String">Some value</property>
+           </javabean>
+           ]]>
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:complexContent>
+         <xsd:extension base="valueType"/>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <xsd:simpleType name="classNameType">
+      <xsd:annotation>
+         <xsd:documentation> The elements that use this type designate the name
+            of a Java class or interface. The name is in the form of a "binary
+            name", as defined in the JLS and as used in Class.forName().
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+         <xsd:whiteSpace value="collapse"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:complexType name="valueType" mixed="true">
+      <xsd:annotation>
+         <xsd:documentation>
+           <![CDATA[
+           A simple value with an optional class name
+           ]]>
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:attribute name="class" type="classNameType" use="optional"/>
+   </xsd:complexType>
+
+</xsd:schema>

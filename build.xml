@@ -165,9 +165,15 @@
     <!-- Build jboss-kernel.jar -->
     <jar jarfile="${build.lib}/jboss-container.jar" manifest="${build.etc}/default.mf">
       <fileset dir="${build.classes}"/>
+      <fileset dir="${build.resources}">
+        <include name="schema/**"/>
+      </fileset>
     </jar>
      <jar jarfile="${build.lib.retro}/jboss-container14.jar" manifest="${build.etc}/default.mf">
        <fileset dir="${build.classes.retro}"/>
+       <fileset dir="${build.resources}">
+          <include name="schema/**"/>
+       </fileset>
      </jar>
      <!-- Minimal source bundle -->
      <zip destfile="${build.lib}/${jar.prefix}-src.zip">

@@ -82,6 +82,7 @@
       <path refid="jboss/common.logging.spi.classpath"/>
       <path refid="jboss/common.logging.log4j.classpath"/>
       <path refid="jboss.test.classpath"/>
+      <path refid="jboss.jbossxb.classpath"/>
       <path refid="jboss.profiler.jvmti.classpath"/>
     </path>
 
@@ -153,6 +154,9 @@
     
     <jar destfile="${build.lib}/jboss-container-test.jar" manifest="${build.etc}/default.mf">
       <fileset dir="${build.classes}"/>
+      <fileset dir="${build.resources}">
+         <include name="org/**"/>
+      </fileset>
     </jar>
 
   </target>
