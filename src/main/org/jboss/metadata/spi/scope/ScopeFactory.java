@@ -26,6 +26,7 @@ import java.lang.annotation.Annotation;
 /**
  * Factory to create ScopeKey from annotation.
  *
+ * @param <T> the scope annotation
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
 public interface ScopeFactory<T extends Annotation>
