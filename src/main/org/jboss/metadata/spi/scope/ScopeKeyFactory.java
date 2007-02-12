@@ -19,22 +19,23 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.metadata.plugins.scope;
+package org.jboss.metadata.spi.scope;
 
-import org.jboss.metadata.spi.scope.CommonLevels;
-import org.jboss.metadata.spi.scope.Scope;
-import org.jboss.metadata.spi.scope.ScopeFactory;
+import java.lang.annotation.Annotation;
 
 /**
- * Factory for creating Instance scope key
- * from InstanceScope annotation.
+ * Factory to create ScopeKey from annotation.
  *
+ * @param <T> the scope key annotation
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
-public class InstanceScopeFactory implements ScopeFactory<InstanceScope>
+public interface ScopeKeyFactory<T extends Annotation>
 {
-   public Scope create(InstanceScope annotation)
-   {
-      return new Scope(CommonLevels.INSTANCE, annotation.value());
-   }
+   /**
+    * Create ScopeKey from scope annotation instance
+    *
+    * @param annotation scope annotation
+    * @return scope key from scope annotation
+    */
+   ScopeKey create(T annotation);
 }

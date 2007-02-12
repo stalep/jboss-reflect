@@ -24,7 +24,7 @@ package org.jboss.metadata.spi.scope;
 import java.lang.annotation.Annotation;
 
 /**
- * Factory to create ScopeKey from annotation.
+ * Factory to create Scope from annotation.
  *
  * @param <T> the scope annotation
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
@@ -37,5 +37,5 @@ public interface ScopeFactory<T extends Annotation>
     * @param annotation scope annotation
     * @return scope key from scope annotation
     */
-   ScopeKey create(T annotation);
+   Scope create(T annotation);
 }

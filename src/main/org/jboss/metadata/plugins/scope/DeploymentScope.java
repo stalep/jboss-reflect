@@ -21,20 +21,15 @@
 */
 package org.jboss.metadata.plugins.scope;
 
-import org.jboss.metadata.spi.scope.CommonLevels;
-import org.jboss.metadata.spi.scope.Scope;
-import org.jboss.metadata.spi.scope.ScopeFactory;
+import org.jboss.metadata.spi.scope.ScopeFactoryLookup;
 
 /**
- * Factory for creating Instance scope key
- * from InstanceScope annotation.
+ * Deployment scope annotation.
  *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
-public class InstanceScopeFactory implements ScopeFactory<InstanceScope>
+@ScopeFactoryLookup(DeploymentScopeFactory.class)
+public @interface DeploymentScope
 {
-   public Scope create(InstanceScope annotation)
-   {
-      return new Scope(CommonLevels.INSTANCE, annotation.value());
-   }
+   String value() default "";
 }

@@ -21,12 +21,19 @@
 */
 package org.jboss.metadata.spi.scope;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * Defining the factory class to create actual ScopeKey
+ * Defining the factory class to create actual Scope
  * from annotated scope annotation.
  *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.ANNOTATION_TYPE})
 public @interface ScopeFactoryLookup
 {
    Class<? extends ScopeFactory> value();

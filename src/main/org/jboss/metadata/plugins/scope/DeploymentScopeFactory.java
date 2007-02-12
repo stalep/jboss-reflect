@@ -26,15 +26,15 @@ import org.jboss.metadata.spi.scope.Scope;
 import org.jboss.metadata.spi.scope.ScopeFactory;
 
 /**
- * Factory for creating Instance scope key
- * from InstanceScope annotation.
+ * Factory for creating Deployment scope key
+ * from DeploymentScope annotation.
  *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
-public class InstanceScopeFactory implements ScopeFactory<InstanceScope>
+public class DeploymentScopeFactory implements ScopeFactory<DeploymentScope>
 {
-   public Scope create(InstanceScope annotation)
+   public Scope create(DeploymentScope annotation)
    {
-      return new Scope(CommonLevels.INSTANCE, annotation.value());
+      return new Scope(CommonLevels.DEPLOYMENT, annotation.value());
    }
 }
