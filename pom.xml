@@ -21,13 +21,17 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
       </plugin>
-      <!--<plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>-->
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>	   	   
     </plugins>
   </build>
   <dependencies>
@@ -48,6 +52,12 @@
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
 	  <!-- Test dependencies -->
+    <dependency>
+      <groupId>jboss</groupId>
+      <artifactId>jboss-test</artifactId>
+      <version>1.0.2-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
