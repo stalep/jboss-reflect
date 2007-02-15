@@ -21,6 +21,11 @@
 */
 package org.jboss.metadata.plugins.scope;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import org.jboss.metadata.spi.scope.ScopeFactoryLookup;
 
 /**
@@ -29,6 +34,8 @@ import org.jboss.metadata.spi.scope.ScopeFactoryLookup;
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
 @ScopeFactoryLookup(InstanceScopeFactory.class)
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
 public @interface InstanceScope
 {
    String value();
