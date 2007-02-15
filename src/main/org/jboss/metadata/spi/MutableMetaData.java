@@ -36,7 +36,6 @@ public interface MutableMetaData
     * 
     * @param <T> the annotation type
     * @param annotation the annotation
-    * @param annotationType the annotation type
     * @return any previous annotation
     */
    <T extends Annotation> T addAnnotation(T annotation);
