@@ -24,6 +24,7 @@ package org.jboss.beans.info.spi;
 import java.util.List;
 import java.util.Set;
 
+import org.jboss.classadapter.spi.DependencyBuilderListItem;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;

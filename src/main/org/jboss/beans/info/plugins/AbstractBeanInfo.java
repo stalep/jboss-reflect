@@ -33,6 +33,7 @@ import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.beans.info.spi.EventInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.classadapter.spi.ClassAdapter;
+import org.jboss.classadapter.spi.DependencyBuilderListItem;
 import org.jboss.joinpoint.plugins.Config;
 import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.joinpoint.spi.JoinpointFactory;
