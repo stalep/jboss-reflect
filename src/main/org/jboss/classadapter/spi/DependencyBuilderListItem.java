@@ -26,8 +26,7 @@ package org.jboss.classadapter.spi;
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  * @version $Revision: 1.1 $
  */
-public interface DependencyBuilderListItem
+public interface DependencyBuilderListItem<T>
 {
-   //TODO This sucks, should be the KernelControllerContext passed in
-   void addDependency(Object ctx);
+   void addDependency(T ctx);
 }
