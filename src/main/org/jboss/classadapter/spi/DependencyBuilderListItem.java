@@ -22,7 +22,8 @@
 package org.jboss.classadapter.spi;
 
 /**
- * 
+ *
+ * @param <T> the type passed to addDependency method.
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  * @version $Revision: 1.1 $
  */
