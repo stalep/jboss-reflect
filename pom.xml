@@ -15,12 +15,6 @@
   <description>JBoss Microcontainer Container</description>
   <build>
     <plugins>
-      <!-- The antrun plugin is used for generating jdk1.4 compatible classes.  
-           The configuration for this plugin is specified in the parent pom. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
