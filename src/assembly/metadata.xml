@@ -1,0 +1,19 @@
+<assembly>
+  <id>metadata</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+        <includes>
+          <include>org/jboss/metadata/plugins/**</include>
+          <include>org/jboss/metadata/annotation/**</include>
+          <include>org/jboss/metadata/generic/**</include>
+          <include>org/jboss/metadata/repository/**</include>
+        </includes>
+      <outputDirectory></outputDirectory>
+    </fileSet>
+  </fileSets>
+</assembly>
