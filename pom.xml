@@ -5,7 +5,6 @@
     <groupId>jboss</groupId>
     <artifactId>jboss-microcontainer</artifactId>
     <version>2.0.0-SNAPSHOT</version>
-	  <relativePath>../build/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>jboss-container</artifactId>
