@@ -13,7 +13,35 @@
   <url>http://www.jboss.com/products/jbossmc</url>
   <description>JBoss Microcontainer Container</description>
   <build>
+    <resources>
+      <resource>
+        <directory>src/resources</directory>
+        <includes>
+          <include>schema</include>
+        </includes>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/resources</directory>
+        <includes>
+          <include>org</include>
+        </includes>
+      </testResource>
+    </testResources>
     <plugins>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <testFailureIgnore>true</testFailureIgnore>
+          <includes>
+            <include>org/jboss/test/**/*TestCase.java</include>
+          </includes>
+          <!--<excludes>
+            <exclude>org/jboss/test/**/NoJavassistAnnotationCreatorTestCase.java</exclude>
+          </excludes>-->
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
