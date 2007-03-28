@@ -17,7 +17,7 @@
       <resource>
         <directory>src/resources</directory>
         <includes>
-          <include>schema</include>
+          <include>schema/**</include>
         </includes>
       </resource>
     </resources>
@@ -25,7 +25,7 @@
       <testResource>
         <directory>src/resources</directory>
         <includes>
-          <include>org</include>
+          <include>org/**</include>
         </includes>
       </testResource>
     </testResources>
@@ -37,9 +37,9 @@
           <includes>
             <include>org/jboss/test/**/*TestCase.java</include>
           </includes>
-          <!--<excludes>
+          <excludes>
             <exclude>org/jboss/test/**/NoJavassistAnnotationCreatorTestCase.java</exclude>
-          </excludes>-->
+          </excludes>
         </configuration>
       </plugin>
       <plugin>
@@ -70,7 +70,7 @@
     <dependency>
 	    <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
-      <version>3.4.GA</version>
+      <version>3.5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>jboss</groupId>
