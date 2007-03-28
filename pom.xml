@@ -40,6 +40,7 @@
           <excludes>
             <exclude>org/jboss/test/**/NoJavassistAnnotationCreatorTestCase.java</exclude>
           </excludes>
+          <useSystemClassLoader>true</useSystemClassLoader>
         </configuration>
       </plugin>
       <plugin>
