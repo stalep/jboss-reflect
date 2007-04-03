@@ -63,6 +63,14 @@
   <dependencies>
     <!-- Global dependencies -->
     <dependency>
+      <!--
+        included to resolve different transitive dependencies from
+        jboss-vfs and jbossxb
+      -->
+      <groupId>jboss</groupId>
+      <artifactId>jboss-common-core</artifactId>
+    </dependency>
+    <dependency>
 	    <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
       <version>3.5-SNAPSHOT</version>
