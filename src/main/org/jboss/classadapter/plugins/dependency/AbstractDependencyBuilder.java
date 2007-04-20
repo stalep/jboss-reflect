@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.DependencyBuilder;
+import org.jboss.classadapter.spi.DependencyBuilderListItem;
 import org.jboss.metadata.spi.MetaData;
 
 /**
@@ -35,7 +36,7 @@ import org.jboss.metadata.spi.MetaData;
  */
 public class AbstractDependencyBuilder implements DependencyBuilder
 {
-   public List<Object> getDependencies(ClassAdapter classAdapter, MetaData metaData)
+   public List<DependencyBuilderListItem> getDependencies(ClassAdapter classAdapter, MetaData metaData)
    {
       return null;
    }

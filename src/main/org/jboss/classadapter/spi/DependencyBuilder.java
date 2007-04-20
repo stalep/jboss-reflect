@@ -40,5 +40,5 @@ public interface DependencyBuilder
     * @param metaData the metadata
     * @return the dependencies
     */
-   List<Object> getDependencies(ClassAdapter classAdapter, MetaData metaData);
+   List<DependencyBuilderListItem> getDependencies(ClassAdapter classAdapter, MetaData metaData);
 }

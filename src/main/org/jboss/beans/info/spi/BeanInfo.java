@@ -24,6 +24,7 @@ package org.jboss.beans.info.spi;
 import java.util.List;
 import java.util.Set;
 
+import org.jboss.classadapter.spi.DependencyBuilderListItem;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;
@@ -140,7 +141,7 @@ public interface BeanInfo extends JBossInterface
     * @param metaData the metadata
     * @return the list of dependencies
     */
-   List<Object> getDependencies(MetaData metaData);
+   List<DependencyBuilderListItem> getDependencies(MetaData metaData);
    
    /**
     * Create a new instance
