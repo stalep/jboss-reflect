@@ -54,8 +54,7 @@ public class ProgressionConvertorFactory
       if (convertor == null)
       {
          ConvertorLookup lookup = new ConvertorLookup();
-         String convertorClass = AccessController.doPrivileged(lookup);
-         convertor = (ProgressionConvertor) ReflectionUtils.newInstance(convertorClass);
+         convertor = AccessController.doPrivileged(lookup);
       }
       return convertor;
    }
@@ -65,11 +64,20 @@ public class ProgressionConvertorFactory
       this.convertorClassName = convertorClassName;
    }
 
-   private class ConvertorLookup implements PrivilegedExceptionAction<String>
+   private class ConvertorLookup implements PrivilegedExceptionAction<ProgressionConvertor>
    {
-      public String run() throws Exception
+      public ProgressionConvertor run() throws Exception
       {
-         return System.getProperty("org.jboss.reflect.plugins.progressionConvertor", convertorClassName);
+         try
+         {
+            String convertorClass = System.getProperty("org.jboss.reflect.plugins.progressionConvertor", convertorClassName);
+            Object result = ReflectionUtils.newInstance(convertorClass);
+            return ProgressionConvertor.class.cast(result);
+         }
+         catch (Throwable t)
+         {
+            throw new Exception("Exception while creating convertor instance.", t);
+         }
       }
    }
 
