@@ -24,6 +24,7 @@ package org.jboss.reflect.plugins.javassist;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -37,8 +38,6 @@ import javassist.NotFoundException;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.UnreachableStatementException;
 
-import EDU.oswego.cs.dl.util.concurrent.SynchronizedInt;
-
 /**
  * JavassistReflectionFactory.
  * 
@@ -50,7 +49,7 @@ import EDU.oswego.cs.dl.util.concurrent.SynchronizedInt;
 public class JavassistReflectionFactory
 {
    /** The method class counter */
-   private static final SynchronizedInt counter = new SynchronizedInt(0);
+   private static final AtomicInteger counter = new AtomicInteger(0);
    
    /** Whether to check arguments */
    private final boolean check;
@@ -75,7 +74,7 @@ public class JavassistReflectionFactory
    public JavassistMethod createMethod(CtMethod ctMethod) throws Throwable
    {
       ClassPool pool = JavassistTypeInfoFactoryImpl.pool;
-      final CtClass result = pool.makeClass(JavassistMethod.class.getName() + counter.increment());
+      final CtClass result = pool.makeClass(JavassistMethod.class.getName() + counter.incrementAndGet());
       /* TODO JBMICROCONT-133 figure out how to do this on all JDKs
       try
       {
@@ -256,7 +255,7 @@ public class JavassistReflectionFactory
    public JavassistConstructor createConstructor(CtConstructor ctConstructor) throws Throwable
    {
       ClassPool pool = JavassistTypeInfoFactoryImpl.pool;
-      final CtClass result = pool.makeClass(JavassistConstructor.class.getName() + counter.increment());
+      final CtClass result = pool.makeClass(JavassistConstructor.class.getName() + counter.incrementAndGet());
       try
       {
          CtClass magic = pool.get("sun.reflect.MagicAccessorImpl");
@@ -381,7 +380,7 @@ public class JavassistReflectionFactory
    public JavassistField createField(CtField ctField) throws Throwable
    {
       ClassPool pool = JavassistTypeInfoFactoryImpl.pool;
-      final CtClass result = pool.makeClass(JavassistField.class.getName() + counter.increment());
+      final CtClass result = pool.makeClass(JavassistField.class.getName() + counter.incrementAndGet());
       try
       {
          CtClass magic = pool.get("sun.reflect.MagicAccessorImpl");
