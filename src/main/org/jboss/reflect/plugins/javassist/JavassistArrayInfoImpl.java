@@ -67,6 +67,7 @@ public class JavassistArrayInfoImpl extends JavassistTypeInfo implements ArrayIn
     * @param factory the factory
     * @param ctClass the ctClass
     * @param clazz the class
+    * @param componentType the component type
     */
    JavassistArrayInfoImpl(JavassistTypeInfoFactoryImpl factory, CtClass ctClass, Class<? extends Object> clazz, TypeInfo componentType)
    {

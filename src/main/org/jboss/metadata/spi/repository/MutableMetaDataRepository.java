@@ -44,7 +44,6 @@ public interface MutableMetaDataRepository extends MetaDataRepository
     * Remove a meta data retrieval for the given scope
     * 
     * @param key the key
-    * @param retrieval the retrieval
     * @return any previous retrieval
     */
    MetaDataRetrieval removeMetaDataRetrieval(ScopeKey key);

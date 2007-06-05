@@ -240,6 +240,9 @@ public class WeakValueHashMap<K, V> extends AbstractMap<K, V>
    
    /**
     * WeakValueRef.
+    * 
+    * @param <K> the key type
+    * @param <V> the value type
     */
    private static class WeakValueRef<K, V> extends WeakReference<V> implements Map.Entry<K, V>
    {
@@ -249,6 +252,8 @@ public class WeakValueHashMap<K, V> extends AbstractMap<K, V>
       /**
        * Safely create a new WeakValueRef
        * 
+       * @param <K> the key type
+       * @param <V> the value type
        * @param key the key
        * @param val the value
        * @param q the reference queue

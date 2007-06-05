@@ -189,7 +189,7 @@ public abstract class WeakTypeCache<T>
    /**
     * Put a result into the cache
     * 
-    * @param clazz the class
+    * @param type the type
     * @param result the value
     */
    private void put(ParameterizedType type, T result)
