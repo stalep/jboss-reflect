@@ -33,8 +33,8 @@ public interface ProgressionConvertor
    /**
     * Check if progression is supported.
     *
-    * @param target
-    * @param source
+    * @param target target's class
+    * @param source source's class
     * @return true, if we can progress source's value class type to target class
     */
    boolean canProgress(Class<? extends Object> target, Class<? extends Object> source);
