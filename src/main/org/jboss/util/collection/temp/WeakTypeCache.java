@@ -25,6 +25,7 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -65,6 +66,8 @@ public abstract class WeakTypeCache<T>
          return getTypeVariable((TypeVariable) type);
       else if (type instanceof GenericArrayType)
          return getGenericArrayType((GenericArrayType) type);
+      else if (type instanceof WildcardType)
+         return getWildcardType((WildcardType) type);
       else
          throw new UnsupportedOperationException("Unknown type: " + type + " class=" + type.getClass());
    }
@@ -143,6 +146,18 @@ public abstract class WeakTypeCache<T>
       generate(type, result);
       
       return result;
+   }
+
+   /**
+    * Get the information for a wildcard type
+    * 
+    * @param type the paremeterized type
+    * @return the info
+    */
+   private T getWildcardType(WildcardType type)
+   {
+      // TODO JBMICROCONT-131 improve this
+      return get(type.getUpperBounds()[0]);
    }
 
    /**
