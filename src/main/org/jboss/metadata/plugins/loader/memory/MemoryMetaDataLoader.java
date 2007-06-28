@@ -202,8 +202,7 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader implemen
       Map<String, BasicAnnotationItem> temp1 = annotations;
       if (temp1 != null && temp1.size() > 0)
       {
-         if (all == null)
-            all = new ArrayList<BasicMetaDataItem>();
+         all = new ArrayList<BasicMetaDataItem>();
          Collection<BasicAnnotationItem> values = temp1.values();
          all.addAll(values);
       }
