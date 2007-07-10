@@ -30,9 +30,9 @@ package org.jboss.test.classinfo.support;
 public class AnnotatedSubClass extends AnnotatedClass
 {
 
+   @AnotherAnnotation
    public AnnotatedSubClass(int i, String x)
    {
-      // TODO JBMICROCONT-124 AnnotatedSubClass constructor
       super(i, x);
    }
 

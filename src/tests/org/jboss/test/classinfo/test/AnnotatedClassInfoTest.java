@@ -187,6 +187,21 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       }
       
       assertTrue("Not found annotations " + set, set.isEmpty());
+
+      java.lang.reflect.Constructor ctorx = AnnotatedSubClass.class.getConstructors()[0];
+      java.lang.annotation.Annotation[] anns = ctorx.getAnnotations();
+      for (int i = 0 ; i < anns.length ; i++)
+      {
+         System.out.println("==============> " + anns[i].annotationType() + " XXXX");
+      }
+      
+      ConstructorInfo[] ctors = info.getDeclaredConstructors();
+      assertEquals(1, ctors.length);
+      ConstructorInfo ctor = ctors[0];
+      annotations = ctor.getAnnotations();
+      assertEquals(1, annotations.length);
+      anotherAnnotation = getAnnotationCheckTypeAndName(ctor, AnotherAnnotation.class.getName());
+      
    }
    
    public void testClassArrayAnnotations() throws Exception
@@ -237,6 +252,8 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       
       assertTrue("Not found annotations " + set, set.isEmpty());
    }
+   
+   
    
    public void testConstructorAnnotations() throws Exception
    {
