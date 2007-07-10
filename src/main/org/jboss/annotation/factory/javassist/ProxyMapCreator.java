@@ -21,6 +21,14 @@
   */
 package org.jboss.annotation.factory.javassist;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import javassist.bytecode.annotation.AnnotationMemberValue;
 import javassist.bytecode.annotation.ArrayMemberValue;
 import javassist.bytecode.annotation.BooleanMemberValue;
@@ -36,14 +44,6 @@ import javassist.bytecode.annotation.MemberValue;
 import javassist.bytecode.annotation.MemberValueVisitor;
 import javassist.bytecode.annotation.ShortMemberValue;
 import javassist.bytecode.annotation.StringMemberValue;
-
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Comment
@@ -70,7 +70,7 @@ public class ProxyMapCreator implements MemberValueVisitor
       }
       catch (Exception e)
       {
-         throw new RuntimeException(e);  //To change body of catch statement use Options | File Templates.
+         throw new RuntimeException(e);
       }
    }
 
@@ -121,19 +121,19 @@ public class ProxyMapCreator implements MemberValueVisitor
       }
       catch (NoSuchFieldException e)
       {
-         throw new RuntimeException(e);  //To change body of catch statement use Options | File Templates.
+         throw new RuntimeException(e);
       }
       catch (SecurityException e)
       {
-         throw new RuntimeException(e);  //To change body of catch statement use Options | File Templates.
+         throw new RuntimeException(e);
       }
       catch (IllegalArgumentException e)
       {
-         throw new RuntimeException(e);  //To change body of catch statement use Options | File Templates.
+         throw new RuntimeException(e);
       }
       catch (IllegalAccessException e)
       {
-         throw new RuntimeException(e);  //To change body of catch statement use Options | File Templates.
+         throw new RuntimeException(e);
       }
    }
 
@@ -210,7 +210,7 @@ public class ProxyMapCreator implements MemberValueVisitor
       }
       catch (ClassNotFoundException e)
       {
-         throw new RuntimeException(e);  //To change body of catch statement use Options | File Templates.
+         throw new RuntimeException(e);
       }
 
    }
