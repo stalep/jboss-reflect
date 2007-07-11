@@ -392,9 +392,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          result = new ReflectClassInfoImpl(clazz.getName());
       }
       result.setType(clazz);
-      result.setTypeInfoFactory(this);
-      result.setClassInfoHelper(this);
-      result.setAnnotationHelper(this);
+      result.setSerializationHelper(IntrospectionSerializationHelper.getInstance());
       return result;
    }
 

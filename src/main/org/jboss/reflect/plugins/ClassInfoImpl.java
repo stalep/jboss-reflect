@@ -26,6 +26,9 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.ObjectInputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
@@ -108,101 +111,17 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    protected PackageInfo packageInfo;
    
    /** The class info helper */
-   protected ClassInfoHelper classInfoHelper;
+   protected transient ClassInfoHelper classInfoHelper;
 
    /** The type info factory */
-   protected TypeInfoFactory typeInfoFactory;
+   protected transient TypeInfoFactory typeInfoFactory;
 
    /** The attachments */
    private transient TypeInfoAttachments attachments;
 
-   public TypeInfoFactory getTypeInfoFactory()
-   {
-      return typeInfoFactory;
-   }
+   /** The serialization helper */
+   private SerializationHelper serializationHelper;
 
-   public void setTypeInfoFactory(TypeInfoFactory typeInfoFactory)
-   {
-      this.typeInfoFactory = typeInfoFactory;
-   }
-
-   /**
-    * Find a method
-    * 
-    * @param methods the methods
-    * @param name the name
-    * @param parameters the parameters
-    * @return the method info
-    */
-   public static MethodInfo findMethod(MethodInfo[] methods, String name, TypeInfo[] parameters)
-   {
-      if (methods == null) return null;
-      for (int i = 0; i < methods.length; i++)
-      {
-         if (methods[i].getName().equals(name))
-         {
-            final int length = (parameters != null) ? parameters.length : 0;
-            if (methods[i].getParameterTypes().length == length)
-            {
-               boolean ok = true;
-               for (int j = 0; j < length; j++)
-               {
-                  if (!parameters[j].equals(methods[i].getParameterTypes()[j]))
-                  {
-                     ok = false;
-                     break;
-                  }
-               }
-               if (ok) return methods[i];
-            }
-         }
-      }
-      return null;
-   }
-   
-   /**
-    * Find a constructor
-    * 
-    * @param constructors the constructors
-    * @param parameters the parameters
-    * @return the constructor info
-    */
-   public static ConstructorInfo findConstructor(ConstructorInfo[] constructors, TypeInfo[] parameters)
-   {
-      if (constructors == null) return null;
-      for (int i = 0; i < constructors.length; i++)
-      {
-         final int length = (parameters != null) ? parameters.length : 0;
-         if (constructors[i].getParameterTypes().length == length)
-         {
-            boolean ok = true;
-            for (int j = 0; j < length; j++)
-            {
-               if (!parameters[j].equals(constructors[i].getParameterTypes()[j]))
-               {
-                  ok = false;
-                  break;
-               }
-            }
-            if (ok) return constructors[i];
-         }
-      }
-      return null;
-   }
-
-   /**
-    * Get an array class
-    * 
-    * TODO JBMICROCONT-123 there must be a better way to do this!
-    * @param clazz the class
-    * @param depth the depth
-    * @return the array class
-    */
-   public static Class getArrayClass(Class clazz, int depth)
-   {
-      return Array.newInstance(clazz, depth).getClass();
-   }
-   
    /**
     * Create a new abstract ClassInfo.
     */
@@ -249,16 +168,103 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       this.superclass = superclass;
    }
 
-   /**
-    * Set the class info helper
-    * 
-    * @param helper the helper
-    */
-   public void setClassInfoHelper(ClassInfoHelper helper)
+   public TypeInfoFactory getTypeInfoFactory()
    {
-      this.classInfoHelper = helper;
+      return typeInfoFactory;
    }
-   
+
+   public void setSerializationHelper(SerializationHelper serializationHelper)
+   {
+      if (serializationHelper == null)
+         throw new IllegalArgumentException("Null serialization helper.");
+      this.serializationHelper = serializationHelper;
+      provideHelpers();
+   }
+
+   private void provideHelpers()
+   {
+      this.classInfoHelper = serializationHelper.provideClassInfoHelper();
+      this.typeInfoFactory = serializationHelper.provideTypeInfoFactory();
+      this.annotationHelper = serializationHelper.provideAnnotationHelper();
+   }
+
+   /**
+    * Find a method
+    *
+    * @param methods the methods
+    * @param name the name
+    * @param parameters the parameters
+    * @return the method info
+    */
+   public static MethodInfo findMethod(MethodInfo[] methods, String name, TypeInfo[] parameters)
+   {
+      if (methods == null) return null;
+      for (int i = 0; i < methods.length; i++)
+      {
+         if (methods[i].getName().equals(name))
+         {
+            final int length = (parameters != null) ? parameters.length : 0;
+            if (methods[i].getParameterTypes().length == length)
+            {
+               boolean ok = true;
+               for (int j = 0; j < length; j++)
+               {
+                  if (!parameters[j].equals(methods[i].getParameterTypes()[j]))
+                  {
+                     ok = false;
+                     break;
+                  }
+               }
+               if (ok) return methods[i];
+            }
+         }
+      }
+      return null;
+   }
+
+   /**
+    * Find a constructor
+    *
+    * @param constructors the constructors
+    * @param parameters the parameters
+    * @return the constructor info
+    */
+   public static ConstructorInfo findConstructor(ConstructorInfo[] constructors, TypeInfo[] parameters)
+   {
+      if (constructors == null) return null;
+      for (int i = 0; i < constructors.length; i++)
+      {
+         final int length = (parameters != null) ? parameters.length : 0;
+         if (constructors[i].getParameterTypes().length == length)
+         {
+            boolean ok = true;
+            for (int j = 0; j < length; j++)
+            {
+               if (!parameters[j].equals(constructors[i].getParameterTypes()[j]))
+               {
+                  ok = false;
+                  break;
+               }
+            }
+            if (ok) return constructors[i];
+         }
+      }
+      return null;
+   }
+
+   /**
+    * Get an array class
+    *
+    * TODO JBMICROCONT-123 there must be a better way to do this!
+    * @param clazz the class
+    * @param depth the depth
+    * @return the array class
+    */
+   public static Class getArrayClass(Class clazz, int depth)
+   {
+      return Array.newInstance(clazz, depth).getClass();
+   }
+
    /**
     * Set the type
     * 
@@ -626,5 +632,16 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    public int hashCode()
    {
       return (name != null ? name.hashCode() : 0);
+   }
+
+   private void writeObject(ObjectOutputStream oos) throws IOException
+   {
+      oos.defaultWriteObject();      
+   }
+
+   private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException
+   {
+      ois.defaultReadObject();
+      provideHelpers();
    }
 }

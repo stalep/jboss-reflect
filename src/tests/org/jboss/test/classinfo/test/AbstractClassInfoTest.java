@@ -86,13 +86,21 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       assertEquals(clazz, info.getType());
       
       // TODO JBMICROCONT-128 fix the serialization
-      //byte[] bytes = serialize(info);
-      //Object deserialized = deserialize(bytes);
-      //assertEquals(info, deserialized);
+      if (isJavassistTestCase() == false)
+      {
+         byte[] bytes = serialize(info);
+         Object deserialized = deserialize(bytes);
+         assertEquals(info, deserialized);
+      }
       
       return info;
    }
-   
+
+   protected boolean isJavassistTestCase()
+   {
+      return (getClass().getName().contains("Javassist"));  
+   }
+
    protected void testArray(Class<?> clazz, TypeInfo info) throws Throwable
    {
       TypeInfo arrayType = info.getArrayType(1);

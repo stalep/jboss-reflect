@@ -34,23 +34,20 @@ import org.jboss.reflect.spi.TypeInfoFactory;
  * 
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class IntrospectionTypeInfoFactory implements TypeInfoFactory
+public class IntrospectionTypeInfoFactory extends IntrospectionDelegateHolder implements TypeInfoFactory
 {
-   /** The delegate */
-   private static IntrospectionTypeInfoFactoryImpl delegate = new IntrospectionTypeInfoFactoryImpl();
-
    public TypeInfo getTypeInfo(Class clazz)
    {
-      return delegate.getTypeInfo(clazz);
+      return getDelegate().getTypeInfo(clazz);
    }
    
    public TypeInfo getTypeInfo(String name, ClassLoader cl) throws ClassNotFoundException
    {
-      return delegate.getTypeInfo(name, cl);
+      return getDelegate().getTypeInfo(name, cl);
    }
 
    public TypeInfo getTypeInfo(Type type)
    {
-      return delegate.getTypeInfo(type);
+      return getDelegate().getTypeInfo(type);
    }
 }

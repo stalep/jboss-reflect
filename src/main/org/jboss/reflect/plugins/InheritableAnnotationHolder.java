@@ -64,23 +64,13 @@ public abstract class InheritableAnnotationHolder extends AbstractAnnotatedInfo
    protected Object annotatedElement;
    
    /** The annotation helper */
-   protected AnnotationHelper annotationHelper;
+   protected transient AnnotationHelper annotationHelper;
    
    /**
     * Create a new InheritableAnnotationHolder.
     */
    public InheritableAnnotationHolder()
    {
-   }
-
-   /**
-    * Set the annotation helper
-    * 
-    * @param helper the helper
-    */
-   public void setAnnotationHelper(AnnotationHelper helper)
-   {
-      this.annotationHelper = helper;
    }
 
    public void setAnnotatedElement(Object annotatedElement)
