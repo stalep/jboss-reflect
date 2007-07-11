@@ -33,6 +33,7 @@ import org.jboss.reflect.spi.TypeInfoFactory;
  */
 public class IntrospectionSerializationHelper extends IntrospectionDelegateHolder implements SerializationHelper
 {
+   private static final long serialVersionUID = 2750888041049795818L;
    private static SerializationHelper instance = new IntrospectionSerializationHelper();
 
    private IntrospectionSerializationHelper() {}
