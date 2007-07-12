@@ -77,7 +77,12 @@ public abstract class InheritableAnnotationHolder extends AbstractAnnotatedInfo
    {
       this.annotatedElement = annotatedElement;
    }
-   
+
+   public void setAnnotationHelper(AnnotationHelper annotationHelper)
+   {
+      this.annotationHelper = annotationHelper;
+   }
+
    /**
     * Get the declared annotations
     * 

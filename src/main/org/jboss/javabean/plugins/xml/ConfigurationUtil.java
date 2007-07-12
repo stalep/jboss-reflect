@@ -22,15 +22,13 @@
 package org.jboss.javabean.plugins.xml;
 
 import java.security.AccessController;
-import java.security.PrivilegedExceptionAction;
+import java.security.PrivilegedAction;
 
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.config.plugins.property.PropertyConfiguration;
 import org.jboss.config.spi.Configuration;
-import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.propertyeditor.PropertyEditors;
 
 /**
@@ -42,31 +40,18 @@ public class ConfigurationUtil
 {
    /** The kernel config */
    private static Configuration config;
-   /** The type info factory */
-   private static final TypeInfoFactory typeInfoFactory = new IntrospectionTypeInfoFactory();
 
    static synchronized void init()
    {
-      if( config == null )
+      if(config == null)
       {
-         try
+         config = AccessController.doPrivileged(new PrivilegedAction<Configuration>()
          {
-            config = AccessController.doPrivileged(new PrivilegedExceptionAction<Configuration>()
+            public Configuration run()
             {
-               public Configuration run() throws Exception
-               {
-                  return new PropertyConfiguration(System.getProperties());
-               }
-            });
-         }
-         catch (RuntimeException e)
-         {
-            throw e;
-         }
-         catch (Exception e)
-         {
-            throw new RuntimeException("Error getting configuration", e);
-         }
+               return new PropertyConfiguration(System.getProperties());
+            }
+         });
          PropertyEditors.init();
       }
    }
@@ -128,7 +113,7 @@ public class ConfigurationUtil
 
       TypeInfo type = property.getType();
       if (override != null)
-         type = typeInfoFactory.getTypeInfo(override, null);
+         type = config.getTypeInfoFactory().getTypeInfo(override, null);
 
       return type != null ? type.convertValue(value) : value;
    }

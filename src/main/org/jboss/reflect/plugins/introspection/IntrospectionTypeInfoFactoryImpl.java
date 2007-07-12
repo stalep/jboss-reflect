@@ -300,11 +300,11 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          name = ((Class) type).getName();
       if (name != null)
       {
-         TypeInfo primitive = PrimitiveInfo.valueOf(((Class) type).getName());
+         TypeInfo primitive = PrimitiveInfo.valueOf(name);
          if (primitive != null)
             return primitive;
 
-         NumberInfo number = NumberInfo.valueOf(((Class) type).getName());
+         NumberInfo number = NumberInfo.valueOf(name);
          if (number != null)
          {
             if (number.isInitialized() == false)
@@ -383,16 +383,14 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          }
          ((AnnotationInfoImpl)result).setAttributes(atttributes);
       }
-      else if (clazz.isInterface())
-      {
-         result = new ReflectClassInfoImpl(clazz.getName());
-      }
       else
       {
          result = new ReflectClassInfoImpl(clazz.getName());
       }
       result.setType(clazz);
-      result.setSerializationHelper(IntrospectionSerializationHelper.getInstance());
+      result.setTypeInfoFactory(this);
+      result.setClassInfoHelper(this);
+      result.setAnnotationHelper(this);
       return result;
    }
 

@@ -26,9 +26,6 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.ObjectInputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
@@ -119,9 +116,6 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    /** The attachments */
    private transient TypeInfoAttachments attachments;
 
-   /** The serialization helper */
-   private SerializationHelper serializationHelper;
-
    /**
     * Create a new abstract ClassInfo.
     */
@@ -173,19 +167,14 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return typeInfoFactory;
    }
 
-   public void setSerializationHelper(SerializationHelper serializationHelper)
+   public void setTypeInfoFactory(TypeInfoFactory typeInfoFactory)
    {
-      if (serializationHelper == null)
-         throw new IllegalArgumentException("Null serialization helper.");
-      this.serializationHelper = serializationHelper;
-      provideHelpers();
+      this.typeInfoFactory = typeInfoFactory;
    }
 
-   private void provideHelpers()
+   public void setClassInfoHelper(ClassInfoHelper classInfoHelper)
    {
-      this.classInfoHelper = serializationHelper.provideClassInfoHelper();
-      this.typeInfoFactory = serializationHelper.provideTypeInfoFactory();
-      this.annotationHelper = serializationHelper.provideAnnotationHelper();
+      this.classInfoHelper = classInfoHelper;
    }
 
    /**
@@ -634,14 +623,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return (name != null ? name.hashCode() : 0);
    }
 
-   private void writeObject(ObjectOutputStream oos) throws IOException
+   Object readResolve()
    {
-      oos.defaultWriteObject();      
-   }
-
-   private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException
-   {
-      ois.defaultReadObject();
-      provideHelpers();
+      TypeInfoFactory typeInfoFactory = SerializationHelper.getTypeInfoFactory();
+      return typeInfoFactory.getTypeInfo(getType());
    }
 }

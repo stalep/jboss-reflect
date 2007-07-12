@@ -21,35 +21,37 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.io.Serializable;
+import java.security.PrivilegedAction;
+import java.security.AccessController;
 
+import org.jboss.config.spi.Configuration;
+import org.jboss.config.plugins.property.PropertyConfiguration;
 import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
- * Provide helper instances for ClassInfo to work.
+ * Provide type info factory for ClassInfoImpl.
  *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
-public interface SerializationHelper extends Serializable
+class SerializationHelper
 {
-   /**
-    * Get the type info factory.
-    *
-    * @return type info factory
-    */
-   TypeInfoFactory provideTypeInfoFactory();
+   /** The type info factory */
+   private static final TypeInfoFactory factory;
 
-   /**
-    * Get the class info helper.
-    *
-    * @return class info helper
-    */
-   ClassInfoHelper provideClassInfoHelper();
+   static
+   {
+      Configuration configuration = AccessController.doPrivileged(new PrivilegedAction<Configuration>()
+      {
+         public Configuration run()
+         {
+            return new PropertyConfiguration();
+         }
+      });
+      factory = configuration.getTypeInfoFactory();
+   }
 
-   /**
-    * Get the annotation helper.
-    *
-    * @return annotation helper
-    */
-   AnnotationHelper provideAnnotationHelper();
+   static TypeInfoFactory getTypeInfoFactory()
+   {
+      return factory;
+   }
 }
