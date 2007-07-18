@@ -23,6 +23,7 @@ package org.jboss.reflect.plugins.introspection;
 
 import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
  * Class info
@@ -69,5 +70,11 @@ public class ReflectClassInfoImpl extends ClassInfoImpl implements InterfaceInfo
    public boolean isInterface()
    {
       return getType().isInterface();
+   }
+
+   Object readResolve()
+   {
+      TypeInfoFactory typeInfoFactory = IntrospectionTypeInfoFactory.getDelegate();
+      return typeInfoFactory.getTypeInfo(getType());
    }
 }

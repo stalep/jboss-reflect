@@ -90,7 +90,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       {
          byte[] bytes = serialize(info);
          Object deserialized = deserialize(bytes);
-         assertEquals(info, deserialized);
+         assertTrue("Not the same object: " + info + " != " + deserialized, info == deserialized);
       }
       
       return info;

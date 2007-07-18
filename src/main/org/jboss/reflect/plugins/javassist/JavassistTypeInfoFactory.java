@@ -39,6 +39,11 @@ public class JavassistTypeInfoFactory implements TypeInfoFactory
    /** The delegate */
    private static JavassistTypeInfoFactoryImpl delegate = new JavassistTypeInfoFactoryImpl();
 
+   static TypeInfoFactory getDelegate()
+   {
+      return delegate;
+   }
+
    public TypeInfo getTypeInfo(Class clazz)
    {
       return delegate.getTypeInfo(clazz);
