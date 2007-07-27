@@ -170,7 +170,29 @@ public class AnnotatedElementMetaDataLoader extends BasicMetaDataLoader
             }
          }
       }
-      
+
+      if (annotated instanceof Method)
+      {
+         if (signature instanceof MethodParametersSignature)
+         {
+            Method method = (Method)annotated;
+            Annotation[][] paramAnnotations = method.getParameterAnnotations();
+            MethodParametersSignature sig = (MethodParametersSignature) signature;
+            return new SimpleMetaDataLoader(paramAnnotations[sig.getParam()]);
+         }
+      }
+
+      if (annotated instanceof Constructor)
+      {
+         if (signature instanceof MethodParametersSignature)
+         {
+            Constructor constructor = (Constructor)annotated;
+            Annotation[][] paramAnnotations = constructor.getParameterAnnotations();
+            MethodParametersSignature sig = (MethodParametersSignature) signature;
+            return new SimpleMetaDataLoader(paramAnnotations[sig.getParam()]);
+         }
+      }
+
       return null;
    }
 
