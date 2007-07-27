@@ -21,6 +21,8 @@
 */
 package org.jboss.beans.info.plugins;
 
+import java.io.Serializable;
+
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.reflect.plugins.AnnotationHolder;
@@ -35,7 +37,8 @@ import org.jboss.util.JBossStringBuilder;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class AbstractPropertyInfo extends AnnotationHolder implements PropertyInfo
+public class AbstractPropertyInfo extends AnnotationHolder
+   implements PropertyInfo, Serializable
 {
    /** The serialVersionUID */
    private static final long serialVersionUID = 6558910165211748079L;
