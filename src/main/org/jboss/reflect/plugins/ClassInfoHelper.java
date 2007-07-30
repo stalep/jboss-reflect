@@ -116,6 +116,30 @@ public interface ClassInfoHelper
    TypeInfo getOwnerType(ParameterizedClassInfo classInfo);
    
    /**
+    * Get the component type for a collection
+    * 
+    * @param classInfo the class info
+    * @return the component type or null if not a collection
+    */
+   TypeInfo getComponentType(ClassInfo classInfo);
+   
+   /**
+    * Get the key type for a map
+    * 
+    * @param classInfo the class info
+    * @return the key type or null if not a map
+    */
+   TypeInfo getKeyType(ClassInfo classInfo);
+   
+   /**
+    * Get the value type for a map
+    * 
+    * @param classInfo the class info
+    * @return the value type or null if not a map
+    */
+   TypeInfo getValueType(ClassInfo classInfo);
+   
+   /**
     * Get the package for class
     * 
     * @param classInfo the class info

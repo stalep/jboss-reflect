@@ -295,6 +295,21 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
       return delegate.getRawType();
    }
 
+   public TypeInfo getComponentType()
+   {
+      return delegate.getComponentType();
+   }
+
+   public TypeInfo getKeyType()
+   {
+      return delegate.getKeyType();
+   }
+
+   public TypeInfo getValueType()
+   {
+      return delegate.getValueType();
+   }
+
    public PackageInfo getPackage()
    {
       return delegate.getPackage();

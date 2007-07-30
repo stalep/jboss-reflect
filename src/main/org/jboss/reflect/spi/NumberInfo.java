@@ -298,6 +298,21 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return delegate;
    }
 
+   public TypeInfo getComponentType()
+   {
+      return delegate.getComponentType();
+   }
+
+   public TypeInfo getKeyType()
+   {
+      return delegate.getKeyType();
+   }
+
+   public TypeInfo getValueType()
+   {
+      return delegate.getValueType();
+   }
+
    public PackageInfo getPackage()
    {
       return delegate.getPackage();

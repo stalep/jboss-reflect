@@ -137,6 +137,27 @@ public interface ClassInfo extends AnnotatedInfo, ModifierInfo, TypeInfo
     * @return the owner type
     */
    TypeInfo getOwnerType();
+
+   /**
+    * Get the component type if it is a collection or an array
+    * 
+    * @return the component type
+    */
+   TypeInfo getComponentType();
+
+   /**
+    * Get the key type if it is a map
+    * 
+    * @return the key type
+    */
+   TypeInfo getKeyType();
+
+   /**
+    * Get the value type if it is a map
+    * 
+    * @return the value type
+    */
+   TypeInfo getValueType();
    
    /**
     * Get the package

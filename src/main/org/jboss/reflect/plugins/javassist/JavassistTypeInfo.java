@@ -619,6 +619,21 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return this;
    }
 
+   public TypeInfo getComponentType()
+   {
+      return null;
+   }
+
+   public TypeInfo getKeyType()
+   {
+      return null;
+   }
+
+   public TypeInfo getValueType()
+   {
+      return null;
+   }
+
    public PackageInfo getPackage()
    {
       if (packageInfo == null)

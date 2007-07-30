@@ -53,6 +53,15 @@ public class ParameterizedClassInfo extends DelegateClassInfo
    /** The type arguments */
    private TypeInfo[] typeArguments = ClassInfoImpl.UNKNOWN_TYPES;
    
+   /** The component type */
+   private transient TypeInfo componentType = ClassInfoImpl.UNKNOWN_TYPE;
+   
+   /** The key type */
+   private transient TypeInfo keyType = ClassInfoImpl.UNKNOWN_TYPE;
+   
+   /** The key type */
+   private transient TypeInfo valueType = ClassInfoImpl.UNKNOWN_TYPE;
+   
    /**
     * Create a new ParameterizedClassInfo.
     *
@@ -93,6 +102,30 @@ public class ParameterizedClassInfo extends DelegateClassInfo
    public ClassInfo getRawType()
    {
       return delegate;
+   }
+
+   @Override
+   public TypeInfo getComponentType()
+   {
+      if (componentType == ClassInfoImpl.UNKNOWN_TYPE)
+         componentType = factory.getComponentType(this);
+      return componentType;
+   }
+
+   @Override
+   public TypeInfo getKeyType()
+   {
+      if (keyType == ClassInfoImpl.UNKNOWN_TYPE);
+         keyType = factory.getKeyType(this);
+      return keyType;
+   }
+
+   @Override
+   public TypeInfo getValueType()
+   {
+      if (valueType == ClassInfoImpl.UNKNOWN_TYPE)
+         valueType = factory.getValueType(this);
+      return valueType;
    }
 
    @Override

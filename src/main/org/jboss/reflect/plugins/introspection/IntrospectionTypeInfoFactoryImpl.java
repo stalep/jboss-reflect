@@ -28,8 +28,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.Collection;
+import java.util.Map;
 
 import org.jboss.reflect.plugins.AnnotationAttributeImpl;
 import org.jboss.reflect.plugins.AnnotationHelper;
@@ -519,5 +522,130 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          return null;
       
       return getTypeInfo(owner);
+   }
+   
+   public TypeInfo getComponentType(ClassInfo classInfo)
+   {
+      if (classInfo.isCollection() == false)
+         return null;
+
+      Type type = classInfo.getType();
+      if (classInfo instanceof ParameterizedClassInfo)
+         type = ((ParameterizedClassInfo) classInfo).parameterizedType;
+      
+      Type result = locateActualType(Collection.class, 0, classInfo.getType(), type);
+      if (result instanceof TypeVariable)
+      {
+         TypeVariable typeVariable = (TypeVariable) result;
+         result = typeVariable.getBounds()[0];
+      }
+      return getTypeInfo(result);
+   }
+   
+   public TypeInfo getKeyType(ClassInfo classInfo)
+   {
+      if (classInfo.isMap() == false)
+         return null;
+
+      Type type = classInfo.getType();
+      if (classInfo instanceof ParameterizedClassInfo)
+         type = ((ParameterizedClassInfo) classInfo).parameterizedType;
+      
+      Type result = locateActualType(Map.class, 0, classInfo.getType(), type);
+      if (result instanceof TypeVariable)
+      {
+         TypeVariable typeVariable = (TypeVariable) result;
+         result = typeVariable.getBounds()[0];
+      }
+      return getTypeInfo(result);
+   }
+   
+   public TypeInfo getValueType(ClassInfo classInfo)
+   {
+      if (classInfo.isMap() == false)
+         return null;
+
+      Type type = classInfo.getType();
+      if (classInfo instanceof ParameterizedClassInfo)
+         type = ((ParameterizedClassInfo) classInfo).parameterizedType;
+      
+      Type result = locateActualType(Map.class, 1, classInfo.getType(), type);
+      if (result instanceof TypeVariable)
+      {
+         TypeVariable typeVariable = (TypeVariable) result;
+         result = typeVariable.getBounds()[0];
+      }
+      return getTypeInfo(result);
+   }
+   
+   protected static Type locateActualType(Class reference, int parameter, Class clazz, Type type)
+   {
+      if (reference.equals(clazz))
+      {
+         if (type instanceof Class)
+         {
+            Class typeClass = (Class) type;
+            Type result = typeClass.getTypeParameters()[parameter];
+            return result;
+         }
+         else
+         {
+            ParameterizedType parameterized = (ParameterizedType) type;
+            Type result = parameterized.getActualTypeArguments()[parameter];
+            return result;
+         }
+      }
+      
+      Type[] interfaces = clazz.getGenericInterfaces();
+      for (Type intf : interfaces)
+      {
+         Type result = null;
+         if (intf instanceof Class)
+         {
+            Class interfaceClass = (Class) intf;
+            result = locateActualType(reference, parameter, interfaceClass, intf);
+            if (result instanceof TypeVariable)
+               result = getParameter(clazz, type, (TypeVariable) result);
+         }
+         else if (intf instanceof ParameterizedType)
+         {
+            ParameterizedType interfaceType = (ParameterizedType) intf;
+            Class interfaceClass = (Class) interfaceType.getRawType();
+            result = locateActualType(reference, parameter, interfaceClass, intf);
+            if (result instanceof TypeVariable)
+               result = getParameter(clazz, type, (TypeVariable) result);
+         }
+         else
+            throw new IllegalStateException("Unexpected type " + intf.getClass());
+         if (result != null)
+            return result;
+      }
+
+      Class superClass = clazz.getSuperclass();
+      Type genericSuperClass = clazz.getGenericSuperclass();
+      Type result = locateActualType(reference, parameter, superClass, genericSuperClass);
+      if (result instanceof TypeVariable)
+         result = getParameter(clazz, type, (TypeVariable) result);
+      return result;
+   }
+   
+   private static Type getParameter(Class clazz, Type type, TypeVariable variable)
+   {
+      TypeVariable[] variables = clazz.getTypeParameters();
+      for (int i = 0; i < variables.length; ++i)
+      {
+         if (variables[i].getName().equals(variable.getName()))
+         {
+            if (type instanceof ParameterizedType)
+            {
+               ParameterizedType parameterized = (ParameterizedType) type;
+               Type result = parameterized.getActualTypeArguments()[i];
+               return result;
+            }
+            return variable;
+         }
+      }
+      // Not generic
+      return Object.class;
    }
 }

@@ -107,6 +107,15 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    /** The package info */
    protected PackageInfo packageInfo;
    
+   /** The component type */
+   private transient TypeInfo componentType = ClassInfoImpl.UNKNOWN_TYPE;
+   
+   /** The key type */
+   private transient TypeInfo keyType = ClassInfoImpl.UNKNOWN_TYPE;
+   
+   /** The key type */
+   private transient TypeInfo valueType = ClassInfoImpl.UNKNOWN_TYPE;
+   
    /** The class info helper */
    protected transient ClassInfoHelper classInfoHelper;
 
@@ -541,6 +550,27 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return this;
    }
 
+   public TypeInfo getComponentType()
+   {
+      if (componentType == UNKNOWN_TYPE)
+         componentType = classInfoHelper.getComponentType(this);
+      return componentType;
+   }
+
+   public TypeInfo getKeyType()
+   {
+      if (keyType == UNKNOWN_TYPE)
+         keyType = classInfoHelper.getKeyType(this);
+      return keyType;
+   }
+
+   public TypeInfo getValueType()
+   {
+      if (valueType == UNKNOWN_TYPE)
+         valueType = classInfoHelper.getValueType(this);
+      return valueType;
+   }
+   
    public PackageInfo getPackage()
    {
       if (packageInfo == null)
