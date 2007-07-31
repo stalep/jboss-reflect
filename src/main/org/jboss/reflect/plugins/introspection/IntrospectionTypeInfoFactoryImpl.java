@@ -528,48 +528,30 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
    {
       if (classInfo.isCollection() == false)
          return null;
-
-      Type type = classInfo.getType();
-      if (classInfo instanceof ParameterizedClassInfo)
-         type = ((ParameterizedClassInfo) classInfo).parameterizedType;
-      
-      Type result = locateActualType(Collection.class, 0, classInfo.getType(), type);
-      if (result instanceof TypeVariable)
-      {
-         TypeVariable typeVariable = (TypeVariable) result;
-         result = typeVariable.getBounds()[0];
-      }
-      return getTypeInfo(result);
+      return findActualType(classInfo, Collection.class, 0);
    }
    
    public TypeInfo getKeyType(ClassInfo classInfo)
    {
       if (classInfo.isMap() == false)
          return null;
-
-      Type type = classInfo.getType();
-      if (classInfo instanceof ParameterizedClassInfo)
-         type = ((ParameterizedClassInfo) classInfo).parameterizedType;
-      
-      Type result = locateActualType(Map.class, 0, classInfo.getType(), type);
-      if (result instanceof TypeVariable)
-      {
-         TypeVariable typeVariable = (TypeVariable) result;
-         result = typeVariable.getBounds()[0];
-      }
-      return getTypeInfo(result);
+      return findActualType(classInfo, Map.class, 0);
    }
    
    public TypeInfo getValueType(ClassInfo classInfo)
    {
       if (classInfo.isMap() == false)
          return null;
+      return findActualType(classInfo, Map.class, 1);
+   }
 
+   protected TypeInfo findActualType(ClassInfo classInfo, Class reference, int parameter)
+   {
       Type type = classInfo.getType();
       if (classInfo instanceof ParameterizedClassInfo)
          type = ((ParameterizedClassInfo) classInfo).parameterizedType;
-      
-      Type result = locateActualType(Map.class, 1, classInfo.getType(), type);
+
+      Type result = locateActualType(reference, parameter, classInfo.getType(), type);
       if (result instanceof TypeVariable)
       {
          TypeVariable typeVariable = (TypeVariable) result;
@@ -577,7 +559,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       }
       return getTypeInfo(result);
    }
-   
+
    protected static Type locateActualType(Class reference, int parameter, Class clazz, Type type)
    {
       if (reference.equals(clazz))
@@ -585,21 +567,19 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          if (type instanceof Class)
          {
             Class typeClass = (Class) type;
-            Type result = typeClass.getTypeParameters()[parameter];
-            return result;
+            return typeClass.getTypeParameters()[parameter];
          }
          else
          {
             ParameterizedType parameterized = (ParameterizedType) type;
-            Type result = parameterized.getActualTypeArguments()[parameter];
-            return result;
+            return parameterized.getActualTypeArguments()[parameter];
          }
       }
       
       Type[] interfaces = clazz.getGenericInterfaces();
       for (Type intf : interfaces)
       {
-         Type result = null;
+         Type result;
          if (intf instanceof Class)
          {
             Class interfaceClass = (Class) intf;
@@ -639,8 +619,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
             if (type instanceof ParameterizedType)
             {
                ParameterizedType parameterized = (ParameterizedType) type;
-               Type result = parameterized.getActualTypeArguments()[i];
-               return result;
+               return parameterized.getActualTypeArguments()[i];
             }
             return variable;
          }
