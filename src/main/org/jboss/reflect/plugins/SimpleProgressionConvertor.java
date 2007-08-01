@@ -45,9 +45,11 @@ public class SimpleProgressionConvertor implements ProgressionConvertor
          return false;
       }
       // ipnbX = is primitive non boolean X
-      boolean ipnbt = target.isPrimitive() && target != Boolean.TYPE;
-      boolean ipnbs = source.isPrimitive() && source != Boolean.TYPE;
-      return (ipnbt || Number.class.isAssignableFrom(target)) && (ipnbs || Number.class.isAssignableFrom(source));
+      boolean ipnbt = target.isPrimitive() && target != Boolean.TYPE && target != Character.TYPE;
+      boolean ipnbs = source.isPrimitive() && source != Boolean.TYPE && source != Character.TYPE;
+      boolean targetIsNumber = Number.class.isAssignableFrom(target);
+      boolean sourceIsNumber = Number.class.isAssignableFrom(source);
+      return (ipnbt || targetIsNumber) && (ipnbs || sourceIsNumber);
    }
 
    public Object doProgression(Class<? extends Object> target, Object value) throws Throwable

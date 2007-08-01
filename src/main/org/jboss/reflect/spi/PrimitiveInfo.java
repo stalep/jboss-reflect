@@ -186,9 +186,21 @@ public class PrimitiveInfo extends AbstractTypeInfo
       throw new UnsupportedOperationException("Not an array " + name);
    }
 
+   @SuppressWarnings("unchecked")
    public boolean isAssignableFrom(TypeInfo info)
    {
-      return (info == this);
+      if (info == this)
+         return true;
+
+      try
+      {
+         ProgressionConvertor pc = ProgressionConvertorFactory.getInstance().getConvertor();
+         return pc.canProgress(getType(), info.getType());
+      }
+      catch (Throwable throwable)
+      {
+         return false;
+      }
    }
 
    public TypeInfoFactory getTypeInfoFactory()
