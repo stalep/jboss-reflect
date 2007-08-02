@@ -560,6 +560,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return getTypeInfo(result);
    }
 
+   @SuppressWarnings("unchecked")
    protected static Type locateActualType(Class reference, int parameter, Class clazz, Type type)
    {
       if (reference.equals(clazz))
@@ -579,24 +580,26 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       Type[] interfaces = clazz.getGenericInterfaces();
       for (Type intf : interfaces)
       {
-         Type result;
+         Class interfaceClass;
          if (intf instanceof Class)
          {
-            Class interfaceClass = (Class) intf;
-            result = locateActualType(reference, parameter, interfaceClass, intf);
-            if (result instanceof TypeVariable)
-               result = getParameter(clazz, type, (TypeVariable) result);
+            interfaceClass = (Class) intf;
          }
          else if (intf instanceof ParameterizedType)
          {
             ParameterizedType interfaceType = (ParameterizedType) intf;
-            Class interfaceClass = (Class) interfaceType.getRawType();
+            interfaceClass = (Class) interfaceType.getRawType();
+         }
+         else
+            throw new IllegalStateException("Unexpected type " + intf.getClass());
+
+         Type result = null;
+         if (reference.isAssignableFrom(interfaceClass))
+         {
             result = locateActualType(reference, parameter, interfaceClass, intf);
             if (result instanceof TypeVariable)
                result = getParameter(clazz, type, (TypeVariable) result);
          }
-         else
-            throw new IllegalStateException("Unexpected type " + intf.getClass());
          if (result != null)
             return result;
       }
