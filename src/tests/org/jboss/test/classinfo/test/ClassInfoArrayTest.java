@@ -45,7 +45,33 @@ public abstract class ClassInfoArrayTest extends AbstractClassInfoTest
       String[] array = new String[0];
       testArray(array);
    }
-   
+   public void testCharArray()
+      throws Throwable
+   {
+      char[] array = {'h', 'e', 'l', 'l', 'o'};
+      testArray(array);
+   }
+   public void testArrayType()
+   {
+      String[] array = {"hello", "world"};
+      TypeInfoFactory factory = getTypeInfoFactory();
+      TypeInfo info = factory.getTypeInfo(array.getClass());
+
+      TypeInfo info0 = info.getArrayType(0);
+      assertEquals(info0.getName(), "[java.lang.String;", info0.getName());
+   }
+   public void test2DArrayType()
+   {
+      String[][] array = {{"hello"}, {"world"}};
+      TypeInfoFactory factory = getTypeInfoFactory();
+      TypeInfo info = factory.getTypeInfo(array.getClass());
+      
+      TypeInfo info0 = info.getArrayType(0);
+      assertEquals(info0.getName(), "[[java.lang.String;", info0.getName());
+      TypeInfo info1 = info.getArrayType(1);
+      assertEquals(info1.getName(), "[java.lang.String;", info1.getName());
+   }
+
    public void testDeepArray() throws Throwable
    {
       String[][][][][] array = new String[1][2][3][4][0];
