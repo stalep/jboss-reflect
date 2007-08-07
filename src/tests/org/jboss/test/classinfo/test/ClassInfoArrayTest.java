@@ -55,21 +55,23 @@ public abstract class ClassInfoArrayTest extends AbstractClassInfoTest
    {
       String[] array = {"hello", "world"};
       TypeInfoFactory factory = getTypeInfoFactory();
-      TypeInfo info = factory.getTypeInfo(array.getClass());
+      ArrayInfo info = (ArrayInfo) factory.getTypeInfo(array.getClass());
 
-      TypeInfo info0 = info.getArrayType(0);
-      assertEquals(info0.getName(), "[java.lang.String;", info0.getName());
+      assertEquals(info.getName(), "[Ljava.lang.String;", info.getName());
+      TypeInfo info0 = info.getComponentType();
+      assertEquals(info0.getName(), "java.lang.String", info0.getName());
    }
    public void test2DArrayType()
    {
       String[][] array = {{"hello"}, {"world"}};
       TypeInfoFactory factory = getTypeInfoFactory();
-      TypeInfo info = factory.getTypeInfo(array.getClass());
+      ArrayInfo info = (ArrayInfo) factory.getTypeInfo(array.getClass());
       
-      TypeInfo info0 = info.getArrayType(0);
-      assertEquals(info0.getName(), "[[java.lang.String;", info0.getName());
-      TypeInfo info1 = info.getArrayType(1);
-      assertEquals(info1.getName(), "[java.lang.String;", info1.getName());
+      assertEquals(info.getName(), "[[Ljava.lang.String;", info.getName());
+      ArrayInfo info0 = (ArrayInfo) info.getComponentType();
+      assertEquals(info0.getName(), "[Ljava.lang.String;", info0.getName());
+      TypeInfo info1 = info0.getComponentType();
+      assertEquals(info1.getName(), "java.lang.String", info1.getName());
    }
 
    public void testDeepArray() throws Throwable
