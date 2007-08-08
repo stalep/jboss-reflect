@@ -24,8 +24,6 @@ package org.jboss.annotation.factory.javassist;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
-import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactoryImpl;
-
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.AnnotationMemberValue;
 import javassist.bytecode.annotation.ArrayMemberValue;
@@ -42,6 +40,8 @@ import javassist.bytecode.annotation.MemberValue;
 import javassist.bytecode.annotation.MemberValueVisitor;
 import javassist.bytecode.annotation.ShortMemberValue;
 import javassist.bytecode.annotation.StringMemberValue;
+import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
+import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
  * 
@@ -52,7 +52,7 @@ public class MemberValueGetter implements MemberValueVisitor
 {
    Object value;
    Method method;
-   static IntrospectionTypeInfoFactoryImpl typeFactory = new IntrospectionTypeInfoFactoryImpl();
+   static TypeInfoFactory typeFactory = new IntrospectionTypeInfoFactory();
 
    public MemberValueGetter(Method method)
    {
