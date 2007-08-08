@@ -77,7 +77,12 @@ public class Signature
       primitiveArrayTypes.put(Long.TYPE.getName(), "J");
       primitiveArrayTypes.put(Short.TYPE.getName(), "S");
    }
-   
+
+   public static String getPrimativeArrayType(String name)
+   {
+      return primitiveArrayTypes.get(name);
+   }
+
    /**
     * Convert classes to string
     * 

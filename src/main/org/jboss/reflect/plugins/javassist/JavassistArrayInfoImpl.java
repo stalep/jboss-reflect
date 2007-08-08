@@ -23,6 +23,7 @@ package org.jboss.reflect.plugins.javassist;
 
 import javassist.CtClass;
 
+import org.jboss.metadata.spi.signature.Signature;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.TypeInfo;
@@ -57,7 +58,16 @@ public class JavassistArrayInfoImpl extends JavassistTypeInfo implements ArrayIn
          builder.append("[");
          temp = ((JavassistArrayInfoImpl) temp).componentType;
       }
-      builder.append("L").append(temp.getName()).append(";");
+      if (temp.isPrimitive())
+      {
+         // Use the signature encoded name for the primitive element type
+         String encodedName = Signature.getPrimativeArrayType(temp.getName());
+         builder.append(encodedName);
+      }
+      else
+      {
+         builder.append("L").append(temp.getName()).append(";");
+      }
       return builder.toString();
    }
    

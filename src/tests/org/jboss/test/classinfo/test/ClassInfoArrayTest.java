@@ -45,12 +45,55 @@ public abstract class ClassInfoArrayTest extends AbstractClassInfoTest
       String[] array = new String[0];
       testArray(array);
    }
+   public void testByteArray()
+      throws Throwable
+   {
+      byte[] array = {1, 2, 3, 4};
+      testArray(array);
+   }
+   public void test2DByteArray()
+      throws Throwable
+   {
+      byte[][] array = {{1, 2, 3, 4}, {5, 6, 7, 8}};
+      testArray(array);
+   }
    public void testCharArray()
       throws Throwable
    {
       char[] array = {'h', 'e', 'l', 'l', 'o'};
       testArray(array);
    }
+   public void testCharacterArray()
+      throws Throwable
+   {
+      Character[] array = {'h', 'e', 'l', 'l', 'o'};
+      testArray(array);
+   }
+   public void test2DCharacterArray()
+      throws Throwable
+   {
+      Character[][] array = {{'h', 'e', 'l', 'l', 'o'}, {'w', 'o', 'r', 'l', 'd'}};
+      testArray(array);
+   }
+   public void testfloatArray()
+      throws Throwable
+   {
+      float[] array = {1.0f, 2.0f, 3f, 4f};
+      testArray(array);
+   }
+   public void testFloatArray()
+      throws Throwable
+   {
+      Float[] array = {1.0f, 2.0f, 3f, 4f};
+      testArray(array);
+   }
+   public void testNumberArray()
+      throws Throwable
+   {
+      Number[] array = {1, 2, 3, 4};
+      testArray(array);
+   }
+
    public void testArrayType()
    {
       String[] array = {"hello", "world"};
