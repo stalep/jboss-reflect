@@ -290,8 +290,8 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
                   merged.add(annotation);
                annotations = merged.toArray(new AnnotationValue[merged.size()]);
             }
-            
-            properties.add(new AbstractPropertyInfo(lowerName, name, getter.getReturnType(), getter, setter, annotations));
+            TypeInfo type = getPropertyType(getter, setter);
+            properties.add(new AbstractPropertyInfo(lowerName, name, type, getter, setter, annotations));
          }
       }
       if (setters.isEmpty() == false)
@@ -312,7 +312,24 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       }
       return properties;
    }
-   
+
+   /**
+    * Determine the type of PropertyInfo.
+    *
+    * @param getter the getter
+    * @param setter the setter
+    * @return property type
+    */
+   protected TypeInfo getPropertyType(MethodInfo getter, MethodInfo setter)
+   {
+      if (getter == null)
+         throw new IllegalArgumentException("Getter should not be null!");
+      if (setter == null)
+         return getter.getReturnType();
+      // TODO - determine more restrictive type among getter and setter
+      return getter.getReturnType();
+   }
+
    /**
     * Get the properties for an annotation
     * 
