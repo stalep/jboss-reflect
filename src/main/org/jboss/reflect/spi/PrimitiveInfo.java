@@ -175,9 +175,9 @@ public class PrimitiveInfo extends AbstractTypeInfo
       return true;
    }
 
-   public TypeInfo getArrayType(int depth)
+   public TypeInfo getArrayType()
    {
-      Class arrayClass = ClassInfoImpl.getArrayClass(getType(), depth);
+      Class arrayClass = ClassInfoImpl.getArrayClass(getType());
       return typeInfoFactory.getTypeInfo(arrayClass);
    }
 

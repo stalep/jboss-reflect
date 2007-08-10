@@ -226,9 +226,9 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
       return delegate.convertValue(value, replaceProperties);
    }
 
-   public TypeInfo getArrayType(int depth)
+   public TypeInfo getArrayType()
    {
-      return delegate.getArrayType(depth);
+      return delegate.getArrayType();
    }
    
    @Deprecated

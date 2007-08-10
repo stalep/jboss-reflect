@@ -349,19 +349,17 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    /**
     * Get an array class
     * 
-    * TODO JBMICROCONT-123 there must be a better way to do this!
     * @param clazz the class
-    * @param depth the depth
     * @return the array class
     */
-   public static Class getArrayClass(Class clazz, int depth)
+   public static Class getArrayClass(Class clazz)
    {
-      return Array.newInstance(clazz, depth).getClass();
+      return Array.newInstance(clazz, 0).getClass();
    }
 
-   public TypeInfo getArrayType(int depth)
+   public TypeInfo getArrayType()
    {
-      Class arrayClass = getArrayClass(getType(), depth);
+      Class arrayClass = getArrayClass(getType());
       return factory.getTypeInfo(arrayClass);
    }
 

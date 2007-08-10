@@ -103,16 +103,16 @@ public abstract class AbstractClassInfoTest extends ContainerTest
 
    protected void testArray(Class<?> clazz, TypeInfo info) throws Throwable
    {
-      TypeInfo arrayType = info.getArrayType(1);
-      getLog().debug("ArrayType(1): " + arrayType);
+      TypeInfo arrayType = info.getArrayType();
+      getLog().debug("ArrayType(0): " + arrayType);
       assertTrue(arrayType.isArray());
-      Class<?> arrayClass = Array.newInstance(clazz, 1).getClass();
+      Class<?> arrayClass = Array.newInstance(clazz, 0).getClass();
       assertEquals(arrayClass, arrayType.getType());
 
-      arrayType = info.getArrayType(5);
-      getLog().debug("ArrayType(5): " + arrayType);
+      arrayType = info.getArrayType();
+      getLog().debug("ArrayType(0): " + arrayType);
       assertTrue(arrayType.isArray());
-      arrayClass = Array.newInstance(clazz, 5).getClass();
+      arrayClass = Array.newInstance(clazz, 0).getClass();
       assertEquals(arrayClass, arrayType.getType());
    }
    

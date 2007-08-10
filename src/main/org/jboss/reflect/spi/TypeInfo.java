@@ -115,12 +115,11 @@ public interface TypeInfo extends Serializable
    boolean isPrimitive();
    
    /**
-    * Whether this type is an array
+    * Get an array type
     * 
-    * @param depth the array depth
     * @return the array type
     */
-   TypeInfo getArrayType(int depth);
+   TypeInfo getArrayType();
    
    /**
     * Create a new array
