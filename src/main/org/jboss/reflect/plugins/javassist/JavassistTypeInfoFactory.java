@@ -37,7 +37,7 @@ import org.jboss.reflect.spi.TypeInfoFactory;
 public class JavassistTypeInfoFactory implements TypeInfoFactory
 {
    /** The delegate */
-   private static JavassistTypeInfoFactoryImpl delegate = new JavassistTypeInfoFactoryImpl();
+   protected static JavassistTypeInfoFactoryImpl delegate = new JavassistTypeInfoFactoryImpl();
 
    static TypeInfoFactory getDelegate()
    {

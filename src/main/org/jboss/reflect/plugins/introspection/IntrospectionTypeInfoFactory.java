@@ -37,7 +37,7 @@ import org.jboss.reflect.spi.TypeInfoFactory;
 public class IntrospectionTypeInfoFactory implements TypeInfoFactory
 {
    /** The delegate */
-   private static IntrospectionTypeInfoFactoryImpl delegate = new IntrospectionTypeInfoFactoryImpl();
+   protected static IntrospectionTypeInfoFactoryImpl delegate = new IntrospectionTypeInfoFactoryImpl();
 
    static TypeInfoFactory getDelegate()
    {
