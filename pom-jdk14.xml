@@ -183,16 +183,17 @@
     </dependency>
     <dependency>
       <groupId>jboss</groupId>
-      <artifactId>jboss-vfs</artifactId>
+      <artifactId>jbossxb</artifactId>
     </dependency>
     <dependency>
-      <groupId>jboss</groupId>
-      <artifactId>jbossxb</artifactId>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-common-core-jdk14</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jboss</groupId>
       <artifactId>jboss-common-logging-spi-jdk14</artifactId>
     </dependency>
+    
 	  <!-- Test dependencies -->
     <dependency>
       <groupId>org.jboss</groupId>
@@ -206,5 +207,23 @@
       <groupId>jboss.profiler.jvmti</groupId>
       <artifactId>jboss-profiler-jvmti</artifactId>
     </dependency>
+    
+    <!-- Runtime dependencies -->
+    <dependency>
+      <groupId>jboss</groupId>
+      <artifactId>jboss-backport-concurrent</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.management</groupId>
+      <artifactId>jmxri</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-retro</artifactId>
+      <classifier>rt</classifier>
+      <scope>runtime</scope>
+    </dependency>    
   </dependencies>
 </project>
