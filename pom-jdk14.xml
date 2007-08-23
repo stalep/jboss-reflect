@@ -80,15 +80,6 @@
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
-            <id>jar</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-          		<classesDirectory>${project.build.directory}/classes-jdk14</classesDirectory>
-            </configuration>
-          </execution>
-          <execution>
             <id>test-jar</id>
             <goals>
               <goal>test-jar</goal>
@@ -98,6 +89,9 @@
             </configuration>
           </execution>
         </executions>
+        <configuration>
+          <classesDirectory>${project.build.directory}/classes-jdk14</classesDirectory>
+        </configuration>
       </plugin>
       <plugin>
         <!-- Skip the tests here because the jdk14 tests have
