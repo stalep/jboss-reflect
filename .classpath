@@ -9,7 +9,7 @@
   <classpathentry kind="var" path="M2_REPO/jboss/jboss-vfs/2.0.4.snapshot/jboss-vfs-2.0.4.snapshot.jar" sourcepath="M2_REPO/jboss/jboss-vfs/2.0.4.snapshot/jboss-vfs-2.0.4.snapshot-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jboss/javassist/3.6-beta/javassist-3.6-beta.jar" sourcepath="M2_REPO/org/jboss/javassist/3.6-beta/javassist-3.6-beta-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/jboss/jboss-common-core/2.0.4.GA/jboss-common-core-2.0.4.GA.jar" sourcepath="M2_REPO/jboss/jboss-common-core/2.0.4.GA/jboss-common-core-2.0.4.GA-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/jboss/jboss-test/1.0.4-SNAPSHOT/jboss-test-1.0.4-SNAPSHOT.jar" sourcepath="M2_REPO/jboss/jboss-test/1.0.4-SNAPSHOT/jboss-test-1.0.4-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/jboss/jboss-test/1.0.4-SNAPSHOT/jboss-test-1.0.4-SNAPSHOT.jar" sourcepath="M2_REPO/jboss/jboss-test/1.0.4-SNAPSHOT/jboss-test-1.0.4-SNAPSHOT-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/ant/ant/1.7.0/ant-1.7.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/jboss/jboss-logging-spi/2.0.3.GA/jboss-logging-spi-2.0.3.GA.jar" sourcepath="M2_REPO/jboss/jboss-logging-spi/2.0.3.GA/jboss-logging-spi-2.0.3.GA-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/jboss/jboss-common-logging-log4j/2.0.4.GA/jboss-common-logging-log4j-2.0.4.GA.jar" sourcepath="M2_REPO/jboss/jboss-common-logging-log4j/2.0.4.GA/jboss-common-logging-log4j-2.0.4.GA-sources.jar"/>
