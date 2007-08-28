@@ -56,7 +56,7 @@ import org.jboss.reflect.spi.NumberInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-import org.jboss.util.collection.temp.WeakTypeCache;
+import org.jboss.util.collection.WeakTypeCache;
 
 /**
  * An introspection type factory.

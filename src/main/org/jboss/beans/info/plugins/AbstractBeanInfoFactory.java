@@ -42,7 +42,7 @@ import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
-import org.jboss.util.collection.temp.WeakValueHashMap;
+import org.jboss.util.collection.WeakValueHashMap;
 
 /**
  * A bean info factory.
