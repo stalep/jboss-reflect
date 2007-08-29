@@ -74,6 +74,12 @@
     <dependency>
       <groupId>jboss</groupId>
       <artifactId>jbossxb</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>jboss</groupId>
+          <artifactId>jboss-common-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.jboss</groupId>
