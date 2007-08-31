@@ -68,7 +68,7 @@
       <artifactId>javassist</artifactId>
     </dependency>
     <dependency>
-      <groupId>jboss</groupId>
+      <groupId>org.jboss</groupId>
       <artifactId>jbossxb</artifactId>
       <exclusions>
         <exclusion>
