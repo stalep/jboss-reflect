@@ -22,9 +22,15 @@
 package org.jboss.metadata.spi.retrieval;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.jboss.metadata.spi.MetaData;
+import org.jboss.metadata.spi.context.MetaDataContext;
+import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.scope.ScopeLevel;
 import org.jboss.metadata.spi.signature.Signature;
+import org.jboss.metadata.plugins.context.AbstractMetaDataContext;
 
 /**
  * MetaDataRetrievalToMetaDataBridge.
@@ -160,6 +166,35 @@ public class MetaDataRetrievalToMetaDataBridge implements MetaData
       if (component == null)
          return null;
       return new MetaDataRetrievalToMetaDataBridge(component);
+   }
+
+   public MetaData getScopeMetaData(ScopeLevel level)
+   {
+      if (level == null)
+         throw new IllegalArgumentException("Null scope level");
+
+      if (retrieval instanceof MetaDataContext)
+      {
+         MetaDataContext context = (MetaDataContext)retrieval;
+         List<MetaDataRetrieval> matchingRetrievals = new ArrayList<MetaDataRetrieval>();
+         List<MetaDataRetrieval> localRetrievals = context.getLocalRetrievals();
+         for (MetaDataRetrieval localRetrieval : localRetrievals)
+         {
+            ScopeKey scopeKey = localRetrieval.getScope();
+            if (scopeKey.getScopeLevel(level) != null)
+               matchingRetrievals.add(localRetrieval);
+         }
+         if (matchingRetrievals.isEmpty() == false)
+            return new MetaDataRetrievalToMetaDataBridge(new AbstractMetaDataContext(context, matchingRetrievals));
+      }
+      else if (retrieval.getScope().getScopeLevel(level) != null)
+         return new MetaDataRetrievalToMetaDataBridge(new AbstractMetaDataContext(retrieval));
+      return null;
+   }
+
+   public boolean isEmpty()
+   {
+      return retrieval.isEmpty();
    }
 
    public boolean equals(Object obj)

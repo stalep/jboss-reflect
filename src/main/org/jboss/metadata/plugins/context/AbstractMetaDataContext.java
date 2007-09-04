@@ -128,10 +128,9 @@ public class AbstractMetaDataContext implements MetaDataContext
          result = parent.getValidTime();
          resultLong = result.getValidTime();
       }
-      
-      for (int i = 0; i < retrievals.size(); ++i)
+
+      for (MetaDataRetrieval retrieval : retrievals)
       {
-         MetaDataRetrieval retrieval = retrievals.get(i);
          ValidTime temp = retrieval.getValidTime();
          long tempLong = temp.getValidTime();
          if (tempLong > resultLong || result == null)
@@ -140,7 +139,7 @@ public class AbstractMetaDataContext implements MetaDataContext
             resultLong = tempLong;
          }
       }
-      
+
       return result;
    }
 
@@ -212,14 +211,13 @@ public class AbstractMetaDataContext implements MetaDataContext
 
    public <T extends Annotation> AnnotationItem<T> retrieveAnnotation(Class<T> annotationType)
    {
-      for (int i = 0; i < retrievals.size(); ++i)
+      for (MetaDataRetrieval retrieval : retrievals)
       {
-         MetaDataRetrieval retrieval = retrievals.get(i);
          AnnotationItem<T> item = retrieval.retrieveAnnotation(annotationType);
          if (item != null)
             return item;
       }
-      
+
       if (parent != null)
          return parent.retrieveAnnotation(annotationType);
       
@@ -238,14 +236,13 @@ public class AbstractMetaDataContext implements MetaDataContext
 
    public <T> MetaDataItem<T> retrieveMetaData(Class<T> type)
    {
-      for (int i = 0; i < retrievals.size(); ++i)
+      for (MetaDataRetrieval retrieval : retrievals)
       {
-         MetaDataRetrieval retrieval = retrievals.get(i);
          MetaDataItem<T> item = retrieval.retrieveMetaData(type);
          if (item != null)
             return item;
       }
-      
+
       if (parent != null)
          return parent.retrieveMetaData(type);
       
@@ -254,14 +251,13 @@ public class AbstractMetaDataContext implements MetaDataContext
 
    public MetaDataItem retrieveMetaData(String name)
    {
-      for (int i = 0; i < retrievals.size(); ++i)
+      for (MetaDataRetrieval retrieval : retrievals)
       {
-         MetaDataRetrieval retrieval = retrievals.get(i);
          MetaDataItem item = retrieval.retrieveMetaData(name);
          if (item != null)
             return item;
       }
-      
+
       if (parent != null)
          return parent.retrieveMetaData(name);
       
@@ -274,9 +270,8 @@ public class AbstractMetaDataContext implements MetaDataContext
          return null;
       
       List<MetaDataRetrieval> componentRetrievals = null;
-      for (int i = 0; i < retrievals.size(); ++i)
+      for (MetaDataRetrieval retrieval : retrievals)
       {
-         MetaDataRetrieval retrieval = retrievals.get(i);
          retrieval = retrieval.getComponentMetaDataRetrieval(signature);
          if (retrieval != null)
          {
@@ -285,7 +280,7 @@ public class AbstractMetaDataContext implements MetaDataContext
             componentRetrievals.add(retrieval);
          }
       }
-      
+
       MetaDataContext parentComponent = null;
       if (parent != null)
          parentComponent = (MetaDataContext) parent.getComponentMetaDataRetrieval(signature);
@@ -294,5 +289,15 @@ public class AbstractMetaDataContext implements MetaDataContext
          return parentComponent;
       
       return new AbstractMetaDataContext(parentComponent, componentRetrievals);
+   }
+
+   public boolean isEmpty()
+   {
+      for(MetaDataRetrieval retrieval : retrievals)
+      {
+         if (retrieval.isEmpty() == false)
+            return false;
+      }
+      return (parent == null || parent.isEmpty());
    }
 }

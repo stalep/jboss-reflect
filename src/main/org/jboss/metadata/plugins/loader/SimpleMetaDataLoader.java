@@ -61,4 +61,9 @@ public class SimpleMetaDataLoader extends BasicMetaDataLoader
    {
       return annotationsItem;
    }
+
+   public boolean isEmpty()
+   {
+      return annotationsItem.getAnnotations().length == 0;
+   }
 }

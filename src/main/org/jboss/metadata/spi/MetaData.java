@@ -23,6 +23,7 @@ package org.jboss.metadata.spi;
 
 import java.lang.annotation.Annotation;
 
+import org.jboss.metadata.spi.scope.ScopeLevel;
 import org.jboss.metadata.spi.signature.Signature;
 
 /**
@@ -150,4 +151,21 @@ public interface MetaData
     * @return the component metadata
     */
    MetaData getComponentMetaData(Signature signature);
+
+   // TODO -- add tests for getScopeMD/isEmpty
+
+   /**
+    * Get the scope metadata.
+    *
+    * @param level the scope level
+    * @return the scope metadata
+    */
+   MetaData getScopeMetaData(ScopeLevel level);
+
+   /**
+    * Is metadata empty.
+    *
+    * @return true if empty
+    */
+   boolean isEmpty();
 }

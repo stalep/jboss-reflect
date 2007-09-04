@@ -217,4 +217,10 @@ public class ThreadLocalMetaDataLoader extends AbstractMutableMetaDataLoader
          return null;
       return delegate.removeMetaData(name, type);
    }
+
+   public boolean isEmpty()
+   {
+      MemoryMetaDataLoader delegate = threadLocal.get();
+      return delegate == null || delegate.isEmpty(); 
+   }
 }

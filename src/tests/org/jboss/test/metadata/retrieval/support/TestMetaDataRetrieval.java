@@ -104,4 +104,9 @@ public class TestMetaDataRetrieval implements MetaDataRetrieval
    {
       return null;
    }
+
+   public boolean isEmpty()
+   {
+      return true;
+   }
 }

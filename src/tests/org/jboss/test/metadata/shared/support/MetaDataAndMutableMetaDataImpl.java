@@ -25,6 +25,7 @@ import java.lang.annotation.Annotation;
 
 import org.jboss.metadata.spi.MetaData;
 import org.jboss.metadata.spi.MutableMetaData;
+import org.jboss.metadata.spi.scope.ScopeLevel;
 import org.jboss.metadata.spi.signature.Signature;
 
 /**
@@ -142,5 +143,15 @@ public class MetaDataAndMutableMetaDataImpl implements MetaDataAndMutableMetaDat
    public MetaData getComponentMetaData(Signature signature)
    {
       return metaData.getComponentMetaData(signature);
+   }
+
+   public MetaData getScopeMetaData(ScopeLevel level)
+   {
+      return metaData.getScopeMetaData(level);
+   }
+
+   public boolean isEmpty()
+   {
+      return metaData.isEmpty();
    }
 }

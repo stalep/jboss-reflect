@@ -196,6 +196,12 @@ public class AnnotatedElementMetaDataLoader extends BasicMetaDataLoader
       return null;
    }
 
+   public boolean isEmpty()
+   {
+      Annotation[] annotations = annotated.getAnnotations();
+      return annotations == null || annotations.length == 0;
+   }
+
    public String toString()
    {
       JBossStringBuilder buffer = new JBossStringBuilder();

@@ -50,4 +50,9 @@ public class TestBasicItemMetaDataLoader extends BasicMetaDataLoader
    {
       throw new NotImplementedException("retrieveAnnotations");
    }
+
+   public boolean isEmpty()
+   {
+      return true;
+   }
 }

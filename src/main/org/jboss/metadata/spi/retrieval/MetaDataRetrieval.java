@@ -109,4 +109,11 @@ public interface MetaDataRetrieval
     * @return the component metadata retrieval
     */
    MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature);
+
+   /**
+    * Is metadata empty.
+    *
+    * @return true if metadata empty
+    */
+   boolean isEmpty();
 }

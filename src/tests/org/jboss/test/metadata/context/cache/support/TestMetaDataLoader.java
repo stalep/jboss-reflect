@@ -63,4 +63,9 @@ public class TestMetaDataLoader extends BasicMetaDataLoader
       retrieved = true;
       return item;
    }
+
+   public boolean isEmpty()
+   {
+      return true;
+   }
 }

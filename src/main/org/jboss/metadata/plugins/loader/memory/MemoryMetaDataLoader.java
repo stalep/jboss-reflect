@@ -393,6 +393,22 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader implemen
       return components.get(signature);
    }
 
+   public boolean isEmpty()
+   {
+      return isNullOrEmpty(annotations) && isNullOrEmpty(metaDataByName) && isNullOrEmpty(components);
+   }
+
+   /**
+    * Is map null or empty.
+    *
+    * @param map the map
+    * @return is null or empty
+    */
+   protected static boolean isNullOrEmpty(Map map)
+   {
+      return map == null || map.isEmpty();
+   }
+
    /**
     * Invalidate the annotations item
     */
