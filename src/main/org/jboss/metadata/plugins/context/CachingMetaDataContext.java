@@ -60,7 +60,10 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
    
    /** The valid time */
    private volatile long validTime;
-   
+
+   /** Is empty */
+   private volatile Boolean empty;
+
    /**
     * Create a new CachingMetaDataContext.
     * 
@@ -229,18 +232,21 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
    {
       super.append(retrieval);
       cachedComponents = null;
+      empty = null;
    }
 
    public void prepend(MetaDataRetrieval retrieval)
    {
       super.prepend(retrieval);
       cachedComponents = null;
+      empty = null;
    }
 
    public void remove(MetaDataRetrieval retrieval)
    {
       super.remove(retrieval);
       cachedComponents = null;
+      empty = null;
    }
 
    public MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature)
@@ -265,5 +271,12 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
       }
       
       return retrieval;
+   }
+
+   public boolean isEmpty()
+   {
+      if (empty == null)
+         empty = super.isEmpty();
+      return empty; 
    }
 }
