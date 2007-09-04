@@ -38,10 +38,10 @@ import org.jboss.reflect.spi.TypeInfo;
 public class ReflectMethodInfoImpl extends MethodInfoImpl
 {
    /** The serialVersionUID */
-   private static final long serialVersionUID = -7215834088396065347L;
+   private static final long serialVersionUID = 2;
    
    /** The method */
-   protected Method method;
+   protected transient Method method;
 
    /**
     * Create a new method info

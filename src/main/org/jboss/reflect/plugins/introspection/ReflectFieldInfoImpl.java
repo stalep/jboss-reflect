@@ -37,10 +37,10 @@ import org.jboss.reflect.spi.TypeInfo;
 public class ReflectFieldInfoImpl extends FieldInfoImpl
 {
    /** The serialVersionUID */
-   private static final long serialVersionUID = 6545568268659038195L;
+   private static final long serialVersionUID = 2;
 
    /** The field */
-   protected Field field;
+   protected transient Field field;
 
    /**
     * Create a new field info

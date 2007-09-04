@@ -41,10 +41,10 @@ public class AbstractPropertyInfo extends AnnotationHolder
    implements PropertyInfo, Serializable
 {
    /** The serialVersionUID */
-   private static final long serialVersionUID = 6558910165211748079L;
+   private static final long serialVersionUID = 2;
 
    /** The bean info */
-   protected BeanInfo beanInfo;
+   protected transient BeanInfo beanInfo;
    
    /** The property name */
    protected String name;

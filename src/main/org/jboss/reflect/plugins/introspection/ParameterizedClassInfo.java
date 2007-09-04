@@ -39,13 +39,13 @@ import org.jboss.util.JBossStringBuilder;
 public class ParameterizedClassInfo extends DelegateClassInfo
 {
    /** The serialVersionUID */
-   private static final long serialVersionUID = -8739806147734002603L;
+   private static final long serialVersionUID = 2;
    
    /** The factory */
-   protected IntrospectionTypeInfoFactoryImpl factory;
+   protected transient IntrospectionTypeInfoFactoryImpl factory;
    
    /** The parameterized type */
-   ParameterizedType parameterizedType;
+   transient ParameterizedType parameterizedType;
    
    /** The owner type */
    private TypeInfo ownerType = ClassInfoImpl.UNKNOWN_TYPE;

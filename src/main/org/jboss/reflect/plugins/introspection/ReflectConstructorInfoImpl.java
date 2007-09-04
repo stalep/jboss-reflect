@@ -38,10 +38,10 @@ import org.jboss.reflect.spi.TypeInfo;
 public class ReflectConstructorInfoImpl extends ConstructorInfoImpl
 {
    /** The serialVersionUID */
-   private static final long serialVersionUID = -7945050116306083175L;
+   private static final long serialVersionUID = 2;
    
    /** The constructor */
-   protected Constructor constructor;
+   protected transient Constructor constructor;
 
    /**
     * Create a new ConstructorInfo.
