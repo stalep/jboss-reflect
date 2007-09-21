@@ -335,10 +335,10 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          }
          return annotationValues;
       }
-      catch (ClassNotFoundException e)
-      {
-         throw new RuntimeException(e);
-      }
+//      catch (ClassNotFoundException e)
+//      {
+//         throw new RuntimeException(e);
+//      }
       catch (Throwable t)
       {
          throw new RuntimeException(t);
