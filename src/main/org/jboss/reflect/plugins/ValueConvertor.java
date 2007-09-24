@@ -87,6 +87,22 @@ public class ValueConvertor
    @SuppressWarnings("unchecked")
    public static Object convertValue(Class<? extends Object> clazz, Object value, boolean replaceProperties) throws Throwable
    {
+      return convertValue(clazz, value, replaceProperties, false);
+   }
+
+   /**
+    * Convert a value
+    *
+    * @param clazz             the class
+    * @param value             the value
+    * @param replaceProperties whether to replace system properties
+    * @param trim whether to trim string value
+    * @return the value or null if there is no editor
+    * @throws Throwable for any error
+    */
+   @SuppressWarnings("unchecked")
+   public static Object convertValue(Class<? extends Object> clazz, Object value, boolean replaceProperties, boolean trim) throws Throwable
+   {
       if (clazz == null)
          throw new IllegalArgumentException("Null class");
       if (value == null)
@@ -94,11 +110,14 @@ public class ValueConvertor
 
       Class<? extends Object> valueClass = value.getClass();
 
-      // If we have a string replace any system properties when requested
-      if (replaceProperties && valueClass == String.class)
+      // If we have a string, trim and replace any system properties when requested
+      if (valueClass == String.class)
       {
          String string = (String)value;
-         value = StringPropertyReplacer.replaceProperties(string);
+         if (trim)
+            string = string.trim();
+         if (replaceProperties)
+            value = StringPropertyReplacer.replaceProperties(string);
       }
 
       if (clazz.isAssignableFrom(valueClass))

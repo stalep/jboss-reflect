@@ -395,6 +395,11 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return ValueConvertor.convertValue(getType(), value, replaceProperties);
    }
 
+   public Object convertValue(Object value, boolean replaceProperties, boolean trim) throws Throwable
+   {
+      return ValueConvertor.convertValue(getType(), value, replaceProperties, trim);
+   }
+
    protected int getHashCode()
    {
       return getName().hashCode();

@@ -73,6 +73,17 @@ public interface TypeInfo extends Serializable
    Object convertValue(Object value, boolean replaceProperties) throws Throwable;
 
    /**
+    * Convert a value
+    *
+    * @param value the original value
+    * @param replaceProperties whether to replace properties
+    * @param trim do we trim before conversion
+    * @return the converted value
+    * @throws Throwable for any error
+    */
+   Object convertValue(Object value, boolean replaceProperties, boolean trim) throws Throwable;
+
+   /**
     * Whether this type is an array
     * 
     * @return true when an array

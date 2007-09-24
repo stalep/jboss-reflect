@@ -480,6 +480,11 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return ValueConvertor.convertValue(getType(), value, replaceProperties);
    }
 
+   public Object convertValue(Object value, boolean replaceProperties, boolean trim) throws Throwable
+   {
+      return ValueConvertor.convertValue(getType(), value, replaceProperties, trim);
+   }
+
    public boolean isArray()
    {
       return getType().isArray();

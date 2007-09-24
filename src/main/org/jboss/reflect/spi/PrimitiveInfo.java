@@ -169,6 +169,16 @@ public class PrimitiveInfo extends AbstractTypeInfo
       return ValueConvertor.convertValue(type, value, replaceProperties);
    }
 
+   public Object convertValue(Object value, boolean replaceProperties, boolean trim) throws Throwable
+   {
+      Object progressResult = ValueConvertor.progressValue(type, value);
+      if (progressResult != null)
+      {
+         return progressResult;
+      }
+      return ValueConvertor.convertValue(type, value, replaceProperties, trim);
+   }
+
    @Override
    public boolean isPrimitive()
    {

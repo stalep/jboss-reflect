@@ -226,6 +226,11 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
       return delegate.convertValue(value, replaceProperties);
    }
 
+   public Object convertValue(Object value, boolean replaceProperties, boolean trim) throws Throwable
+   {
+      return delegate.convertValue(value, replaceProperties, trim);
+   }
+
    public TypeInfo getArrayType()
    {
       return delegate.getArrayType();
