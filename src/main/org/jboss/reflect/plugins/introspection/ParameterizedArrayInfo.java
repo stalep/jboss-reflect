@@ -51,6 +51,6 @@ public class ParameterizedArrayInfo extends ParameterizedClassInfo implements Ar
 
    public TypeInfo getComponentType()
    {
-      return ((ArrayInfo) delegate).getComponentType();
+      return delegate.getComponentType();
    }
 }
