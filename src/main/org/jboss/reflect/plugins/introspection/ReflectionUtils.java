@@ -26,6 +26,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.jboss.util.Strings;
 
@@ -186,7 +187,126 @@ public class ReflectionUtils
          throw handleErrors("set", field, target, value, t);
       }
    }
-   
+
+   /**
+    * Find the method by name and parameters.
+    *
+    * @param clazz the class to look for method
+    * @param name the name
+    * @param parameterTypes the types
+    * @return method or null if not found
+    */
+   public static Method findMethod(Class clazz, String name, Class<?>... parameterTypes)
+   {
+      if (clazz == null)
+         return null;
+
+      try
+      {
+         return clazz.getDeclaredMethod(name, parameterTypes);
+      }
+      catch(Exception ignored)
+      {
+      }
+      return findMethod(clazz.getSuperclass(), name, parameterTypes);
+   }
+
+   /**
+    * Find the method by name and parameters.
+    *
+    * @param clazz the class to look for method
+    * @param name the name
+    * @param parameterTypes the types
+    * @return method or throw exception if not found
+    * @throws NoSuchMethodException for no such method
+    */
+   public static Method findExactMethod(Class clazz, String name, Class<?>... parameterTypes)
+         throws NoSuchMethodException
+   {
+      Method method = findMethod(clazz, name, parameterTypes);
+      if (method == null)
+         throw new NoSuchMethodException(clazz + "." + name + " - " +  Arrays.asList(parameterTypes));
+      return method;
+   }
+
+   /**
+    * Find the field by name.
+    *
+    * @param clazz the class to look for field
+    * @param name the name
+    * @return field or null if not found
+    */
+   public static Field findField(Class clazz, String name)
+   {
+      if (clazz == null)
+         return null;
+
+      try
+      {
+         return clazz.getDeclaredField(name);
+      }
+      catch(Exception ignored)
+      {
+      }
+      return findField(clazz.getSuperclass(), name);
+   }
+
+   /**
+    * Find the field by name.
+    *
+    * @param clazz the class to look for field
+    * @param name the name
+    * @return field or throw exception if not found
+    * @throws NoSuchFieldException for no such field
+    */
+   public static Field findExactField(Class clazz, String name)
+         throws NoSuchFieldException
+   {
+      Field field = findField(clazz, name);
+      if (field == null)
+         throw new NoSuchFieldException(clazz + "." + name);
+      return field;
+   }
+
+   /**
+    * Find the constructor by parameters.
+    *
+    * @param clazz the class to look for constructor
+    * @param parameterTypes the types
+    * @return constructor or null if not found
+    */
+   public static Constructor findConstructor(Class clazz, Class<?>... parameterTypes)
+   {
+      if (clazz == null)
+         return null;
+
+      try
+      {
+         return clazz.getDeclaredConstructor(parameterTypes);
+      }
+      catch(Exception ignored)
+      {
+      }
+      return findConstructor(clazz.getSuperclass(), parameterTypes);
+   }
+
+   /**
+    * Find the constructor by parameters.
+    *
+    * @param clazz the class to look for constructor
+    * @param parameterTypes the types
+    * @return method or throw exception if not found
+    * @throws NoSuchMethodException for no such method
+    */
+   public static Constructor findExactConstructor(Class clazz, Class<?>... parameterTypes)
+         throws NoSuchMethodException
+   {
+      Constructor constructor = findConstructor(clazz, parameterTypes);
+      if (constructor == null)
+         throw new NoSuchMethodException(clazz + " - " +  Arrays.asList(parameterTypes));
+      return constructor;
+   }
+
    /**
     * Handle errors
     * 

@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins.introspection;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
 
 import org.jboss.reflect.plugins.MethodInfoImpl;
@@ -106,5 +108,24 @@ public class ReflectMethodInfoImpl extends MethodInfoImpl
    public Object invoke(Object target, Object[] args) throws Throwable
    {
       return ReflectionUtils.invoke(method, target, args);
+   }
+
+   /**
+    * Read the object, handling method read.
+    *
+    * @param oistream the stream
+    * @throws IOException io error
+    * @throws ClassNotFoundException cnf error
+    * @throws NoSuchMethodException no such method error
+    */
+   private void readObject(ObjectInputStream oistream)
+         throws IOException, ClassNotFoundException, NoSuchMethodException
+   {
+      oistream.defaultReadObject();
+      int length = parameterTypes != null ? parameterTypes.length : 0;
+      Class<?>[] classes = new Class<?>[length];
+      for(int i = 0; i < length; i++)
+         classes[i] = parameterTypes[i].getType();
+      method = ReflectionUtils.findExactMethod(getDeclaringClass().getType(), name, classes);
    }
 }

@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins.introspection;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 
 import org.jboss.reflect.plugins.FieldInfoImpl;
@@ -91,5 +93,20 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
    public Object set(Object target, Object value) throws Throwable
    {
       return ReflectionUtils.setField(field, target, value);
+   }
+   
+   /**
+    * Read the object, handling field read.
+    *
+    * @param oistream the stream
+    * @throws IOException io error
+    * @throws ClassNotFoundException cnf error
+    * @throws NoSuchFieldException no such field error
+    */
+   private void readObject(ObjectInputStream oistream)
+         throws IOException, ClassNotFoundException, NoSuchFieldException
+   {
+      oistream.defaultReadObject();
+      field = ReflectionUtils.findExactField(getDeclaringClass().getType(), name);
    }
 }

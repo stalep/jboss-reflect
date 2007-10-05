@@ -21,6 +21,8 @@
 */
 package org.jboss.reflect.plugins.introspection;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.lang.reflect.Constructor;
 
 import org.jboss.reflect.plugins.ConstructorInfoImpl;
@@ -102,5 +104,24 @@ public class ReflectConstructorInfoImpl extends ConstructorInfoImpl
    public Object newInstance(Object[] args) throws Throwable
    {
       return ReflectionUtils.newInstance(constructor, args);
+   }
+
+   /**
+    * Read the object, handling constructor read.
+    *
+    * @param oistream the stream
+    * @throws IOException io error
+    * @throws ClassNotFoundException cnf error
+    * @throws NoSuchMethodException no such method error
+    */
+   private void readObject(ObjectInputStream oistream)
+         throws IOException, ClassNotFoundException, NoSuchMethodException
+   {
+      oistream.defaultReadObject();
+      int length = parameterTypes != null ? parameterTypes.length : 0;
+      Class<?>[] classes = new Class<?>[length];
+      for(int i = 0; i < length; i++)
+         classes[i] = parameterTypes[i].getType();
+      constructor = ReflectionUtils.findExactConstructor(getDeclaringClass().getType(), classes);
    }
 }
