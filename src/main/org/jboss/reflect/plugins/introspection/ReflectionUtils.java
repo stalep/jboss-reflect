@@ -189,6 +189,18 @@ public class ReflectionUtils
    }
 
    /**
+    * Get array info.
+    * Handle null parameter.
+    *
+    * @param objects the array of objects
+    * @return info
+    */
+   protected static Object arrayInfo(Object... objects)
+   {
+      return objects == null ? "<null>" : Arrays.asList(objects);
+   }
+
+   /**
     * Find the method by name and parameters.
     *
     * @param clazz the class to look for method
@@ -225,7 +237,7 @@ public class ReflectionUtils
    {
       Method method = findMethod(clazz, name, parameterTypes);
       if (method == null)
-         throw new NoSuchMethodException(clazz + "." + name + " - " +  Arrays.asList(parameterTypes));
+         throw new NoSuchMethodException(clazz + "." + name + " - " +  arrayInfo(parameterTypes));
       return method;
    }
 
@@ -303,7 +315,7 @@ public class ReflectionUtils
    {
       Constructor constructor = findConstructor(clazz, parameterTypes);
       if (constructor == null)
-         throw new NoSuchMethodException(clazz + " - " +  Arrays.asList(parameterTypes));
+         throw new NoSuchMethodException(clazz + " - " + arrayInfo(parameterTypes));
       return constructor;
    }
 
