@@ -63,7 +63,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       if ((name.length() > 3 && name.startsWith("get")) || (name.length() > 2 && name.startsWith("is")))
       {
          // isBoolean() is not a getter for java.lang.Boolean
-         if (name.startsWith("is") && returnType.equals(PrimitiveInfo.BOOLEAN) == false)
+         if (name.startsWith("is") && PrimitiveInfo.BOOLEAN.equals(returnType) == false)
             return false;
          if (parameters.length == 0 && PrimitiveInfo.VOID.equals(returnType) == false)
             return true;
@@ -134,7 +134,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
 
          Set<ConstructorInfo> constructors = getConstructors(classInfo);
          Set<MethodInfo> methods = getMethods(classInfo);
-         Set<PropertyInfo> properties = null;
+         Set<PropertyInfo> properties;
          if (classInfo.isAnnotation())
             properties = getAnnotationProperties(methods);
          else
