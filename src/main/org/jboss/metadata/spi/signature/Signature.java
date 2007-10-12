@@ -21,6 +21,8 @@
 */
 package org.jboss.metadata.spi.signature;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +42,7 @@ public class Signature
    public static final String[] NO_PARAMETERS = new String[0];
 
    /** No Parameters Types */
-   public static final Class[] NO_PARAMETER_TYPES = new Class[0];
+   public static final Class<?>[] NO_PARAMETER_TYPES = new Class[0];
    
    /** The name */
    private String name;
@@ -49,14 +51,15 @@ public class Signature
    private String[] parameters;
 
    /** The parameter types */
-   private Class[] parameterTypes;
+   private Class<?>[] parameterTypes;
    
    /** The cached hashcode */
    private transient int cachedHashCode = Integer.MIN_VALUE;
 
    /** The primitive types indexed by names */
-   private static final Map<String, Class> primitiveTypes = new HashMap<String, Class>();
+   private static final Map<String, Class<?>> primitiveTypes = new HashMap<String, Class<?>>();
    private static final Map<String, String> primitiveArrayTypes = new HashMap<String, String>();
+   private static final Map<String, Class<?>> primitiveArrayTypesClassMap = new HashMap<String, Class<?>>();
    static
    {
       primitiveTypes.put(Byte.TYPE.getName(), Byte.TYPE);
@@ -76,6 +79,15 @@ public class Signature
       primitiveArrayTypes.put(Integer.TYPE.getName(), "I");
       primitiveArrayTypes.put(Long.TYPE.getName(), "J");
       primitiveArrayTypes.put(Short.TYPE.getName(), "S");
+      
+      primitiveArrayTypesClassMap.put("B", Byte.TYPE);
+      primitiveArrayTypesClassMap.put("Z", Boolean.TYPE);
+      primitiveArrayTypesClassMap.put("C", Character.TYPE);
+      primitiveArrayTypesClassMap.put("D", Double.TYPE);
+      primitiveArrayTypesClassMap.put("F", Float.TYPE);
+      primitiveArrayTypesClassMap.put("I", Integer.TYPE);
+      primitiveArrayTypesClassMap.put("J", Long.TYPE);
+      primitiveArrayTypesClassMap.put("S", Short.TYPE);
    }
 
    public static String getPrimativeArrayType(String name)
@@ -131,6 +143,44 @@ public class Signature
    }
 
    /**
+    * Loads a class by name.
+    * 
+    * TODO A similar method exists in org.jboss.util.Classes ...
+    */
+   private static Class<?> loadClass(ClassLoader cl, String name) throws ClassNotFoundException
+   {
+      Class<?> primitive = primitiveTypes.get(name);
+      if (primitive != null)
+      {
+         return primitive;
+      }
+
+      int index = name.lastIndexOf('[');
+      if (index >= 0)
+      {
+         // count opening braces
+         int arrayDimension = 0;
+         while (name.charAt(arrayDimension) == '[')
+            arrayDimension++;
+         Class<?> componentType;
+         if (name.charAt(arrayDimension) == 'L')
+         {
+            String arrayType = name.substring(arrayDimension + 1, name.length() - 1);
+            componentType = loadClass(cl, arrayType);
+         }
+         else
+         {
+            String arrayType = name.substring(arrayDimension);
+            componentType = primitiveArrayTypesClassMap.get(arrayType);
+         }
+
+         // construct array class
+         return Array.newInstance(componentType, new int[arrayDimension]).getClass();
+      }
+      return cl.loadClass(name);
+   }
+   
+   /**
     * Convert classes to string
     * 
     * @param cl the classloader
@@ -145,34 +195,12 @@ public class Signature
       if (parameters == null || parameters.length == 0)
          return NO_PARAMETER_TYPES;
 
-      Class[] result = new Class[parameters.length];
+      Class<?>[] result = new Class[parameters.length];
       for (int i = 0; i < result.length; ++i)
       {
-         String param = parameters[i]; 
-         int index = param.lastIndexOf('[');
-         if (index >= 0)
-         {
-            //For arrays we will want to load the class, the ArrayInfoImpl generates names in an invalid format, resolve this here
-            String primitiveCandidate = param.substring(index + 1);
-            String componentType = primitiveArrayTypes.get(primitiveCandidate);
-            if (componentType != null)
-            {
-               param = param.substring(0, index + 1) + componentType;
-            }
-         }
-         else
-         {
-            Class primitive = primitiveTypes.get(param);
-            if (primitive != null)
-            {
-               result[i] = primitive;
-               continue;
-            }
-         }
-         
          try
          {
-            result[i] = cl.loadClass(param);
+            result[i] = loadClass(cl, parameters[i]);
          }
          catch (ClassNotFoundException e)
          {
@@ -266,7 +294,17 @@ public class Signature
    }
    
    /**
-    * Get the name.
+    * Constructs a new Signature.
+    * 
+    * @param method class method
+    */
+   public Signature(Method method)
+   {
+	   this(method.getName(), method.getParameterTypes());
+   }
+
+   /**
+    * Returns the name.
     * 
     * @return the name.
     */
@@ -276,7 +314,7 @@ public class Signature
    }
 
    /**
-    * Get the parameters.
+    * Returns the parameters.
     * 
     * @return the parameters.
     */
@@ -286,7 +324,7 @@ public class Signature
    }
 
    /**
-    * Get the parameter types.
+    * Returns the parameter types.
     * 
     * @param clazz the reference class
     * @return the parameter types.
