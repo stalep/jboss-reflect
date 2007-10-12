@@ -275,7 +275,7 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
       return delegate.isPrimitive();
    }
 
-   public Object[] newArrayInstance(int size) throws Throwable
+   public Object newArrayInstance(int size) throws Throwable
    {
       return delegate.newArrayInstance(size);
    }

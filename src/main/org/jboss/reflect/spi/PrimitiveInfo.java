@@ -191,7 +191,7 @@ public class PrimitiveInfo extends AbstractTypeInfo
       return typeInfoFactory.getTypeInfo(arrayClass);
    }
 
-   public Object[] newArrayInstance(int size) throws Throwable
+   public Object newArrayInstance(int size) throws Throwable
    {
       throw new UnsupportedOperationException("Not an array " + name);
    }

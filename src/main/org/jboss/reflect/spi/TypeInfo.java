@@ -139,7 +139,7 @@ public interface TypeInfo extends Serializable
     * @return the converted value
     * @throws Throwable for any error
     */
-   Object[] newArrayInstance(int size) throws Throwable;
+   Object newArrayInstance(int size) throws Throwable;
 
    /**
     * Mostly using

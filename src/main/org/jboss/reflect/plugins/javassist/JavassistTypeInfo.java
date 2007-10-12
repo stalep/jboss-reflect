@@ -363,12 +363,11 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return factory.getTypeInfo(arrayClass);
    }
 
-   public Object[] newArrayInstance(int size) throws Throwable
+   public Object newArrayInstance(int size) throws Throwable
    {
-      Class clazz = getType();
-      if (clazz.isArray() == false)
-         throw new ClassCastException(clazz + " is not an array.");
-      return (Object[]) Array.newInstance(clazz.getComponentType(), size);
+      if (isArray() == false)
+         throw new ClassCastException(this + " is not an array.");
+      return Array.newInstance(getComponentType().getType(), size);
    }
 
    public boolean isAssignableFrom(TypeInfo info)
