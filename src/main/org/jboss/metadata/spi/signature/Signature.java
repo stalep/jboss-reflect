@@ -22,7 +22,6 @@
 package org.jboss.metadata.spi.signature;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +59,7 @@ public class Signature
    private static final Map<String, Class<?>> primitiveTypes = new HashMap<String, Class<?>>();
    private static final Map<String, String> primitiveArrayTypes = new HashMap<String, String>();
    private static final Map<String, Class<?>> primitiveArrayTypesClassMap = new HashMap<String, Class<?>>();
+
    static
    {
       primitiveTypes.put(Byte.TYPE.getName(), Byte.TYPE);
@@ -293,16 +293,6 @@ public class Signature
       }
    }
    
-   /**
-    * Constructs a new Signature.
-    * 
-    * @param method class method
-    */
-   public Signature(Method method)
-   {
-	   this(method.getName(), method.getParameterTypes());
-   }
-
    /**
     * Returns the name.
     * 

@@ -26,6 +26,7 @@ import org.jboss.test.metadata.loader.MetaDataLoaderTestSuite;
 import org.jboss.test.metadata.repository.test.RepositoryTestSuite;
 import org.jboss.test.metadata.retrieval.test.RetrievalTestSuite;
 import org.jboss.test.metadata.scope.test.ScopeTestSuite;
+import org.jboss.test.metadata.spi.ContainerSPITestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -53,7 +54,8 @@ public class MetaDataAllTestSuite extends TestSuite
       suite.addTest(MetaDataLoaderTestSuite.suite());
       suite.addTest(MetaDataContextTestSuite.suite());
       suite.addTest(RepositoryTestSuite.suite());
-      
+      suite.addTest(ContainerSPITestSuite.suite());
+
       return suite;
    }
 }

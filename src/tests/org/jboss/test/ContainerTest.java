@@ -21,10 +21,6 @@
 */
 package org.jboss.test;
 
-import java.util.Arrays;
-
-import junit.framework.AssertionFailedError;
-
 /**
  * A ContainerTest.
  * 
@@ -43,39 +39,6 @@ public class ContainerTest extends AbstractTestCaseWithSetup
       super(name);
    }
    
-   /**
-    * Assert an array is empty or null
-    * 
-    * TODO Move this to the AbstractTestCase
-    * @param array the array
-    */
-   protected static void assertEmpty(Object[] array)
-   {
-      if (array != null)
-         assertEquals(Arrays.asList(array).toString(), 0, array.length);
-   }
-
-   /**
-    * Assert two arrays are equal
-    *
-    * TODO fix the abstract test case
-    * @param expected the expected array
-    * @param actual the actual array
-    */
-   protected void assertEquals(Object[] expected, Object[] actual)
-   {
-      if (Arrays.equals(expected, actual) == false)
-      {
-         String expectedString = null;
-         if (expected != null)
-            expectedString = Arrays.asList(expected).toString();
-         String actualString = null;
-         if (actual != null)
-            actualString = Arrays.asList(actual).toString();
-         throw new AssertionFailedError("expected: " + expectedString + " actual: " + actualString);
-      }
-   }
-
    /**
     * Default setup with security manager enabled
     * 
