@@ -27,7 +27,7 @@ package org.jboss.test.beaninfo.support;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public class BeanInfoAnnotatedGetterAndSetterWithInterface
+public class BeanInfoAnnotatedGetterAndSetterWithInterface implements BeanInfoAnnotatedGetterAndSetterInterface
 {
    @BeanInfoAnnotation1
    public int getSomething()
