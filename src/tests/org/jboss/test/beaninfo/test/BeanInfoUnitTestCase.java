@@ -30,6 +30,7 @@ import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterAndSetter;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterAndSetterSimpleMerge;
+import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterAndSetterWithInterface;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterOnly;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedSetterOnly;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotation;
@@ -146,6 +147,11 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
    public void testBeanAnnotatedGetterAndSetter() throws Throwable
    {
       testBean(BeanInfoAnnotatedGetterAndSetter.class, new String[] { "something" });
+   }
+   
+   public void testBeanAnnotatedGetterAndSetterWithInterface() throws Throwable
+   {
+      testBean(BeanInfoAnnotatedGetterAndSetterWithInterface.class, new String[] { "something" });
    }
    
    public void testBeanAnnotatedGetterAndSetterSimpleMerge() throws Throwable
