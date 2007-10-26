@@ -41,6 +41,7 @@ import org.jboss.test.beaninfo.support.BeanInfoEmpty;
 import org.jboss.test.beaninfo.support.BeanInfoGenericGetterAndSetter;
 import org.jboss.test.beaninfo.support.BeanInfoGenericGetterOnly;
 import org.jboss.test.beaninfo.support.BeanInfoGenericInconsistentTypes;
+import org.jboss.test.beaninfo.support.BeanInfoGenericInterfaceImpl;
 import org.jboss.test.beaninfo.support.BeanInfoGenericSetterOnly;
 import org.jboss.test.beaninfo.support.BeanInfoGetterAndSetter;
 import org.jboss.test.beaninfo.support.BeanInfoGetterOnly;
@@ -228,6 +229,15 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
       assertNull(bean.notInvoked);
       beanInfo.invoke(bean, "setInvoked", new String[] { String.class.getName() }, new Object[] { invoked });
       assertTrue(invoked == bean.notInvoked);
+   }
+   
+   public void testGenericInterfaceImpl() throws Throwable
+   {
+      BeanInfo beanInfo = getBeanInfo(BeanInfoGenericInterfaceImpl.class);
+      assertNotNull(beanInfo);
+      PropertyInfo property = beanInfo.getProperty("property");
+      assertNotNull(property);
+      assertEquals("java.lang.String", property.getType().getName());
    }
    
    protected void testBean(Class clazz, String[] beanNames) throws Throwable
