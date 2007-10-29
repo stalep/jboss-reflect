@@ -24,11 +24,12 @@ package org.jboss.test.beaninfo.support;
 
 /**
  * A BeanInfoGenericInterface.
- * 
+ *
+ * @param <T> exact property type
  * @author <a href="alex@jboss.com">Alexey Loubyansky</a>
  * @version $Revision: 1.1 $
  */
-public interface BeanInfoGenericInterface<T extends Object>
+public interface BeanInfoGenericInterface<T>
 {
    T getProperty();
    void setProperty(T value);
