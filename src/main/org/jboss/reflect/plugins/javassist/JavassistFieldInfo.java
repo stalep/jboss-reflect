@@ -93,6 +93,11 @@ public class JavassistFieldInfo extends JavassistAnnotatedInfo implements FieldI
       return Modifier.isStatic(getModifiers());
    }
 
+   public boolean isVolatile()
+   {
+      return Modifier.isVolatile(getModifiers());
+   }
+
    public ClassInfo getDeclaringClass()
    {
       return typeInfo;

@@ -454,6 +454,11 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return Modifier.isPublic(modifiers);
    }
 
+   public boolean isVolatile()
+   {
+      return Modifier.isVolatile(modifiers);
+   }
+
    public String getName()
    {
       return name;

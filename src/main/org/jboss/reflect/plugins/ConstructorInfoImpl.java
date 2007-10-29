@@ -171,6 +171,11 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
       return Modifier.isPublic(modifiers);
    }
    
+   public boolean isVolatile()
+   {
+      return Modifier.isVolatile(modifiers);
+   }
+
    public Object newInstance(Object[] args) throws Throwable
    {
       throw new NotImplementedException("newInstance");

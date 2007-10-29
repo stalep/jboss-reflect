@@ -216,6 +216,11 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
       return delegate.isStatic();
    }
 
+   public boolean isVolatile()
+   {
+      return delegate.isVolatile();
+   }
+
    public Object convertValue(Object value) throws Throwable
    {
       return delegate.convertValue(value);

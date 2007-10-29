@@ -111,7 +111,12 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
    {
       return Modifier.isPublic(modifiers);
    }
-   
+
+   public boolean isVolatile()
+   {
+      return Modifier.isVolatile(modifiers);
+   }
+
    public Object get(Object target) throws Throwable
    {
       throw new NotImplementedException("get");

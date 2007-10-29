@@ -194,6 +194,11 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       return Modifier.isPublic(modifiers);
    }
    
+   public boolean isVolatile()
+   {
+      return Modifier.isVolatile(modifiers);
+   }
+
    public Object invoke(Object target, Object[] args) throws Throwable
    {
       throw new NotImplementedException("invoke");

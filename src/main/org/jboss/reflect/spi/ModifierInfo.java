@@ -107,4 +107,11 @@ public interface ModifierInfo
     * @return true when static
     */
    boolean isStatic();
+
+   /**
+    * Whether it is volatile
+    *
+    * @return true if volatile
+    */
+   boolean isVolatile();
 }

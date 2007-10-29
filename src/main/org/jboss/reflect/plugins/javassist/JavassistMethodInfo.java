@@ -98,6 +98,11 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
       return Modifier.isStatic(getModifiers());
    }
 
+   public boolean isVolatile()
+   {
+      return Modifier.isVolatile(getModifiers());
+   }
+
    public ClassInfo[] getExceptionTypes()
    {
       if (exceptionTypes == null)
@@ -232,5 +237,4 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
          throw new RuntimeException(e);
       }
    }
-
 }

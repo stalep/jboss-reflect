@@ -149,6 +149,11 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return Modifier.isStatic(getModifiers());
    }
 
+   public boolean isVolatile()
+   {
+      return Modifier.isVolatile(getModifiers());
+   }
+
    @Deprecated
    public Class<? extends Object> getType()
    {

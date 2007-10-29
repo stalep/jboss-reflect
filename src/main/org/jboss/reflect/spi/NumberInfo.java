@@ -259,6 +259,11 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return delegate.isStatic();
    }
 
+   public boolean isVolatile()
+   {
+      return delegate.isVolatile();
+   }
+
    public boolean isPrimitive()
    {
       return delegate.isPrimitive();

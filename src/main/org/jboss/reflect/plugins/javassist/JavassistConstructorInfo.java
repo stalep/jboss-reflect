@@ -86,6 +86,11 @@ public class JavassistConstructorInfo extends JavassistAnnotatedParameterInfo im
       return Modifier.isStatic(getModifiers());
    }
 
+   public boolean isVolatile()
+   {
+      return Modifier.isVolatile(getModifiers());
+   }
+
    public ClassInfo getDeclaringClass()
    {
       return typeInfo;
