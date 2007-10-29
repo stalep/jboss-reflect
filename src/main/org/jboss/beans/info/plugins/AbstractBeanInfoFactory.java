@@ -205,7 +205,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          {
             for (int i = 0; i < minfos.length; ++i)
             {
-               if (result.contains(minfos[i]) == false && minfos[i].isPublic() && minfos[i].isStatic() == false)
+               if (result.contains(minfos[i]) == false && minfos[i].isPublic() && minfos[i].isStatic() == false && minfos[i].isVolatile() == false)
                   result.add(minfos[i]);
             }
          }

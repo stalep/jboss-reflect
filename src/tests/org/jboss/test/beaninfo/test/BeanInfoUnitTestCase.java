@@ -25,7 +25,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import junit.framework.Test;
-
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterAndSetter;
@@ -37,6 +36,7 @@ import org.jboss.test.beaninfo.support.BeanInfoAnnotation;
 import org.jboss.test.beaninfo.support.BeanInfoBooleanProperties;
 import org.jboss.test.beaninfo.support.BeanInfoConstructors;
 import org.jboss.test.beaninfo.support.BeanInfoDefaultConstructor;
+import org.jboss.test.beaninfo.support.BeanInfoDoubleCovariantImpl;
 import org.jboss.test.beaninfo.support.BeanInfoEmpty;
 import org.jboss.test.beaninfo.support.BeanInfoGenericGetterAndSetter;
 import org.jboss.test.beaninfo.support.BeanInfoGenericGetterOnly;
@@ -240,6 +240,15 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
       assertEquals("java.lang.String", property.getType().getName());
    }
    
+   public void testCovariantImpl() throws Throwable
+   {
+      BeanInfo beanInfo = getBeanInfo(BeanInfoDoubleCovariantImpl.class);
+      assertNotNull(beanInfo);
+      PropertyInfo property = beanInfo.getProperty("property");
+      assertNotNull(property);
+      assertEquals("java.lang.Double", property.getType().getName());
+   }
+
    protected void testBean(Class clazz, String[] beanNames) throws Throwable
    {
       BeanInfo beanInfo = getBeanInfo(clazz);
