@@ -28,11 +28,13 @@ import org.jboss.metadata.spi.retrieval.AnnotationItem;
 import org.jboss.metadata.spi.retrieval.AnnotationsItem;
 import org.jboss.metadata.spi.retrieval.Item;
 import org.jboss.metadata.spi.retrieval.MetaDataItem;
+import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
 import org.jboss.metadata.spi.retrieval.MetaDatasItem;
 import org.jboss.metadata.spi.retrieval.ValidTime;
 import org.jboss.metadata.spi.retrieval.helper.AnnotationToMetaDataBridge;
 import org.jboss.metadata.spi.retrieval.helper.AnnotationsToMetaDatasBridge;
 import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.scope.ScopeLevel;
 
 /**
  * AbstractMetaDataLoader.
@@ -111,6 +113,14 @@ public abstract class AbstractMetaDataLoader implements MetaDataLoader
    {
       AnnotationsItem annotations = retrieveAnnotations();
       return new AnnotationsToMetaDatasBridge(annotations);
+   }
+
+   public MetaDataRetrieval getScopedRetrieval(ScopeLevel level)
+   {
+      if (getScope().getScopeLevel(level) != null)
+         return this;
+
+      return null;
    }
 
    /**

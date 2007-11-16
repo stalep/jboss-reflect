@@ -102,11 +102,19 @@ public class TestMetaDataRetrieval implements MetaDataRetrieval
 
    public MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature)
    {
+      lastMethod = "getComponentMetaDataRetrieval";
       return null;
    }
 
    public boolean isEmpty()
    {
+      lastMethod = "isEmpty";
       return true;
+   }
+
+   public MetaDataRetrieval getScopedRetrieval(ScopeLevel level)
+   {
+      lastMethod = "getScopedRetrieval";
+      return null;
    }
 }

@@ -34,6 +34,7 @@ import org.jboss.metadata.spi.retrieval.MetaDataItem;
 import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
 import org.jboss.metadata.spi.retrieval.MetaDatasItem;
 import org.jboss.metadata.spi.signature.Signature;
+import org.jboss.metadata.spi.scope.ScopeLevel;
 
 /**
  * CachingMetaDataContext.
@@ -56,6 +57,7 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
    /** All meta data */
    private volatile MetaDatasItem cachedMetaDatasItem;
 
+   /** Cached components */
    private volatile Map<Signature, MetaDataRetrieval> cachedComponents;
    
    /** The valid time */
@@ -63,6 +65,12 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
 
    /** Is empty */
    private volatile Boolean empty;
+
+   /** The scoped context */
+   private volatile MetaDataRetrieval scopedContext;
+
+   /** Was scoped context check done */
+   private volatile boolean scopedRetrievalExecuted;
 
    /**
     * Create a new CachingMetaDataContext.
@@ -278,5 +286,15 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
       if (empty == null)
          empty = super.isEmpty();
       return empty; 
+   }
+
+   public MetaDataRetrieval getScopedRetrieval(ScopeLevel level)
+   {
+      if (cachedComponents == null || scopedRetrievalExecuted == false)
+      {
+         scopedRetrievalExecuted = true;
+         scopedContext = super.getScopedRetrieval(level);
+      }
+      return scopedContext;
    }
 }

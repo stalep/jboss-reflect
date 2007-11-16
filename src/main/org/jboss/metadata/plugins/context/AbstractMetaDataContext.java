@@ -39,6 +39,7 @@ import org.jboss.metadata.spi.retrieval.cummulative.CummulativeAnnotationsItem;
 import org.jboss.metadata.spi.retrieval.cummulative.CummulativeMetaDatasItem;
 import org.jboss.metadata.spi.scope.Scope;
 import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.scope.ScopeLevel;
 import org.jboss.metadata.spi.signature.Signature;
 
 /**
@@ -299,5 +300,27 @@ public class AbstractMetaDataContext implements MetaDataContext
             return false;
       }
       return (parent == null || parent.isEmpty());
+   }
+
+   public MetaDataRetrieval getScopedRetrieval(ScopeLevel level)
+   {
+      List<MetaDataRetrieval> matchingRetrievals = new ArrayList<MetaDataRetrieval>();
+      List<MetaDataRetrieval> localRetrievals = getLocalRetrievals();
+      for (MetaDataRetrieval localRetrieval : localRetrievals)
+      {
+         ScopeKey scopeKey = localRetrieval.getScope();
+         if (scopeKey.getScopeLevel(level) != null)
+            matchingRetrievals.add(localRetrieval);
+      }
+
+      if (matchingRetrievals.isEmpty() == false)
+      {
+         if (matchingRetrievals.size() > 1)
+            return new AbstractMetaDataContext(null, matchingRetrievals);
+         else
+            return matchingRetrievals.get(0);
+      }
+
+      return null;
    }
 }

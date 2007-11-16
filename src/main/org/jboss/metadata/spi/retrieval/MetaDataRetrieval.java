@@ -24,6 +24,7 @@ package org.jboss.metadata.spi.retrieval;
 import java.lang.annotation.Annotation;
 
 import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.scope.ScopeLevel;
 import org.jboss.metadata.spi.signature.Signature;
 
 /**
@@ -116,4 +117,12 @@ public interface MetaDataRetrieval
     * @return true if metadata empty
     */
    boolean isEmpty();
+
+   /**
+    * Get scoped retrieval for level param.
+    *
+    * @param level the scope level
+    * @return list of retrieval instances
+    */
+   MetaDataRetrieval getScopedRetrieval(ScopeLevel level);
 }
