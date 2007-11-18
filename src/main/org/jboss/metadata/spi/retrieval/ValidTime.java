@@ -22,6 +22,7 @@
 package org.jboss.metadata.spi.retrieval;
 
 import java.util.concurrent.atomic.AtomicLong;
+import java.io.Serializable;
 
 /**
  * ValidTime.
@@ -29,7 +30,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class ValidTime
+public class ValidTime implements Serializable
 {
    /** The serialVersionUID */
    private static final long serialVersionUID = 1075815265759870744L;

@@ -46,7 +46,8 @@ public class RetrievalTestSuite extends TestSuite
       suite.addTest(new TestSuite(SimpleUnitTestCase.class));
       suite.addTest(new TestSuite(BasicUnitTestCase.class));
       suite.addTest(new TestSuite(CummulativeUnitTestCase.class));
-      
+      suite.addTest(new TestSuite(EmptyTestCase.class));
+
       return suite;
    }
 }
