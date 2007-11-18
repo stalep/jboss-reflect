@@ -63,7 +63,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    {
       if (expected == null && actual == null)
          return;
-      if (expected == null && actual != null || (expected != null && actual == null))
+      if (expected == null || actual == null)
          fail("Expected " + expected + " got " + actual);
       
       List<Object> expectedList = Arrays.asList(expected);
@@ -2051,7 +2051,7 @@ public class AbstractMetaDataTest extends BaseTestCase
    {
       if (expected == null && actual == null)
          return;
-      if ((expected == null && actual != null) || (expected != null && actual == null))
+      if (expected == null || actual == null)
          fail(context, expected, actual);
       if (expected.size() != actual.size())
          fail(context, expected, actual);
