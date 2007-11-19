@@ -25,6 +25,7 @@ import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jboss.metadata.spi.context.MetaDataContext;
@@ -66,11 +67,8 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
    /** Is empty */
    private volatile Boolean empty;
 
-   /** The scoped context */
-   private volatile MetaDataRetrieval scopedContext;
-
-   /** Was scoped context check done */
-   private volatile boolean scopedRetrievalExecuted;
+   /** Scoped contexs */
+   private volatile Map<ScopeLevel, MetaDataRetrieval> cachedScopedRetrievals;
 
    /**
     * Create a new CachingMetaDataContext.
@@ -241,6 +239,7 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
       super.append(retrieval);
       cachedComponents = null;
       empty = null;
+      cachedScopedRetrievals = null;
    }
 
    public void prepend(MetaDataRetrieval retrieval)
@@ -248,6 +247,7 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
       super.prepend(retrieval);
       cachedComponents = null;
       empty = null;
+      cachedScopedRetrievals = null;
    }
 
    public void remove(MetaDataRetrieval retrieval)
@@ -255,6 +255,7 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
       super.remove(retrieval);
       cachedComponents = null;
       empty = null;
+      cachedScopedRetrievals = null;
    }
 
    public MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature)
@@ -290,11 +291,29 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
 
    public MetaDataRetrieval getScopedRetrieval(ScopeLevel level)
    {
-      if (cachedComponents == null || scopedRetrievalExecuted == false)
+      boolean update = cachedScopedRetrievals == null || cachedScopedRetrievals.keySet().contains(level) == false;
+      return getCachedScopedRetrieval(level, update);
+   }
+
+   /**
+    * Get the cached scoped retireval.
+    *
+    * @param level the scope level
+    * @param update update current cache
+    * @return cached retrieval or null
+    */
+   protected MetaDataRetrieval getCachedScopedRetrieval(ScopeLevel level, boolean update)
+   {
+      if (cachedScopedRetrievals == null)
       {
-         scopedRetrievalExecuted = true;
-         scopedContext = super.getScopedRetrieval(level);
+         cachedScopedRetrievals = new HashMap<ScopeLevel, MetaDataRetrieval>();
       }
-      return scopedContext;
+      MetaDataRetrieval retrieval = cachedScopedRetrievals.get(level);
+      if (update)
+      {
+         retrieval = super.getScopedRetrieval(level);
+         cachedScopedRetrievals.put(level, retrieval);
+      }
+      return retrieval;
    }
 }
