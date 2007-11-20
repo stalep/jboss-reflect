@@ -50,7 +50,6 @@ public class ClassMetaDataRetrievalFactory implements MetaDataRetrievalFactory
          return null;
       
       Class<?> clazz = Class.class.cast(qualifier);
-      AnnotatedElementMetaDataLoader result = new AnnotatedElementMetaDataLoader(clazz);
-      return result;
+      return new AnnotatedElementMetaDataLoader(clazz);
    }
 }
