@@ -23,6 +23,8 @@ package org.jboss.metadata.spi.signature;
 
 import java.lang.reflect.Constructor;
 
+import org.jboss.reflect.spi.ConstructorInfo;
+
 /**
  * Constructor Signature.
  * 
@@ -46,7 +48,7 @@ public class ConstructorSignature extends Signature
     * 
     * @param parameters the parameters
     */
-   public ConstructorSignature(Class... parameters)
+   public ConstructorSignature(Class<?>... parameters)
    {
       super(parameters);
    }
@@ -59,5 +61,15 @@ public class ConstructorSignature extends Signature
    public ConstructorSignature(Constructor<?> constructor)
    {
       super(constructor.getParameterTypes());
+   }
+
+   /**
+    * Create a new Signature.
+    * 
+    * @param constructor the constructor
+    */
+   public ConstructorSignature(ConstructorInfo constructor)
+   {
+      super(convertParameterTypes(constructor.getParameterTypes()));
    }
 }

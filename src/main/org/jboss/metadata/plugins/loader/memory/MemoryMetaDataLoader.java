@@ -27,8 +27,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.jboss.metadata.plugins.loader.AbstractMutableMetaDataLoader;
-import org.jboss.metadata.spi.ComponentMutableMetaData;
+import org.jboss.metadata.plugins.loader.AbstractMutableComponentMetaDataLoader;
 import org.jboss.metadata.spi.retrieval.AnnotationItem;
 import org.jboss.metadata.spi.retrieval.AnnotationsItem;
 import org.jboss.metadata.spi.retrieval.Item;
@@ -48,16 +47,13 @@ import org.jboss.metadata.spi.signature.Signature;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader implements ComponentMutableMetaData
+public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
 {
    /** The annotations */
    private volatile Map<String, BasicAnnotationItem> annotations;
 
    /** MetaData by name */
    private volatile Map<String, BasicMetaDataItem> metaDataByName;
-
-   /** The component metadata */
-   private volatile Map<Signature, MetaDataRetrieval> components; 
 
    /** All annotations */
    private volatile BasicAnnotationsItem cachedAnnotationsItem;
@@ -363,50 +359,9 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader implemen
       return result.getValue();
    }
 
-   public MetaDataRetrieval addComponentMetaDataRetrieval(Signature signature, MetaDataRetrieval component)
-   {
-      if (signature == null)
-         throw new IllegalArgumentException("Null signature");
-      
-      if (components == null)
-         components = new ConcurrentHashMap<Signature, MetaDataRetrieval>();
-      
-      return components.put(signature, component);
-   }
-
-   public MetaDataRetrieval removeComponentMetaDataRetrieval(Signature signature)
-   {
-      if (signature == null)
-         throw new IllegalArgumentException("Null signature");
-      
-      if (components == null)
-         return null;
-      
-      return components.remove(signature);
-   }
-
-   public MetaDataRetrieval getComponentMetaDataRetrieval(Signature signature)
-   {
-      if (components == null)
-         return null;
-      
-      return components.get(signature);
-   }
-
    public boolean isEmpty()
    {
-      return isNullOrEmpty(annotations) && isNullOrEmpty(metaDataByName) && isNullOrEmpty(components);
-   }
-
-   /**
-    * Is map null or empty.
-    *
-    * @param map the map
-    * @return is null or empty
-    */
-   protected static boolean isNullOrEmpty(Map map)
-   {
-      return map == null || map.isEmpty();
+      return isNullOrEmpty(annotations) && isNullOrEmpty(metaDataByName) && super.isEmpty();
    }
 
    /**
@@ -457,5 +412,11 @@ public class MemoryMetaDataLoader extends AbstractMutableMetaDataLoader implemen
       BasicMetaDatasItem result = new BasicMetaDatasItem(this, BasicMetaDatasItem.NO_META_DATA_ITEMS);
       cachedMetaDatasItem = result;
       return result;
+   }
+
+   @Override
+   protected MetaDataRetrieval initComponentRetrieval(Signature signature)
+   {
+      return new MemoryMetaDataLoader();
    }
 }

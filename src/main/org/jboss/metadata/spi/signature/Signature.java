@@ -22,9 +22,19 @@
 package org.jboss.metadata.spi.signature;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.jboss.reflect.spi.ConstructorInfo;
+import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.MemberInfo;
+import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.TypeInfo;
 
 /**
  * Signature.
@@ -90,18 +100,98 @@ public class Signature
       primitiveArrayTypesClassMap.put("S", Short.TYPE);
    }
 
+   /**
+    * Get a signature for a member
+    * 
+    * @param member the member
+    * @return the result
+    */
+   public static Signature getSignature(Member member)
+   {
+      if (member == null)
+         throw new IllegalArgumentException("Null member");
+      
+      if (member instanceof Method)
+      {
+         Method method = Method.class.cast(member);
+         return new MethodSignature(method);
+      }
+      if (member instanceof Field)
+      {
+         Field field = Field.class.cast(member);
+         return new FieldSignature(field);
+      }
+      if (member instanceof Constructor)
+      {
+         Constructor<?> constructor = Constructor.class.cast(member);
+         return new ConstructorSignature(constructor);
+      }
+      throw new IllegalArgumentException("Unknown member: " + member);
+   }
+
+   /**
+    * Get a signature for a member info
+    * 
+    * @param member the member
+    * @return the result
+    */
+   public static Signature getSignature(MemberInfo member)
+   {
+      if (member == null)
+         throw new IllegalArgumentException("Null member");
+      
+      if (member instanceof MethodInfo)
+      {
+         MethodInfo method = MethodInfo.class.cast(member);
+         return new MethodSignature(method);
+      }
+      if (member instanceof FieldInfo)
+      {
+         FieldInfo field = FieldInfo.class.cast(member);
+         return new FieldSignature(field);
+      }
+      if (member instanceof ConstructorInfo)
+      {
+         ConstructorInfo constructor = ConstructorInfo.class.cast(member);
+         return new ConstructorSignature(constructor);
+      }
+      throw new IllegalArgumentException("Unknown member: " + member);
+   }
+   
    public static String getPrimativeArrayType(String name)
    {
       return primitiveArrayTypes.get(name);
    }
 
+   public static String[] convertParameters(TypeInfo[] typeInfos)
+   {
+      if (typeInfos == null || typeInfos.length == 0)
+         return NO_PARAMETERS;
+      
+      String[] paramTypes = new String[typeInfos.length];
+      for (int i = 0; i < typeInfos.length; ++i)
+         paramTypes[i] = typeInfos[i].getName();
+      return paramTypes;
+   }
+
+   public static Class<?>[] convertParameterTypes(TypeInfo[] typeInfos)
+   {
+      if (typeInfos == null || typeInfos.length == 0)
+         return NO_PARAMETER_TYPES;
+
+      Class<?>[] paramTypes = new Class<?>[typeInfos.length];
+      for (int i = 0; i < typeInfos.length; ++i)
+         paramTypes[i] = typeInfos[i].getType();
+      return paramTypes;
+   }
+   
    /**
     * Convert classes to string
     * 
     * @param parameters the parameters as classes
     * @return the parameters as strings
     */
-   private static String[] classesToStrings(Class... parameters)
+   private static String[] classesToStrings(Class<?>... parameters)
    {
       if (parameters == null || parameters.length == 0)
          return NO_PARAMETERS;
@@ -123,7 +213,7 @@ public class Signature
     * @param parameters the parameters as strings
     * @return the parameters as classes
     */
-   private static Class[] stringsToClasses(Class clazz, String... parameters)
+   private static Class<?>[] stringsToClasses(Class<?> clazz, String... parameters)
    {
       if (clazz == null)
          throw new IllegalArgumentException("Null clazz");
@@ -177,7 +267,7 @@ public class Signature
          // construct array class
          return Array.newInstance(componentType, new int[arrayDimension]).getClass();
       }
-      return cl.loadClass(name);
+      return Class.forName(name, true, cl);
    }
    
    /**
@@ -187,7 +277,7 @@ public class Signature
     * @param parameters the parameters as strings
     * @return the parameters as classes
     */
-   private static Class[] stringsToClasses(ClassLoader cl, String... parameters)
+   private static Class<?>[] stringsToClasses(ClassLoader cl, String... parameters)
    {
       if (cl == null)
          throw new IllegalArgumentException("Null classloader");
@@ -243,7 +333,7 @@ public class Signature
     * 
     * @param parameters the parameters
     */
-   public Signature(Class... parameters)
+   public Signature(Class<?>... parameters)
    {
       this(NO_NAME, parameters, null);
    }
@@ -254,7 +344,7 @@ public class Signature
     * @param name the  name
     * @param parameters the parameters
     */
-   public Signature(String name, Class... parameters)
+   public Signature(String name, Class<?>... parameters)
    {
       this(name, parameters, null);
    }
@@ -277,7 +367,7 @@ public class Signature
     * @param parameterTypes the parameterTypes
     * @param parameters the parameters
     */
-   private Signature(String name, Class[] parameterTypes, String[] parameters)
+   private Signature(String name, Class<?>[] parameterTypes, String[] parameters)
    {
       this.name = name;
       this.parameters = parameters;
@@ -319,7 +409,7 @@ public class Signature
     * @param clazz the reference class
     * @return the parameter types.
     */
-   public Class[] getParametersTypes(Class clazz)
+   public Class<?>[] getParametersTypes(Class<?> clazz)
    {
       if (parameterTypes == null)
          return stringsToClasses(clazz, parameters);

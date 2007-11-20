@@ -21,17 +21,23 @@
 */
 package org.jboss.metadata.plugins.repository.basic;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.jboss.metadata.plugins.loader.reflection.ClassMetaDataRetrievalFactory;
 import org.jboss.metadata.plugins.repository.AbstractMetaDataRepository;
 import org.jboss.metadata.plugins.repository.visitor.ChildrenMetaDataRepositoryVisitor;
 import org.jboss.metadata.spi.repository.MutableMetaDataRepository;
 import org.jboss.metadata.spi.repository.visitor.MetaDataRepositoryVisitor;
 import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
+import org.jboss.metadata.spi.retrieval.MetaDataRetrievalFactory;
+import org.jboss.metadata.spi.scope.CommonLevels;
+import org.jboss.metadata.spi.scope.Scope;
 import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.scope.ScopeLevel;
 
 /**
  * BasicMetaDataRepository.
@@ -44,9 +50,38 @@ public class BasicMetaDataRepository extends AbstractMetaDataRepository implemen
    /** The retrievals */
    private Map<ScopeKey, MetaDataRetrieval> retrievals = new ConcurrentHashMap<ScopeKey, MetaDataRetrieval>();
    
+   /** The retrieval factories by scope level */
+   private Map<ScopeLevel, MetaDataRetrievalFactory> factories = new ConcurrentHashMap<ScopeLevel, MetaDataRetrievalFactory>(); 
+   
+   /**
+    * Create a new BasicMetaDataRepository.
+    */
+   public BasicMetaDataRepository()
+   {
+      // ClassMetaData retrieval by default
+      addMetaDataRetrievalFactory(CommonLevels.CLASS, ClassMetaDataRetrievalFactory.INSTANCE);
+   }
+   
    public MetaDataRetrieval getMetaDataRetrieval(ScopeKey key)
    {
-      return retrievals.get(key);
+      MetaDataRetrieval result = retrievals.get(key);
+      if (result != null)
+         return result;
+      
+      // Is this a single level?
+      Collection<Scope> scopes = key.getScopes();
+      if (scopes.size() != 1)
+         return null;
+      
+      // See if we have a factory
+      Scope scope = scopes.iterator().next();
+      ScopeLevel scopeLevel = scope.getScopeLevel();
+      MetaDataRetrievalFactory factory = getMetaDataRetrievalFactory(scopeLevel);
+      if (factory == null)
+         return null;
+      
+      // We have a factory, use it
+      return factory.getMetaDataRetrieval(scope);
    }
 
    public Set<ScopeKey> getChildren(ScopeKey key)
@@ -83,5 +118,28 @@ public class BasicMetaDataRepository extends AbstractMetaDataRepository implemen
       if (key == null)
          throw new IllegalArgumentException("Null key");
       return retrievals.remove(key);
+   }
+
+   public MetaDataRetrievalFactory addMetaDataRetrievalFactory(ScopeLevel level, MetaDataRetrievalFactory factory)
+   {
+      if (level == null)
+         throw new IllegalArgumentException("Null level");
+      if (factory == null)
+         throw new IllegalArgumentException("Null factory");
+      return factories.put(level,factory);
+   }
+
+   public MetaDataRetrievalFactory getMetaDataRetrievalFactory(ScopeLevel level)
+   {
+      if (level == null)
+         throw new IllegalArgumentException("Null level");
+      return factories.get(level);
+   }
+
+   public MetaDataRetrievalFactory removeMetaDataRetrievalFactory(ScopeLevel level)
+   {
+      if (level == null)
+         throw new IllegalArgumentException("Null level");
+      return factories.remove(level);
    }
 }

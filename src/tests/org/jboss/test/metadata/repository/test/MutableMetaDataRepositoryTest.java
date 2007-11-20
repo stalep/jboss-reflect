@@ -31,6 +31,7 @@ import org.jboss.metadata.spi.scope.Scope;
 import org.jboss.metadata.spi.scope.ScopeKey;
 import org.jboss.metadata.spi.scope.ScopeLevel;
 import org.jboss.test.metadata.AbstractMetaDataTest;
+import org.jboss.test.metadata.repository.support.TestMetaDataRetrievalFactory;
 
 /**
  * MutableMetaDataRepositoryTest.
@@ -57,6 +58,7 @@ public abstract class MutableMetaDataRepositoryTest extends AbstractMetaDataTest
    private static Scope testScope3 = new Scope(testLevel3, testQualifier3);
    
    private static ScopeKey testKey1 = new ScopeKey(testScope1);
+   private static ScopeKey testKey2 = new ScopeKey(testScope2);
    private static ScopeKey testKey1Different = new ScopeKey(testScope1Different);
    private static ScopeKey testKey12 = new ScopeKey(new Scope[] { testScope1, testScope2 });
    private static ScopeKey testKey12Different = new ScopeKey(new Scope[] { testScope1, testScope2Different });
@@ -296,6 +298,78 @@ public abstract class MutableMetaDataRepositoryTest extends AbstractMetaDataTest
       Set<ScopeKey> expected = new HashSet<ScopeKey>();
       expected.add(testKey123);
       assertEquals(expected, result);
+   }
+   
+   public void testAddMetaDataRetrievalFactory() throws Exception
+   {
+      MutableMetaDataRepository repository = setupEmpty();
+      assertNull(repository.getMetaDataRetrievalFactory(testLevel1));
+      TestMetaDataRetrievalFactory factory1 = new TestMetaDataRetrievalFactory();
+      assertNull(repository.addMetaDataRetrievalFactory(testLevel1, factory1));
+      assertEquals(factory1, repository.getMetaDataRetrievalFactory(testLevel1));
+      TestMetaDataRetrievalFactory factory2 = new TestMetaDataRetrievalFactory();
+      assertEquals(factory1, repository.addMetaDataRetrievalFactory(testLevel1, factory2));
+      assertEquals(factory2, repository.getMetaDataRetrievalFactory(testLevel1));
+      TestMetaDataRetrievalFactory factory3 = new TestMetaDataRetrievalFactory();
+      assertNull(repository.addMetaDataRetrievalFactory(testLevel2, factory3));
+      assertEquals(factory2, repository.getMetaDataRetrievalFactory(testLevel1));
+      assertEquals(factory3, repository.getMetaDataRetrievalFactory(testLevel2));
+   }
+   
+   public void testRemoveMetaDataRetrievalFactory() throws Exception
+   {
+      MutableMetaDataRepository repository = setupEmpty();
+      assertNull(repository.getMetaDataRetrievalFactory(testLevel1));
+      TestMetaDataRetrievalFactory factory1 = new TestMetaDataRetrievalFactory();
+      assertNull(repository.addMetaDataRetrievalFactory(testLevel1, factory1));
+      assertEquals(factory1, repository.removeMetaDataRetrievalFactory(testLevel1));
+      assertNull(repository.getMetaDataRetrievalFactory(testLevel1));
+      assertNull(repository.removeMetaDataRetrievalFactory(testLevel1));
+      TestMetaDataRetrievalFactory factory2 = new TestMetaDataRetrievalFactory();
+      assertNull(repository.addMetaDataRetrievalFactory(testLevel1, factory1));
+      assertNull(repository.addMetaDataRetrievalFactory(testLevel2, factory2));
+      assertEquals(factory1, repository.removeMetaDataRetrievalFactory(testLevel1));
+      assertNull(repository.getMetaDataRetrievalFactory(testLevel1));
+      assertNull(repository.removeMetaDataRetrievalFactory(testLevel1));
+      assertEquals(factory2, repository.getMetaDataRetrievalFactory(testLevel2));
+   }
+
+   public void testBasicMetaDataRetrievalFactory() throws Exception
+   {
+      MutableMetaDataRepository repository = setupEmpty();
+      TestMetaDataRetrievalFactory factory1 = new TestMetaDataRetrievalFactory();
+      repository.addMetaDataRetrievalFactory(testLevel1, factory1);
+      MutableMetaDataLoader loader1 = createTestMutableMetaDataLoader(testKey1);
+      factory1.retrievals.put(testScope1, loader1);
+      assertEquals(loader1, repository.getMetaDataRetrieval(testKey1));
+   }
+
+   public void testMultipleRetrievalMetaDataRetrievalFactory() throws Exception
+   {
+      MutableMetaDataRepository repository = setupEmpty();
+      TestMetaDataRetrievalFactory factory1 = new TestMetaDataRetrievalFactory();
+      repository.addMetaDataRetrievalFactory(testLevel1, factory1);
+      MutableMetaDataLoader loader1 = createTestMutableMetaDataLoader(testKey1);
+      factory1.retrievals.put(testScope1, loader1);
+      MutableMetaDataLoader loader2 = createTestMutableMetaDataLoader(testKey1Different);
+      factory1.retrievals.put(testScope1Different, loader2);
+      assertEquals(loader1, repository.getMetaDataRetrieval(testKey1));
+      assertEquals(loader2, repository.getMetaDataRetrieval(testKey1Different));
+   }
+
+   public void testMultipleMetaDataRetrievalFactories() throws Exception
+   {
+      MutableMetaDataRepository repository = setupEmpty();
+      TestMetaDataRetrievalFactory factory1 = new TestMetaDataRetrievalFactory();
+      repository.addMetaDataRetrievalFactory(testLevel1, factory1);
+      TestMetaDataRetrievalFactory factory2 = new TestMetaDataRetrievalFactory();
+      repository.addMetaDataRetrievalFactory(testLevel2, factory2);
+      MutableMetaDataLoader loader1 = createTestMutableMetaDataLoader(testKey1);
+      factory1.retrievals.put(testScope1, loader1);
+      MutableMetaDataLoader loader2 = createTestMutableMetaDataLoader(testKey2);
+      factory2.retrievals.put(testScope2, loader2);
+      assertEquals(loader1, repository.getMetaDataRetrieval(testKey1));
+      assertEquals(loader2, repository.getMetaDataRetrieval(testKey2));
    }
    
    protected void assertAddMetaDataRetrieval(MutableMetaDataRepository repository, MetaDataRetrieval add, MetaDataRetrieval expected) throws Exception

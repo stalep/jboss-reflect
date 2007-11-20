@@ -55,7 +55,7 @@ public class MethodParametersSignature extends Signature
     * @param param the parameter number
     * @param parameters the parameters
     */
-   public MethodParametersSignature(String name, int param, Class... parameters)
+   public MethodParametersSignature(String name, int param, Class<?>... parameters)
    {
       super(name, parameters);
       this.param = param;

@@ -1,6 +1,6 @@
 /*
 * JBoss, Home of Professional Open Source
-* Copyright 2006, JBoss Inc., and individual contributors as indicated
+* Copyright 2007, JBoss Inc., and individual contributors as indicated
 * by the @authors tag. See the copyright.txt in the distribution for a
 * full listing of individual contributors.
 *
@@ -19,47 +19,11 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.metadata.spi.signature;
+package org.jboss.test.metadata.repository.support;
 
-import java.lang.reflect.Field;
+import org.jboss.test.metadata.shared.support.TestAnnotation1;
 
-import org.jboss.reflect.spi.FieldInfo;
-
-/**
- * Field Signature.
- * 
- * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision: 1.1 $
- */
-public class FieldSignature extends Signature
+@TestAnnotation1
+public class TestClass1
 {
-   /**
-    * Create a new Signature.
-    * 
-    * @param name the name
-    */
-   public FieldSignature(String name)
-   {
-      super(name);
-   }
-
-   /**
-    * Create a new Signature.
-    * 
-    * @param field the field
-    */
-   public FieldSignature(Field field)
-   {
-      super(field.getName());
-   }
-
-   /**
-    * Create a new Signature.
-    * 
-    * @param field the field
-    */
-   public FieldSignature(FieldInfo field)
-   {
-      super(field.getName());
-   }
 }

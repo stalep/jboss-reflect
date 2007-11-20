@@ -79,7 +79,7 @@ public class ScopeKey implements Serializable, Cloneable
     * @param level the scope level
     * @param qualifier the scope qualifier
     */
-   public ScopeKey(ScopeLevel level, String qualifier)
+   public ScopeKey(ScopeLevel level, Object qualifier)
    {
       addScope(level, qualifier);
    }
@@ -138,6 +138,19 @@ public class ScopeKey implements Serializable, Cloneable
    public Collection<Scope> getScopes()
    {
       return Collections.unmodifiableCollection(scopes.values());
+   }
+
+   /**
+    * Get a scope
+    * 
+    * @param level the scope level
+    * @return the scope
+    */
+   public Scope getScope(ScopeLevel level)
+   {
+      if (level == null)
+         throw new IllegalArgumentException("Null level");
+      return scopes.get(level);
    }
    
    /**
@@ -221,7 +234,7 @@ public class ScopeKey implements Serializable, Cloneable
     * @param qualifier the scope qualifier
     * @return the previous value or null if there wasn't one
     */
-   public Scope addScope(ScopeLevel level, String qualifier)
+   public Scope addScope(ScopeLevel level, Object qualifier)
    {
       Scope scope = new Scope(level, qualifier);
       return addScope(scope);

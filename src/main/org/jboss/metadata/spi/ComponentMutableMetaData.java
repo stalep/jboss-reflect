@@ -21,8 +21,12 @@
 */
 package org.jboss.metadata.spi;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Member;
+
 import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
 import org.jboss.metadata.spi.signature.Signature;
+import org.jboss.reflect.spi.MemberInfo;
 
 /**
  * ComponentMutableMetaData.
@@ -48,4 +52,196 @@ public interface ComponentMutableMetaData
     * @return any previous component at that signature
     */
    MetaDataRetrieval removeComponentMetaDataRetrieval(Signature signature);
+
+   /**
+    * Add a component annotation
+    * 
+    * @param <T> the annotation type
+    * @param signature the signature
+    * @param annotation the annotation
+    * @return any previous annotation
+    */
+   <T extends Annotation> T addAnnotation(Signature signature, T annotation);
+
+   /**
+    * Remove a member annotation
+    * 
+    * @param <T> the annotation type
+    * @param signature the signature
+    * @param annotationType the annotation type
+    * @return any previous annotation
+    */
+   <T extends Annotation> T removeAnnotation(Signature signature, Class<T> annotationType);
+
+   /**
+    * Add member  metaData
+    * 
+    * @param <T> the metadata type
+    * @param signature the signature
+    * @param metaData the meta data
+    * @param type the expected type
+    * @return any previous meta data
+    */
+   <T> T addMetaData(Signature signature, T metaData, Class<T> type);
+
+   /**
+    * Remove member metaData
+    * 
+    * @param <T> the metadata type
+    * @param signature the signature
+    * @param type the meta data type
+    * @return any previous meta data
+    */
+   <T> T removeMetaData(Signature signature, Class<T> type);
+
+   /**
+    * Add member metaData
+    *
+    * @param <T> the metadata type
+    * @param signature the signature
+    * @param name the name
+    * @param metaData the meta data
+    * @param type the expected type
+    * @return any previous meta data
+    */
+   <T> T addMetaData(Signature signature, String name, T metaData, Class<T> type);
+
+   /**
+    * Remove member metadata
+    * 
+    * @param <T> the metadata type
+    * @param signature the signature
+    * @param name the name of the meta data
+    * @param type the expected type of the metadata
+    * @return the metadata or null if not present
+    */
+   <T> T removeMetaData(Signature signature, String name, Class<T> type);
+
+   /**
+    * Add a component annotation
+    * 
+    * @param <T> the annotation type
+    * @param member member
+    * @param annotation the annotation
+    * @return any previous annotation
+    */
+   <T extends Annotation> T addAnnotation(Member member, T annotation);
+
+   /**
+    * Remove a member annotation
+    * 
+    * @param <T> the annotation type
+    * @param member member
+    * @param annotationType the annotation type
+    * @return any previous annotation
+    */
+   <T extends Annotation> T removeAnnotation(Member member, Class<T> annotationType);
+
+   /**
+    * Add member  metaData
+    * 
+    * @param <T> the metadata type
+    * @param member member
+    * @param metaData the meta data
+    * @param type the expected type
+    * @return any previous meta data
+    */
+   <T> T addMetaData(Member member, T metaData, Class<T> type);
+
+   /**
+    * Remove member metaData
+    * 
+    * @param <T> the metadata type
+    * @param member member
+    * @param type the meta data type
+    * @return any previous meta data
+    */
+   <T> T removeMetaData(Member member, Class<T> type);
+
+   /**
+    * Add member metaData
+    *
+    * @param <T> the metadata type
+    * @param member member
+    * @param name the name
+    * @param metaData the meta data
+    * @param type the expected type
+    * @return any previous meta data
+    */
+   <T> T addMetaData(Member member, String name, T metaData, Class<T> type);
+
+   /**
+    * Remove member metadata
+    * 
+    * @param <T> the metadata type
+    * @param member member
+    * @param name the name of the meta data
+    * @param type the expected type of the metadata
+    * @return the metadata or null if not present
+    */
+   <T> T removeMetaData(Member member, String name, Class<T> type);
+
+   /**
+    * Add a member annotation
+    * 
+    * @param <T> the annotation type
+    * @param member member
+    * @param annotation the annotation
+    * @return any previous annotation
+    */
+   <T extends Annotation> T addAnnotation(MemberInfo member, T annotation);
+
+   /**
+    * Remove a member annotation
+    * 
+    * @param <T> the annotation type
+    * @param member member
+    * @param annotationType the annotation type
+    * @return any previous annotation
+    */
+   <T extends Annotation> T removeAnnotation(MemberInfo member, Class<T> annotationType);
+
+   /**
+    * Add member  metaData
+    * 
+    * @param <T> the metadata type
+    * @param member member
+    * @param metaData the meta data
+    * @param type the expected type
+    * @return any previous meta data
+    */
+   <T> T addMetaData(MemberInfo member, T metaData, Class<T> type);
+
+   /**
+    * Remove member metaData
+    * 
+    * @param <T> the metadata type
+    * @param member member
+    * @param type the meta data type
+    * @return any previous meta data
+    */
+   <T> T removeMetaData(MemberInfo member, Class<T> type);
+
+   /**
+    * Add member metaData
+    *
+    * @param <T> the metadata type
+    * @param member member
+    * @param name the name
+    * @param metaData the meta data
+    * @param type the expected type
+    * @return any previous meta data
+    */
+   <T> T addMetaData(MemberInfo member, String name, T metaData, Class<T> type);
+
+   /**
+    * Remove member metadata
+    * 
+    * @param <T> the metadata type
+    * @param member member
+    * @param name the name of the meta data
+    * @param type the expected type of the metadata
+    * @return the metadata or null if not present
+    */
+   <T> T removeMetaData(MemberInfo member, String name, Class<T> type);
 }

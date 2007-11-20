@@ -22,7 +22,15 @@
 package org.jboss.test.metadata.repository.test;
 
 import org.jboss.metadata.plugins.repository.basic.BasicMetaDataRepository;
+import org.jboss.metadata.spi.MetaData;
 import org.jboss.metadata.spi.repository.MutableMetaDataRepository;
+import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
+import org.jboss.metadata.spi.retrieval.MetaDataRetrievalToMetaDataBridge;
+import org.jboss.metadata.spi.scope.CommonLevels;
+import org.jboss.metadata.spi.scope.Scope;
+import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.test.metadata.repository.support.TestClass1;
+import org.jboss.test.metadata.shared.support.TestAnnotation1;
 
 /**
  * BasicMutableMetaDataRepositoryUnitTestCase.
@@ -40,5 +48,15 @@ public class BasicMutableMetaDataRepositoryUnitTestCase extends MutableMetaDataR
    protected MutableMetaDataRepository setupEmpty()
    {
       return new BasicMetaDataRepository();
+   }
+   
+   public void testAutoClassRetrieval() throws Exception
+   {
+      MutableMetaDataRepository repository = setupEmpty();
+      ScopeKey key = new ScopeKey(new Scope(CommonLevels.CLASS, TestClass1.class));
+      MetaDataRetrieval retrieval = repository.getMetaDataRetrieval(key);
+      assertNotNull(retrieval);
+      MetaData metaData = new MetaDataRetrievalToMetaDataBridge(retrieval);
+      assertNotNull(metaData.getAnnotation(TestAnnotation1.class));
    }
 }

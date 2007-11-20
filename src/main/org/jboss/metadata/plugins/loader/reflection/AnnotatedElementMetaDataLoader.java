@@ -62,13 +62,13 @@ public class AnnotatedElementMetaDataLoader extends BasicMetaDataLoader
       Scope scope;
       if (annotated instanceof Class)
       {
-         Class clazz = (Class) annotated;
-         scope = new Scope(CommonLevels.CLASS, clazz.getName());
+         Class<?> clazz = Class.class.cast(annotated);
+         scope = new Scope(CommonLevels.CLASS, clazz);
       }
       else if (annotated instanceof Member)
       {
          Member member = (Member) annotated;
-         scope = new Scope(CommonLevels.JOINPOINT, member.getName());
+         scope = new Scope(CommonLevels.JOINPOINT, member);
       }
       else
       {
@@ -118,12 +118,12 @@ public class AnnotatedElementMetaDataLoader extends BasicMetaDataLoader
 
       if (annotated instanceof Class)
       {
-         Class clazz = (Class) annotated;
+         Class<?> clazz = Class.class.cast(annotated);
          if (signature instanceof ConstructorSignature)
          {
             try
             {
-               Constructor constructor = clazz.getConstructor(signature.getParametersTypes(clazz));
+               Constructor<?> constructor = clazz.getConstructor(signature.getParametersTypes(clazz));
                return new AnnotatedElementMetaDataLoader(constructor);
             }
             catch (NoSuchMethodException e)
@@ -186,7 +186,7 @@ public class AnnotatedElementMetaDataLoader extends BasicMetaDataLoader
       {
          if (signature instanceof MethodParametersSignature)
          {
-            Constructor constructor = (Constructor)annotated;
+            Constructor<?> constructor = Constructor.class.cast(annotated);
             Annotation[][] paramAnnotations = constructor.getParameterAnnotations();
             MethodParametersSignature sig = (MethodParametersSignature) signature;
             return new SimpleMetaDataLoader(paramAnnotations[sig.getParam()]);

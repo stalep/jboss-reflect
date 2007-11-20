@@ -61,7 +61,7 @@ public class AnnotatedElementLoaderScopeUnitTestCase extends AbstractMetaDataTes
       Scope scope = scopes.iterator().next();
       
       assertEquals(CommonLevels.CLASS, scope.getScopeLevel());
-      assertEquals(TestAnnotationScopeBean.class.getName(), scope.getQualifier());
+      assertEquals(TestAnnotationScopeBean.class, scope.getQualifier());
    }
    
    public void testFieldScope() throws Exception
@@ -96,6 +96,6 @@ public class AnnotatedElementLoaderScopeUnitTestCase extends AbstractMetaDataTes
       Scope scope = scopes.iterator().next();
       
       assertEquals(CommonLevels.JOINPOINT, scope.getScopeLevel());
-      assertEquals(member.getName(), scope.getQualifier());
+      assertEquals(member, scope.getQualifier());
    }
 }

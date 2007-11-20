@@ -38,9 +38,9 @@ public class Scope implements Serializable
    private final ScopeLevel level;
    
    /** The scope qualifier */
-   private final String qualifier;
+   private final Object qualifier;
    
-   public Scope(ScopeLevel level, String qualifier)
+   public Scope(ScopeLevel level, Object qualifier)
    {
       if (level == null)
          throw new IllegalArgumentException("Null level");
@@ -56,7 +56,7 @@ public class Scope implements Serializable
       return level;
    }
 
-   public String getQualifier()
+   public Object getQualifier()
    {
       return qualifier;
    }

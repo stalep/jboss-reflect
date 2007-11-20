@@ -22,7 +22,9 @@
 package org.jboss.metadata.spi.repository;
 
 import org.jboss.metadata.spi.retrieval.MetaDataRetrieval;
+import org.jboss.metadata.spi.retrieval.MetaDataRetrievalFactory;
 import org.jboss.metadata.spi.scope.ScopeKey;
+import org.jboss.metadata.spi.scope.ScopeLevel;
 
 /**
  * MutableMetaDataRepository.
@@ -47,4 +49,29 @@ public interface MutableMetaDataRepository extends MetaDataRepository
     * @return any previous retrieval
     */
    MetaDataRetrieval removeMetaDataRetrieval(ScopeKey key);
+
+   /**
+    * Get a meta data retrieval factory for the given scope level
+    * 
+    * @param level the scope level
+    * @return the factory
+    */
+   MetaDataRetrievalFactory getMetaDataRetrievalFactory(ScopeLevel level);
+
+   /**
+    * Add a meta data retrieval factory to the given scope level
+    * 
+    * @param level the scope level
+    * @param factory the factory
+    * @return any previous factory
+    */
+   MetaDataRetrievalFactory addMetaDataRetrievalFactory(ScopeLevel level, MetaDataRetrievalFactory factory);
+
+   /**
+    * Remove a meta data retrieval factory for the given scope level
+    * 
+    * @param level the scope level
+    * @return any previous factory
+    */
+   MetaDataRetrievalFactory removeMetaDataRetrievalFactory(ScopeLevel level);
 }
