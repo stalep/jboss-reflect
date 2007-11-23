@@ -43,7 +43,8 @@ public class BeanInfoTestSuite extends TestSuite
       TestSuite suite = new TestSuite("BeanInfo Tests");
 
       suite.addTest(BeanInfoUnitTestCase.suite());
-      
+      suite.addTest(BeanInfoUtilTestCase.suite());
+
       return suite;
    }
 }
