@@ -25,6 +25,7 @@ import junit.framework.Test;
 import org.jboss.test.beaninfo.support.NestedBean;
 import org.jboss.beans.info.plugins.BeanInfoUtil;
 import org.jboss.beans.info.spi.BeanInfo;
+import org.jboss.beans.info.spi.PropertyInfo;
 
 /**
  * BeanInfoUtil Test Case.
@@ -107,6 +108,33 @@ public class BeanInfoUtilTestCase extends AbstractBeanInfoTest
          BeanInfoUtil.set(getBeanInfo(), parent, "differentGetter.nestedBean", grandchild);
          assertSame(child, parent.getNestedBean());
          assertSame(grandchild, child.getNestedBean());
+         fail("Should not be here.");
+      }
+      catch (Throwable t)
+      {
+         assertInstanceOf(t, IllegalArgumentException.class);
+      }
+   }
+
+   public void testNestedPropertyInfo() throws Throwable
+   {
+      NestedBean grandchild = new NestedBean();
+      NestedBean child = new NestedBean(grandchild);
+      NestedBean parent = new NestedBean(child);
+      BeanInfo beanInfo = getBeanInfo();
+      PropertyInfo propertyInfo = beanInfo.getProperty("string");
+      PropertyInfo nestedPropertyInfo = BeanInfoUtil.getPropertyInfo(beanInfo, parent, "nestedBean.otherBean.string");
+      assertEquals(propertyInfo, nestedPropertyInfo);
+   }
+
+   public void testNestedPropertyInfoFail() throws Throwable
+   {
+      try
+      {
+         NestedBean child = new NestedBean();
+         NestedBean parent = new NestedBean(child);
+         BeanInfo beanInfo = getBeanInfo();
+         BeanInfoUtil.getPropertyInfo(beanInfo, parent, "nestedBean.differentGetter.string");
          fail("Should not be here.");
       }
       catch (Throwable t)

@@ -29,6 +29,7 @@ import org.jboss.config.spi.Configuration;
 import org.jboss.config.plugins.property.PropertyConfiguration;
 import org.jboss.util.propertyeditor.PropertyEditors;
 import org.jboss.beans.info.spi.BeanInfo;
+import org.jboss.beans.info.spi.PropertyInfo;
 
 /**
  * Bean info helper.
@@ -65,12 +66,16 @@ public class BeanInfoUtil
    protected static Object getNestedTarget(BeanInfo beanInfo, Object target, String[] propertys)
          throws Throwable
    {
+      if (propertys == null)
+         throw new IllegalArgumentException("Null propertys.");
+
       for(int i = 0; i < propertys.length; i++)
       {
          if (beanInfo == null)
             throw new IllegalArgumentException("Null bean info");
 
-         Object result = beanInfo.getProperty(target, propertys[i]);
+         PropertyInfo propertyInfo = beanInfo.getProperty(propertys[i]);
+         Object result = propertyInfo.get(target);
          if (i < propertys.length - 1)
          {
             if (result == null)
@@ -80,6 +85,41 @@ public class BeanInfoUtil
          target = result;
       }
       return target;
+   }
+
+   /**
+    * Get the nested property info from target.
+    *
+    * @param beanInfo the bean info
+    * @param target the target
+    * @param propertys the property names
+    * @return nested property info
+    * @throws Throwable for any error
+    */
+   protected static PropertyInfo getNestedPropertyInfo(BeanInfo beanInfo, Object target, String[] propertys)
+         throws Throwable
+   {
+      if (propertys == null || propertys.length == 0)
+         throw new IllegalArgumentException("Illegal propertys: " + Arrays.asList(propertys) + ", " + target);
+
+      PropertyInfo propertyInfo = null;
+      for(int i = 0; i < propertys.length; i++)
+      {
+         if (beanInfo == null)
+            throw new IllegalArgumentException("Null bean info");
+
+         propertyInfo = beanInfo.getProperty(propertys[i]);
+         // we're not done yet
+         if (i < propertys.length - 1)
+         {
+            Object result = propertyInfo.get(target);
+            if (result == null)
+               throw new IllegalArgumentException("Null target in nested property (" + Arrays.asList(propertys) + "): " + target + "." + propertys[i]);
+            beanInfo = configuration.getBeanInfo(result.getClass());
+            target = result;
+         }
+      }
+      return propertyInfo;
    }
 
    /**
@@ -132,7 +172,28 @@ public class BeanInfoUtil
       }
       else if (beanInfo == null)
          throw new IllegalArgumentException("Null bean info.");
-      
-      beanInfo.setProperty(target, propertys[size], value);
+
+      PropertyInfo propertyInfo = beanInfo.getProperty(propertys[size]);
+      propertyInfo.set(target, value);
+   }
+
+   /**
+    * Get nested property info.
+    *
+    * @param beanInfo the bean info
+    * @param target the target
+    * @param name the nested property name
+    * @return nested property
+    * @throws Throwable for any error
+    */
+   public static PropertyInfo getPropertyInfo(BeanInfo beanInfo, Object target, String name) throws Throwable
+   {
+      if (target == null)
+         throw new IllegalArgumentException("Null target");
+      if (name == null)
+         throw new IllegalArgumentException("Null property name");
+
+      String[] propertys = name.split("\\.");
+      return getNestedPropertyInfo(beanInfo, target, propertys);
    }
 }

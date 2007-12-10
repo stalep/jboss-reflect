@@ -234,14 +234,12 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
 
    public Object getProperty(Object bean, String name) throws Throwable
    {
-      PropertyInfo property = getProperty(name);
-      return property.get(bean);
+      return BeanInfoUtil.get(this, bean, name);
    }
 
    public void setProperty(Object bean, String name, Object value) throws Throwable
    {
-      PropertyInfo property = getProperty(name);
-      property.set(bean, value);
+      BeanInfoUtil.set(this, bean, name, value);
    }
 
    public Object invoke(Object bean, String name) throws Throwable

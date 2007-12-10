@@ -27,6 +27,7 @@ package org.jboss.test.beaninfo.support;
 public class NestedBean
 {
    private NestedBean bean;
+   private String string;
 
    public NestedBean()
    {
@@ -50,5 +51,22 @@ public class NestedBean
    public NestedBean getDifferentGetter()
    {
       return null;
+   }
+
+   public NestedBean getOtherBean()
+   {
+      NestedBean other = new NestedBean();
+      other.setString(string);
+      return other;
+   }
+
+   public String getString()
+   {
+      return string;
+   }
+
+   public void setString(String string)
+   {
+      this.string = string;
    }
 }
