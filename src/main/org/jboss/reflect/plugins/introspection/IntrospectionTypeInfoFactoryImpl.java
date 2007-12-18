@@ -30,7 +30,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Collection;
@@ -356,8 +355,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
    {
       Type compType = type.getGenericComponentType();
       TypeInfo componentType = getTypeInfo(compType);
-      ArrayInfoImpl result = new ArrayInfoImpl(componentType);
-      return result;
+      return new ArrayInfoImpl(componentType);
    }
 
    private TypeInfo resolveComplexTypeInfo(ClassLoader cl, String name)
@@ -469,8 +467,6 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
    protected Method[] getDeclaredMethods(final Class clazz)
    {
-      if(clazz.getSimpleName().equals("ClassLoader") || clazz.isAssignableFrom(ClassLoader.class))
-         System.out.println("Saw ClassLoader class");
       if (System.getSecurityManager() == null)
          return clazz.getDeclaredMethods();
       else
