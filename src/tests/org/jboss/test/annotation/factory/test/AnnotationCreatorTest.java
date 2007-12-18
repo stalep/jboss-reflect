@@ -22,6 +22,7 @@
 package org.jboss.test.annotation.factory.test;
 
 import java.lang.annotation.Annotation;
+import java.io.Serializable;
 
 import org.jboss.annotation.factory.AnnotationCreator;
 import org.jboss.annotation.factory.AnnotationValidationException;
@@ -77,7 +78,17 @@ public abstract class AnnotationCreatorTest extends ContainerTest
       assertEquals(new String[]{"Test", "123"}, complex.array());
       assertEquals(MyEnum.TWO, complex.enumVal());
    }
-   
+
+   public void testSerializable() throws Exception
+   {
+      String expr = "@org.jboss.test.annotation.factory.support.Complex(ch='a', string=\"Test123\", flt=9.9, dbl=123456789.99, shrt=1, lng=987654321, integer=123, bool=true, annotation=@org.jboss.test.annotation.factory.support.SimpleValue(\"Yes\"), array={\"Test\", \"123\"}, clazz=java.lang.Long.class, enumVal=org.jboss.test.annotation.factory.support.MyEnum.TWO)";
+      Annotation annotation  = (Annotation)AnnotationCreator.createAnnotation(expr, Complex.class);
+      assertInstanceOf(annotation, Serializable.class);
+      byte[] bytes = serialize((Serializable)annotation);
+      Object desAnn = deserialize(bytes);
+      assertEquals(annotation, desAnn);
+   }
+
    public void testMissingAttributeAndNoDefault() throws Exception
    {
       try

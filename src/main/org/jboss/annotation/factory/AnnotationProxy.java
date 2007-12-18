@@ -49,23 +49,24 @@ public class AnnotationProxy implements InvocationHandler, Serializable
    public Object invoke(Object proxy, Method method, Object[] args)
            throws Throwable
    {
-      if (method.getName().equals("equals"))
+      String name = method.getName();
+      if ("equals".equals(name))
       {
          return doEquals(proxy, args[0]);
       }
-      else if (method.getName().equals("hashCode"))
+      else if ("hashCode".equals(name))
       {
          return doHashCode();
       }
-      else if (method.getName().equals("toString"))
+      else if ("toString".equals(name))
       {
          return map.toString();
       }
-      else if (method.getName().equals("annotationType"))
+      else if ("annotationType".equals(name))
       {
          return annotationType;
       }
-      
+
       /*
       Object obj = map.get(method.getName());
       if (!method.getReturnType().equals(obj.getClass()))
@@ -74,14 +75,14 @@ public class AnnotationProxy implements InvocationHandler, Serializable
       }
       return obj;
       */
-      return map.get(method.getName());
+      return map.get(name);
    }
 
    public Object getValue(String name)
    {
       return map.get(name);
    }
-   
+
    @SuppressWarnings("unchecked")
    private Object doEquals(Object proxy, Object obj)
    {
@@ -91,7 +92,7 @@ public class AnnotationProxy implements InvocationHandler, Serializable
          return Boolean.FALSE;
 
       Class[] intfs = proxy.getClass().getInterfaces();
-      if (!intfs[0].isAssignableFrom(obj.getClass()))
+      if (intfs[0].isAssignableFrom(obj.getClass()) == false)
       {
          return Boolean.FALSE;
       }
@@ -114,9 +115,9 @@ public class AnnotationProxy implements InvocationHandler, Serializable
    /**
     * Create a proxy implementation for the annotation class.
     * @param map - map of the annotation values
-    * @param annotation - the annotation class 
-    * @return an instance implementing the annotation 
-    * @throws Exception
+    * @param annotation - the annotation class
+    * @return an instance implementing the annotation
+    * @throws Exception for any error
     */
    public static Object createProxy(Map map, Class annotation) throws Exception
    {
