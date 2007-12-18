@@ -343,6 +343,16 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return resolveComplexTypeInfo(cl, name);
    }
 
+/*
+   // TODO - uncomment one the jboss-commons-core is updated
+   protected TypeInfo getGenericArrayType(GenericArrayType type)
+   {
+      Type compType = type.getGenericComponentType();
+      TypeInfo componentType = getTypeInfo(compType);
+      return new ArrayInfoImpl(componentType);
+   }
+*/
+
    private TypeInfo resolveComplexTypeInfo(ClassLoader cl, String name)
          throws ClassNotFoundException
    {

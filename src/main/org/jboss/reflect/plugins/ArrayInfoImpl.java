@@ -21,11 +21,14 @@
 */
 package org.jboss.reflect.plugins;
 
+import java.lang.reflect.UndeclaredThrowableException;
+
 import org.jboss.metadata.spi.signature.Signature;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
  * Array information
@@ -58,6 +61,9 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
     */
    public ArrayInfoImpl(TypeInfo componentType)
    {
+      if (componentType == null)
+         throw new IllegalArgumentException("Null component type.");
+
       this.componentType = componentType;
       StringBuilder builder = new StringBuilder();
       builder.append("[");
@@ -67,7 +73,7 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
          builder.append("[");
          temp = ((ArrayInfo) temp).getComponentType();
       }
-      if (temp.getClass().equals(PrimitiveInfo.class))
+      if (PrimitiveInfo.class.equals(temp.getClass()))
       {
          //builder.append(temp.getName());
          String encodedName = Signature.getPrimativeArrayType(temp.getName());
@@ -79,6 +85,25 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
       }
       name = builder.toString();
       calculateHash();
+   }
+
+   @Deprecated
+   @SuppressWarnings("unchecked")
+   public Class<? extends Object> getType()
+   {
+      if (annotatedElement == null)
+      {
+         try
+         {
+            TypeInfoFactory tif = SerializationHelper.getTypeInfoFactory();
+            annotatedElement = tif.getTypeInfo(name, componentType.getType().getClassLoader()).getType();
+         }
+         catch (Throwable t)
+         {
+            throw new UndeclaredThrowableException(t);
+         }
+      }
+      return (Class<? extends Object>)annotatedElement;
    }
 
    public TypeInfo getComponentType()
