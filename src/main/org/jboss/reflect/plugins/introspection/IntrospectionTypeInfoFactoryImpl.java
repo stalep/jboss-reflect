@@ -25,10 +25,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Collection;
@@ -343,15 +345,20 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return resolveComplexTypeInfo(cl, name);
    }
 
-/*
-   // TODO - uncomment one the jboss-commons-core is updated
+   /**
+    * Get the information for an array type
+    * 
+    * @param type the array type
+    * @return the info
+    */
+   @Override
    protected TypeInfo getGenericArrayType(GenericArrayType type)
    {
       Type compType = type.getGenericComponentType();
       TypeInfo componentType = getTypeInfo(compType);
-      return new ArrayInfoImpl(componentType);
+      ArrayInfoImpl result = new ArrayInfoImpl(componentType);
+      return result;
    }
-*/
 
    private TypeInfo resolveComplexTypeInfo(ClassLoader cl, String name)
          throws ClassNotFoundException
@@ -462,6 +469,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
    protected Method[] getDeclaredMethods(final Class clazz)
    {
+      if(clazz.getSimpleName().equals("ClassLoader") || clazz.isAssignableFrom(ClassLoader.class))
+         System.out.println("Saw ClassLoader class");
       if (System.getSecurityManager() == null)
          return clazz.getDeclaredMethods();
       else
