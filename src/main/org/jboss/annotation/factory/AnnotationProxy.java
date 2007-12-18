@@ -21,22 +21,24 @@
   */
 package org.jboss.annotation.factory;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 
 /**
- * Comment
+ * InvocationHandler implementation for creating an annotation proxy.
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:kabir.khan@jboss.org">Kabir Khan</a>
  * @version $Revision$
  */
-public class AnnotationProxy implements InvocationHandler
+public class AnnotationProxy implements InvocationHandler, Serializable
 {
-   Map map;
-   Class annotationType;
+   private static final long serialVersionUID = 1;
+   private Map map;
+   private Class annotationType;
 
    public AnnotationProxy(Class annotationType, Map valueMap)
    {
@@ -83,8 +85,10 @@ public class AnnotationProxy implements InvocationHandler
    @SuppressWarnings("unchecked")
    private Object doEquals(Object proxy, Object obj)
    {
-      if (obj == proxy) return Boolean.TRUE;
-      if (obj == null) return Boolean.FALSE;
+      if (obj == proxy)
+         return Boolean.TRUE;
+      if (obj == null)
+         return Boolean.FALSE;
 
       Class[] intfs = proxy.getClass().getInterfaces();
       if (!intfs[0].isAssignableFrom(obj.getClass()))
@@ -107,6 +111,13 @@ public class AnnotationProxy implements InvocationHandler
       return new Integer(map.hashCode());
    }
 
+   /**
+    * Create a proxy implementation for the annotation class.
+    * @param map - map of the annotation values
+    * @param annotation - the annotation class 
+    * @return an instance implementing the annotation 
+    * @throws Exception
+    */
    public static Object createProxy(Map map, Class annotation) throws Exception
    {
       AnnotationProxy proxyHandler = new AnnotationProxy(annotation, map);
