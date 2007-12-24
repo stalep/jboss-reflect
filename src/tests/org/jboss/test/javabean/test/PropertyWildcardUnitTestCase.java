@@ -22,40 +22,32 @@
 package org.jboss.test.javabean.test;
 
 import junit.framework.Test;
-import org.jboss.test.javabean.support.SimpleBean;
+
+import org.jboss.test.javabean.support.TestPropertyWildcard;
+import org.jboss.test.javabean.support.TestWildcard;
 
 /**
- * InstantiateTestCase.
+ * PropertyWildcardUnitTestCase.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision$
+ * @version $Revision: 1.1 $
  */
-public class InstantiateTestCase extends OldAbstractJavaBeanTest
+public class PropertyWildcardUnitTestCase extends AbstractJavaBeanTest
 {
-   public void testInstantiate() throws Exception
-   {
-      SimpleBean bean = unmarshal("TestInstantiate.xml", SimpleBean.class);
-      assertEquals("()", bean.getConstructorUsed());
-   }
-   
-   /**
-    * Setup the test
-    * 
-    * @return the test
-    */
    public static Test suite()
    {
-      return suite(InstantiateTestCase.class);
+      return suite(PropertyWildcardUnitTestCase.class);
    }
-
-   /**
-    * Create a new InstantiateTestCase.
-    * 
-    * @param name the test name
-    */
-   public InstantiateTestCase(String name)
+   
+   public PropertyWildcardUnitTestCase(String name)
    {
       super(name);
    }
 
+   public void testProperty() throws Exception
+   {
+      TestPropertyWildcard bean = unmarshalJavaBean(TestPropertyWildcard.class);
+      TestWildcard wildcard = bean.getBean();
+      assertNotNull(wildcard);
+   }
 }

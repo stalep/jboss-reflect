@@ -94,6 +94,17 @@ public interface Configuration
    TypeInfo getTypeInfo(Type type);
 
    /**
+    * Get the type info for a type
+    *
+    * @param type the type
+    * @return the type info
+    * @param cl the classloader
+    * @throws IllegalArgumentException for a null type
+    * @throws ClassNotFoundException when the class could not be loaded
+    */
+   TypeInfo getTypeInfo(String type, ClassLoader cl) throws ClassNotFoundException;
+
+   /**
     * Get the type info factory
     * 
     * @return the TypeInfoFactory

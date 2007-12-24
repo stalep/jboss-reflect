@@ -81,6 +81,10 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jbossxb-builder</artifactId>
+    </dependency>
+    <dependency>
       <groupId>apache-xerces</groupId>
       <artifactId>xml-apis</artifactId>
     </dependency>

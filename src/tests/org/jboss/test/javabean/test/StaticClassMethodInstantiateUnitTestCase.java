@@ -22,40 +22,29 @@
 package org.jboss.test.javabean.test;
 
 import junit.framework.Test;
-import org.jboss.test.javabean.support.SimpleBean;
+
+import org.jboss.test.javabean.support.TestStaticClassMethodInstantiate;
 
 /**
- * InstantiateTestCase.
+ * StaticClassMethodInstantiateUnitTestCase.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision$
+ * @version $Revision: 1.1 $
  */
-public class InstantiateTestCase extends OldAbstractJavaBeanTest
+public class StaticClassMethodInstantiateUnitTestCase extends AbstractJavaBeanTest
 {
-   public void testInstantiate() throws Exception
-   {
-      SimpleBean bean = unmarshal("TestInstantiate.xml", SimpleBean.class);
-      assertEquals("()", bean.getConstructorUsed());
-   }
-   
-   /**
-    * Setup the test
-    * 
-    * @return the test
-    */
    public static Test suite()
    {
-      return suite(InstantiateTestCase.class);
+      return suite(StaticClassMethodInstantiateUnitTestCase.class);
    }
-
-   /**
-    * Create a new InstantiateTestCase.
-    * 
-    * @param name the test name
-    */
-   public InstantiateTestCase(String name)
+   
+   public StaticClassMethodInstantiateUnitTestCase(String name)
    {
       super(name);
    }
 
+   public void testStaticClassMethodInstantiate() throws Exception
+   {
+      unmarshalJavaBean(TestStaticClassMethodInstantiate.class);
+   }
 }

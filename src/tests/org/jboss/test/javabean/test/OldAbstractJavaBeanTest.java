@@ -21,41 +21,36 @@
 */
 package org.jboss.test.javabean.test;
 
-import junit.framework.Test;
-import org.jboss.test.javabean.support.SimpleBean;
+import org.jboss.test.AbstractTestDelegate;
+import org.jboss.test.ioc.test.AbstractIoCTest;
 
 /**
- * InstantiateTestCase.
+ * AbstractJavaBeanTest.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class InstantiateTestCase extends OldAbstractJavaBeanTest
+public class OldAbstractJavaBeanTest extends AbstractIoCTest
 {
-   public void testInstantiate() throws Exception
-   {
-      SimpleBean bean = unmarshal("TestInstantiate.xml", SimpleBean.class);
-      assertEquals("()", bean.getConstructorUsed());
-   }
-   
    /**
-    * Setup the test
+    * Create a new AbstractJBossXBTest.
     * 
-    * @return the test
+    * @param name the name of the test
     */
-   public static Test suite()
-   {
-      return suite(InstantiateTestCase.class);
-   }
-
-   /**
-    * Create a new InstantiateTestCase.
-    * 
-    * @param name the test name
-    */
-   public InstantiateTestCase(String name)
+   public OldAbstractJavaBeanTest(String name)
    {
       super(name);
    }
 
+   /**
+    * Setup the test delegate
+    * 
+    * @param clazz the class
+    * @return the delegate
+    * @throws Exception for any error
+    */
+   public static AbstractTestDelegate getDelegate(Class clazz) throws Exception
+   {
+      return new JavaBeanTestDelegate(clazz);
+   }
 }

@@ -19,51 +19,24 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.javabean.test;
+package org.jboss.javabean.plugins.jaxb;
 
-import junit.framework.Test;
-import org.jboss.test.javabean.support.AmbiguityBean;
+import org.jboss.beans.info.spi.BeanInfo;
+import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.xb.spi.BeanAdapterBuilder;
+import org.jboss.xb.spi.BeanAdapterFactory;
 
 /**
- * PropertyTestCase.
+ * JavaBeanBuilder.
  *
+ * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision: 58996 $
+ * @version $Revision: 1.1 $
  */
-public class AmbiguityTestCase extends OldAbstractJavaBeanTest
+public class JavaBeanBuilder implements BeanAdapterBuilder
 {
-   /**
-    * Create a new AmbiguityTestCase.
-    *
-    * @param name the test name
-    */
-   public AmbiguityTestCase(String name)
+   public BeanAdapterFactory newFactory(BeanInfo beanInfo, MethodInfo factory)
    {
-      super(name);
+      return new JavaBeanFactory();
    }
-
-   /**
-    * Setup the test
-    *
-    * @return the test
-    */
-   public static Test suite()
-   {
-      return suite(AmbiguityTestCase.class);
-   }
-
-   public void testConfigureInt() throws Exception
-   {
-      AmbiguityBean ab = unmarshal("TestAmbiguityInt.xml", AmbiguityBean.class);
-      Object something = ab.something();
-      assertEquals(something.getClass(), Integer.class);
-   }
-
-   public void testConfigureString() throws Exception
-   {
-      AmbiguityBean ab = unmarshal("TestAmbiguityString.xml", AmbiguityBean.class);
-      Object something = ab.something();
-      assertEquals(something.getClass(), String.class);
-   }
-
 }

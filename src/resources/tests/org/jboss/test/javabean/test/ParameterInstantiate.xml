@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<javabean xmlns="test:javabean"
+          class="org.jboss.test.javabean.support.TestParameterInstantiate">
+   <constructor>
+      <parameter>Hello</parameter>
+      <parameter>5</parameter>
+   </constructor>
+</javabean>

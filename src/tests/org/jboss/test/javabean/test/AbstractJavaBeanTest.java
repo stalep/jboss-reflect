@@ -21,37 +21,25 @@
 */
 package org.jboss.test.javabean.test;
 
-import org.jboss.test.AbstractTestDelegate;
-import org.jboss.test.ioc.test.AbstractIoCTest;
+import org.jboss.test.xb.builder.AbstractBuilderTest;
+import org.jboss.javabean.plugins.jaxb.JavaBean;
 
 /**
  * AbstractJavaBeanTest.
- * 
+ *
+ * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class AbstractJavaBeanTest extends AbstractIoCTest
+public class AbstractJavaBeanTest extends AbstractBuilderTest
 {
-   /**
-    * Create a new AbstractJBossXBTest.
-    * 
-    * @param name the name of the test
-    */
    public AbstractJavaBeanTest(String name)
    {
       super(name);
    }
 
-   /**
-    * Setup the test delegate
-    * 
-    * @param clazz the class
-    * @return the delegate
-    * @throws Exception for any error
-    */
-   public static AbstractTestDelegate getDelegate(Class clazz) throws Exception
+   protected <T> T unmarshalJavaBean(Class<T> expected, Class... others) throws Exception
    {
-      return new JavaBeanTestDelegate(clazz);
+      return unmarshalObject(expected, JavaBean.class, others);
    }
-
 }

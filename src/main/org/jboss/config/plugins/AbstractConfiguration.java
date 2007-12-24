@@ -100,6 +100,11 @@ public abstract class AbstractConfiguration implements Configuration
       return getTypeInfoFactory().getTypeInfo(type);
    }
 
+   public TypeInfo getTypeInfo(String type, ClassLoader cl) throws ClassNotFoundException
+   {
+      return getTypeInfoFactory().getTypeInfo(type, cl);
+   }
+
    public TypeInfoFactory getTypeInfoFactory()
    {
       if (typeInfoFactory == null)

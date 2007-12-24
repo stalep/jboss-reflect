@@ -19,43 +19,22 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.javabean.test;
-
-import junit.framework.Test;
-import org.jboss.test.javabean.support.SimpleBean;
+package org.jboss.test.javabean.support;
 
 /**
- * InstantiateTestCase.
+ * TestStaticMethodInstantiate.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision$
+ * @version $Revision: 1.1 $
  */
-public class InstantiateTestCase extends OldAbstractJavaBeanTest
+public class TestStaticMethodInstantiate
 {
-   public void testInstantiate() throws Exception
+   public static TestStaticMethodInstantiate instantiate()
    {
-      SimpleBean bean = unmarshal("TestInstantiate.xml", SimpleBean.class);
-      assertEquals("()", bean.getConstructorUsed());
+      return new TestStaticMethodInstantiate();
    }
    
-   /**
-    * Setup the test
-    * 
-    * @return the test
-    */
-   public static Test suite()
+   private TestStaticMethodInstantiate()
    {
-      return suite(InstantiateTestCase.class);
    }
-
-   /**
-    * Create a new InstantiateTestCase.
-    * 
-    * @param name the test name
-    */
-   public InstantiateTestCase(String name)
-   {
-      super(name);
-   }
-
 }

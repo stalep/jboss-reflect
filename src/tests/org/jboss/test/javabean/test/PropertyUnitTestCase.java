@@ -21,30 +21,24 @@
 */
 package org.jboss.test.javabean.test;
 
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 import junit.framework.Test;
-import org.jboss.test.javabean.support.SimpleBean;
-import org.jboss.util.NestedRuntimeException;
+
+import org.jboss.test.javabean.support.TestProperty;
 
 /**
- * PropertyTestCase.
- *
+ * PropertyInstantiateUnitTestCase.
+ * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision$
+ * @version $Revision: 1.1 $
  */
-public class PropertyTestCase extends OldAbstractJavaBeanTest
+public class PropertyUnitTestCase extends AbstractJavaBeanTest
 {
-//   private static DateFormat dateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
-   // EEE names - Locale configured
    private static DateFormat dateFormat = new SimpleDateFormat("MMM d HH:mm:ss z yyyy");
 
    String stringValue =  "StringValue";
@@ -58,85 +52,23 @@ public class PropertyTestCase extends OldAbstractJavaBeanTest
    Float floatValue = new Float("3.14");
    Double doubleValue = new Double("3.14e12");
 //   Date dateValue = createDate("Mon Jan 01 00:00:00 CET 2001");
-   Date dateValue = createDate("Jan 01 00:00:00 CET 2001");
+//   Date dateValue = createDate("Jan 01 00:00:00 CET 2001");
    BigDecimal bigDecimalValue = new BigDecimal("12e4");
    BigInteger bigIntegerValue = new BigInteger("123456");
 
-   public void testConfigure() throws Exception
+   public static Test suite()
    {
-      // check bean
-      SimpleBean bean = unmarshal("TestConfigure.xml", SimpleBean.class);
-      validateFields("()", null, bean);
+      return suite(PropertyUnitTestCase.class);
+   }
+   
+   public PropertyUnitTestCase(String name)
+   {
+      super(name);
    }
 
-   public void testConfigure20() throws Exception
+   public void testProperty() throws Exception
    {
-      // check bean
-      SimpleBean bean = unmarshal("TestConfigure20.xml", SimpleBean.class);
-      validateFields("()", null, bean);
-   }
-
-   public void testConfigure20WithCtor() throws Exception
-   {
-      // check bean
-      SimpleBean bean = unmarshal("TestConfigure20WithCtor.xml", SimpleBean.class);
-      validateFields("(<all-fields>)", null, bean);
-   }
-
-   public void testConfigure20WithCtorFactory() throws Exception
-   {
-      // check bean
-      SimpleBean bean = unmarshal("TestConfigure20WithCtorFactory.xml", SimpleBean.class);
-      validateFields("(<all-fields>)", "getInstance(<all-fields>)", bean);
-   }
-
-   public void testConfigure20WithCtorExplicitFactoryClass() throws Exception
-   {
-      // check bean
-      SimpleBean bean = unmarshal("TestConfigure20WithCtorExplicitFactoryClass.xml", SimpleBean.class);
-      validateFields("()", "SimpleBeanFactory.newInstance()", bean);
-   }
-   public void testConfigure20WithCtorExplicitFactoryClassAndParams() throws Exception
-   {
-      // check bean
-      SimpleBean bean = unmarshal("TestConfigure20WithCtorExplicitFactoryClassAndParams.xml", SimpleBean.class);
-      validateFields("(<all-fields>)", "SimpleBeanFactory.newInstance(<all-fields>)", bean);
-   }
-
-   /**
-    * Validate the JavaBean property name introspection
-    * @throws Exception
-    */
-   public void testJavaBeanMatching() throws Exception
-   {
-      BeanInfo info = Introspector.getBeanInfo(SimpleBean.class);
-      PropertyDescriptor[] props = info.getPropertyDescriptors();
-      HashMap<String, PropertyDescriptor> propMap = new HashMap<String, PropertyDescriptor>();
-      for(PropertyDescriptor pd : props)
-      {
-         propMap.put(pd.getName(), pd);
-      }
-      assertNotNull("Has XYZ", propMap.get("XYZ"));
-      assertNull("Does not have xYZ", propMap.get("xYZ"));
-   }
-
-   @Override
-   protected Object unmarshal(String name) throws Exception
-   {
-      // tmp format
-      System.setProperty("org.jboss.util.propertyeditor.DateEditor.format", "MMM d HH:mm:ss z yyyy");
-      // TODO Auto-generated method stub
-      return super.unmarshal(name);
-   }
-
-   protected void validateFields(String ctor, String factory, SimpleBean bean)
-   {
-      // check bean
-      assertEquals(ctor, bean.getConstructorUsed());
-      if( factory == null )
-         assertTrue("factory == null", bean.getFactoryUsed() == null);
-      else
-         assertEquals(factory, bean.getFactoryUsed());
+      TestProperty bean = unmarshalJavaBean(TestProperty.class);
 
       assertEquals(stringValue, bean.getAString());
       assertEquals(byteValue, bean.getAByte());
@@ -148,7 +80,7 @@ public class PropertyTestCase extends OldAbstractJavaBeanTest
       assertEquals(longValue, bean.getALong());
       assertEquals(floatValue, bean.getAFloat());
       assertEquals(doubleValue, bean.getADouble());
-      assertEquals(dateValue, bean.getADate());
+      // TODO assertEquals(dateValue, bean.getADate());
       assertEquals(bigDecimalValue, bean.getABigDecimal());
       assertEquals(bigIntegerValue, bean.getABigInteger());
       assertEquals(byteValue.byteValue(), bean.getAbyte());
@@ -177,28 +109,7 @@ public class PropertyTestCase extends OldAbstractJavaBeanTest
       }
       catch (Exception e)
       {
-         throw new NestedRuntimeException(e);
+         throw new RuntimeException(e);
       }
    }
-
-   /**
-    * Setup the test
-    * 
-    * @return the test
-    */
-   public static Test suite()
-   {
-      return suite(PropertyTestCase.class);
-   }
-
-   /**
-    * Create a new InstantiateTestCase.
-    * 
-    * @param name the test name
-    */
-   public PropertyTestCase(String name)
-   {
-      super(name);
-   }
-
 }

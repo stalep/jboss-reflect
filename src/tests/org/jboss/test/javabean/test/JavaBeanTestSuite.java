@@ -28,6 +28,7 @@ import junit.textui.TestRunner;
 /**
  * JavaBean Test Suite.
  * 
+ * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
@@ -45,6 +46,13 @@ public class JavaBeanTestSuite extends TestSuite
       suite.addTest(InstantiateTestCase.suite());
       suite.addTest(PropertyTestCase.suite());
       suite.addTest(AmbiguityTestCase.suite());
+      // jaxb tests
+      suite.addTest(SimpleInstantiateUnitTestCase.suite());
+      suite.addTest(StaticMethodInstantiateUnitTestCase.suite());
+      suite.addTest(StaticClassMethodInstantiateUnitTestCase.suite());
+      suite.addTest(ParameterInstantiateUnitTestCase.suite());
+      suite.addTest(PropertyUnitTestCase.suite());
+      suite.addTest(PropertyWildcardUnitTestCase.suite());
 
       return suite;
    }

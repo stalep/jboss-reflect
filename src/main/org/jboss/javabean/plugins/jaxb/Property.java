@@ -19,51 +19,29 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.javabean.test;
+package org.jboss.javabean.plugins.jaxb;
 
-import junit.framework.Test;
-import org.jboss.test.javabean.support.AmbiguityBean;
+import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- * PropertyTestCase.
+ * Property.
  *
+ * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision: 58996 $
+ * @version $Revision: 1.1 $
  */
-public class AmbiguityTestCase extends OldAbstractJavaBeanTest
+public class Property extends Parameter
 {
-   /**
-    * Create a new AmbiguityTestCase.
-    *
-    * @param name the test name
-    */
-   public AmbiguityTestCase(String name)
+   private String name;
+
+   public String getName()
    {
-      super(name);
+      return name;
    }
 
-   /**
-    * Setup the test
-    *
-    * @return the test
-    */
-   public static Test suite()
+   @XmlAttribute
+   public void setName(String name)
    {
-      return suite(AmbiguityTestCase.class);
+      this.name = name;
    }
-
-   public void testConfigureInt() throws Exception
-   {
-      AmbiguityBean ab = unmarshal("TestAmbiguityInt.xml", AmbiguityBean.class);
-      Object something = ab.something();
-      assertEquals(something.getClass(), Integer.class);
-   }
-
-   public void testConfigureString() throws Exception
-   {
-      AmbiguityBean ab = unmarshal("TestAmbiguityString.xml", AmbiguityBean.class);
-      Object something = ab.something();
-      assertEquals(something.getClass(), String.class);
-   }
-
 }

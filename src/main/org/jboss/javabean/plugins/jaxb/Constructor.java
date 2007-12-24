@@ -19,51 +19,58 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.javabean.test;
+package org.jboss.javabean.plugins.jaxb;
 
-import junit.framework.Test;
-import org.jboss.test.javabean.support.AmbiguityBean;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * PropertyTestCase.
+ * Constructor.
  *
+ * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision: 58996 $
+ * @version $Revision: 1.1 $
  */
-public class AmbiguityTestCase extends OldAbstractJavaBeanTest
+@XmlRootElement(name="constructor")
+public class Constructor
 {
-   /**
-    * Create a new AmbiguityTestCase.
-    *
-    * @param name the test name
-    */
-   public AmbiguityTestCase(String name)
+   private String factoryClass;
+
+   private String factoryMethod;
+
+   private Parameter[] parameters;
+
+   public String getFactoryClass()
    {
-      super(name);
+      return factoryClass;
    }
 
-   /**
-    * Setup the test
-    *
-    * @return the test
-    */
-   public static Test suite()
+   @XmlAttribute(name="factoryClass")
+   public void setFactoryClass(String factoryClass)
    {
-      return suite(AmbiguityTestCase.class);
+      this.factoryClass = factoryClass;
    }
 
-   public void testConfigureInt() throws Exception
+   public String getFactoryMethod()
    {
-      AmbiguityBean ab = unmarshal("TestAmbiguityInt.xml", AmbiguityBean.class);
-      Object something = ab.something();
-      assertEquals(something.getClass(), Integer.class);
+      return factoryMethod;
    }
 
-   public void testConfigureString() throws Exception
+   @XmlAttribute(name="factoryMethod")
+   public void setFactoryMethod(String factoryMethod)
    {
-      AmbiguityBean ab = unmarshal("TestAmbiguityString.xml", AmbiguityBean.class);
-      Object something = ab.something();
-      assertEquals(something.getClass(), String.class);
+      this.factoryMethod = factoryMethod;
    }
 
+   public Parameter[] getParameters()
+   {
+      return parameters;
+   }
+
+   @XmlElement(name="parameter")
+   public void setParameters(Parameter[] parameters)
+   {
+      this.parameters = parameters;
+   }
 }
