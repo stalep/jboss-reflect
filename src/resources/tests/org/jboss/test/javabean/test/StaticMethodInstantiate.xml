@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<javabean xmlns="test:javabean"
+<javabean xmlns="urn:jboss:javabean:1.0"
           class="org.jboss.test.javabean.support.TestStaticMethodInstantiate">
    <constructor factoryMethod="instantiate"/>
 </javabean>

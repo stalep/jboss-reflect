@@ -38,11 +38,11 @@ import org.jboss.joinpoint.plugins.Config;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.util.propertyeditor.PropertyEditors;
 import org.jboss.xb.annotations.JBossXmlSchema;
 import org.jboss.xb.annotations.JBossXmlType;
 import org.jboss.xb.spi.BeanAdapter;
 import org.jboss.xb.spi.BeanAdapterFactory;
-import org.jboss.util.propertyeditor.PropertyEditors;
 
 /**
  * JavaBean.
@@ -50,7 +50,7 @@ import org.jboss.util.propertyeditor.PropertyEditors;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-@JBossXmlSchema(namespace="test:javabean", elementFormDefault=XmlNsForm.QUALIFIED)
+@JBossXmlSchema(namespace="urn:jboss:javabean:1.0", elementFormDefault=XmlNsForm.QUALIFIED)
 @XmlRootElement(name="javabean")
 @XmlType(name="javabean")
 @JBossXmlType(beanAdapterBuilder=JavaBeanBuilder.class)
