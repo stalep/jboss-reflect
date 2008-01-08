@@ -23,6 +23,8 @@ package org.jboss.metadata.spi.signature;
 
 import java.lang.reflect.Method;
 
+import org.jboss.reflect.spi.MethodInfo;
+
 /**
  * Method parameters Signature.
  * 
@@ -75,6 +77,19 @@ public class MethodParametersSignature extends Signature
       checkParam();
    }
    
+   /**
+    * Create a new Signature.
+    *
+    * @param method the method info
+    * @param param the parameter number
+    */
+   public MethodParametersSignature(MethodInfo method, int param)
+   {
+      super(method.getName(), convertParameterTypes(method.getParameterTypes()));
+      this.param = param;
+      checkParam();
+   }
+
    /**
     * Get the param.
     * 
