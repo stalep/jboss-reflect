@@ -21,10 +21,10 @@
 */
 package org.jboss.reflect.plugins;
 
+import java.util.HashMap;
+
 import org.jboss.reflect.spi.AnnotationAttribute;
 import org.jboss.reflect.spi.AnnotationInfo;
-
-import java.util.HashMap;
 
 /**
  * Annotation Info
@@ -78,11 +78,6 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
             attributeMap.put(attributes[i].getName(), attributes[i]);
          }
       }
-   }
-
-   public String getName()
-   {
-      return name;
    }
 
    public boolean isAnnotation()

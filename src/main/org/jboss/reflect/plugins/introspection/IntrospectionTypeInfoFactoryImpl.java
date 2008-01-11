@@ -358,13 +358,21 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return new ArrayInfoImpl(componentType);
    }
 
-   private TypeInfo resolveComplexTypeInfo(ClassLoader cl, String name)
+   /**
+    * Resolve complex type info.
+    *
+    * @param cl the classloader to use
+    * @param name the class name
+    * @return type info from the name and classloader
+    * @throws ClassNotFoundException for any error
+    */
+   protected TypeInfo resolveComplexTypeInfo(ClassLoader cl, String name)
          throws ClassNotFoundException
    {
       if (cl == null)
          cl = Thread.currentThread().getContextClassLoader();
 
-      Class clazz = cl.loadClass(name);
+      Class clazz = Class.forName(name, false, cl);
       return getTypeInfo(clazz);
    }
 

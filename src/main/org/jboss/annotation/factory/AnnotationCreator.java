@@ -21,6 +21,16 @@
   */
 package org.jboss.annotation.factory;
 
+import java.io.StringReader;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.HashMap;
+
 import org.jboss.annotation.factory.ast.ASTAnnotation;
 import org.jboss.annotation.factory.ast.ASTChar;
 import org.jboss.annotation.factory.ast.ASTIdentifier;
@@ -35,16 +45,6 @@ import org.jboss.annotation.factory.ast.AnnotationParserVisitor;
 import org.jboss.annotation.factory.ast.Node;
 import org.jboss.annotation.factory.ast.SimpleNode;
 import org.jboss.annotation.factory.javassist.DefaultValueAnnotationValidator;
-
-import java.io.StringReader;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.HashMap;
 
 /**
  * Comment
@@ -158,7 +158,8 @@ public class AnnotationCreator implements AnnotationParserVisitor
             }
             else
             {
-               typeValue = Thread.currentThread().getContextClassLoader().loadClass(classname);
+               ClassLoader loader = Thread.currentThread().getContextClassLoader();
+               typeValue = Class.forName(classname, false, loader);
             }
          }
          else if (type.isPrimitive())

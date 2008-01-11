@@ -96,7 +96,7 @@ public class ReflectionUtils
          throw new IllegalArgumentException("Null class name");
       if (cl == null)
          throw new IllegalArgumentException("Null classloader");
-      Class clazz = cl.loadClass(className);
+      Class clazz = Class.forName(className, false, cl);
       try
       {
          return clazz.newInstance();

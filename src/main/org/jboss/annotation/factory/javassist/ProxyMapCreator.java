@@ -205,7 +205,8 @@ public class ProxyMapCreator implements MemberValueVisitor
          }
          else
          {
-            value = Thread.currentThread().getContextClassLoader().loadClass(classMemberValue.getValue());
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            value = Class.forName(classMemberValue.getValue(), false, loader);
          }
       }
       catch (ClassNotFoundException e)

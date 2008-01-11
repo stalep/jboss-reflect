@@ -595,7 +595,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
          {
             if (attachment == null)
                return;
-            attachments = new TypeInfoAttachments();;
+            attachments = new TypeInfoAttachments();
          }
       }
       if (attachment == null)

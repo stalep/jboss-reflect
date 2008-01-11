@@ -31,13 +31,17 @@ import javassist.CtMember;
 import javassist.CtMethod;
 import javassist.CtPrimitiveType;
 import javassist.NotFoundException;
-
 import org.jboss.reflect.plugins.AnnotationAttributeImpl;
 import org.jboss.reflect.plugins.AnnotationHelper;
 import org.jboss.reflect.plugins.AnnotationValueFactory;
 import org.jboss.reflect.plugins.AnnotationValueImpl;
 import org.jboss.reflect.plugins.EnumConstantInfoImpl;
-import org.jboss.reflect.spi.*;
+import org.jboss.reflect.spi.AnnotationInfo;
+import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.NumberInfo;
+import org.jboss.reflect.spi.PrimitiveInfo;
+import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.collection.WeakClassCache;
 
@@ -284,12 +288,12 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       {
          if (number.isInitialized() == false)
          {
-            number.setDelegate((TypeInfo) get(cl.loadClass(name)));
+            number.setDelegate((TypeInfo) get(Class.forName(name, false, cl)));
          }
          return number;
       }
 
-      Class clazz = cl.loadClass(name);
+      Class clazz = Class.forName(name, false, cl);
       return getTypeInfo(clazz);
    }
    
