@@ -130,7 +130,7 @@ public abstract class SignatureMetaDataTest extends AbstractMetaDataTest
       return new MethodParametersSignature(getMethodInfo(), 0);
    }
 
-   protected Constructor getConstructor() throws Exception
+   protected Constructor<?> getConstructor() throws Exception
    {
       return SignatureTester.class.getDeclaredConstructor(Calendar.class);
    }

@@ -245,12 +245,13 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       }
    }
 
+   @SuppressWarnings("unchecked")
    protected void generate(Class clazz, Object result)
    {
       // Everything is done lazily
    }
 
-   public TypeInfo getTypeInfo(Class clazz)
+   public TypeInfo getTypeInfo(Class<?> clazz)
    {
       if (clazz == null)
          throw new IllegalArgumentException("Null class");
@@ -293,14 +294,14 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          return number;
       }
 
-      Class clazz = Class.forName(name, false, cl);
+      Class<?> clazz = Class.forName(name, false, cl);
       return getTypeInfo(clazz);
    }
    
    public TypeInfo getTypeInfo(Type type)
    {
       if (type instanceof Class)
-         return getTypeInfo((Class) type);
+         return getTypeInfo((Class<?>) type);
 
       // TODO JBMICROCONT-129 getTypeInfo + NumberInfo
       throw new org.jboss.util.NotImplementedException("getTypeInfo");
@@ -332,7 +333,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          AnnotationValue[] annotationValues = new AnnotationValueImpl[annotations.length];
          for (int i = 0 ; i < annotations.length ; i++)
          {
-            Class clazz = ((Annotation)annotations[i]).annotationType();
+            Class<?> clazz = ((Annotation)annotations[i]).annotationType();
             
             AnnotationInfo info = (AnnotationInfo)getTypeInfo(clazz);
             annotationValues[i] = AnnotationValueFactory.createAnnotationValue(this, this, info, annotations[i]);

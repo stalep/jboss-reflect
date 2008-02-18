@@ -37,7 +37,7 @@ public class SimpleMetaDatasItem extends SimpleItem<Object[]> implements MetaDat
    public static final SimpleMetaDatasItem NO_META_DATA = new SimpleMetaDatasItem();
    
    /** The meta data items */
-   private MetaDataItem[] metaDataItems;
+   private MetaDataItem<?>[] metaDataItems;
    
    /** The meta data */
    private Object[] metaDatas;
@@ -55,7 +55,7 @@ public class SimpleMetaDatasItem extends SimpleItem<Object[]> implements MetaDat
     * 
     * @param metaDataItems the meta data items
     */
-   public SimpleMetaDatasItem(MetaDataItem[] metaDataItems)
+   public SimpleMetaDatasItem(MetaDataItem<?>[] metaDataItems)
    {
       setMetaDataItems(metaDataItems);
    }
@@ -72,7 +72,7 @@ public class SimpleMetaDatasItem extends SimpleItem<Object[]> implements MetaDat
       return metaDatas;
    }
 
-   public MetaDataItem[] getMetaDatas()
+   public MetaDataItem<?>[] getMetaDatas()
    {
       return metaDataItems;
    }
@@ -82,7 +82,7 @@ public class SimpleMetaDatasItem extends SimpleItem<Object[]> implements MetaDat
     * 
     * @param metaDataItems the meta data items
     */
-   protected void setMetaDataItems(MetaDataItem[] metaDataItems)
+   protected void setMetaDataItems(MetaDataItem<?>[] metaDataItems)
    {
       if (metaDataItems == null)
          throw new IllegalArgumentException("Null metaDataItems");

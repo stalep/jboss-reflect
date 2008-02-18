@@ -176,7 +176,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
    protected void assertSuperClass(Class<?> clazz, ClassInfo classInfo) throws Throwable
    {
       TypeInfoFactory factory = getTypeInfoFactory();
-      Class superClass = clazz.getSuperclass();
+      Class<?> superClass = clazz.getSuperclass();
       TypeInfo superType = classInfo.getSuperclass();
       getLog().debug(clazz + " superClass: " + superClass + " superType=" + superType);
       if (superClass == null)
@@ -194,7 +194,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       Set<TypeInfo> expected = new HashSet<TypeInfo>();
-      for (Class c : clazz.getInterfaces())
+      for (Class<?> c : clazz.getInterfaces())
       {
          TypeInfo type = factory.getTypeInfo(c);
          expected.add(type);
@@ -266,11 +266,11 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       for (Method method : clazz.getDeclaredMethods())
       {
          TypeInfo returnType = factory.getTypeInfo(method.getReturnType());
-         Class[] paramClasses = method.getParameterTypes();
+         Class<?>[] paramClasses = method.getParameterTypes();
          TypeInfo[] paramTypes = new TypeInfo[paramClasses.length];
          AnnotationValue[][] paramAnnotations = new AnnotationValue[paramClasses.length][0];
          int i = 0;
-         for (Class c : paramClasses)
+         for (Class<?> c : paramClasses)
             paramTypes[i++] = factory.getTypeInfo(c);
          MethodInfo m = new MethodInfoImpl(null, method.getName(), returnType, paramTypes, paramAnnotations, null, method.getModifiers(), classInfo);
          expected.add(m);
@@ -310,7 +310,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       TypeInfo[] actualParamTypes = methodInfo.getParameterTypes();
       for (int i = 0; i < paramTypes.length; ++i)
          assertTypeEquals(method.getName() + " param" + i, paramTypes[i], actualParamTypes[i]);
-      Class[] exceptionClasses = method.getExceptionTypes();
+      Class<?>[] exceptionClasses = method.getExceptionTypes();
       TypeInfo[] expectedExceptionTypes = new TypeInfo[exceptionClasses.length];
       for (int i = 0; i < exceptionClasses.length; ++i)
          expectedExceptionTypes[i] = factory.getTypeInfo(exceptionClasses[i]);
@@ -328,13 +328,13 @@ public abstract class AbstractClassInfoTest extends ContainerTest
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       Set<ConstructorInfo> expected = new HashSet<ConstructorInfo>();
-      for (Constructor constructor : clazz.getDeclaredConstructors())
+      for (Constructor<?> constructor : clazz.getDeclaredConstructors())
       {
-         Class[] paramClasses = constructor.getParameterTypes();
+         Class<?>[] paramClasses = constructor.getParameterTypes();
          TypeInfo[] paramTypes = new TypeInfo[paramClasses.length];
          AnnotationValue[][] paramAnnotations = new AnnotationValue[paramClasses.length][0];
          int i = 0;
-         for (Class c : paramClasses)
+         for (Class<?> c : paramClasses)
             paramTypes[i++] = factory.getTypeInfo(c);
          ConstructorInfo c = new ConstructorInfoImpl(null, paramTypes, paramAnnotations, null, constructor.getModifiers(), classInfo);
          expected.add(c);
@@ -354,11 +354,11 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       getLog().debug(clazz + " expected constructors=" + expected + " actual=" + actual);
       assertEquals(expected, actual);
       
-      for (Constructor constructor : clazz.getDeclaredConstructors())
+      for (Constructor<?> constructor : clazz.getDeclaredConstructors())
          assertDeclaredConstructor(clazz, constructor, classInfo);
    }
    
-   protected void assertDeclaredConstructor(Class<?> clazz, Constructor constructor, ClassInfo classInfo) throws Throwable
+   protected void assertDeclaredConstructor(Class<?> clazz, Constructor<?> constructor, ClassInfo classInfo) throws Throwable
    {
       getLog().debug("Checking constructor " + Arrays.asList(constructor.getParameterTypes()));
 
@@ -380,7 +380,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       TypeInfo[] actualParamTypes = constructorInfo.getParameterTypes();
       for (int i = 0; i < paramTypes.length; ++i)
          assertTypeEquals(clazz + " constructorParameter" + i, paramTypes[i], actualParamTypes[i]);
-      Class[] exceptionClasses = constructor.getExceptionTypes();
+      Class<?>[] exceptionClasses = constructor.getExceptionTypes();
       TypeInfo[] expectedExceptionTypes = new TypeInfo[exceptionClasses.length];
       for (int i = 0; i < exceptionClasses.length; ++i)
          expectedExceptionTypes[i] = factory.getTypeInfo(exceptionClasses[i]);
@@ -458,7 +458,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
          assertParameterAnnotations(annotations[i], parameters[i]);
    }
    
-   protected void assertConstructorAnnotations(Constructor constructor, ConstructorInfo constructorInfo) throws Throwable
+   protected void assertConstructorAnnotations(Constructor<?> constructor, ConstructorInfo constructorInfo) throws Throwable
    {
       Set<AnnotationValue> expected = getExpectedAnnotations(constructor.getDeclaredAnnotations());
       
@@ -496,7 +496,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       assertEquals(expected, actual);
    }
    
-   protected void assertParameterAnnotations(Constructor constructor, ConstructorInfo constructorInfo) throws Throwable
+   protected void assertParameterAnnotations(Constructor<?> constructor, ConstructorInfo constructorInfo) throws Throwable
    {
       Annotation[][] annotations = constructor.getParameterAnnotations();
       ParameterInfo[] parameters = constructorInfo.getParameters();
@@ -528,7 +528,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       Set<AnnotationValue> expected = new HashSet<AnnotationValue>();
       for (Annotation annotation : annotations)
       {
-         Class type = annotation.annotationType();
+         Class<?> type = annotation.annotationType();
          AnnotationInfoImpl info = new AnnotationInfoImpl(type.getName(), type.getModifiers());
          // TODO JBMICROCONT-127 attributes
          AnnotationValue a = new AnnotationValueImpl(info, new HashMap<String, Value>(), annotation);

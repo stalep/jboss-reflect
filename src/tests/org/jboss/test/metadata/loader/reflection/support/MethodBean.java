@@ -44,7 +44,7 @@ public class MethodBean
 
    @TestAnnotation1
    @TestAnnotation2
-   public void testAnnotation12(String p1, Class p2)
+   public void testAnnotation12(String p1, Class<?> p2)
    {
    }
 }

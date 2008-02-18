@@ -28,14 +28,14 @@ package org.jboss.test.classinfo.support;
  */
 public abstract class ExpectedAnnotations
 {
-   public abstract Class[] getAnnotationExpectedAnnotations();
+   public abstract Class<?>[] getAnnotationExpectedAnnotations();
 
-   public abstract Class[] getComplexExpectedAnnotations();
+   public abstract Class<?>[] getComplexExpectedAnnotations();
 
-   public abstract Class[] getExpectedAnnotations();
+   public abstract Class<?>[] getExpectedAnnotations();
 
-   public abstract Class[] getFirstParamExpectedAnnotations();
+   public abstract Class<?>[] getFirstParamExpectedAnnotations();
 
-   public abstract Class[] getSecondParamExpectedAnnotations();
+   public abstract Class<?>[] getSecondParamExpectedAnnotations();
    
 }

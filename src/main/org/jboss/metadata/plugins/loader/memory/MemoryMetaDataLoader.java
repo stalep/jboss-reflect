@@ -50,10 +50,10 @@ import org.jboss.metadata.spi.signature.Signature;
 public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
 {
    /** The annotations */
-   private volatile Map<String, BasicAnnotationItem> annotations;
+   private volatile Map<String, BasicAnnotationItem<? extends Annotation>> annotations;
 
    /** MetaData by name */
-   private volatile Map<String, BasicMetaDataItem> metaDataByName;
+   private volatile Map<String, BasicMetaDataItem<?>> metaDataByName;
 
    /** All annotations */
    private volatile BasicAnnotationsItem cachedAnnotationsItem;
@@ -112,21 +112,22 @@ public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
       return cachable;
    }
 
+   @SuppressWarnings("unchecked")
    public AnnotationsItem retrieveAnnotations()
    {
       BasicAnnotationsItem result = cachedAnnotationsItem;
       if (result != null && result.isValid())
          return result;
       
-      Map<String, BasicAnnotationItem> temp = annotations;
+      Map<String, BasicAnnotationItem<? extends Annotation>> temp = annotations;
       if (temp == null)
          return noAnnotations();
       
-      Collection<BasicAnnotationItem> values = temp.values();
+      Collection<BasicAnnotationItem<? extends Annotation>> values = temp.values();
       if (values.isEmpty())
          return noAnnotations();
       
-      AnnotationItem[] items = values.toArray(new AnnotationItem[values.size()]);
+      AnnotationItem<? extends Annotation>[] items = values.toArray(new AnnotationItem[values.size()]);
       result = new BasicAnnotationsItem(this, items);
       cachedAnnotationsItem = result;
       return result;
@@ -135,10 +136,10 @@ public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
    @SuppressWarnings("unchecked")
    public <T extends Annotation> AnnotationItem<T> retrieveAnnotation(Class<T> annotationType)
    {
-      Map<String, BasicAnnotationItem> temp = annotations; 
+      Map<String, BasicAnnotationItem<? extends Annotation>> temp = annotations; 
       if (temp == null)
          return null;
-      return temp.get(annotationType.getName());
+      return (AnnotationItem) temp.get(annotationType.getName());
    }
 
    @SuppressWarnings("unchecked")
@@ -151,13 +152,13 @@ public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
       synchronized (this)
       {
          if (annotations == null)
-            annotations = new ConcurrentHashMap<String, BasicAnnotationItem>();
+            annotations = new ConcurrentHashMap<String, BasicAnnotationItem<? extends Annotation>>();
       }
 
       T result = null;
 
       Class<? extends Annotation> annotationType = annotation.annotationType();
-      BasicAnnotationItem<T> old = annotations.get(annotationType.getName());
+      BasicAnnotationItem<T> old = (BasicAnnotationItem) annotations.get(annotationType.getName());
       if (old != null)
       {
          result = old.getAnnotation();
@@ -179,7 +180,7 @@ public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
    {
       if (annotations == null)
          return null;
-      BasicAnnotationItem<T> annotation = annotations.remove(annotationType.getName());
+      BasicAnnotationItem<T> annotation = (BasicAnnotationItem) annotations.remove(annotationType.getName());
       if (annotation == null)
          return null;
       annotation.invalidate();
@@ -194,27 +195,27 @@ public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
       if (result != null && result.isValid())
          return result;
       
-      Collection<BasicMetaDataItem> all = null;
-      Map<String, BasicAnnotationItem> temp1 = annotations;
+      Collection<BasicMetaDataItem<?>> all = null;
+      Map<String, BasicAnnotationItem<? extends Annotation>> temp1 = annotations;
       if (temp1 != null && temp1.size() > 0)
       {
-         all = new ArrayList<BasicMetaDataItem>();
-         Collection<BasicAnnotationItem> values = temp1.values();
+         all = new ArrayList<BasicMetaDataItem<?>>();
+         Collection<BasicAnnotationItem<?>> values = temp1.values();
          all.addAll(values);
       }
-      Map<String, BasicMetaDataItem> temp2 = metaDataByName;
+      Map<String, BasicMetaDataItem<?>> temp2 = metaDataByName;
       if (temp2 != null && temp2.size() > 0)
       {
          if (all == null)
-            all = new ArrayList<BasicMetaDataItem>();
-         Collection<BasicMetaDataItem> values = temp2.values();
+            all = new ArrayList<BasicMetaDataItem<?>>();
+         Collection<BasicMetaDataItem<?>> values = temp2.values();
          all.addAll(values);
       }
 
       if (all == null)
          return noMetaDatas();
       
-      MetaDataItem[] metaDataItems = all.toArray(new MetaDataItem[all.size()]);
+      MetaDataItem<?>[] metaDataItems = all.toArray(new MetaDataItem[all.size()]);
       result = new BasicMetaDatasItem(this, metaDataItems);
       cachedMetaDatasItem = result;
       return result;
@@ -233,17 +234,17 @@ public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
       return (MetaDataItem<T>) temp.get(type.getName());
    }
 
-   public MetaDataItem retrieveMetaData(String name)
+   public MetaDataItem<?> retrieveMetaData(String name)
    {
-      Map<String, BasicMetaDataItem> temp = metaDataByName; 
+      Map<String, BasicMetaDataItem<?>> temp = metaDataByName; 
       if (temp != null)
       {
-         MetaDataItem result = temp.get(name);
+         MetaDataItem<?> result = temp.get(name);
          if (result != null)
             return result;
       }
 
-      Map<String, BasicAnnotationItem> temp2 = annotations;
+      Map<String, BasicAnnotationItem<? extends Annotation>> temp2 = annotations;
       if (temp2 != null)
          return temp2.get(name);
       
@@ -266,12 +267,12 @@ public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
       synchronized (this)
       {
          if (metaDataByName == null)
-            metaDataByName = new ConcurrentHashMap<String, BasicMetaDataItem>();
+            metaDataByName = new ConcurrentHashMap<String, BasicMetaDataItem<?>>();
       }
 
       T result = null;
       
-      BasicMetaDataItem<T> old = metaDataByName.get(type.getName());
+      BasicMetaDataItem<T> old = (BasicMetaDataItem) metaDataByName.get(type.getName());
       if (old != null)
       {
          result = old.getValue();
@@ -298,7 +299,7 @@ public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
       if (metaDataByName == null)
          return null;
 
-      BasicMetaDataItem<T> result = metaDataByName.remove(type.getName());
+      BasicMetaDataItem<T> result = (BasicMetaDataItem) metaDataByName.remove(type.getName());
       if (result == null)
          return null;
       result.invalidate();
@@ -321,12 +322,12 @@ public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
       synchronized (this)
       {
          if (metaDataByName == null)
-            metaDataByName = new ConcurrentHashMap<String, BasicMetaDataItem>();
+            metaDataByName = new ConcurrentHashMap<String, BasicMetaDataItem<?>>();
       }
 
       T result = null;
       
-      BasicMetaDataItem<T> old = metaDataByName.get(name);
+      BasicMetaDataItem<T> old = (BasicMetaDataItem) metaDataByName.get(name);
       if (old != null)
       {
          result = old.getValue();
@@ -347,11 +348,11 @@ public class MemoryMetaDataLoader extends AbstractMutableComponentMetaDataLoader
       if (name == null)
          throw new IllegalArgumentException("Null name");
 
-      Map<String, BasicMetaDataItem> temp = metaDataByName;
+      Map<String, BasicMetaDataItem<?>> temp = metaDataByName;
       if (temp == null)
          return null;
       
-      BasicMetaDataItem<T> result = temp.remove(name);
+      BasicMetaDataItem<T> result = (BasicMetaDataItem) temp.remove(name);
       if (result == null)
          return null;
       result.invalidate();

@@ -53,7 +53,7 @@ public interface ClassAdapterFactory
     * @param clazz the class
     * @return the class adapter
     */
-   ClassAdapter getClassAdapter(Class clazz);
+   ClassAdapter getClassAdapter(Class<?> clazz);
 
    /**
     * Get a class adapter

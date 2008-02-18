@@ -48,7 +48,7 @@ public @interface ComplexWithDefault
 
    String[] array() default {"The", "defaults"};
 
-   Class clazz() default String.class;
+   Class<?> clazz() default String.class;
 
    MyEnum enumVal() default MyEnum.ONE;
    

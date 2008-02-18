@@ -116,7 +116,7 @@ public class PropertyConfiguration extends AbstractConfiguration
    {
       String value = properties.getProperty(propertyName, defaultValue);
       StringTokenizer tokenizer = new StringTokenizer(value, ":");
-      Class clazz = null;
+      Class<?> clazz = null;
       ClassNotFoundException error = null;
       while (tokenizer.hasMoreTokens())
       {

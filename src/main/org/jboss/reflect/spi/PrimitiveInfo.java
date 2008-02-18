@@ -187,7 +187,7 @@ public class PrimitiveInfo extends AbstractTypeInfo
 
    public TypeInfo getArrayType()
    {
-      Class arrayClass = ClassInfoImpl.getArrayClass(getType());
+      Class<?> arrayClass = ClassInfoImpl.getArrayClass(getType());
       return typeInfoFactory.getTypeInfo(arrayClass);
    }
 

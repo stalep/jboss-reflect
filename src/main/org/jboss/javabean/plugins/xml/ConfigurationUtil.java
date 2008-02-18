@@ -63,7 +63,7 @@ public class ConfigurationUtil
       return getBeanInfo(object.getClass());
    }
 
-   static BeanInfo getBeanInfo(Class clazz) throws Throwable
+   static BeanInfo getBeanInfo(Class<?> clazz) throws Throwable
    {
       return config.getBeanInfo(clazz);
    }

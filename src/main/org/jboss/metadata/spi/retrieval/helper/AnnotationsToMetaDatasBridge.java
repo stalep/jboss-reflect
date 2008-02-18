@@ -64,7 +64,7 @@ public class AnnotationsToMetaDatasBridge implements MetaDatasItem
       return annotations.getValue();
    }
 
-   public MetaDataItem[] getMetaDatas()
+   public MetaDataItem<?>[] getMetaDatas()
    {
       return annotations.getAnnotations();
    }

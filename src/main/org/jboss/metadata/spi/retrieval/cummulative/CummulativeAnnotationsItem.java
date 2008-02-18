@@ -71,7 +71,7 @@ public class CummulativeAnnotationsItem extends SimpleAnnotationsItem
       return super.getValue();
    }
    
-   public AnnotationItem[] getAnnotations()
+   public AnnotationItem<? extends Annotation>[] getAnnotations()
    {
       checkValid();
       return super.getAnnotations();
@@ -92,7 +92,7 @@ public class CummulativeAnnotationsItem extends SimpleAnnotationsItem
     */
    protected void checkValid()
    {
-      AnnotationItem[] items = super.getAnnotations();
+      AnnotationItem<? extends Annotation>[] items = super.getAnnotations();
       boolean valid = (items != null);
       
       long newValidTime = context.getValidTime().getValidTime();
@@ -101,7 +101,7 @@ public class CummulativeAnnotationsItem extends SimpleAnnotationsItem
       
       if (valid && items != null)
       {
-         for (AnnotationItem item : items)
+         for (AnnotationItem<? extends Annotation> item : items)
          {
             if (item.isValid() == false)
                valid = false;
@@ -117,9 +117,10 @@ public class CummulativeAnnotationsItem extends SimpleAnnotationsItem
     * 
     * @param validTime the valid time
     */
+   @SuppressWarnings("unchecked")
    protected void init(long validTime)
    {
-      Set<AnnotationItem> temp = null;
+      Set<AnnotationItem<? extends Annotation>> temp = null;
 
       List<MetaDataRetrieval> retrievals;
       
@@ -133,17 +134,17 @@ public class CummulativeAnnotationsItem extends SimpleAnnotationsItem
          AnnotationsItem item = retrieval.retrieveAnnotations();
          if (item != null)
          {
-            AnnotationItem[] items = item.getAnnotations();
-            for (AnnotationItem it : items)
+            AnnotationItem<? extends Annotation>[] items = item.getAnnotations();
+            for (AnnotationItem<? extends Annotation> it : items)
             {
                if (temp == null)
-                  temp = new HashSet<AnnotationItem>();
+                  temp = new HashSet<AnnotationItem<? extends Annotation>>();
                temp.add(it);
             }
          }
       }
       
-      AnnotationItem[] items = NO_ANNOTATION_ITEMS;
+      AnnotationItem<? extends Annotation>[] items = NO_ANNOTATION_ITEMS;
       if (temp != null)
          items = temp.toArray(new AnnotationItem[temp.size()]);
       setAnnotationItems(items);

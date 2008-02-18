@@ -172,7 +172,7 @@ public class ThreadLocalMetaDataLoader extends AbstractMutableMetaDataLoader
       return delegate.retrieveMetaData(type);
    }
 
-   public MetaDataItem retrieveMetaData(String name)
+   public MetaDataItem<?> retrieveMetaData(String name)
    {
       MemoryMetaDataLoader delegate = threadLocal.get();
       if (delegate == null)

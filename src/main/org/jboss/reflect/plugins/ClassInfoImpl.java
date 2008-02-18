@@ -256,7 +256,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
     * @param clazz the class
     * @return the array class
     */
-   public static Class getArrayClass(Class clazz)
+   public static Class<?> getArrayClass(Class<?> clazz)
    {
       return Array.newInstance(clazz, 0).getClass();
    }
@@ -266,7 +266,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
     * 
     * @param type the class
     */
-   public void setType(Class type)
+   public void setType(Class<?> type)
    {
       setAnnotatedElement(type);
       if (type != null)
@@ -470,6 +470,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    }
 
    @Deprecated
+   @SuppressWarnings("unchecked")
    public Class<? extends Object> getType()
    {
       return (Class<? extends Object>) annotatedElement;
@@ -522,7 +523,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
 
    public TypeInfo getArrayType()
    {
-      Class arrayClass = getArrayClass(getType());
+      Class<?> arrayClass = getArrayClass(getType());
       return classInfoHelper.getTypeInfo(arrayClass);
    }
 

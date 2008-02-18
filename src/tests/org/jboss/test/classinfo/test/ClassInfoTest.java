@@ -135,7 +135,7 @@ public abstract class ClassInfoTest extends ContainerTest
       checkConstructors(getSimpleBeanConstructors(), cinfo.getDeclaredConstructors());
    }
 
-   protected ClassInfo getClassInfo(Class clazz)
+   protected ClassInfo getClassInfo(Class<?> clazz)
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       TypeInfo info = factory.getTypeInfo(clazz);
@@ -221,9 +221,9 @@ public abstract class ClassInfoTest extends ContainerTest
 
       expectClone = new HashSet<FieldInfo>(expected);
       actualClone = new ArrayList<FieldInfo>(Arrays.asList(actually));
-      for (Iterator i = expectClone.iterator(); i.hasNext();)
+      for (Iterator<FieldInfo> i = expectClone.iterator(); i.hasNext();)
       {
-         FieldInfo expect = (FieldInfo) i.next();
+         FieldInfo expect = i.next();
          int j = actualClone.indexOf(expect);
          FieldInfo actual = actualClone.get(j);
          compareField(expect, actual);
@@ -257,9 +257,9 @@ public abstract class ClassInfoTest extends ContainerTest
 
       expectClone = new HashSet<MethodInfo>(expected);
       actualClone = new ArrayList<MethodInfo>(Arrays.asList(actually));
-      for (Iterator i = expectClone.iterator(); i.hasNext();)
+      for (Iterator<MethodInfo> i = expectClone.iterator(); i.hasNext();)
       {
-         MethodInfo expect = (MethodInfo) i.next();
+         MethodInfo expect = i.next();
          int j = actualClone.indexOf(expect);
          MethodInfo actual = actualClone.get(j);
          compareMethod(expect, actual);
@@ -297,9 +297,9 @@ public abstract class ClassInfoTest extends ContainerTest
 
       expectClone = new HashSet<ConstructorInfo>(expected);
       actualClone = new ArrayList<ConstructorInfo>(Arrays.asList(actually));
-      for (Iterator i = expectClone.iterator(); i.hasNext();)
+      for (Iterator<ConstructorInfo> i = expectClone.iterator(); i.hasNext();)
       {
-         ConstructorInfo expect = (ConstructorInfo) i.next();
+         ConstructorInfo expect = i.next();
          int j = actualClone.indexOf(expect);
          ConstructorInfo actual = actualClone.get(j);
          compareConstructor(expect, actual);

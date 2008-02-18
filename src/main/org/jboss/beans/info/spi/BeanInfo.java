@@ -141,7 +141,7 @@ public interface BeanInfo extends JBossInterface
     * @param metaData the metadata
     * @return the list of dependencies
     */
-   List<DependencyBuilderListItem> getDependencies(MetaData metaData);
+   List<DependencyBuilderListItem<?>> getDependencies(MetaData metaData);
    
    /**
     * Create a new instance
@@ -169,7 +169,7 @@ public interface BeanInfo extends JBossInterface
     * @return the new instance
     * @throws Throwable for any error
     */
-   Object newInstance(Class[] paramTypes, Object[] params) throws Throwable;
+   Object newInstance(Class<?>[] paramTypes, Object[] params) throws Throwable;
    
    /**
     * Create a new instance
@@ -233,7 +233,7 @@ public interface BeanInfo extends JBossInterface
     * @return the result
     * @throws Throwable for any error
     */
-   Object invoke(Object bean, String name, Class[] paramTypes, Object[] params) throws Throwable;
+   Object invoke(Object bean, String name, Class<?>[] paramTypes, Object[] params) throws Throwable;
    
    /**
     * Invoke a method
@@ -276,7 +276,7 @@ public interface BeanInfo extends JBossInterface
     * @return the result
     * @throws Throwable for any error
     */
-   Object invokeStatic(String name, Class[] paramTypes, Object[] params) throws Throwable;
+   Object invokeStatic(String name, Class<?>[] paramTypes, Object[] params) throws Throwable;
 
    /**
     * Invoke a static method

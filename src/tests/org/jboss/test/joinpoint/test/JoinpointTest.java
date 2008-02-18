@@ -113,7 +113,7 @@ public abstract class JoinpointTest extends ContainerTest
       assertEquals(bean.toString(), joinpoint.dispatch());
    }
 
-   protected JoinpointFactory getJointpointFactory(Class clazz)
+   protected JoinpointFactory getJointpointFactory(Class<?> clazz)
    {
       TypeInfoFactory typeFactory = getTypeInfoFactory();
       ClassInfo info = (ClassInfo) typeFactory.getTypeInfo(clazz);

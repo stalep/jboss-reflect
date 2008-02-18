@@ -52,7 +52,7 @@ public abstract class ClassInfoGenericInterfaceTest extends AbstractClassInfoTes
       testGenericInterface(ClassInfoGenericFieldsInterface.class);
    }
    
-   private void testGenericInterface(Class clazz) throws Throwable
+   private void testGenericInterface(Class<?> clazz) throws Throwable
    {
       ClassInfoImpl expected = new ClassInfoImpl(clazz.getName(), Modifier.PUBLIC);
       TypeInfo info = testBasics(clazz, expected);

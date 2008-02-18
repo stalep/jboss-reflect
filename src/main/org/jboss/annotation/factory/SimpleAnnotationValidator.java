@@ -36,8 +36,7 @@ import java.util.Map;
  */
 public class SimpleAnnotationValidator implements AnnotationValidator
 {
-
-   public void validate(Map map, Class annotation)
+   public void validate(Map<String, Object> map, Class<?> annotation)
    {
       ArrayList<String> notAssignedAttributes = null;
       Method[] methods = getDeclaredMethods(annotation);
@@ -59,7 +58,7 @@ public class SimpleAnnotationValidator implements AnnotationValidator
       }
    }
    
-   private Method[] getDeclaredMethods(final Class clazz)
+   private Method[] getDeclaredMethods(final Class<?> clazz)
    {
       return AccessController.doPrivileged(new PrivilegedAction<Method[]>()
       {

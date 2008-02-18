@@ -84,6 +84,7 @@ public class SimpleCacheMetaDataContextUnitTestCase extends AbstractMetaDataCont
       return  new BasicAnnotationItem<T>(loader, annotation);
    }
 
+   @SuppressWarnings("unchecked")
    protected <T extends Annotation> void setAnnotations(TestMetaDataLoader loader, AnnotationItem<T> annotationItem)
    {
       AnnotationItem[] items = { annotationItem };

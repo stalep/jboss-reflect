@@ -121,7 +121,7 @@ public class AbstractBuilderTest extends AbstractTestCaseWithSetup
       return expected.cast(o);
    }
 
-   protected <T, U> T unmarshalObject(Class<T> expected, Class<U> reference, Class... others) throws Exception
+   protected <T, U> T unmarshalObject(Class<T> expected, Class<U> reference, Class<?>... others) throws Exception
    {
       TestSchemaResolver resolver = new TestSchemaResolver();
 

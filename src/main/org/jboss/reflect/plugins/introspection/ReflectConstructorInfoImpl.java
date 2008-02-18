@@ -43,7 +43,7 @@ public class ReflectConstructorInfoImpl extends ConstructorInfoImpl
    private static final long serialVersionUID = 2;
    
    /** The constructor */
-   protected transient Constructor constructor;
+   protected transient Constructor<?> constructor;
 
    /**
     * Create a new ConstructorInfo.
@@ -86,7 +86,7 @@ public class ReflectConstructorInfoImpl extends ConstructorInfoImpl
     * 
     * @param constructor the constructor
     */
-   public void setConstructor(Constructor constructor)
+   public void setConstructor(Constructor<?> constructor)
    {
       this.constructor = constructor;
    }
@@ -96,7 +96,7 @@ public class ReflectConstructorInfoImpl extends ConstructorInfoImpl
     * 
     * @return the constructor
     */
-   public Constructor getConstructor()
+   public Constructor<?> getConstructor()
    {
       return constructor;
    }

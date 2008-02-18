@@ -114,7 +114,7 @@ public class MetaDataRetrievalToMetaDataBridge implements MetaData
          throw new IllegalArgumentException("Null name");
       if (type == null)
          throw new IllegalArgumentException("Null type");
-      MetaDataItem item = retrieval.retrieveMetaData(name);
+      MetaDataItem<?> item = retrieval.retrieveMetaData(name);
       if (item == null)
          return null;
       return type.cast(item.getValue());
@@ -124,7 +124,7 @@ public class MetaDataRetrievalToMetaDataBridge implements MetaData
    {
       if (name == null)
          throw new IllegalArgumentException("Null name");
-      MetaDataItem item = retrieval.retrieveMetaData(name);
+      MetaDataItem<?> item = retrieval.retrieveMetaData(name);
       if (item == null)
          return null;
       return item.getValue();

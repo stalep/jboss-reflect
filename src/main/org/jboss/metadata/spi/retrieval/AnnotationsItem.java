@@ -32,12 +32,13 @@ import java.lang.annotation.Annotation;
 public interface AnnotationsItem extends Item<Annotation[]>
 {
    /** No annotations */
-   public static final AnnotationItem[] NO_ANNOTATION_ITEMS = new AnnotationItem[0];
+   @SuppressWarnings("unchecked")
+   public static final AnnotationItem<? extends Annotation>[] NO_ANNOTATION_ITEMS = new AnnotationItem[0];
    
    /**
     * Get the annotations
     * 
     * @return the annotations
     */
-   AnnotationItem[] getAnnotations();
+   AnnotationItem<? extends Annotation>[] getAnnotations();
 }

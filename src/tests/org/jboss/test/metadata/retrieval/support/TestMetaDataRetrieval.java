@@ -94,7 +94,7 @@ public class TestMetaDataRetrieval implements MetaDataRetrieval
       return null;
    }
 
-   public MetaDataItem retrieveMetaData(String name)
+   public MetaDataItem<?> retrieveMetaData(String name)
    {
       lastMethod = "retrieveMetaData(String)";
       return null;

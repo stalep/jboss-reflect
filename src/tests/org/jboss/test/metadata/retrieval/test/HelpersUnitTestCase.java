@@ -125,11 +125,13 @@ public class HelpersUnitTestCase extends AbstractMetaDataTest
       SimpleAnnotationItem<TestAnnotation1> item1 = new SimpleAnnotationItem<TestAnnotation1>(annotation1);
       SimpleAnnotationItem<TestAnnotation2> item2 = new SimpleAnnotationItem<TestAnnotation2>(annotation2);
 
+      @SuppressWarnings("unchecked")
       AnnotationItem[] items = new AnnotationItem[] { item1, item2 };
+      @SuppressWarnings("unchecked")
       SimpleAnnotationsItem item = new SimpleAnnotationsItem(items);
       AnnotationsToMetaDatasBridge bridge = new AnnotationsToMetaDatasBridge(item);
       
-      MetaDataItem[] result = bridge.getMetaDatas();
+      MetaDataItem<?>[] result = bridge.getMetaDatas();
       assertTrue(Arrays.equals(items, result));
 
       Object[] expected = new Object[] { annotation1, annotation2 };
@@ -145,7 +147,7 @@ public class HelpersUnitTestCase extends AbstractMetaDataTest
       TestAnnotation annotation = new TestAnnotationImpl();
       
       SimpleAnnotationItem<TestAnnotation> item = new SimpleAnnotationItem<TestAnnotation>(annotation);
-      AnnotationToMetaDataBridge bridge = new AnnotationToMetaDataBridge(item);
+      AnnotationToMetaDataBridge<TestAnnotation> bridge = new AnnotationToMetaDataBridge<TestAnnotation>(item);
       
       assertEquals(annotation, bridge.getValue());
 
@@ -158,7 +160,7 @@ public class HelpersUnitTestCase extends AbstractMetaDataTest
       TestAnnotation annotation = new TestAnnotationImpl();
       
       SimpleMetaDataItem<TestAnnotation> item = new SimpleMetaDataItem<TestAnnotation>(annotation.annotationType().getName(), annotation);
-      MetaDataToAnnotationBridge bridge = new MetaDataToAnnotationBridge(item);
+      MetaDataToAnnotationBridge<TestAnnotation> bridge = new MetaDataToAnnotationBridge<TestAnnotation>(item);
       
       assertEquals(annotation, bridge.getAnnotation());
       assertEquals(annotation, bridge.getValue());

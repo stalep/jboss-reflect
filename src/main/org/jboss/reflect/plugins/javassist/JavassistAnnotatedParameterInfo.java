@@ -61,7 +61,7 @@ public abstract class JavassistAnnotatedParameterInfo extends JavassistAnnotated
          AnnotationValue[] annotationValues = new AnnotationValue[annotations[param].length];
          for (int ann = 0 ; ann < annotationValues.length ; ann++)
          {
-            Class clazz = ((Annotation)annotations[param][ann]).annotationType();
+            Class<?> clazz = ((Annotation)annotations[param][ann]).annotationType();
 
             AnnotationInfo info = (AnnotationInfo)((JavassistTypeInfoFactoryImpl)annotationHelper).getTypeInfo(clazz);
             annotationValues[ann] = annotationHelper.createAnnotationValue(info, annotations[param][ann]);

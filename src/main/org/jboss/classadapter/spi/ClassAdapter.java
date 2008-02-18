@@ -80,5 +80,5 @@ public interface ClassAdapter extends JBossInterface
     * @param metaData the metadata
     * @return the list of dependencies
     */
-   List<DependencyBuilderListItem> getDependencies(MetaData metaData);
+   List<DependencyBuilderListItem<?>> getDependencies(MetaData metaData);
 }

@@ -118,7 +118,7 @@ public abstract class ClassInfoClassTest extends AbstractClassInfoTest
       testClass(ClassInfoConstructorParameterAnnotationClass.class);
    }
    
-   private void testClass(Class clazz) throws Throwable
+   private void testClass(Class<?> clazz) throws Throwable
    {
       ClassInfoImpl expected = new ClassInfoImpl(clazz.getName(), Modifier.PUBLIC);
       TypeInfo info = testBasics(clazz, expected);

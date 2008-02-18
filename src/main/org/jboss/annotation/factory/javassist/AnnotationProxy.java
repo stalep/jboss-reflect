@@ -33,18 +33,22 @@ import java.util.Map;
  */
 public class AnnotationProxy extends org.jboss.annotation.factory.AnnotationProxy implements InvocationHandler
 {
-   public AnnotationProxy(Class annotationType, Map valueMap)
+   /** The serialVersionUID */
+   private static final long serialVersionUID = -3253810562939848082L;
+
+   @SuppressWarnings("unchecked")
+   public AnnotationProxy(Class<?> annotationType, Map valueMap)
    {
       super(annotationType, valueMap);
    }
 
    public static Object createProxy(javassist.bytecode.annotation.Annotation info) throws Exception
    {
-      Class annotation = Thread.currentThread().getContextClassLoader().loadClass(info.getTypeName());
+      Class<?> annotation = Thread.currentThread().getContextClassLoader().loadClass(info.getTypeName());
       return createProxy(info, annotation);
    }
 
-   public static Object createProxy(javassist.bytecode.annotation.Annotation info, Class annotation) throws Exception
+   public static Object createProxy(javassist.bytecode.annotation.Annotation info, Class<?> annotation) throws Exception
    {
       Map<String, Object> map = ProxyMapCreator.createProxyMap(annotation, info);
       DefaultValueAnnotationValidator reader = new DefaultValueAnnotationValidator();

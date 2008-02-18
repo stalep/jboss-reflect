@@ -55,8 +55,8 @@ import org.jboss.annotation.factory.javassist.DefaultValueAnnotationValidator;
  */
 public class AnnotationCreator implements AnnotationParserVisitor
 {
-   private Class annotation;
-   private Class type;
+   private Class<?> annotation;
+   private Class<?> type;
    public Object typeValue;
    
    static final AnnotationValidator defaultAnnotationReader;
@@ -83,7 +83,7 @@ public class AnnotationCreator implements AnnotationParserVisitor
       
    }
 
-   public AnnotationCreator(Class annotation, Class type)
+   public AnnotationCreator(Class<?> annotation, Class<?> type)
    {
       this.type = type;
       this.annotation = annotation;
@@ -199,7 +199,7 @@ public class AnnotationCreator implements AnnotationParserVisitor
             if (index == -1) throw new RuntimeException("Enum must be fully qualified: " + node.getValue());
             String className = node.getValue().substring(0, index);
             String en = node.getValue().substring(index + 1);
-            Class enumClass = Thread.currentThread().getContextClassLoader().loadClass(className);
+            Class<?> enumClass = Thread.currentThread().getContextClassLoader().loadClass(className);
 
             if (enumClass.getSuperclass().getName().equals("java.lang.Enum"))
             {
@@ -260,7 +260,7 @@ public class AnnotationCreator implements AnnotationParserVisitor
    public Object visit(ASTMemberValueArrayInitializer node, Object data)
    {
       if (!type.isArray()) throw new RuntimeException(annotation.getName() + "." + data + " is not an array");
-      Class baseType = type.getComponentType();
+      Class<?> baseType = type.getComponentType();
       int size = node.jjtGetNumChildren();
       typeValue = Array.newInstance(baseType, size);
 
@@ -277,7 +277,7 @@ public class AnnotationCreator implements AnnotationParserVisitor
    {
       try
       {
-         Class subAnnotation = Thread.currentThread().getContextClassLoader().loadClass(node.getIdentifier());
+         Class<?> subAnnotation = Thread.currentThread().getContextClassLoader().loadClass(node.getIdentifier());
          typeValue = createAnnotation(node, subAnnotation);
       }
       catch (Exception e)
@@ -299,7 +299,7 @@ public class AnnotationCreator implements AnnotationParserVisitor
       return null;
    }
 
-   private static Class getMemberType(Class annotation, String member)
+   private static Class<?> getMemberType(Class<?> annotation, String member)
    {
       Method[] methods = annotation.getMethods();
       for (int i = 0; i < methods.length; i++)
@@ -334,7 +334,7 @@ public class AnnotationCreator implements AnnotationParserVisitor
    }
    
    
-   public static Object createAnnotation(ASTAnnotation node, Class annotation, ClassLoader cl) throws Exception
+   public static Object createAnnotation(ASTAnnotation node, Class<?> annotation, ClassLoader cl) throws Exception
    {
       HashMap<String, Object> map = new HashMap<String, Object>();
       if (annotation == null)
@@ -348,7 +348,7 @@ public class AnnotationCreator implements AnnotationParserVisitor
          Node contained = node.jjtGetChild(0);
          if (contained instanceof ASTSingleMemberValue)
          {
-            Class type = getMemberType(annotation, "value");
+            Class<?> type = getMemberType(annotation, "value");
             AnnotationCreator creator = new AnnotationCreator(annotation, type);
             contained.jjtAccept(creator, "value");
             map.put("value", creator.typeValue);
@@ -359,7 +359,7 @@ public class AnnotationCreator implements AnnotationParserVisitor
             for (int i = 0; i < pairs.jjtGetNumChildren(); i++)
             {
                ASTMemberValuePair member = (ASTMemberValuePair) pairs.jjtGetChild(i);
-               Class type = getMemberType(annotation, member.getIdentifier().getValue());
+               Class<?> type = getMemberType(annotation, member.getIdentifier().getValue());
                AnnotationCreator creator = new AnnotationCreator(annotation, type);
                member.jjtAccept(creator, null);
                map.put(member.getIdentifier().getValue(), creator.typeValue);
@@ -371,12 +371,12 @@ public class AnnotationCreator implements AnnotationParserVisitor
       return AnnotationProxy.createProxy(map, annotation);
    }
 
-   public static Object createAnnotation(ASTAnnotation node, Class annotation) throws Exception
+   public static Object createAnnotation(ASTAnnotation node, Class<?> annotation) throws Exception
    {
       return createAnnotation(node, annotation, null);
    }
    
-   public static Object createAnnotation(final String annotationExpr, final Class annotation) throws Exception
+   public static Object createAnnotation(final String annotationExpr, final Class<?> annotation) throws Exception
    {
       return createAnnotation(getRootExpr(annotationExpr), annotation, null);
    }

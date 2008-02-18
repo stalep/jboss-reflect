@@ -357,14 +357,14 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
     * @param clazz the class
     * @return the array class
     */
-   public static Class getArrayClass(Class clazz)
+   public static Class<?> getArrayClass(Class<?> clazz)
    {
       return Array.newInstance(clazz, 0).getClass();
    }
 
    public TypeInfo getArrayType()
    {
-      Class arrayClass = getArrayClass(getType());
+      Class<?> arrayClass = getArrayClass(getType());
       return factory.getTypeInfo(arrayClass);
    }
 

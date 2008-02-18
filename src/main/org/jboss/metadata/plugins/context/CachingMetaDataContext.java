@@ -47,10 +47,10 @@ import org.jboss.metadata.spi.scope.ScopeLevel;
 public class CachingMetaDataContext extends AbstractMetaDataContext
 {
    /** The annotations */
-   private volatile Map<String, AnnotationItem> annotations;
+   private volatile Map<String, AnnotationItem<? extends Annotation>> annotations;
 
    /** MetaData by name */
-   private volatile Map<String, MetaDataItem> metaDataByName;
+   private volatile Map<String, MetaDataItem<?>> metaDataByName;
 
    /** All annotations */
    private volatile AnnotationsItem cachedAnnotationsItem;
@@ -130,7 +130,7 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
       
       if (annotations != null)
       {
-         AnnotationItem<T> result = annotations.get(annotationName);
+         AnnotationItem<T> result = (AnnotationItem) annotations.get(annotationName);
          if (result != null)
          {
             if (result.isValid())
@@ -143,7 +143,7 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
       if (result != null && result.isCachable())
       {
          if (annotations == null)
-            annotations = new ConcurrentHashMap<String, AnnotationItem>();
+            annotations = new ConcurrentHashMap<String, AnnotationItem<? extends Annotation>>();
          annotations.put(annotationName, result);
       }
       
@@ -177,7 +177,7 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
 
       if (metaDataByName != null)
       {
-         MetaDataItem<T> result = metaDataByName.get(name);
+         MetaDataItem<T> result = (MetaDataItem) metaDataByName.get(name);
          if (result != null)
          {
             if (result.isValid())
@@ -190,14 +190,14 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
       if (result != null && result.isCachable())
       {
          if (metaDataByName == null)
-            metaDataByName = new ConcurrentHashMap<String, MetaDataItem>();
+            metaDataByName = new ConcurrentHashMap<String, MetaDataItem<?>>();
          metaDataByName.put(name, result);
       }
       
       return result;
    }
 
-   public MetaDataItem retrieveMetaData(String name)
+   public MetaDataItem<?> retrieveMetaData(String name)
    {
       if (name == null)
          throw new IllegalArgumentException("Null name");
@@ -214,7 +214,7 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
 
       if (metaDataByName != null)
       {
-         MetaDataItem result = metaDataByName.get(name);
+         MetaDataItem<?> result = metaDataByName.get(name);
          if (result != null)
          {
             if (result.isValid())
@@ -223,11 +223,11 @@ public class CachingMetaDataContext extends AbstractMetaDataContext
          }
       }
 
-      MetaDataItem result = super.retrieveMetaData(name);
+      MetaDataItem<?> result = super.retrieveMetaData(name);
       if (result != null && result.isCachable())
       {
          if (metaDataByName == null)
-            metaDataByName = new ConcurrentHashMap<String, MetaDataItem>();
+            metaDataByName = new ConcurrentHashMap<String, MetaDataItem<?>>();
          metaDataByName.put(name, result);
       }
       

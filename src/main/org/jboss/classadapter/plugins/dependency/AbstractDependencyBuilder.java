@@ -36,7 +36,7 @@ import org.jboss.metadata.spi.MetaData;
  */
 public class AbstractDependencyBuilder implements DependencyBuilder
 {
-   public List<DependencyBuilderListItem> getDependencies(ClassAdapter classAdapter, MetaData metaData)
+   public List<DependencyBuilderListItem<?>> getDependencies(ClassAdapter classAdapter, MetaData metaData)
    {
       return null;
    }

@@ -51,6 +51,7 @@ public class BasicAnnotationItem<T extends Annotation> extends BasicMetaDataItem
       return getValue();
    }
    
+   @SuppressWarnings("unchecked")
    public boolean equals(Object object)
    {
       if (object == this)

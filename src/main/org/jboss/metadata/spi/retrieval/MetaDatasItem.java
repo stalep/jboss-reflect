@@ -30,12 +30,12 @@ package org.jboss.metadata.spi.retrieval;
 public interface MetaDatasItem extends Item<Object[]>
 {
    /** No meta data items */
-   public static final MetaDataItem[] NO_META_DATA_ITEMS = new MetaDataItem[0];
+   public static final MetaDataItem<?>[] NO_META_DATA_ITEMS = new MetaDataItem[0];
 
    /**
     * Get the meta datas
     * 
     * @return the meta datas
     */
-   MetaDataItem[] getMetaDatas();
+   MetaDataItem<?>[] getMetaDatas();
 }

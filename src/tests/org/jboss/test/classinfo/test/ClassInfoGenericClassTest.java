@@ -93,7 +93,7 @@ public abstract class ClassInfoGenericClassTest extends AbstractClassInfoTest
       testGenericSuperInterface(ClassInfoGenericSuperInterfaceEmptyClass.class, ClassInfoGenericInterface.class, new Class[] { ClassInfoEmptyClass.class });
    }
    
-   public void testGenericSuperClass(Class clazz, Class genericClass, Class[] genericTypes)
+   public void testGenericSuperClass(Class<?> clazz, Class<?> genericClass, Class<?>[] genericTypes)
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       ClassInfo typeInfo = (ClassInfo) factory.getTypeInfo(clazz);
@@ -112,7 +112,7 @@ public abstract class ClassInfoGenericClassTest extends AbstractClassInfoTest
          assertEquals(types[i], actualTypes[i]);
    }
    
-   public void testGenericSuperInterface(Class clazz, Class genericClass, Class[] genericTypes)
+   public void testGenericSuperInterface(Class<?> clazz, Class<?> genericClass, Class<?>[] genericTypes)
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       ClassInfo typeInfo = (ClassInfo) factory.getTypeInfo(clazz);
@@ -289,14 +289,14 @@ public abstract class ClassInfoGenericClassTest extends AbstractClassInfoTest
       assertKeyValueType(ClassInfoGenericExtendsMapInComplicatedWayWIthSpecificType.class, Double.class, Short.class);
    }
    
-   private void assertComponentType(String methodName, Class expected) throws Exception
+   private void assertComponentType(String methodName, Class<?> expected) throws Exception
    {
       Method method = ClassInfoGenericClassTest.class.getMethod(methodName, null);
       Type type = method.getGenericReturnType();
       assertComponentType(type, expected);
    }
    
-   private void assertComponentType(Type type, Class expected) throws Exception
+   private void assertComponentType(Type type, Class<?> expected) throws Exception
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       TypeInfo typeInfo = factory.getTypeInfo(type);
@@ -307,14 +307,14 @@ public abstract class ClassInfoGenericClassTest extends AbstractClassInfoTest
       assertEquals(expectedInfo, classInfo.getComponentType());
    }
    
-   private void assertKeyValueType(String methodName, Class keyExpected, Class valueExpected) throws Exception
+   private void assertKeyValueType(String methodName, Class<?> keyExpected, Class<?> valueExpected) throws Exception
    {
       Method method = ClassInfoGenericClassTest.class.getMethod(methodName, null);
       Type type = method.getGenericReturnType();
       assertKeyValueType(type, keyExpected, valueExpected);
    }
    
-   private void assertKeyValueType(Type type, Class keyExpected, Class valueExpected) throws Exception
+   private void assertKeyValueType(Type type, Class<?> keyExpected, Class<?> valueExpected) throws Exception
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       TypeInfo typeInfo = factory.getTypeInfo(type);
@@ -328,7 +328,7 @@ public abstract class ClassInfoGenericClassTest extends AbstractClassInfoTest
       assertEquals(expectedInfo, classInfo.getValueType());
    }
    
-   private void testGenericClass(Class clazz) throws Throwable
+   private void testGenericClass(Class<?> clazz) throws Throwable
    {
       ClassInfoImpl expected = new ClassInfoImpl(clazz.getName(), Modifier.PUBLIC);
       TypeInfo info = testBasics(clazz, expected);

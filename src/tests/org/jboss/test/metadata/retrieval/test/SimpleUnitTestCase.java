@@ -71,10 +71,12 @@ public class SimpleUnitTestCase extends AbstractMetaDataTest
       SimpleAnnotationItem<TestAnnotation1> item1 = new SimpleAnnotationItem<TestAnnotation1>(annotation1);
       SimpleAnnotationItem<TestAnnotation2> item2 = new SimpleAnnotationItem<TestAnnotation2>(annotation2);
 
+      @SuppressWarnings("unchecked")
       AnnotationItem[] items = { item1, item2 };
       
+      @SuppressWarnings("unchecked")
       SimpleAnnotationsItem item = new SimpleAnnotationsItem(items);
-      AnnotationItem[] result = item.getAnnotations();
+      AnnotationItem<? extends Annotation>[] result = item.getAnnotations();
       assertUnorderedArrayEquals(items, result);
 
       Annotation[] expected = { annotation1, annotation2 };
@@ -89,7 +91,7 @@ public class SimpleUnitTestCase extends AbstractMetaDataTest
    {
       AnnotationsItem item = SimpleAnnotationsItem.NO_ANNOTATIONS;
 
-      AnnotationItem[] items = item.getAnnotations();
+      AnnotationItem<? extends Annotation>[] items = item.getAnnotations();
       assertNotNull(items);
       assertEquals(0, items.length);
 
@@ -119,10 +121,10 @@ public class SimpleUnitTestCase extends AbstractMetaDataTest
       SimpleMetaDataItem<Object> item1 = new SimpleMetaDataItem<Object>(Object.class.getName(), object1);
       SimpleMetaDataItem<String> item2 = new SimpleMetaDataItem<String>(String.class.getName(), object2);
 
-      MetaDataItem[] items = { item1, item2 };
+      MetaDataItem<?>[] items = { item1, item2 };
       
       SimpleMetaDatasItem item = new SimpleMetaDatasItem(items);
-      MetaDataItem[] result = item.getMetaDatas();
+      MetaDataItem<?>[] result = item.getMetaDatas();
       assertUnorderedArrayEquals(items, result);
 
       Object[] expected = { object1, object2 };
@@ -137,7 +139,7 @@ public class SimpleUnitTestCase extends AbstractMetaDataTest
    {
       MetaDatasItem item = SimpleMetaDatasItem.NO_META_DATA;
 
-      MetaDataItem[] items = item.getMetaDatas();
+      MetaDataItem<?>[] items = item.getMetaDatas();
       assertNotNull(items);
       assertEquals(0, items.length);
 

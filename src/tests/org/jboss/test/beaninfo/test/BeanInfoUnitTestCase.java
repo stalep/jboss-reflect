@@ -249,7 +249,7 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
       assertEquals("java.lang.Double", property.getType().getName());
    }
 
-   protected void testBean(Class clazz, String[] beanNames) throws Throwable
+   protected void testBean(Class<?> clazz, String[] beanNames) throws Throwable
    {
       BeanInfo beanInfo = getBeanInfo(clazz);
       assertBeanInfo(beanInfo, clazz);

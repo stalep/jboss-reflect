@@ -73,19 +73,19 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
       assertBeanProperties(beanInfo, clazz);
    }
    
-   protected void assertBeanConstructors(BeanInfo beanInfo, Class clazz)
+   protected void assertBeanConstructors(BeanInfo beanInfo, Class<?> clazz)
    {
       ClassInfo classInfo = beanInfo.getClassInfo();
       
       TypeInfoFactory factory = getTypeInfoFactory();
       Set<ConstructorInfo> expected = new HashSet<ConstructorInfo>();
-      for (Constructor constructor : clazz.getConstructors())
+      for (Constructor<?> constructor : clazz.getConstructors())
       {
-         Class[] paramClasses = constructor.getParameterTypes();
+         Class<?>[] paramClasses = constructor.getParameterTypes();
          TypeInfo[] paramTypes = new TypeInfo[paramClasses.length];
          AnnotationValue[][] paramAnnotations = new AnnotationValue[paramClasses.length][0];
          int i = 0;
-         for (Class c : paramClasses)
+         for (Class<?> c : paramClasses)
             paramTypes[i++] = factory.getTypeInfo(c);
          ConstructorInfo c = new ConstructorInfoImpl(null, paramTypes, paramAnnotations, null, constructor.getModifiers(), classInfo);
          expected.add(c);
@@ -117,11 +117,11 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
       for (Method method : methods)
       {
          TypeInfo returnType = factory.getTypeInfo(method.getReturnType());
-         Class[] paramClasses = method.getParameterTypes();
+         Class<?>[] paramClasses = method.getParameterTypes();
          TypeInfo[] paramTypes = new TypeInfo[paramClasses.length];
          AnnotationValue[][] paramAnnotations = new AnnotationValue[paramClasses.length][0];
          int i = 0;
-         for (Class c : paramClasses)
+         for (Class<?> c : paramClasses)
             paramTypes[i++] = factory.getTypeInfo(c);
          ClassInfo classInfo = (ClassInfo) factory.getTypeInfo(method.getDeclaringClass());
          MethodInfo m = new MethodInfoImpl(null, method.getName(), returnType, paramTypes, paramAnnotations, null, method.getModifiers(), classInfo);
@@ -181,7 +181,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
       }
    }
 
-   protected Set<PropertyInfo> getExpectedProperties(Class clazz)
+   protected Set<PropertyInfo> getExpectedProperties(Class<?> clazz)
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       Method[] methods = clazz.getMethods();
@@ -304,7 +304,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
       for (Method method : methods)
       {
          TypeInfo returnType = factory.getTypeInfo(method.getGenericReturnType());
-         Class[] parameters = method.getParameterTypes();
+         Class<?>[] parameters = method.getParameterTypes();
          if (parameters.length == 0 && PrimitiveInfo.VOID.equals(returnType) == false)
          {
             String name = method.getName();
@@ -347,8 +347,8 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
    protected static boolean isGetter(Method method)
    {
       String name = method.getName();
-      Class returnType = method.getReturnType();
-      Class[] parameters = method.getParameterTypes();
+      Class<?> returnType = method.getReturnType();
+      Class<?>[] parameters = method.getParameterTypes();
       if ((name.length() > 3 && name.startsWith("get")) || (name.length() > 2 && name.startsWith("is")))
       {
          // isBoolean() is not a getter for java.lang.Boolean
@@ -363,8 +363,8 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
    protected static boolean isSetter(Method method)
    {
       String name = method.getName();
-      Class returnType = method.getReturnType();
-      Class[] parameters = method.getParameterTypes();
+      Class<?> returnType = method.getReturnType();
+      Class<?>[] parameters = method.getParameterTypes();
       if ((name.length() > 3 && name.startsWith("set")))
       {
          if (parameters.length == 1 && Void.TYPE.equals(returnType))
@@ -378,7 +378,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
       return configuration.getTypeInfoFactory();
    }
    
-   protected BeanInfo getBeanInfo(Class clazz) throws Throwable
+   protected BeanInfo getBeanInfo(Class<?> clazz) throws Throwable
    {
       return configuration.getBeanInfo(clazz);
    }

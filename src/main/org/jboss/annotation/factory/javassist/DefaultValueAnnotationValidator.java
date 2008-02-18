@@ -51,7 +51,7 @@ public class DefaultValueAnnotationValidator implements AnnotationValidator
 {
    ScopedClassPoolRepository repository = ScopedClassPoolRepositoryImpl.getInstance();
    
-   public void validate(Map<String, Object> map, Class annotation)
+   public void validate(Map<String, Object> map, Class<?> annotation)
    {
       ArrayList<String> notAssignedAttributes = null;
       CtClass ctClass = null;
@@ -110,7 +110,7 @@ public class DefaultValueAnnotationValidator implements AnnotationValidator
    }
    
    
-   CtClass getCtClass(Class clazz)
+   CtClass getCtClass(Class<?> clazz)
    {
       try
       {
@@ -123,7 +123,7 @@ public class DefaultValueAnnotationValidator implements AnnotationValidator
       }
    }
 
-   private Method[] getDeclaredMethods(final Class clazz)
+   private Method[] getDeclaredMethods(final Class<?> clazz)
    {
       return AccessController.doPrivileged(new PrivilegedAction<Method[]>()
       {

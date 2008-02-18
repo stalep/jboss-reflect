@@ -49,7 +49,7 @@ public class OldAbstractJavaBeanTest extends AbstractIoCTest
     * @return the delegate
     * @throws Exception for any error
     */
-   public static AbstractTestDelegate getDelegate(Class clazz) throws Exception
+   public static AbstractTestDelegate getDelegate(Class<?> clazz) throws Exception
    {
       return new JavaBeanTestDelegate(clazz);
    }

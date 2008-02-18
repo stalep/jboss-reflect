@@ -44,7 +44,7 @@ public class ConstructorBean
 
    @TestAnnotation1
    @TestAnnotation2
-   public ConstructorBean(String p1, Class p2)
+   public ConstructorBean(String p1, Class<?> p2)
    {
    }
 }

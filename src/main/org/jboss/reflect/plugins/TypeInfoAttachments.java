@@ -108,7 +108,7 @@ public class TypeInfoAttachments
       {
          try
          {
-            return ((Future) result).get();
+            return ((Future<?>) result).get();
          }
          catch (RuntimeException e)
          {

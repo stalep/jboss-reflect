@@ -37,7 +37,7 @@ import org.jboss.metadata.spi.retrieval.AnnotationsItem;
 public class BasicAnnotationsItem extends BasicItem<Annotation[]> implements AnnotationsItem
 {
    /** The annotation items */
-   private AnnotationItem[] annotationItems;
+   private AnnotationItem<? extends Annotation>[] annotationItems;
    
    /** The annotations */
    private Annotation[] annotations;
@@ -48,7 +48,7 @@ public class BasicAnnotationsItem extends BasicItem<Annotation[]> implements Ann
     * @param loader the loader
     * @param annotationItems the annotation items
     */
-   public BasicAnnotationsItem(MetaDataLoader loader, AnnotationItem[] annotationItems)
+   public BasicAnnotationsItem(MetaDataLoader loader, AnnotationItem<? extends Annotation>[] annotationItems)
    {
       super(loader);
 
@@ -73,7 +73,7 @@ public class BasicAnnotationsItem extends BasicItem<Annotation[]> implements Ann
       return annotations;
    }
 
-   public AnnotationItem[] getAnnotations()
+   public AnnotationItem<? extends Annotation>[] getAnnotations()
    {
       return annotationItems;
    }
@@ -83,7 +83,7 @@ public class BasicAnnotationsItem extends BasicItem<Annotation[]> implements Ann
       if (super.isCachable() == false)
          return false;
       
-      for (AnnotationItem item : annotationItems)
+      for (AnnotationItem<? extends Annotation> item : annotationItems)
       {
          if (item.isCachable() == false)
             return false;
@@ -97,7 +97,7 @@ public class BasicAnnotationsItem extends BasicItem<Annotation[]> implements Ann
       if (super.isValid() == false)
          return false;
       
-      for (AnnotationItem item : annotationItems)
+      for (AnnotationItem<? extends Annotation> item : annotationItems)
       {
          if (item.isValid() == false)
             return false;

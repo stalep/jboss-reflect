@@ -36,6 +36,7 @@ public class TestMetaDataLoader extends BasicMetaDataLoader
 {
    private boolean retrieved = false;
    
+   @SuppressWarnings("unchecked")
    private final AnnotationsItem NO_ANNOTATIONS = new BasicAnnotationsItem(this, new AnnotationItem[0]);
    
    private AnnotationsItem item = NO_ANNOTATIONS;

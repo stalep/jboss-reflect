@@ -55,13 +55,13 @@ public class ClassInfoMemoryTestCase extends JBossMemoryTestCase
      ClassLoader oldloader = Thread.currentThread().getContextClassLoader();
      System.out.println("+++oldloader =" + oldloader.toString());
      ClassLoader loader = newClassLoader(ClassInfoMemoryTestCase.class);
-     WeakReference weakReferenceOnLoader = new WeakReference<ClassLoader>(loader);
+     WeakReference<ClassLoader> weakReferenceOnLoader = new WeakReference<ClassLoader>(loader);
      
      System.out.println("+++newloader =" + loader.toString());
      //step1
      
-     Class simpleBeanClass = loader.loadClass("org.jboss.test.classinfo.support.SimpleBean");
-     Class simpleBeanInterface = loader.loadClass("org.jboss.test.classinfo.support.SimpleInterface");
+     Class<?> simpleBeanClass = loader.loadClass("org.jboss.test.classinfo.support.SimpleBean");
+     Class<?> simpleBeanInterface = loader.loadClass("org.jboss.test.classinfo.support.SimpleInterface");
      ClassInfo cinfo = getClassInfo(loader,simpleBeanClass);
      cinfo=null;
      
@@ -97,7 +97,7 @@ public class ClassInfoMemoryTestCase extends JBossMemoryTestCase
       checkUnload( weakReferenceOnLoader,"org.jboss.test.classinfo.support.SimpleBean","./leak-report.html");          
    }
    
-   protected ClassInfo getClassInfo(ClassLoader loader,Class clazz)
+   protected ClassInfo getClassInfo(ClassLoader loader,Class<?> clazz)
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       TypeInfo info=null;

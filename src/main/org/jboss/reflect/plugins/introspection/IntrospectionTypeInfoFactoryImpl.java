@@ -74,18 +74,18 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
     * @param clazz the class
     * @param info the class info
     */
-   public void generateTypeInfo(Class clazz, ClassInfoImpl info)
+   public void generateTypeInfo(Class<?> clazz, ClassInfoImpl info)
    {
       // Everything is done lazily
    }
 
    public ClassInfoImpl getSuperClass(ClassInfoImpl classInfo)
    {
-      Class clazz = classInfo.getType();
+      Class<?> clazz = classInfo.getType();
       ClassInfoImpl superType = null;
       if (clazz.isInterface() == false)
       {
-         Class superClazz = clazz.getSuperclass();
+         Class<?> superClazz = clazz.getSuperclass();
          if (superClazz != null)
             superType = (ClassInfoImpl) getTypeInfo(superClazz);
       }
@@ -94,7 +94,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
    public ClassInfo getGenericSuperClass(ClassInfoImpl classInfo)
    {
-      Class clazz = classInfo.getType();
+      Class<?> clazz = classInfo.getType();
       ClassInfo superType = null;
       if (clazz.isInterface() == false)
       {
@@ -136,11 +136,11 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
    public ConstructorInfoImpl[] getConstructors(ClassInfoImpl classInfo)
    {
-      Class clazz = classInfo.getType();
+      Class<?> clazz = classInfo.getType();
       ReflectConstructorInfoImpl[] infos = null;
       if (clazz.isInterface() == false)
       {
-         Constructor[] constructors = getDeclaredConstructors(clazz);
+         Constructor<?>[] constructors = getDeclaredConstructors(clazz);
          if (constructors != null && constructors.length > 0)
          {
             infos = new ReflectConstructorInfoImpl[constructors.length];
@@ -166,7 +166,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
    public FieldInfoImpl[] getFields(ClassInfoImpl classInfo)
    {
-      Class clazz = classInfo.getType();
+      Class<?> clazz = classInfo.getType();
       Field[] fields = getDeclaredFields(clazz);
       if (fields == null || fields.length == 0)
          return null;
@@ -184,7 +184,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
    public MethodInfoImpl[] getMethods(ClassInfoImpl classInfo)
    {
-      Class clazz = classInfo.getType();
+      Class<?> clazz = classInfo.getType();
       Method[] methods = getDeclaredMethods(clazz);
       if (methods == null || methods.length == 0)
          return null;
@@ -201,8 +201,8 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
    public InterfaceInfo[] getInterfaces(ClassInfoImpl classInfo)
    {
-      Class clazz = classInfo.getType();
-      Class[] interfaces = clazz.getInterfaces();
+      Class<?> clazz = classInfo.getType();
+      Class<?>[] interfaces = clazz.getInterfaces();
       if (interfaces == null || interfaces.length == 0)
          return null;
 
@@ -215,7 +215,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
    public InterfaceInfo[] getGenericInterfaces(ClassInfoImpl classInfo)
    {
-      Class clazz = classInfo.getType();
+      Class<?> clazz = classInfo.getType();
       Type[] interfaces = clazz.getGenericInterfaces();
       if (interfaces == null || interfaces.length == 0)
          return null;
@@ -229,7 +229,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
    public PackageInfoImpl getPackage(ClassInfoImpl classInfo)
    {
-      Class clazz = classInfo.getType();
+      Class<?> clazz = classInfo.getType();
       Package pkg = clazz.getPackage();
       if (pkg == null)
          return null;
@@ -272,7 +272,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return result;
    }
 
-   public TypeInfo getTypeInfo(Class clazz)
+   public TypeInfo getTypeInfo(Class<?> clazz)
    {
       if (clazz == null)
          throw new IllegalArgumentException("Null class");
@@ -301,7 +301,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
       String name = null;
       if (type instanceof Class)
-         name = ((Class) type).getName();
+         name = ((Class<?>) type).getName();
       if (name != null)
       {
          TypeInfo primitive = PrimitiveInfo.valueOf(name);
@@ -372,7 +372,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       if (cl == null)
          cl = Thread.currentThread().getContextClassLoader();
 
-      Class clazz = Class.forName(name, false, cl);
+      Class<?> clazz = Class.forName(name, false, cl);
       return getTypeInfo(clazz);
    }
 
@@ -422,7 +422,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
 
    protected TypeInfo instantiate(ParameterizedType type)
    {
-      Class rawType = (Class) type.getRawType();
+      Class<?> rawType = (Class<?>) type.getRawType();
       ClassInfo rawTypeInfo = (ClassInfo) getTypeInfo(rawType);
       if (rawTypeInfo instanceof ArrayInfo)
          return new ParameterizedArrayInfo(this, (ArrayInfo) rawTypeInfo, type);
@@ -439,15 +439,15 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       // Everything is lazy
    }
 
-   protected Constructor[] getDeclaredConstructors(final Class clazz)
+   protected Constructor<?>[] getDeclaredConstructors(final Class<?> clazz)
    {
       if (System.getSecurityManager() == null)
          return clazz.getDeclaredConstructors();
       else
       {
-         PrivilegedAction<Constructor[]> action = new PrivilegedAction<Constructor[]>()
+         PrivilegedAction<Constructor<?>[]> action = new PrivilegedAction<Constructor<?>[]>()
          {
-            public Constructor[] run()
+            public Constructor<?>[] run()
             {
                return clazz.getDeclaredConstructors();
             }
@@ -456,7 +456,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       }
    }
 
-   protected Field[] getDeclaredFields(final Class clazz)
+   protected Field[] getDeclaredFields(final Class<?> clazz)
    {
       if (System.getSecurityManager() == null)
          return clazz.getDeclaredFields();
@@ -473,7 +473,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       }
    }
 
-   protected Method[] getDeclaredMethods(final Class clazz)
+   protected Method[] getDeclaredMethods(final Class<?> clazz)
    {
       if (System.getSecurityManager() == null)
          return clazz.getDeclaredMethods();
@@ -568,7 +568,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return findActualType(classInfo, Map.class, 1);
    }
 
-   protected TypeInfo findActualType(ClassInfo classInfo, Class reference, int parameter)
+   protected TypeInfo findActualType(ClassInfo classInfo, Class<?> reference, int parameter)
    {
       Type type = classInfo.getType();
       if (classInfo instanceof ParameterizedClassInfo)
@@ -577,7 +577,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       Type result = locateActualType(reference, parameter, classInfo.getType(), type);
       if (result instanceof TypeVariable)
       {
-         TypeVariable typeVariable = (TypeVariable) result;
+         TypeVariable<?> typeVariable = (TypeVariable<?>) result;
          result = typeVariable.getBounds()[0];
       }
       return getTypeInfo(result);
@@ -635,9 +635,9 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return result;
    }
    
-   private static Type getParameter(Class clazz, Type type, TypeVariable variable)
+   private static Type getParameter(Class<?> clazz, Type type, TypeVariable<?> variable)
    {
-      TypeVariable[] variables = clazz.getTypeParameters();
+      TypeVariable<?>[] variables = clazz.getTypeParameters();
       for (int i = 0; i < variables.length; ++i)
       {
          if (variables[i].getName().equals(variable.getName()))

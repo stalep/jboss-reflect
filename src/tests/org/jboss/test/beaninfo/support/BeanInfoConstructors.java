@@ -29,6 +29,7 @@ package org.jboss.test.beaninfo.support;
  */
 public class BeanInfoConstructors
 {
+   @SuppressWarnings("unused")
    private BeanInfoConstructors() {}
    BeanInfoConstructors(int p1) {}
    protected BeanInfoConstructors(int p1, String p2) {}

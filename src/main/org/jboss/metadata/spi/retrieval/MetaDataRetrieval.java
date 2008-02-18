@@ -101,7 +101,7 @@ public interface MetaDataRetrieval
     * @param name the name of the meta data
     * @return the metadata or null if not present
     */
-   MetaDataItem retrieveMetaData(String name);
+   MetaDataItem<?> retrieveMetaData(String name);
    
    /**
     * Get the component metadata retrieval

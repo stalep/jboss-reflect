@@ -41,7 +41,7 @@ public class MethodParamBean
    {
    }
 
-   public void testAnnotation12(String p1, @TestAnnotation1 @TestAnnotation2 Class p2)
+   public void testAnnotation12(String p1, @TestAnnotation1 @TestAnnotation2 Class<?> p2)
    {
    }
 }

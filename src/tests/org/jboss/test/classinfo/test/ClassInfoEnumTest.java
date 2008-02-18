@@ -80,11 +80,11 @@ public abstract class ClassInfoEnumTest extends AbstractClassInfoTest
       assertClassInfo(enumInfo, enumClass);
    }
    
-   protected void assertEnumConstants(Class<Enum> enumClass, EnumInfo enumInfo) throws Throwable
+   protected void assertEnumConstants(Class<Enum<?>> enumClass, EnumInfo enumInfo) throws Throwable
    {
       HashSet<EnumConstantInfo> expected = new HashSet<EnumConstantInfo>();
       
-      for (Enum enumeration : enumClass.getEnumConstants())
+      for (Enum<?> enumeration : enumClass.getEnumConstants())
       {
          EnumConstantInfo constant = new EnumConstantInfoImpl(enumeration.name(), enumInfo);
          expected.add(constant);
@@ -97,7 +97,7 @@ public abstract class ClassInfoEnumTest extends AbstractClassInfoTest
          actual.add(c);
       assertEquals(expected, actual);
       
-      for (Enum enumeration : enumClass.getEnumConstants())
+      for (Enum<?> enumeration : enumClass.getEnumConstants())
       {
          String name = enumeration.name();
          Field field = enumClass.getField(name);

@@ -39,7 +39,7 @@ public class SimpleAnnotationsItem extends SimpleItem<Annotation[]> implements A
    public static final SimpleAnnotationsItem NO_ANNOTATIONS = new SimpleAnnotationsItem();
    
    /** The annotation items */
-   private AnnotationItem[] annotationItems;
+   private AnnotationItem<? extends Annotation>[] annotationItems;
    
    /** The annotations */
    private Annotation[] annotations;
@@ -57,7 +57,7 @@ public class SimpleAnnotationsItem extends SimpleItem<Annotation[]> implements A
     * 
     * @param annotationItems the annotation items
     */
-   public SimpleAnnotationsItem(AnnotationItem[] annotationItems)
+   public SimpleAnnotationsItem(AnnotationItem<? extends Annotation>[] annotationItems)
    {
       setAnnotationItems(annotationItems);
    }
@@ -74,7 +74,7 @@ public class SimpleAnnotationsItem extends SimpleItem<Annotation[]> implements A
       return annotations;
    }
 
-   public AnnotationItem[] getAnnotations()
+   public AnnotationItem<? extends Annotation>[] getAnnotations()
    {
       return annotationItems;
    }
@@ -84,7 +84,7 @@ public class SimpleAnnotationsItem extends SimpleItem<Annotation[]> implements A
     * 
     * @param annotationItems the annotation items 
     */
-   protected void setAnnotationItems(AnnotationItem[] annotationItems)
+   protected void setAnnotationItems(AnnotationItem<? extends Annotation>[] annotationItems)
    {
       if (annotationItems == null)
          throw new IllegalArgumentException("Null annotation items");

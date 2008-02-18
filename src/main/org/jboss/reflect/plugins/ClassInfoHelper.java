@@ -97,7 +97,7 @@ public interface ClassInfoHelper
     * @param clazz the class
     * @return the type info
     */
-   TypeInfo getTypeInfo(Class clazz);
+   TypeInfo getTypeInfo(Class<?> clazz);
    
    /**
     * Get the actual type parameters

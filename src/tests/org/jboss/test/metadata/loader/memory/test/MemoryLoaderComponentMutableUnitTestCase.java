@@ -102,7 +102,7 @@ public class MemoryLoaderComponentMutableUnitTestCase extends SignatureMetaDataT
             assertSame(annotation, cmmd.removeAnnotation(sig, TestAnnotation.class));
          }
       }
-      Constructor c = getConstructor();
+      Constructor<?> c = getConstructor();
       ConstructorInfo ci = getConstructorInfo();
       Signature sc = new ConstructorSignature(c);
       checkAnnotationCycle(sc, c, ci);
@@ -130,7 +130,7 @@ public class MemoryLoaderComponentMutableUnitTestCase extends SignatureMetaDataT
             assertSame(metadata, object);
          }
       }
-      Constructor c = getConstructor();
+      Constructor<?> c = getConstructor();
       ConstructorInfo ci = getConstructorInfo();
       Signature sc = new ConstructorSignature(c);
       checkMetaDataCycle(sc, c, ci);

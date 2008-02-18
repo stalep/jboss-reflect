@@ -48,7 +48,7 @@ public @interface Complex
 
    String[] array();
 
-   Class clazz();
+   Class<?> clazz();
 
    MyEnum enumVal();
 }

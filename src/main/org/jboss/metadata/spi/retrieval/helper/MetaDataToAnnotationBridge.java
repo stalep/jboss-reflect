@@ -36,14 +36,14 @@ import org.jboss.metadata.spi.retrieval.MetaDataItem;
 public class MetaDataToAnnotationBridge<T extends Annotation> implements AnnotationItem<T>
 {
    /** The meta data */
-   private MetaDataItem metaData;
+   private MetaDataItem<?> metaData;
 
    /**
     * Create a new MetaDataToAnnotationBridge.
     * 
     * @param metaData the meta data
     */
-   public MetaDataToAnnotationBridge(MetaDataItem metaData)
+   public MetaDataToAnnotationBridge(MetaDataItem<?> metaData)
    {
       if (metaData == null)
          throw new IllegalArgumentException("Null metaData");

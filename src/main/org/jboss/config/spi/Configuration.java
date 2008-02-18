@@ -56,7 +56,7 @@ public interface Configuration
     * @param clazz the class
     * @return the bean info
     */
-   BeanInfo getBeanInfo(Class clazz);
+   BeanInfo getBeanInfo(Class<?> clazz);
 
    /**
     * Get the bean info
@@ -82,7 +82,7 @@ public interface Configuration
     * @param clazz the class
     * @return the class info
     */
-   ClassInfo getClassInfo(Class clazz);
+   ClassInfo getClassInfo(Class<?> clazz);
    
    /**
     * Get the type info for a type

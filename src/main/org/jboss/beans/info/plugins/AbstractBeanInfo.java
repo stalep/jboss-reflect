@@ -206,7 +206,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return beanInfoFactory;
    }
 
-   public List<DependencyBuilderListItem> getDependencies(MetaData metaData)
+   public List<DependencyBuilderListItem<?>> getDependencies(MetaData metaData)
    {
       return classAdapter.getDependencies(metaData);
    }
@@ -222,7 +222,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return joinpoint.dispatch();
    }
 
-   public Object newInstance(Class[] paramTypes, Object[] params) throws Throwable
+   public Object newInstance(Class<?>[] paramTypes, Object[] params) throws Throwable
    {
       return newInstance(classesToStrings(paramTypes), params);
    }
@@ -253,7 +253,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return joinpoint.dispatch();
    }
 
-   public Object invoke(Object bean, String name, Class[] paramTypes, Object[] params) throws Throwable
+   public Object invoke(Object bean, String name, Class<?>[] paramTypes, Object[] params) throws Throwable
    {
       return invoke(bean, name, classesToStrings(paramTypes), params);
    }
@@ -274,7 +274,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return joinpoint.dispatch();
    }
 
-   public Object invokeStatic(String name, Class[] paramTypes, Object[] params) throws Throwable
+   public Object invokeStatic(String name, Class<?>[] paramTypes, Object[] params) throws Throwable
    {
       return invokeStatic(name, classesToStrings(paramTypes), params);
    }
@@ -336,7 +336,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
     * @param classes the classes
     * @return the strings
     */
-   private static String[] classesToStrings(Class[] classes)
+   private static String[] classesToStrings(Class<?>[] classes)
    {
       if (classes == null || classes.length == 0)
          return null;

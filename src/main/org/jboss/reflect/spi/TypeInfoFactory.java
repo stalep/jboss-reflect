@@ -46,7 +46,7 @@ public interface TypeInfoFactory
     * @param clazz the class
     * @return the type info
     */
-   TypeInfo getTypeInfo(Class clazz);
+   TypeInfo getTypeInfo(Class<?> clazz);
 
    /**
     * Get a type info

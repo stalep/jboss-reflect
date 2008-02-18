@@ -65,8 +65,9 @@ public class CummulativeUnitTestCase extends AbstractMetaDataTest
       
       TestAnnotation1Impl annotation1 = new TestAnnotation1Impl();
       parentLoader.addAnnotation(annotation1);
-      AnnotationItem annotationItem1Parent = parentLoader.retrieveAnnotation(TestAnnotation1.class);
+      AnnotationItem<? extends Annotation> annotationItem1Parent = parentLoader.retrieveAnnotation(TestAnnotation1.class);
 
+      @SuppressWarnings("unchecked")
       AnnotationItem[] expectedItems = { annotationItem1Parent };
       assertUnorderedArrayEquals(expectedItems, item.getAnnotations());
       Annotation[] expected = { annotation1 };
@@ -74,7 +75,7 @@ public class CummulativeUnitTestCase extends AbstractMetaDataTest
       
       TestAnnotation2Impl annotation2 = new TestAnnotation2Impl();
       childLoader.addAnnotation(annotation2);
-      AnnotationItem annotationItem2Child = childLoader.retrieveAnnotation(TestAnnotation2.class);
+      AnnotationItem<? extends Annotation> annotationItem2Child = childLoader.retrieveAnnotation(TestAnnotation2.class);
 
       expectedItems = new AnnotationItem[] { annotationItem1Parent, annotationItem2Child };
       assertUnorderedArrayEquals(expectedItems, item.getAnnotations());
@@ -83,7 +84,7 @@ public class CummulativeUnitTestCase extends AbstractMetaDataTest
       
       TestAnnotation1Impl annotation1Child = new TestAnnotation1Impl();
       childLoader.addAnnotation(annotation1Child);
-      AnnotationItem annotationItem1Child = childLoader.retrieveAnnotation(TestAnnotation1.class);
+      AnnotationItem<? extends Annotation> annotationItem1Child = childLoader.retrieveAnnotation(TestAnnotation1.class);
 
       expectedItems = new AnnotationItem[] { annotationItem1Child, annotationItem2Child };
       assertUnorderedArrayEquals(expectedItems, item.getAnnotations());
@@ -129,7 +130,7 @@ public class CummulativeUnitTestCase extends AbstractMetaDataTest
       parentLoader.addMetaData(object1, Object.class);
       MetaDataItem<Object> metaDataItem1Parent = parentLoader.retrieveMetaData(Object.class);
 
-      MetaDataItem[] expectedItems = { metaDataItem1Parent };
+      MetaDataItem<?>[] expectedItems = { metaDataItem1Parent };
       assertUnorderedArrayEquals(expectedItems, item.getMetaDatas());
       Object[] expected = { object1 };
       assertUnorderedArrayEquals(expected, item.getValue());
@@ -189,16 +190,16 @@ public class CummulativeUnitTestCase extends AbstractMetaDataTest
       
       Object object1 = new Object();
       parentLoader.addMetaData("Object", object1, Object.class);
-      MetaDataItem metaDataItem1Parent = parentLoader.retrieveMetaData("Object");
+      MetaDataItem<?> metaDataItem1Parent = parentLoader.retrieveMetaData("Object");
 
-      MetaDataItem[] expectedItems = { metaDataItem1Parent };
+      MetaDataItem<?>[] expectedItems = { metaDataItem1Parent };
       assertUnorderedArrayEquals(expectedItems, item.getMetaDatas());
       Object[] expected = { object1 };
       assertUnorderedArrayEquals(expected, item.getValue());
       
       String object2 = "Hello";
       childLoader.addMetaData("String", object2, String.class);
-      MetaDataItem metaDataItem2Child = childLoader.retrieveMetaData("String");
+      MetaDataItem<?> metaDataItem2Child = childLoader.retrieveMetaData("String");
 
       expectedItems = new MetaDataItem[] { metaDataItem1Parent, metaDataItem2Child };
       assertUnorderedArrayEquals(expectedItems, item.getMetaDatas());
@@ -207,7 +208,7 @@ public class CummulativeUnitTestCase extends AbstractMetaDataTest
       
       Object object1Child = new Object();
       childLoader.addMetaData("Object", object1Child, Object.class);
-      MetaDataItem metaDataItem1Child = childLoader.retrieveMetaData("Object");
+      MetaDataItem<?> metaDataItem1Child = childLoader.retrieveMetaData("Object");
 
       expectedItems = new MetaDataItem[] { metaDataItem1Child, metaDataItem2Child };
       assertUnorderedArrayEquals(expectedItems, item.getMetaDatas());

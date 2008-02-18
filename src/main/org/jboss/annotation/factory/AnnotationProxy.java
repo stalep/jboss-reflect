@@ -37,10 +37,12 @@ import java.util.Map;
 public class AnnotationProxy implements InvocationHandler, Serializable
 {
    private static final long serialVersionUID = 1;
+   @SuppressWarnings("unchecked")
    private Map map;
-   private Class annotationType;
+   private Class<?> annotationType;
 
-   public AnnotationProxy(Class annotationType, Map valueMap)
+   @SuppressWarnings("unchecked")
+   public AnnotationProxy(Class<?> annotationType, Map valueMap)
    {
       this.annotationType = annotationType;
       map = valueMap;
@@ -119,7 +121,8 @@ public class AnnotationProxy implements InvocationHandler, Serializable
     * @return an instance implementing the annotation
     * @throws Exception for any error
     */
-   public static Object createProxy(Map map, Class annotation) throws Exception
+   @SuppressWarnings("unchecked")
+   public static Object createProxy(Map map, Class<?> annotation) throws Exception
    {
       AnnotationProxy proxyHandler = new AnnotationProxy(annotation, map);
       return java.lang.reflect.Proxy.newProxyInstance(annotation.getClassLoader(), new Class[]{annotation}, proxyHandler);

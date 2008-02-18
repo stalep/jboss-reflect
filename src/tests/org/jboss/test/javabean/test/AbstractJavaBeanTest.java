@@ -38,7 +38,7 @@ public class AbstractJavaBeanTest extends AbstractBuilderTest
       super(name);
    }
 
-   protected <T> T unmarshalJavaBean(Class<T> expected, Class... others) throws Exception
+   protected <T> T unmarshalJavaBean(Class<T> expected, Class<?>... others) throws Exception
    {
       return unmarshalObject(expected, JavaBean.class, others);
    }

@@ -68,11 +68,11 @@ public final class GenericMatcher
     * @param name the type name
     * @return the matched meta data item or null if no match
     */
-   public static final MetaDataItem matchMetaDataItem(MetaDataItem[] metaDatas, String name)
+   public static final MetaDataItem<?> matchMetaDataItem(MetaDataItem<?>[] metaDatas, String name)
    {
       if (metaDatas != null)
       {
-         for (MetaDataItem item : metaDatas)
+         for (MetaDataItem<?> item : metaDatas)
          {
             Object o = item.getValue();
             if (o instanceof Annotation)

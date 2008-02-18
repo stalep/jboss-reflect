@@ -119,7 +119,7 @@ public class UnmodifiableBeanInfo extends JBossObject implements BeanInfo
       return delegate.getBeanInfoFactory();
    }
 
-   public List<DependencyBuilderListItem> getDependencies(MetaData metaData)
+   public List<DependencyBuilderListItem<?>> getDependencies(MetaData metaData)
    {
       return delegate.getDependencies(metaData);
    }
@@ -134,7 +134,7 @@ public class UnmodifiableBeanInfo extends JBossObject implements BeanInfo
       return delegate.newInstance(paramTypes, params);
    }
 
-   public Object newInstance(Class[] paramTypes, Object[] params) throws Throwable
+   public Object newInstance(Class<?>[] paramTypes, Object[] params) throws Throwable
    {
       return delegate.newInstance(paramTypes, params);
    }
@@ -164,7 +164,7 @@ public class UnmodifiableBeanInfo extends JBossObject implements BeanInfo
       return delegate.invoke(bean, name, paramTypes, params);
    }
 
-   public Object invoke(Object bean, String name, Class[] paramTypes, Object[] params) throws Throwable
+   public Object invoke(Object bean, String name, Class<?>[] paramTypes, Object[] params) throws Throwable
    {
       return delegate.invoke(bean, name, paramTypes, params);
    }
@@ -184,7 +184,7 @@ public class UnmodifiableBeanInfo extends JBossObject implements BeanInfo
       return delegate.invokeStatic(name, paramTypes, params);
    }
 
-   public Object invokeStatic(String name, Class[] paramTypes, Object[] params) throws Throwable
+   public Object invokeStatic(String name, Class<?>[] paramTypes, Object[] params) throws Throwable
    {
       return delegate.invokeStatic(name, paramTypes, params);
    }

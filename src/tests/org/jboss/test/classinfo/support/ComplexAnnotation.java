@@ -40,12 +40,12 @@ public @interface ComplexAnnotation
    String stringValue() default "The answer is";
    int intValue() default 42;
    ValueAnnotation annotationValue() default @ValueAnnotation("method_");
-   Class clazzValue() default Integer.class;
+   Class<?> clazzValue() default Integer.class;
    TestEnum enumValue() default TestEnum.METHOD;
    
    String[] stringArrayValue() default {"The", "answer", "is"};
    int[] intArrayValue() default {4, 2};
    ValueAnnotation[] annotationArrayValue() default {@ValueAnnotation("Ann1"), @ValueAnnotation("Ann2")};
-   Class[] clazzArrayValue() default {Integer.class, Long.class};
+   Class<?>[] clazzArrayValue() default {Integer.class, Long.class};
    TestEnum[] enumArrayValue() default {TestEnum.ARRAY_STUFF, TestEnum.METHOD};
 }

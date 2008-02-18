@@ -70,7 +70,7 @@ public class SimpleMetaDataItem<T> extends SimpleItem<T> implements MetaDataItem
       if (object == null || object instanceof MetaDataItem == false)
          return false;
       
-      MetaDataItem other = (MetaDataItem) object;
+      MetaDataItem<?> other = (MetaDataItem<?>) object;
       return getName().equals(other.getName());
    }
    

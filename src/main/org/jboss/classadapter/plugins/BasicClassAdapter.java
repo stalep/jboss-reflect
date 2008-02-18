@@ -74,7 +74,7 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
       return classInfo.getType().getClassLoader();
    }
 
-   public List<DependencyBuilderListItem> getDependencies(MetaData metaData)
+   public List<DependencyBuilderListItem<?>> getDependencies(MetaData metaData)
    {
       DependencyBuilder builder = classAdapterFactory.getConfiguration().getDependencyBuilder();
       return builder.getDependencies(this, metaData);

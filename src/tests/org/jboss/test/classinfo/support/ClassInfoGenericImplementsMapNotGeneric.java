@@ -31,6 +31,7 @@ import java.util.Set;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
+@SuppressWarnings("unchecked")
 public class ClassInfoGenericImplementsMapNotGeneric implements Map
 {
    public void clear()

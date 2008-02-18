@@ -76,7 +76,7 @@ public class AnnotationValueFactory
       else if (type instanceof ClassInfo)
       {
          // TODO JBMICROCONT-118 do not depend on Class
-         rtnValue = new ClassValueImpl(((Class)value).getName(), type);
+         rtnValue = new ClassValueImpl(((Class<?>)value).getName(), type);
       }
       
       return rtnValue;
@@ -85,7 +85,7 @@ public class AnnotationValueFactory
    public static AnnotationValue createAnnotationValue(TypeInfoFactory typeInfoFactory, AnnotationHelper annotationHelper, AnnotationInfo info, Object ann)
    {
       Annotation annotation = (Annotation)ann;
-      Class clazz = annotation.annotationType();
+      Class<?> clazz = annotation.annotationType();
       ClassInfo clazzInfo = (ClassInfo) typeInfoFactory.getTypeInfo(clazz);
       
       HashMap<String, Value> attributes = new HashMap<String, Value>();

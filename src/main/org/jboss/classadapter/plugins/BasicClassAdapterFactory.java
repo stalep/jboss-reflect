@@ -48,7 +48,7 @@ public class BasicClassAdapterFactory implements ClassAdapterFactory
       this.configuration = configuration;
    }
    
-   public ClassAdapter getClassAdapter(Class clazz)
+   public ClassAdapter getClassAdapter(Class<?> clazz)
    {
       TypeInfoFactory typeInfoFactory = configuration.getTypeInfoFactory();
       TypeInfo typeInfo = typeInfoFactory.getTypeInfo(clazz);

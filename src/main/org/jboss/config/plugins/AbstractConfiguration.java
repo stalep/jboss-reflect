@@ -71,7 +71,7 @@ public abstract class AbstractConfiguration implements Configuration
       return getBeanInfoFactory().getBeanInfo(classAdapter);
    }
    
-   public BeanInfo getBeanInfo(Class clazz)
+   public BeanInfo getBeanInfo(Class<?> clazz)
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(clazz);
       return getBeanInfoFactory().getBeanInfo(classAdapter);
@@ -89,7 +89,7 @@ public abstract class AbstractConfiguration implements Configuration
       return classAdapter.getClassInfo();
    }
    
-   public ClassInfo getClassInfo(Class clazz)
+   public ClassInfo getClassInfo(Class<?> clazz)
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(clazz);
       return classAdapter.getClassInfo();

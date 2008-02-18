@@ -242,7 +242,7 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
    }
    
    @Deprecated
-   public Class getType()
+   public Class<?> getType()
    {
       return delegate.getType();
    }

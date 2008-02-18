@@ -58,13 +58,13 @@ public abstract class BasicMetaDataLoader extends AbstractMetaDataLoader
 
    public <T extends Annotation> AnnotationItem<T> retrieveAnnotation(Class<T> annotationType)
    {
-      AnnotationItem[] annotations = retrieveAnnotations().getAnnotations();
+      AnnotationItem<? extends Annotation>[] annotations = retrieveAnnotations().getAnnotations();
       return AnnotationMatcher.matchAnnotationItem(annotations, annotationType);
    }
 
-   public MetaDataItem retrieveMetaData(String name)
+   public MetaDataItem<?> retrieveMetaData(String name)
    {
-      MetaDataItem[] metaDatas = retrieveMetaData().getMetaDatas();
+      MetaDataItem<?>[] metaDatas = retrieveMetaData().getMetaDatas();
       return GenericMatcher.matchMetaDataItem(metaDatas, name);
    }
 

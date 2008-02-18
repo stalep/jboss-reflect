@@ -329,7 +329,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param result the annotation
     * @throws Exception for any error
     */
-   protected void checkAnnotation(Class expected, Object result) throws Exception
+   protected void checkAnnotation(Class<?> expected, Object result) throws Exception
    {
       assertNotNull("Annotation should not be null", result);
       assertTrue(result.getClass().getName() + " should be an instance of " + expected.getName(), expected.isInstance(result));
@@ -342,7 +342,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param result the annotation
     * @throws Exception for any error
     */
-   protected void checkAnnotation(Class expected, AnnotationItem result) throws Exception
+   protected void checkAnnotation(Class<?> expected, AnnotationItem<? extends Annotation> result) throws Exception
    {
       assertNotNull("AnnotationItem should not be null", result);
       assertTrue(result.isValid());
@@ -357,7 +357,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param result the annotation
     * @throws Exception for any error
     */
-   protected void checkAnnotation(Class expected, MetaDataItem result) throws Exception
+   protected void checkAnnotation(Class<?> expected, MetaDataItem<?> result) throws Exception
    {
       assertNotNull("MetaDataItem should not be null", result);
       assertTrue(result.isValid());
@@ -372,7 +372,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param result the meta data
     * @throws Exception for any error
     */
-   protected void checkMetaData(Class expected, Object result) throws Exception
+   protected void checkMetaData(Class<?> expected, Object result) throws Exception
    {
       assertNotNull("MetaData should not be null", result);
       assertTrue(result.getClass().getName() + " should be an instance of " + expected.getName(), expected.isInstance(result));
@@ -385,7 +385,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param result the meta data
     * @throws Exception for any error
     */
-   protected void checkMetaData(Class expected, MetaDataItem result) throws Exception
+   protected void checkMetaData(Class<?> expected, MetaDataItem<?> result) throws Exception
    {
       assertNotNull("MetaDataItem should not be null", result);
       assertTrue(result.isValid());
@@ -703,11 +703,11 @@ public class AbstractMetaDataTest extends BaseTestCase
       assertNotNull(annotation);
       Class<? extends Annotation> expected = annotation.annotationType();
 
-      AnnotationItem annotationItem = mutable.retrieveAnnotation(expected);
+      AnnotationItem<? extends Annotation> annotationItem = mutable.retrieveAnnotation(expected);
       checkAnnotation(expected, annotationItem);
-      MetaDataItem metaDataItem1 = mutable.retrieveMetaData(expected);
+      MetaDataItem<?> metaDataItem1 = mutable.retrieveMetaData(expected);
       checkAnnotation(expected, metaDataItem1);
-      MetaDataItem metaDataItem2 = mutable.retrieveMetaData(expected.getName());
+      MetaDataItem<?> metaDataItem2 = mutable.retrieveMetaData(expected.getName());
       checkAnnotation(expected, metaDataItem2);
       
       Annotation result = mutable.addAnnotation(annotation);
@@ -768,11 +768,11 @@ public class AbstractMetaDataTest extends BaseTestCase
       assertNotNull(annotation);
       Class<? extends Annotation> expected = annotation.annotationType();
 
-      AnnotationItem annotationItem = mutable.retrieveAnnotation(expected);
+      AnnotationItem<? extends Annotation> annotationItem = mutable.retrieveAnnotation(expected);
       checkAnnotation(expected, annotationItem);
-      MetaDataItem metaDataItem1 = mutable.retrieveMetaData(expected);
+      MetaDataItem<?> metaDataItem1 = mutable.retrieveMetaData(expected);
       checkAnnotation(expected, metaDataItem1);
-      MetaDataItem metaDataItem2 = mutable.retrieveMetaData(expected.getName());
+      MetaDataItem<?> metaDataItem2 = mutable.retrieveMetaData(expected.getName());
       checkAnnotation(expected, metaDataItem2);
       
       Annotation result = mutable.addAnnotation(annotation);
@@ -1135,11 +1135,11 @@ public class AbstractMetaDataTest extends BaseTestCase
       assertNotNull(expected);
       expectedAnnotations.remove(expected);
 
-      AnnotationItem annotationItem = mutable.retrieveAnnotation(expected);
+      AnnotationItem<? extends Annotation> annotationItem = mutable.retrieveAnnotation(expected);
       checkAnnotation(expected, annotationItem);
-      MetaDataItem metaDataItem1 = mutable.retrieveMetaData(expected);
+      MetaDataItem<?> metaDataItem1 = mutable.retrieveMetaData(expected);
       checkAnnotation(expected, metaDataItem1);
-      MetaDataItem metaDataItem2 = mutable.retrieveMetaData(expected.getName());
+      MetaDataItem<?> metaDataItem2 = mutable.retrieveMetaData(expected.getName());
       checkAnnotation(expected, metaDataItem2);
       
       Annotation result = mutable.removeAnnotation(expected);
@@ -1688,10 +1688,10 @@ public class AbstractMetaDataTest extends BaseTestCase
       
       AnnotationsItem result = metaData.retrieveAnnotations();
       assertNotNull("Null result", result);
-      AnnotationItem[] items = result.getAnnotations();
+      AnnotationItem<? extends Annotation>[] items = result.getAnnotations();
       assertNotNull("Null items", items);
       ExpectedAnnotations actual = emptyExpectedAnnotations();
-      for (AnnotationItem item : items)
+      for (AnnotationItem<? extends Annotation> item : items)
       {
          assertNotNull("Null annotation item " + Arrays.asList(items), item);
          Annotation annotation = item.getAnnotation();
@@ -1716,10 +1716,10 @@ public class AbstractMetaDataTest extends BaseTestCase
       
       AnnotationsItem result = metaData.retrieveLocalAnnotations();
       assertNotNull("Null result", result);
-      AnnotationItem[] items = result.getAnnotations();
+      AnnotationItem<? extends Annotation>[] items = result.getAnnotations();
       assertNotNull("Null items", items);
       ExpectedAnnotations actual = emptyExpectedAnnotations();
-      for (AnnotationItem item : items)
+      for (AnnotationItem<? extends Annotation> item : items)
       {
          assertNotNull("Null annotation item " + Arrays.asList(items), item);
          Annotation annotation = item.getAnnotation();
@@ -1846,10 +1846,10 @@ public class AbstractMetaDataTest extends BaseTestCase
       
       MetaDatasItem result = metaData.retrieveMetaData();
       assertNotNull("Null result", result);
-      MetaDataItem[] items = result.getMetaDatas();
+      MetaDataItem<?>[] items = result.getMetaDatas();
       assertNotNull("Null items", items);
       ExpectedMetaData actual = emptyExpectedMetaData();
-      for (MetaDataItem item : items)
+      for (MetaDataItem<?> item : items)
       {
          assertNotNull("Null meta data item " + Arrays.asList(items), item);
          Object object = item.getValue();
@@ -1874,10 +1874,10 @@ public class AbstractMetaDataTest extends BaseTestCase
       
       MetaDatasItem result = metaData.retrieveLocalMetaData();
       assertNotNull("Null result", result);
-      MetaDataItem[] items = result.getMetaDatas();
+      MetaDataItem<?>[] items = result.getMetaDatas();
       assertNotNull("Null items", items);
       ExpectedMetaData actual = emptyExpectedMetaData();
-      for (MetaDataItem item : items)
+      for (MetaDataItem<?> item : items)
       {
          assertNotNull("Null meta data item " + Arrays.asList(items), item);
          Object object = item.getValue();
@@ -1894,10 +1894,10 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param object the object
     * @return the type
     */
-   protected Class getType(Object object)
+   protected Class<?> getType(Object object)
    {
-      Class type = object.getClass();
-      Class[] interfaces = type.getInterfaces();
+      Class<?> type = object.getClass();
+      Class<?>[] interfaces = type.getInterfaces();
       if (interfaces.length == 1)
          return interfaces[0];
       return type;
@@ -1969,10 +1969,10 @@ public class AbstractMetaDataTest extends BaseTestCase
       
       MetaDatasItem result = metaData.retrieveMetaData();
       assertNotNull("Null result", result);
-      MetaDataItem[] items = result.getMetaDatas();
+      MetaDataItem<?>[] items = result.getMetaDatas();
       assertNotNull("Null items", items);
       ExpectedAnnotations actual = emptyExpectedAnnotations();
-      for (MetaDataItem item : items)
+      for (MetaDataItem<?> item : items)
       {
          assertNotNull("Null item " + Arrays.asList(items), item);
          Object object = item.getValue();
@@ -1999,10 +1999,10 @@ public class AbstractMetaDataTest extends BaseTestCase
       
       MetaDatasItem result = metaData.retrieveLocalMetaData();
       assertNotNull("Null result", result);
-      MetaDataItem[] items = result.getMetaDatas();
+      MetaDataItem<?>[] items = result.getMetaDatas();
       assertNotNull("Null items", items);
       ExpectedAnnotations actual = emptyExpectedAnnotations();
-      for (MetaDataItem item : items)
+      for (MetaDataItem<?> item : items)
       {
          assertNotNull("Null item " + Arrays.asList(items), item);
          Object object = item.getValue();
@@ -2068,6 +2068,7 @@ public class AbstractMetaDataTest extends BaseTestCase
     * @param expected the expected
     * @param actual the actual
     */
+   @SuppressWarnings("unchecked")
    private void fail(String context, Collection expected, Collection actual)
    {
       assertTrue("Unexpected " + context + " expected=" + expected + " actual=" + actual, false);

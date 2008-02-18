@@ -35,7 +35,7 @@ import org.jboss.metadata.spi.retrieval.MetaDatasItem;
 public class BasicMetaDatasItem extends BasicItem<Object[]> implements MetaDatasItem
 {
    /** The meta data items */
-   private MetaDataItem[] metaDataItems;
+   private MetaDataItem<?>[] metaDataItems;
    
    /** The meta data */
    private Object[] metaDatas;
@@ -46,7 +46,7 @@ public class BasicMetaDatasItem extends BasicItem<Object[]> implements MetaDatas
     * @param loader the loader
     * @param metaDataItems the meta data items
     */
-   public BasicMetaDatasItem(MetaDataLoader loader, MetaDataItem[] metaDataItems)
+   public BasicMetaDatasItem(MetaDataLoader loader, MetaDataItem<?>[] metaDataItems)
    {
       super(loader);
       
@@ -71,7 +71,7 @@ public class BasicMetaDatasItem extends BasicItem<Object[]> implements MetaDatas
       return metaDatas;
    }
 
-   public MetaDataItem[] getMetaDatas()
+   public MetaDataItem<?>[] getMetaDatas()
    {
       return metaDataItems;
    }
@@ -81,7 +81,7 @@ public class BasicMetaDatasItem extends BasicItem<Object[]> implements MetaDatas
       if (super.isCachable() == false)
          return false;
       
-      for (MetaDataItem item : metaDataItems)
+      for (MetaDataItem<?> item : metaDataItems)
       {
          if (item.isCachable() == false)
             return false;
@@ -95,7 +95,7 @@ public class BasicMetaDatasItem extends BasicItem<Object[]> implements MetaDatas
       if (super.isValid() == false)
          return false;
       
-      for (MetaDataItem item : metaDataItems)
+      for (MetaDataItem<?> item : metaDataItems)
       {
          if (item.isValid() == false)
             return false;

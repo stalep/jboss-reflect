@@ -61,7 +61,7 @@ public interface DomainClassLoader
     * @return the class
     * @throws ClassNotFoundException
     */
-   Class loadClass(String name) throws ClassNotFoundException;
+   Class<?> loadClass(String name) throws ClassNotFoundException;
 
    /**
     * Load a class
@@ -71,7 +71,7 @@ public interface DomainClassLoader
     * @return the class
     * @throws ClassNotFoundException when there is not class
     */
-   Class loadClassLocally(String name, boolean resolve) throws ClassNotFoundException;
+   Class<?> loadClassLocally(String name, boolean resolve) throws ClassNotFoundException;
    
    /**
     * Get a resource

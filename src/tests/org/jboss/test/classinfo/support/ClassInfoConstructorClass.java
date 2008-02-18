@@ -29,6 +29,7 @@ package org.jboss.test.classinfo.support;
  */
 public class ClassInfoConstructorClass
 {
+   @SuppressWarnings("unused")
    private ClassInfoConstructorClass() {}
    ClassInfoConstructorClass(int p1) {}
    protected ClassInfoConstructorClass(int p1, String p2) {}

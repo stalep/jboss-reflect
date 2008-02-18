@@ -74,7 +74,7 @@ public class BasicMetaDataItem<T> extends BasicItem<T> implements MetaDataItem<T
       if (object == null || object instanceof MetaDataItem == false)
          return false;
       
-      MetaDataItem other = (MetaDataItem) object;
+      MetaDataItem<?> other = (MetaDataItem<?>) object;
       return getName().equals(other.getName());
    }
    

@@ -45,7 +45,7 @@ public class IoCTestDelegate extends AbstractTestDelegate
     *
     * @param clazz the test class
     */
-   public IoCTestDelegate(Class clazz)
+   public IoCTestDelegate(Class<?> clazz)
    {
       super(clazz);
    }

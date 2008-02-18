@@ -70,7 +70,7 @@ public class CummulativeMetaDatasItem extends SimpleMetaDatasItem
       return super.getValue();
    }
    
-   public MetaDataItem[] getMetaDatas()
+   public MetaDataItem<?>[] getMetaDatas()
    {
       checkValid();
       return super.getMetaDatas();
@@ -91,7 +91,7 @@ public class CummulativeMetaDatasItem extends SimpleMetaDatasItem
     */
    protected void checkValid()
    {
-      MetaDataItem[] items = super.getMetaDatas();
+      MetaDataItem<?>[] items = super.getMetaDatas();
       boolean valid = (items != null);
       
       long newValidTime = context.getValidTime().getValidTime();
@@ -100,7 +100,7 @@ public class CummulativeMetaDatasItem extends SimpleMetaDatasItem
       
       if (items != null)
       {
-         for (MetaDataItem item : items)
+         for (MetaDataItem<?> item : items)
          {
             if (item.isValid() == false)
                valid = false;
@@ -118,7 +118,7 @@ public class CummulativeMetaDatasItem extends SimpleMetaDatasItem
     */
    protected void init(long validTime)
    {
-      Set<MetaDataItem> temp = null;
+      Set<MetaDataItem<?>> temp = null;
 
       List<MetaDataRetrieval> retrievals;
       
@@ -132,17 +132,17 @@ public class CummulativeMetaDatasItem extends SimpleMetaDatasItem
          MetaDatasItem item = retrieval.retrieveMetaData();
          if (item != null)
          {
-            MetaDataItem[] items = item.getMetaDatas();
-            for (MetaDataItem it : items)
+            MetaDataItem<?>[] items = item.getMetaDatas();
+            for (MetaDataItem<?> it : items)
             {
                if (temp == null)
-                  temp = new HashSet<MetaDataItem>();
+                  temp = new HashSet<MetaDataItem<?>>();
                temp.add(it);
             }
          }
       }
       
-      MetaDataItem[] items = NO_META_DATA_ITEMS;
+      MetaDataItem<?>[] items = NO_META_DATA_ITEMS;
       if (temp != null)
          items = temp.toArray(new MetaDataItem[temp.size()]);
       setMetaDataItems(items);

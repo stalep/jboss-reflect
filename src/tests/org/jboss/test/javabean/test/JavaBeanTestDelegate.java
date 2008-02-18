@@ -36,7 +36,7 @@ public class JavaBeanTestDelegate extends IoCTestDelegate
     *
     * @param clazz the test class
     */
-   public JavaBeanTestDelegate(Class clazz)
+   public JavaBeanTestDelegate(Class<?> clazz)
    {
       super(clazz);
    }

@@ -68,7 +68,7 @@ public class ReflectionUtils
     * @return the constructed object
     * @throws Throwable for any error
     */
-   public static Object newInstance(Class clazz) throws Throwable
+   public static Object newInstance(Class<?> clazz) throws Throwable
    {
       if (clazz == null)
          throw new IllegalArgumentException("Null clazz");
@@ -96,7 +96,7 @@ public class ReflectionUtils
          throw new IllegalArgumentException("Null class name");
       if (cl == null)
          throw new IllegalArgumentException("Null classloader");
-      Class clazz = Class.forName(className, false, cl);
+      Class<?> clazz = Class.forName(className, false, cl);
       try
       {
          return clazz.newInstance();
@@ -128,7 +128,7 @@ public class ReflectionUtils
     * @return the constructed object
     * @throws Throwable for any error
     */
-   public static Object newInstance(Constructor constructor, Object[] arguments) throws Throwable
+   public static Object newInstance(Constructor<?> constructor, Object[] arguments) throws Throwable
    {
       if (constructor == null)
          throw new IllegalArgumentException("Null constructor");
@@ -208,7 +208,7 @@ public class ReflectionUtils
     * @param parameterTypes the types
     * @return method or null if not found
     */
-   public static Method findMethod(Class clazz, String name, Class<?>... parameterTypes)
+   public static Method findMethod(Class<?> clazz, String name, Class<?>... parameterTypes)
    {
       if (clazz == null)
          return null;
@@ -232,7 +232,7 @@ public class ReflectionUtils
     * @return method or throw exception if not found
     * @throws NoSuchMethodException for no such method
     */
-   public static Method findExactMethod(Class clazz, String name, Class<?>... parameterTypes)
+   public static Method findExactMethod(Class<?> clazz, String name, Class<?>... parameterTypes)
          throws NoSuchMethodException
    {
       Method method = findMethod(clazz, name, parameterTypes);
@@ -248,7 +248,7 @@ public class ReflectionUtils
     * @param name the name
     * @return field or null if not found
     */
-   public static Field findField(Class clazz, String name)
+   public static Field findField(Class<?> clazz, String name)
    {
       if (clazz == null)
          return null;
@@ -271,7 +271,7 @@ public class ReflectionUtils
     * @return field or throw exception if not found
     * @throws NoSuchFieldException for no such field
     */
-   public static Field findExactField(Class clazz, String name)
+   public static Field findExactField(Class<?> clazz, String name)
          throws NoSuchFieldException
    {
       Field field = findField(clazz, name);
@@ -287,7 +287,7 @@ public class ReflectionUtils
     * @param parameterTypes the types
     * @return constructor or null if not found
     */
-   public static Constructor findConstructor(Class clazz, Class<?>... parameterTypes)
+   public static Constructor<?> findConstructor(Class<?> clazz, Class<?>... parameterTypes)
    {
       if (clazz == null)
          return null;
@@ -310,10 +310,10 @@ public class ReflectionUtils
     * @return method or throw exception if not found
     * @throws NoSuchMethodException for no such method
     */
-   public static Constructor findExactConstructor(Class clazz, Class<?>... parameterTypes)
+   public static Constructor<?> findExactConstructor(Class<?> clazz, Class<?>... parameterTypes)
          throws NoSuchMethodException
    {
-      Constructor constructor = findConstructor(clazz, parameterTypes);
+      Constructor<?> constructor = findConstructor(clazz, parameterTypes);
       if (constructor == null)
          throw new NoSuchMethodException(clazz + " - " + arrayInfo(parameterTypes));
       return constructor;
@@ -330,7 +330,7 @@ public class ReflectionUtils
     * @return never
     * @throws Throwable always
     */
-   public static Throwable handleErrors(String context, Object target, Class[] parameters, Object[] arguments, Throwable t) throws Throwable
+   public static Throwable handleErrors(String context, Object target, Class<?>[] parameters, Object[] arguments, Throwable t) throws Throwable
    {
       if (t instanceof IllegalArgumentException)
       {

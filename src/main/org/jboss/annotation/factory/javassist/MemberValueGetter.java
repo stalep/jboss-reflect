@@ -155,9 +155,10 @@ public class MemberValueGetter implements MemberValueVisitor
       }
    }
 
+   @SuppressWarnings("unchecked")
    private Class getAttributeType()
    {
-      Class rtn = method.getReturnType();
+      Class<?> rtn = method.getReturnType();
       
       while (rtn.isArray())
       {

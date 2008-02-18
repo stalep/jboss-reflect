@@ -31,29 +31,29 @@ import java.lang.annotation.Inherited;
  */
 public class JDK14ExpectedAnnotations extends ExpectedAnnotations
 {
-   final static Class[] EXPECTED_ANNOTATIONS = {SimpleAnnotation.class, ComplexAnnotation.class};
-   final static Class[] ANNOTATION_EXPECTED_ANNOTATIONS = {Inherited.class};   
-   final static Class[] COMPLEXANNOTATION_EXPECTED_ANNOTATIONS = {SimpleAnnotation.class, ValueAnnotation.class};
-   final static Class[] FIRST_PARAM_EXPECTED_ANNOTATIONS = {ValueAnnotation.class, ComplexAnnotation.class};
-   final static Class[] SECOND_PARAM_EXPECTED_ANNOTATIONS = {ValueAnnotation.class, SimpleAnnotation.class};
+   final static Class<?>[] EXPECTED_ANNOTATIONS = {SimpleAnnotation.class, ComplexAnnotation.class};
+   final static Class<?>[] ANNOTATION_EXPECTED_ANNOTATIONS = {Inherited.class};   
+   final static Class<?>[] COMPLEXANNOTATION_EXPECTED_ANNOTATIONS = {SimpleAnnotation.class, ValueAnnotation.class};
+   final static Class<?>[] FIRST_PARAM_EXPECTED_ANNOTATIONS = {ValueAnnotation.class, ComplexAnnotation.class};
+   final static Class<?>[] SECOND_PARAM_EXPECTED_ANNOTATIONS = {ValueAnnotation.class, SimpleAnnotation.class};
    
-   public Class[] getAnnotationExpectedAnnotations()
+   public Class<?>[] getAnnotationExpectedAnnotations()
    {
       return ANNOTATION_EXPECTED_ANNOTATIONS;
    }
-   public Class[] getComplexExpectedAnnotations()
+   public Class<?>[] getComplexExpectedAnnotations()
    {
       return COMPLEXANNOTATION_EXPECTED_ANNOTATIONS;
    }
-   public Class[] getExpectedAnnotations()
+   public Class<?>[] getExpectedAnnotations()
    {
       return EXPECTED_ANNOTATIONS;
    }
-   public Class[] getFirstParamExpectedAnnotations()
+   public Class<?>[] getFirstParamExpectedAnnotations()
    {
       return FIRST_PARAM_EXPECTED_ANNOTATIONS;
    }
-   public Class[] getSecondParamExpectedAnnotations()
+   public Class<?>[] getSecondParamExpectedAnnotations()
    {
       return SECOND_PARAM_EXPECTED_ANNOTATIONS;
    }

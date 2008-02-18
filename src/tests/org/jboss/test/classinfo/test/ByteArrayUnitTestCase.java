@@ -27,12 +27,9 @@ import java.lang.reflect.Type;
 import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
-
-import junit.framework.TestCase;
 
 /**
  * Tests of the TypeInfo for byte[] types
@@ -63,7 +60,7 @@ public class ByteArrayUnitTestCase extends AbstractClassInfoTest
       throws Exception
    {
       byte[] x = {};
-      Class[] parameterTypes = {x.getClass(), int.class, int.class};
+      Class<?>[] parameterTypes = {x.getClass(), int.class, int.class};
       Method defineClass = ClassLoader.class.getDeclaredMethod("defineClass", parameterTypes);
       assertNotNull(defineClass);
       Class<?>[] types = defineClass.getParameterTypes();
@@ -79,7 +76,7 @@ public class ByteArrayUnitTestCase extends AbstractClassInfoTest
       throws Exception
    {
       byte[] x = {};
-      Class[] parameterTypes = {x.getClass(), int.class, int.class};
+      Class<?>[] parameterTypes = {x.getClass(), int.class, int.class};
       Method defineClass = ClassLoader.class.getDeclaredMethod("defineClass", parameterTypes);
       assertNotNull(defineClass);
       Type[] types = defineClass.getGenericParameterTypes();
@@ -92,7 +89,7 @@ public class ByteArrayUnitTestCase extends AbstractClassInfoTest
       assertEquals(PrimitiveInfo.BYTE, compType);
    }
 
-   protected ClassInfo getClassInfo(Class clazz)
+   protected ClassInfo getClassInfo(Class<?> clazz)
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       TypeInfo info = factory.getTypeInfo(clazz);

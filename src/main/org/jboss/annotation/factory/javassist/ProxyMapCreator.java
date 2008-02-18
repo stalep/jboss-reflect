@@ -54,10 +54,10 @@ import javassist.bytecode.annotation.StringMemberValue;
 public class ProxyMapCreator implements MemberValueVisitor
 {
    public Object value;
-   private Class type;
+   private Class<?> type;
 
 
-   public ProxyMapCreator(Class type)
+   public ProxyMapCreator(Class<?> type)
    {
       this.type = type;
    }
@@ -76,7 +76,7 @@ public class ProxyMapCreator implements MemberValueVisitor
 
    public void visitArrayMemberValue(ArrayMemberValue arrayMemberValue)
    {
-      Class baseType = type.getComponentType();
+      Class<?> baseType = type.getComponentType();
       int size = 0;
       if (arrayMemberValue.getValue() != null)
       {
@@ -216,7 +216,7 @@ public class ProxyMapCreator implements MemberValueVisitor
 
    }
 
-   public static Class getMemberType(Class annotation, String member)
+   public static Class<?> getMemberType(Class<?> annotation, String member)
    {
       Method[] methods = annotation.getMethods();
       for (int i = 0; i < methods.length; i++)
@@ -229,7 +229,8 @@ public class ProxyMapCreator implements MemberValueVisitor
       throw new RuntimeException("unable to determine member type for annotation: " + annotation.getName() + "." + member);
    }
 
-   public static Map<String, Object> createProxyMap(Class annotation, javassist.bytecode.annotation.Annotation info)
+   @SuppressWarnings("unchecked")
+   public static Map<String, Object> createProxyMap(Class<?> annotation, javassist.bytecode.annotation.Annotation info)
    {
       Map<String, Object> map = new HashMap<String, Object>();
 

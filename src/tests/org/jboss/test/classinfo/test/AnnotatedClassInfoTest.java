@@ -83,11 +83,11 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
          expected = new JDK14ExpectedAnnotations();
       }
    }
-   final static Class[] EXPECTED_ANNOTATIONS = expected.getExpectedAnnotations();
-   final static Class[] ANNOTATION_EXPECTED_ANNOTATIONS = expected.getAnnotationExpectedAnnotations();   
-   final static Class[] COMPLEXANNOTATION_EXPECTED_ANNOTATIONS = expected.getComplexExpectedAnnotations();
-   final static Class[] FIRST_PARAM_EXPECTED_ANNOTATIONS = expected.getFirstParamExpectedAnnotations();
-   final static Class[] SECOND_PARAM_EXPECTED_ANNOTATIONS = expected.getSecondParamExpectedAnnotations();
+   final static Class<?>[] EXPECTED_ANNOTATIONS = expected.getExpectedAnnotations();
+   final static Class<?>[] ANNOTATION_EXPECTED_ANNOTATIONS = expected.getAnnotationExpectedAnnotations();   
+   final static Class<?>[] COMPLEXANNOTATION_EXPECTED_ANNOTATIONS = expected.getComplexExpectedAnnotations();
+   final static Class<?>[] FIRST_PARAM_EXPECTED_ANNOTATIONS = expected.getFirstParamExpectedAnnotations();
+   final static Class<?>[] SECOND_PARAM_EXPECTED_ANNOTATIONS = expected.getSecondParamExpectedAnnotations();
    
    
    final static ExpectedComplexAnnotationData CLASS_DATA = 
@@ -198,13 +198,13 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
    
    public void testClassArrayAnnotations() throws Exception
    {
-      Class classArray = new AnnotatedClass[0].getClass();
+      Class<?> classArray = new AnnotatedClass[0].getClass();
       
       ClassInfo info = getClassInfo(classArray);
       assertTrue(ArrayInfo.class.isAssignableFrom(info.getClass()));
       
       assertTrue(info.getAnnotations().length == 0);
-      for (Class annotation : EXPECTED_ANNOTATIONS)
+      for (Class <?>annotation : EXPECTED_ANNOTATIONS)
       {
          assertNull(info.getAnnotation(annotation.getName()));
          assertFalse(info.isAnnotationPresent(annotation.getName()));
@@ -216,7 +216,7 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
    
    public void testSubClassArrayAnnotations() throws Exception
    {
-      Class classArray = new AnnotatedSubClass[0].getClass();
+      Class<?> classArray = new AnnotatedSubClass[0].getClass();
       
       ClassInfo info = getClassInfo(classArray);
       assertTrue(ArrayInfo.class.isAssignableFrom(info.getClass()));
@@ -410,7 +410,7 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       }
    }
 
-   private void checkClassValue(Value value, Class expected)
+   private void checkClassValue(Value value, Class<?> expected)
    {
       assertNotNull(value);
       ClassValue theVal = (ClassValue)value;
@@ -419,7 +419,7 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       assertEquals(val, expected.getName());
    }
 
-   private void checkClassArrayValue(Value value, Class[] expected)
+   private void checkClassArrayValue(Value value, Class<?>[] expected)
    {
       Value[] values = getArrayValuesWithCheck(value, expected);
       for (int i = 0 ; i < values.length ; i++)
@@ -499,7 +499,7 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       return annotation;
    }
    
-   private void checkExpectedAnnotations(AnnotationValue[] values, Class[] expected)
+   private void checkExpectedAnnotations(AnnotationValue[] values, Class<?>[] expected)
    {
       assertEquals(expected.length, values.length);
       
@@ -518,7 +518,7 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       }
    }
    
-   protected ClassInfo getClassInfo(Class clazz)
+   protected ClassInfo getClassInfo(Class<?> clazz)
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       TypeInfo info = factory.getTypeInfo(clazz);
@@ -565,25 +565,25 @@ public abstract class AnnotatedClassInfoTest extends ContainerTest
       String stringAttribute;
       Integer intAttribute;
       String containedValueAnnotationString;
-      Class classAttribute;
+      Class<?> classAttribute;
       String enumAttribute;
 
       String[] stringArrayAttribute;
       Integer[] intArrayAttribute;
       String[] containedValueAnnotationArrayString;
-      Class[] classArrayAttribute;
+      Class<?>[] classArrayAttribute;
       String[] enumArrayAttribute;
 
       public ExpectedComplexAnnotationData(
             String stringAttribute, 
             int intAttribute, 
             String containedValueAnnotationString, 
-            Class classAttribute, 
+            Class<?> classAttribute, 
             String enumAttribute,
             String[] stringArrayAttribute, 
             Integer[] intArrayAttribute, 
             String[] containedValueAnnotationArrayString, 
-            Class[] classArrayAttribute, 
+            Class<?>[] classArrayAttribute, 
             String[] enumArrayAttribute)
       {
 //         this.annotationValueAnnotationString = annotationValueAnnotationString;

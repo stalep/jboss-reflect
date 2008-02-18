@@ -250,11 +250,11 @@ public class AbstractMetaDataContext implements MetaDataContext
       return null;
    }
 
-   public MetaDataItem retrieveMetaData(String name)
+   public MetaDataItem<?> retrieveMetaData(String name)
    {
       for (MetaDataRetrieval retrieval : retrievals)
       {
-         MetaDataItem item = retrieval.retrieveMetaData(name);
+         MetaDataItem<?> item = retrieval.retrieveMetaData(name);
          if (item != null)
             return item;
       }

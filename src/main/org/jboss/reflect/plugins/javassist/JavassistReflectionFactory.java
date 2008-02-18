@@ -234,7 +234,7 @@ public class JavassistReflectionFactory
          {
             public JavassistMethod run() throws Exception
             {
-               Class clazz = result.toClass();
+               Class<?> clazz = result.toClass();
                return (JavassistMethod) clazz.newInstance();
             }
          });
@@ -359,7 +359,7 @@ public class JavassistReflectionFactory
          {
             public JavassistConstructor run() throws Exception
             {
-               Class clazz = result.toClass();
+               Class<?> clazz = result.toClass();
                return (JavassistConstructor) clazz.newInstance();
             }
          });
@@ -560,7 +560,7 @@ public class JavassistReflectionFactory
          {
             public JavassistField run() throws Exception
             {
-               Class clazz = result.toClass();
+               Class<?> clazz = result.toClass();
                return (JavassistField) clazz.newInstance();
             }
          });

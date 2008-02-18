@@ -52,7 +52,7 @@ public interface ClassLoadingDomain
     * @return the class
     * @throws ClassNotFoundException when the class is not found
     */
-   Class loadClass(String name, boolean resolve, DomainClassLoader classLoader) throws ClassNotFoundException;
+   Class<?> loadClass(String name, boolean resolve, DomainClassLoader classLoader) throws ClassNotFoundException;
    
    /**
     * Get a resource

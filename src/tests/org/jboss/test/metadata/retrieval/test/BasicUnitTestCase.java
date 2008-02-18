@@ -82,10 +82,12 @@ public class BasicUnitTestCase extends AbstractMetaDataTest
       BasicAnnotationItem<TestAnnotation1> item1 = new BasicAnnotationItem<TestAnnotation1>(loader, annotation1);
       BasicAnnotationItem<TestAnnotation2> item2 = new BasicAnnotationItem<TestAnnotation2>(loader, annotation2);
 
+      @SuppressWarnings("unchecked")
       AnnotationItem[] items = { item1, item2 };
       
+      @SuppressWarnings("unchecked")
       BasicAnnotationsItem item = new BasicAnnotationsItem(loader, items);
-      AnnotationItem[] result = item.getAnnotations();
+      AnnotationItem<? extends Annotation>[] result = item.getAnnotations();
       assertUnorderedArrayEquals(items, result);
 
       Annotation[] expected = { annotation1, annotation2 };
@@ -134,10 +136,10 @@ public class BasicUnitTestCase extends AbstractMetaDataTest
       BasicMetaDataItem<Object> item1 = new BasicMetaDataItem<Object>(loader, Object.class.getName(), object1);
       BasicMetaDataItem<String> item2 = new BasicMetaDataItem<String>(loader, String.class.getName(), object2);
 
-      MetaDataItem[] items =  { item1, item2 };
+      MetaDataItem<?>[] items =  { item1, item2 };
       
       BasicMetaDatasItem item = new BasicMetaDatasItem(loader, items);
-      MetaDataItem[] result = item.getMetaDatas();
+      MetaDataItem<?>[] result = item.getMetaDatas();
       assertUnorderedArrayEquals(items, result);
 
       Object[] expected = { object1, object2 };

@@ -44,7 +44,7 @@ public class IntrospectionTypeInfoFactory implements TypeInfoFactory
       return delegate;
    }
 
-   public TypeInfo getTypeInfo(Class clazz)
+   public TypeInfo getTypeInfo(Class<?> clazz)
    {
       return delegate.getTypeInfo(clazz);
    }

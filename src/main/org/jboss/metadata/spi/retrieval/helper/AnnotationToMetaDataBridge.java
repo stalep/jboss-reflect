@@ -21,6 +21,8 @@
 */
 package org.jboss.metadata.spi.retrieval.helper;
 
+import java.lang.annotation.Annotation;
+
 import org.jboss.metadata.spi.retrieval.AnnotationItem;
 import org.jboss.metadata.spi.retrieval.MetaDataItem;
 
@@ -34,14 +36,14 @@ import org.jboss.metadata.spi.retrieval.MetaDataItem;
 public class AnnotationToMetaDataBridge<T> implements MetaDataItem<T>
 {
    /** The annotation */
-   private AnnotationItem annotation;
+   private AnnotationItem<? extends Annotation> annotation;
 
    /**
     * Create a new AnnotationToMetaDataBridge.
     * 
     * @param annotation the annotation
     */
-   public AnnotationToMetaDataBridge(AnnotationItem annotation)
+   public AnnotationToMetaDataBridge(AnnotationItem<? extends Annotation> annotation)
    {
       if (annotation == null)
          throw new IllegalArgumentException("Null annotation");
