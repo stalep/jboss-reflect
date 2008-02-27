@@ -57,4 +57,11 @@ public class BeanInfoMethods
    public void voidMethodintStringPublic(int p1, String p2) {}
    public long longMethodintStringPublic(int p1, String p2) { return 0; }
    public long longMethodintStringThrowsPublic(int p1, String p2) throws IllegalArgumentException, IllegalStateException { return 0; }
+   public long a() { return 0; };
+   public long ab() { return 0; };
+   public boolean is() { return false; };
+   public long get() { return 0; };
+   public void x(long x) {}
+   public void xy(long xy) {}
+   public void set(long xy) {}
 }

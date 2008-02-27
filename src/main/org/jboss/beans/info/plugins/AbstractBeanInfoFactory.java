@@ -231,13 +231,14 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          for (MethodInfo methodInfo : methods)
          {
             String name = methodInfo.getName();
-            String upperName = getUpperPropertyName(name);
             if (isGetter(methodInfo))
             {
+               String upperName = getUpperPropertyName(name);
                getters.put(upperName, methodInfo);
             }
             else if (isSetter(methodInfo))
             {
+               String upperName = getUpperPropertyName(name);
                List<MethodInfo> list = setters.get(upperName);
                if (list == null)
                {
