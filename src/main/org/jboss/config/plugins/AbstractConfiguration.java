@@ -29,6 +29,7 @@ import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.config.spi.Configuration;
+import org.jboss.config.spi.ConfigurationPermission;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
@@ -152,7 +153,7 @@ public abstract class AbstractConfiguration implements Configuration
       }
       return joinpointFactoryBuilder;
    }
-
+   
    public DependencyBuilder getDependencyBuilder()
    {
       if (dependencyBuilder == null)
@@ -175,6 +176,36 @@ public abstract class AbstractConfiguration implements Configuration
          }
       }
       return dependencyBuilder;
+   }
+
+   public void setBeanInfoFactory(BeanInfoFactory beanInfoFactory)
+   {
+      checkPermissionName("beanInfoFactory");
+      this.beanInfoFactory = beanInfoFactory;
+   }
+
+   public void setClassAdapterFactory(ClassAdapterFactory classAdapterFactory)
+   {
+      checkPermissionName("classAdapterFactory");
+      this.classAdapterFactory = classAdapterFactory;
+   }
+
+   public void setTypeInfoFactory(TypeInfoFactory typeInfoFactory)
+   {
+      checkPermissionName("typeInfoFactory");
+      this.typeInfoFactory = typeInfoFactory;
+   }
+
+   public void setJoinpointFactoryBuilder(JoinpointFactoryBuilder joinpointFactoryBuilder)
+   {
+      checkPermissionName("joinpointFactoryBuilder");
+      this.joinpointFactoryBuilder = joinpointFactoryBuilder;
+   }
+
+   public void setDependencyBuilder(DependencyBuilder dependencyBuilder)
+   {
+      checkPermissionName("dependencyBuilder");
+      this.dependencyBuilder = dependencyBuilder;
    }
 
    /**
@@ -274,4 +305,17 @@ public abstract class AbstractConfiguration implements Configuration
     * @throws Throwable for any error
     */
    protected abstract DependencyBuilder createDefaultDependencyBuilder() throws Throwable;
+   
+   /**
+    * Check a permission
+    * 
+    * @param name the name of the permission
+    */
+   private void checkPermissionName(String name)
+   {
+      SecurityManager sm = System.getSecurityManager();
+      if (sm != null)
+         sm.checkPermission(new ConfigurationPermission(name));
+      
+   }
 }

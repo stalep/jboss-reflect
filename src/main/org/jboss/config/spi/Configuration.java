@@ -24,6 +24,8 @@ package org.jboss.config.spi;
 import java.lang.reflect.Type;
 
 import org.jboss.beans.info.spi.BeanInfo;
+import org.jboss.beans.info.spi.BeanInfoFactory;
+import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.ClassInfo;
@@ -124,4 +126,44 @@ public interface Configuration
     * @return the JoinpointFactoryBuilder
     */
    JoinpointFactoryBuilder getJoinpointFactoryBuilder();
+
+   /**
+    * Set the beanInfoFactory.
+    * 
+    * @param beanInfoFactory the beanInfoFactory.
+    * @throws SecurityException if you don't have the ConfigurationPermission
+    */
+   void setBeanInfoFactory(BeanInfoFactory beanInfoFactory);
+
+   /**
+    * Set the classAdapterFactory.
+    * 
+    * @param classAdapterFactory the classAdapterFactory.
+    * @throws SecurityException if you don't have the ConfigurationPermission
+    */
+   void setClassAdapterFactory(ClassAdapterFactory classAdapterFactory);
+
+   /**
+    * Set the typeInfoFactory.
+    * 
+    * @param typeInfoFactory the typeInfoFactory.
+    * @throws SecurityException if you don't have the ConfigurationPermission
+    */
+   void setTypeInfoFactory(TypeInfoFactory typeInfoFactory);
+
+   /**
+    * Set the joinpointFactoryBuilder.
+    * 
+    * @param joinpointFactoryBuilder the joinpointFactoryBuilder.
+    * @throws SecurityException if you don't have the ConfigurationPermission
+    */
+   void setJoinpointFactoryBuilder(JoinpointFactoryBuilder joinpointFactoryBuilder);
+
+   /**
+    * Set the dependencyBuilder.
+    * 
+    * @param dependencyBuilder the dependencyBuilder.
+    * @throws SecurityException if you don't have the ConfigurationPermission
+    */
+   void setDependencyBuilder(DependencyBuilder dependencyBuilder);
 }
