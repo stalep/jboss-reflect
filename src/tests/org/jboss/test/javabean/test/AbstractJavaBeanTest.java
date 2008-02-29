@@ -21,8 +21,9 @@
 */
 package org.jboss.test.javabean.test;
 
+import org.jboss.javabean.plugins.jaxb.JavaBean10;
+import org.jboss.javabean.plugins.jaxb.JavaBean20;
 import org.jboss.test.xb.builder.AbstractBuilderTest;
-import org.jboss.javabean.plugins.jaxb.JavaBean;
 
 /**
  * AbstractJavaBeanTest.
@@ -40,6 +41,16 @@ public class AbstractJavaBeanTest extends AbstractBuilderTest
 
    protected <T> T unmarshalJavaBean(Class<T> expected, Class<?>... others) throws Exception
    {
-      return unmarshalObject(expected, JavaBean.class, others);
+      return unmarshalJavaBean10(expected, others);
+   }
+
+   protected <T> T unmarshalJavaBean10(Class<T> expected, Class<?>... others) throws Exception
+   {
+      return unmarshalObject(expected, JavaBean10.class, others);
+   }
+
+   protected <T> T unmarshalJavaBean20(Class<T> expected, Class<?>... others) throws Exception
+   {
+      return unmarshalObject(expected, JavaBean20.class, others);
    }
 }

@@ -45,6 +45,6 @@ public class StaticClassMethodInstantiateUnitTestCase extends AbstractJavaBeanTe
 
    public void testStaticClassMethodInstantiate() throws Exception
    {
-      unmarshalJavaBean(TestStaticClassMethodInstantiate.class);
+      unmarshalJavaBean20(TestStaticClassMethodInstantiate.class);
    }
 }

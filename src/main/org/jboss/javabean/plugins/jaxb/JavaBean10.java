@@ -21,56 +21,40 @@
 */
 package org.jboss.javabean.plugins.jaxb;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlNsForm;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.jboss.xb.annotations.JBossXmlSchema;
+import org.jboss.xb.annotations.JBossXmlType;
+import org.jboss.xb.spi.BeanAdapterFactory;
+
 /**
- * Constructor.
+ * JavaBean version 1.
  *
- * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-@XmlType(name="constructorType")
-public class Constructor
+@JBossXmlSchema(namespace="urn:jboss:javabean:1.0", elementFormDefault=XmlNsForm.QUALIFIED)
+@XmlRootElement(name="javabean")
+@XmlType(name="javabeanType")
+@JBossXmlType(beanAdapterBuilder=JavaBeanBuilder10.class)
+public class JavaBean10 extends JavaBean
 {
-   private String factoryClass;
-
-   private String factoryMethod;
-
-   private Parameter[] parameters;
-
-   public String getFactoryClass()
+   /**
+    * Create a new JavaBean10.
+    * 
+    * @param beanAdapterFactory the bean adapter factory
+    */
+   public JavaBean10(BeanAdapterFactory beanAdapterFactory)
    {
-      return factoryClass;
+      super(beanAdapterFactory);
    }
 
-   @XmlAttribute(name="factoryClass")
-   public void setFactoryClass(String factoryClass)
+   @XmlTransient // Version 1 didn't have a constructor
+   public void setConstructor(Constructor constructor)
    {
-      this.factoryClass = factoryClass;
-   }
-
-   public String getFactoryMethod()
-   {
-      return factoryMethod;
-   }
-
-   @XmlAttribute(name="factoryMethod")
-   public void setFactoryMethod(String factoryMethod)
-   {
-      this.factoryMethod = factoryMethod;
-   }
-
-   public Parameter[] getParameters()
-   {
-      return parameters;
-   }
-
-   @XmlElement(name="parameter")
-   public void setParameters(Parameter[] parameters)
-   {
-      this.parameters = parameters;
+      super.setConstructor(constructor);
    }
 }

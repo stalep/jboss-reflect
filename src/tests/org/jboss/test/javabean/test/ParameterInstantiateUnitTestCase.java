@@ -45,7 +45,7 @@ public class ParameterInstantiateUnitTestCase extends AbstractJavaBeanTest
 
    public void testParameterInstantiate() throws Exception
    {
-      TestParameterInstantiate result = unmarshalJavaBean(TestParameterInstantiate.class);
+      TestParameterInstantiate result = unmarshalJavaBean20(TestParameterInstantiate.class);
       assertEquals("Hello5", result.constructorUsed);
    }
 }

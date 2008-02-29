@@ -45,6 +45,6 @@ public class SimpleInstantiateUnitTestCase extends AbstractJavaBeanTest
 
    public void testSimpleInstantiate() throws Exception
    {
-      unmarshalJavaBean(TestSimpleInstantiate.class);
+      unmarshalJavaBean20(TestSimpleInstantiate.class);
    }
 }

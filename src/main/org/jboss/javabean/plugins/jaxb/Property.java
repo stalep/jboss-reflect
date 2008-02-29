@@ -22,6 +22,7 @@
 package org.jboss.javabean.plugins.jaxb;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Property.
@@ -30,6 +31,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
+@XmlType(name="propertyType")
 public class Property extends Parameter
 {
    private String name;

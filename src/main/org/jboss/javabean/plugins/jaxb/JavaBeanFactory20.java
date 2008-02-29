@@ -21,56 +21,20 @@
 */
 package org.jboss.javabean.plugins.jaxb;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import org.jboss.xb.spi.BeanAdapter;
+import org.jboss.xb.spi.BeanAdapterFactory;
 
 /**
- * Constructor.
+ * JavaBeanFactory version 2.
  *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-@XmlType(name="constructorType")
-public class Constructor
+public class JavaBeanFactory20 extends BeanAdapterFactory
 {
-   private String factoryClass;
-
-   private String factoryMethod;
-
-   private Parameter[] parameters;
-
-   public String getFactoryClass()
+   public BeanAdapter newInstance()
    {
-      return factoryClass;
-   }
-
-   @XmlAttribute(name="factoryClass")
-   public void setFactoryClass(String factoryClass)
-   {
-      this.factoryClass = factoryClass;
-   }
-
-   public String getFactoryMethod()
-   {
-      return factoryMethod;
-   }
-
-   @XmlAttribute(name="factoryMethod")
-   public void setFactoryMethod(String factoryMethod)
-   {
-      this.factoryMethod = factoryMethod;
-   }
-
-   public Parameter[] getParameters()
-   {
-      return parameters;
-   }
-
-   @XmlElement(name="parameter")
-   public void setParameters(Parameter[] parameters)
-   {
-      this.parameters = parameters;
+      return new JavaBean20(this);
    }
 }

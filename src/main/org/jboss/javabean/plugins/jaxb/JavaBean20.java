@@ -21,20 +21,33 @@
 */
 package org.jboss.javabean.plugins.jaxb;
 
-import org.jboss.xb.spi.BeanAdapter;
+import javax.xml.bind.annotation.XmlNsForm;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.jboss.xb.annotations.JBossXmlSchema;
+import org.jboss.xb.annotations.JBossXmlType;
 import org.jboss.xb.spi.BeanAdapterFactory;
 
 /**
- * JavaBeanBuilder.
+ * JavaBean version 2.
  *
- * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public class JavaBeanFactory extends BeanAdapterFactory
+@JBossXmlSchema(namespace="urn:jboss:javabean:2.0", elementFormDefault=XmlNsForm.QUALIFIED)
+@XmlRootElement(name="javabean")
+@XmlType(name="javabeanType")
+@JBossXmlType(beanAdapterBuilder=JavaBeanBuilder20.class)
+public class JavaBean20 extends JavaBean
 {
-   public BeanAdapter newInstance()
+   /**
+    * Create a new JavaBean20.
+    * 
+    * @param beanAdapterFactory the bean adapter factory
+    */
+   public JavaBean20(BeanAdapterFactory beanAdapterFactory)
    {
-      return new JavaBean(this);
+      super(beanAdapterFactory);
    }
 }

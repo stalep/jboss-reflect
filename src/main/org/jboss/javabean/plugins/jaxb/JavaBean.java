@@ -23,12 +23,10 @@ package org.jboss.javabean.plugins.jaxb;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlNsForm;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
 
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
@@ -39,8 +37,6 @@ import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.propertyeditor.PropertyEditors;
-import org.jboss.xb.annotations.JBossXmlSchema;
-import org.jboss.xb.annotations.JBossXmlType;
 import org.jboss.xb.spi.BeanAdapter;
 import org.jboss.xb.spi.BeanAdapterFactory;
 
@@ -50,10 +46,6 @@ import org.jboss.xb.spi.BeanAdapterFactory;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-@JBossXmlSchema(namespace="urn:jboss:javabean:1.0", elementFormDefault=XmlNsForm.QUALIFIED)
-@XmlRootElement(name="javabean")
-@XmlType(name="javabean")
-@JBossXmlType(beanAdapterBuilder=JavaBeanBuilder.class)
 public class JavaBean extends BeanAdapter
 {
    private static Configuration configuration;

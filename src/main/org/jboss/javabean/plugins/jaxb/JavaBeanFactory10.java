@@ -21,22 +21,20 @@
 */
 package org.jboss.javabean.plugins.jaxb;
 
-import org.jboss.beans.info.spi.BeanInfo;
-import org.jboss.reflect.spi.MethodInfo;
-import org.jboss.xb.spi.BeanAdapterBuilder;
+import org.jboss.xb.spi.BeanAdapter;
 import org.jboss.xb.spi.BeanAdapterFactory;
 
 /**
- * JavaBeanBuilder.
+ * JavaBeanFactory version 1.
  *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision: 1.1 $
  */
-public class JavaBeanBuilder implements BeanAdapterBuilder
+public class JavaBeanFactory10 extends BeanAdapterFactory
 {
-   public BeanAdapterFactory newFactory(BeanInfo beanInfo, MethodInfo factory)
+   public BeanAdapter newInstance()
    {
-      return new JavaBeanFactory();
+      return new JavaBean10(this);
    }
 }
