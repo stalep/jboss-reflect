@@ -28,7 +28,6 @@ import org.jboss.test.beaninfo.test.BeanInfoTestSuite;
 import org.jboss.test.classinfo.test.ClassInfoTestSuite;
 import org.jboss.test.javabean.test.JavaBeanTestSuite;
 import org.jboss.test.joinpoint.test.JoinpointTestSuite;
-import org.jboss.test.metadata.MetaDataAllTestSuite;
 
 /**
  * All Test Suite.
@@ -50,7 +49,6 @@ public class ContainerAllTestSuite extends TestSuite
       suite.addTest(ClassInfoTestSuite.suite());
       suite.addTest(JoinpointTestSuite.suite());
       suite.addTest(BeanInfoTestSuite.suite());
-      suite.addTest(MetaDataAllTestSuite.suite());
       suite.addTest(JavaBeanTestSuite.suite());
 
       return suite;
