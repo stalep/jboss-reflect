@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<javabean xmlns="urn:jboss:javabean:1.0"
-          class="org.jboss.test.javabean.support.TestPropertyWildcard">
-   <property name="bean">
-      <javabean class="org.jboss.test.javabean.support.TestWildcard"/>
-   </property>
-</javabean>
