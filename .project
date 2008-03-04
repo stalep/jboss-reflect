@@ -1,6 +1,6 @@
 <projectDescription>
-  <name>jboss-container</name>
-  <comment>JBoss Microcontainer Container</comment>
+  <name>jboss-reflection</name>
+  <comment>JBoss Reflection</comment>
   <projects/>
   <buildSpec>
     <buildCommand>
