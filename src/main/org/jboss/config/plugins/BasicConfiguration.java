@@ -24,9 +24,7 @@ package org.jboss.config.plugins;
 import org.jboss.beans.info.plugins.AbstractBeanInfoFactory;
 import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.classadapter.plugins.BasicClassAdapterFactory;
-import org.jboss.classadapter.plugins.dependency.AbstractDependencyBuilder;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
-import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.joinpoint.plugins.BasicJoinpointFactoryBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory;
@@ -67,10 +65,5 @@ public class BasicConfiguration extends AbstractConfiguration
    protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
    {
       return new BasicJoinpointFactoryBuilder();
-   }
-
-   protected DependencyBuilder createDefaultDependencyBuilder() throws Throwable
-   {
-      return new AbstractDependencyBuilder();
    }
 }

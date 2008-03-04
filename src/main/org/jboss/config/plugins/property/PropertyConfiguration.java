@@ -26,7 +26,6 @@ import java.util.StringTokenizer;
 
 import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
-import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.config.plugins.AbstractConfiguration;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.logging.Logger;
@@ -96,11 +95,6 @@ public class PropertyConfiguration extends AbstractConfiguration
    protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
    {
       return (JoinpointFactoryBuilder) loadFromProperties(PropertyConfigurationConstants.JOIN_POINT_FACTORY_BUILDER_NAME, PropertyConfigurationConstants.JOIN_POINT_FACTORY_BUILDER_DEFAULT, JoinpointFactoryBuilder.class);
-   }
-
-   protected DependencyBuilder createDefaultDependencyBuilder() throws Throwable
-   {
-      return (DependencyBuilder) loadFromProperties(PropertyConfigurationConstants.DEPENDENCY_BUILDER_NAME, PropertyConfigurationConstants.DEPENDENCY_BUILDER_DEFAULT, DependencyBuilder.class);
    }
 
    /**

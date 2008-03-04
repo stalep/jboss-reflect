@@ -21,15 +21,10 @@
 */
 package org.jboss.classadapter.plugins;
 
-import java.util.List;
-
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
-import org.jboss.classadapter.spi.DependencyBuilder;
-import org.jboss.classadapter.spi.DependencyBuilderListItem;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
-import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.util.JBossObject;
 
@@ -72,11 +67,5 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
    public ClassLoader getClassLoader()
    {
       return classInfo.getType().getClassLoader();
-   }
-
-   public List<DependencyBuilderListItem<?>> getDependencies(MetaData metaData)
-   {
-      DependencyBuilder builder = classAdapterFactory.getConfiguration().getDependencyBuilder();
-      return builder.getDependencies(this, metaData);
    }
 }

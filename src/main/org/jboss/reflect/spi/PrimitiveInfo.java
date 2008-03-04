@@ -149,7 +149,7 @@ public class PrimitiveInfo extends AbstractTypeInfo
     * Get a primtive array type
     * 
     * @param name the primtive type name
-    * @param the array type or null if not found
+    * @return the array type or null if not found
     */   
    public static String getPrimativeArrayType(String name)
    {
@@ -160,7 +160,7 @@ public class PrimitiveInfo extends AbstractTypeInfo
     * Get the primtive type for a name
     * 
     * @param name the primtive type name
-    * @param the primitive type
+    * @return the primitive type
     */   
    public static Class<?> getPrimativeType(String name)
    {
@@ -171,7 +171,7 @@ public class PrimitiveInfo extends AbstractTypeInfo
     * Get the primtive array type class map for a name
     * 
     * @param name the array type name
-    * @param the component type
+    * @return the component type
     */   
    public static Class<?> getPrimativeArrayComponentType(String name)
    {

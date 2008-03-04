@@ -24,7 +24,6 @@ package org.jboss.beans.info.plugins;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,12 +32,10 @@ import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.beans.info.spi.EventInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.classadapter.spi.ClassAdapter;
-import org.jboss.classadapter.spi.DependencyBuilderListItem;
 import org.jboss.joinpoint.plugins.Config;
 import org.jboss.joinpoint.spi.ConstructorJoinpoint;
 import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.joinpoint.spi.MethodJoinpoint;
-import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
@@ -204,11 +201,6 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    public BeanInfoFactory getBeanInfoFactory()
    {
       return beanInfoFactory;
-   }
-
-   public List<DependencyBuilderListItem<?>> getDependencies(MetaData metaData)
-   {
-      return classAdapter.getDependencies(metaData);
    }
 
    public Object newInstance() throws Throwable

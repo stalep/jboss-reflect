@@ -22,21 +22,18 @@
 package org.jboss.beans.info.spi.helpers;
 
 import java.util.Set;
-import java.util.List;
 
 import org.jboss.beans.info.spi.BeanInfo;
-import org.jboss.beans.info.spi.PropertyInfo;
-import org.jboss.beans.info.spi.EventInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
+import org.jboss.beans.info.spi.EventInfo;
+import org.jboss.beans.info.spi.PropertyInfo;
+import org.jboss.joinpoint.spi.JoinpointFactory;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.joinpoint.spi.JoinpointFactory;
-import org.jboss.classadapter.spi.DependencyBuilderListItem;
-import org.jboss.metadata.spi.MetaData;
-import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.JBossObject;
+import org.jboss.util.JBossStringBuilder;
 
 /**
  * An unmodifiable view of the specified bean info instance.
@@ -117,11 +114,6 @@ public class UnmodifiableBeanInfo extends JBossObject implements BeanInfo
    public BeanInfoFactory getBeanInfoFactory()
    {
       return delegate.getBeanInfoFactory();
-   }
-
-   public List<DependencyBuilderListItem<?>> getDependencies(MetaData metaData)
-   {
-      return delegate.getDependencies(metaData);
    }
 
    public Object newInstance() throws Throwable

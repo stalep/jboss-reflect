@@ -27,7 +27,6 @@ import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
-import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.config.spi.Configuration;
 import org.jboss.config.spi.ConfigurationPermission;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
@@ -55,9 +54,6 @@ public abstract class AbstractConfiguration implements Configuration
    
    /** The default type joinpoint factory builder */
    private JoinpointFactoryBuilder joinpointFactoryBuilder;
-   
-   /** The dependency builder */
-   private DependencyBuilder dependencyBuilder;
 
    /**
     * Create an abstract configuration
@@ -153,30 +149,6 @@ public abstract class AbstractConfiguration implements Configuration
       }
       return joinpointFactoryBuilder;
    }
-   
-   public DependencyBuilder getDependencyBuilder()
-   {
-      if (dependencyBuilder == null)
-      {
-         try
-         {
-            dependencyBuilder = createDefaultDependencyBuilder();
-         }
-         catch (RuntimeException e)
-         {
-            throw e;
-         }
-         catch (Error e)
-         {
-            throw e;
-         }
-         catch (Throwable t)
-         {
-            throw new NestedRuntimeException("Cannot create DependencyBuilder", t);
-         }
-      }
-      return dependencyBuilder;
-   }
 
    public void setBeanInfoFactory(BeanInfoFactory beanInfoFactory)
    {
@@ -200,12 +172,6 @@ public abstract class AbstractConfiguration implements Configuration
    {
       checkPermissionName("joinpointFactoryBuilder");
       this.joinpointFactoryBuilder = joinpointFactoryBuilder;
-   }
-
-   public void setDependencyBuilder(DependencyBuilder dependencyBuilder)
-   {
-      checkPermissionName("dependencyBuilder");
-      this.dependencyBuilder = dependencyBuilder;
    }
 
    /**
@@ -297,14 +263,6 @@ public abstract class AbstractConfiguration implements Configuration
     * @throws Throwable for any error
     */
    protected abstract JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable;
-
-   /**
-    * Create the default dependency builder
-    * 
-    * @return the dependency builder
-    * @throws Throwable for any error
-    */
-   protected abstract DependencyBuilder createDefaultDependencyBuilder() throws Throwable;
    
    /**
     * Check a permission

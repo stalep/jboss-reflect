@@ -21,10 +21,7 @@
 */
 package org.jboss.classadapter.spi;
 
-import java.util.List;
-
 import org.jboss.joinpoint.spi.JoinpointFactory;
-import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.util.JBossInterface;
 
@@ -72,13 +69,4 @@ public interface ClassAdapter extends JBossInterface
     * @return the classloader
     */
    ClassLoader getClassLoader();
-
-   /**
-    * Bean may have additional dependencies
-    * that the kernel cannot initially resolve. (currently defined by ClassAdapter)
-    *
-    * @param metaData the metadata
-    * @return the list of dependencies
-    */
-   List<DependencyBuilderListItem<?>> getDependencies(MetaData metaData);
 }

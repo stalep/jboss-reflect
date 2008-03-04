@@ -23,7 +23,6 @@ package org.jboss.config.plugins.property;
 
 import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
-import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.TypeInfoFactory;
 
@@ -46,12 +45,6 @@ public interface PropertyConfigurationConstants
    
    /** The ClassAdapterFactory default value */
    static final String CLASS_ADAPTER_FACTORY_DEFAULT="org.jboss.classadapter.plugins.BasicClassAdapterFactory";
-
-   /** The DependencyBuilder property name */
-   static final String DEPENDENCY_BUILDER_NAME = DependencyBuilder.class.getName();
-   
-   /** The DependencyBuilder default value */
-   static final String DEPENDENCY_BUILDER_DEFAULT="org.jboss.aop.microcontainer.integration.AOPDependencyBuilder:org.jboss.classadapter.plugins.dependency.AbstractDependencyBuilder";
 
    /** The JoinpointFactoryBuilder property name */
    static final String JOIN_POINT_FACTORY_BUILDER_NAME = JoinpointFactoryBuilder.class.getName();

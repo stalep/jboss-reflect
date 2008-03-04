@@ -26,7 +26,6 @@ import java.lang.reflect.Type;
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
-import org.jboss.classadapter.spi.DependencyBuilder;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
@@ -114,13 +113,6 @@ public interface Configuration
    TypeInfoFactory getTypeInfoFactory();
 
    /**
-    * Get the dependency builder
-    * 
-    * @return the DependencyFactoryBuilder
-    */
-   DependencyBuilder getDependencyBuilder();
-
-   /**
     * Get the joinpoint factory builder
     * 
     * @return the JoinpointFactoryBuilder
@@ -158,12 +150,4 @@ public interface Configuration
     * @throws SecurityException if you don't have the ConfigurationPermission
     */
    void setJoinpointFactoryBuilder(JoinpointFactoryBuilder joinpointFactoryBuilder);
-
-   /**
-    * Set the dependencyBuilder.
-    * 
-    * @param dependencyBuilder the dependencyBuilder.
-    * @throws SecurityException if you don't have the ConfigurationPermission
-    */
-   void setDependencyBuilder(DependencyBuilder dependencyBuilder);
 }

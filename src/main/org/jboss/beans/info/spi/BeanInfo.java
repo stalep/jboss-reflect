@@ -21,12 +21,9 @@
 */
 package org.jboss.beans.info.spi;
 
-import java.util.List;
 import java.util.Set;
 
-import org.jboss.classadapter.spi.DependencyBuilderListItem;
 import org.jboss.joinpoint.spi.JoinpointFactory;
-import org.jboss.metadata.spi.MetaData;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
@@ -133,15 +130,6 @@ public interface BeanInfo extends JBossInterface
     * @return the factory
     */
    BeanInfoFactory getBeanInfoFactory();
-
-   /**
-    * Bean may have additional dependencies
-    * that the kernel cannot initially resolve. (currently defined by ClassAdapter)
-    *
-    * @param metaData the metadata
-    * @return the list of dependencies
-    */
-   List<DependencyBuilderListItem<?>> getDependencies(MetaData metaData);
    
    /**
     * Create a new instance
