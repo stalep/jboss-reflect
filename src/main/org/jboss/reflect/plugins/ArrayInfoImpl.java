@@ -23,7 +23,6 @@ package org.jboss.reflect.plugins;
 
 import java.lang.reflect.UndeclaredThrowableException;
 
-import org.jboss.metadata.spi.signature.Signature;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
@@ -75,8 +74,7 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
       }
       if (PrimitiveInfo.class.equals(temp.getClass()))
       {
-         //builder.append(temp.getName());
-         String encodedName = Signature.getPrimativeArrayType(temp.getName());
+         String encodedName = PrimitiveInfo.getPrimativeArrayType(temp.getName());
          builder.append(encodedName);
       }
       else

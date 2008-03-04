@@ -82,6 +82,15 @@ public class PrimitiveInfo extends AbstractTypeInfo
    /** The type */
    protected final transient Class<? extends Object> type;
 
+   /** The primitive types indexed by name */
+   private static final HashMap<String, Class<?>> primitiveTypes = new HashMap<String, Class<?>>();
+   
+   /** The primitive array types indexed by name */
+   private static final HashMap<String, String> primitiveArrayTypes = new HashMap<String, String>();
+   
+   /** The primitive array classes indexed by name */
+   private static final HashMap<String, Class<?>> primitiveArrayTypesClassMap = new HashMap<String, Class<?>>();
+
    /** The primitives */
    private static final HashMap<String, PrimitiveInfo> map = new HashMap<String, PrimitiveInfo>();
 
@@ -96,6 +105,33 @@ public class PrimitiveInfo extends AbstractTypeInfo
       map.put("long", LONG);
       map.put("short", SHORT);
       map.put("void", VOID);
+
+      primitiveTypes.put(Byte.TYPE.getName(), Byte.TYPE);
+      primitiveTypes.put(Boolean.TYPE.getName(), Boolean.TYPE);
+      primitiveTypes.put(Character.TYPE.getName(), Character.TYPE);
+      primitiveTypes.put(Double.TYPE.getName(), Double.TYPE);
+      primitiveTypes.put(Float.TYPE.getName(), Float.TYPE);
+      primitiveTypes.put(Integer.TYPE.getName(), Integer.TYPE);
+      primitiveTypes.put(Long.TYPE.getName(), Long.TYPE);
+      primitiveTypes.put(Short.TYPE.getName(), Short.TYPE);
+      
+      primitiveArrayTypes.put(Byte.TYPE.getName(), "B");
+      primitiveArrayTypes.put(Boolean.TYPE.getName(), "Z");
+      primitiveArrayTypes.put(Character.TYPE.getName(), "C");
+      primitiveArrayTypes.put(Double.TYPE.getName(), "D");
+      primitiveArrayTypes.put(Float.TYPE.getName(), "F");
+      primitiveArrayTypes.put(Integer.TYPE.getName(), "I");
+      primitiveArrayTypes.put(Long.TYPE.getName(), "J");
+      primitiveArrayTypes.put(Short.TYPE.getName(), "S");
+      
+      primitiveArrayTypesClassMap.put("B", Byte.TYPE);
+      primitiveArrayTypesClassMap.put("Z", Boolean.TYPE);
+      primitiveArrayTypesClassMap.put("C", Character.TYPE);
+      primitiveArrayTypesClassMap.put("D", Double.TYPE);
+      primitiveArrayTypesClassMap.put("F", Float.TYPE);
+      primitiveArrayTypesClassMap.put("I", Integer.TYPE);
+      primitiveArrayTypesClassMap.put("J", Long.TYPE);
+      primitiveArrayTypesClassMap.put("S", Short.TYPE);
    }
 
    /**
@@ -109,6 +145,39 @@ public class PrimitiveInfo extends AbstractTypeInfo
       return map.get(name);
    }
 
+   /**
+    * Get a primtive array type
+    * 
+    * @param name the primtive type name
+    * @param the array type or null if not found
+    */   
+   public static String getPrimativeArrayType(String name)
+   {
+      return primitiveArrayTypes.get(name);
+   }
+
+   /**
+    * Get the primtive type for a name
+    * 
+    * @param name the primtive type name
+    * @param the primitive type
+    */   
+   public static Class<?> getPrimativeType(String name)
+   {
+      return primitiveTypes.get(name);
+   }
+   
+   /**
+    * Get the primtive array type class map for a name
+    * 
+    * @param name the array type name
+    * @param the component type
+    */   
+   public static Class<?> getPrimativeArrayComponentType(String name)
+   {
+      return primitiveArrayTypesClassMap.get(name);
+   }
+   
    /**
     * Create a new primitive info
     * 
