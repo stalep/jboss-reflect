@@ -379,6 +379,9 @@ public class Config
     */
    public static MethodInfo findMethodInfo(ClassInfo classInfo, String name, String[] paramTypes, boolean isStatic, boolean isPublic, boolean strict) throws JoinpointException
    {
+      if (name == null)
+         throw new IllegalArgumentException("Null name");
+   
       if (classInfo == null)
          throw new IllegalArgumentException("ClassInfo cannot be null!");
 
