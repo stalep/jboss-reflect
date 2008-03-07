@@ -42,6 +42,12 @@
       <groupId>org.jboss</groupId>
       <artifactId>javassist</artifactId>
       <version>3.6.0.GA</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>jboss</groupId>
+      <artifactId>jboss-common-logging-spi</artifactId>
+      <version>2.0.4.GA</version>
     </dependency>
     <dependency>
       <groupId>org.jboss</groupId>
@@ -52,18 +58,42 @@
           <groupId>jboss</groupId>
           <artifactId>jboss-common-logging-spi</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>apache-httpclient</groupId>
+          <artifactId>commons-httpclient</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>apache-slide</groupId>
+          <artifactId>webdavlib</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>apache-xerces</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
+	  <!-- Test dependencies -->
     <dependency>
       <groupId>jboss</groupId>
-      <artifactId>jboss-logging-spi</artifactId>
-      <version>2.0.3.GA</version>
+      <artifactId>jboss-common-logging-log4j</artifactId>
+      <version>2.0.4.GA</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>jboss</groupId>
+          <artifactId>jboss-common-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>jboss</groupId>
+          <artifactId>jboss-common-logging-spi</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
-	  <!-- Test dependencies -->
     <dependency>
       <groupId>org.jboss</groupId>
       <artifactId>jboss-test</artifactId>
       <version>1.0.4.GA</version>
+      <scope>test</scope>
       <exclusions>
         <exclusion>
           <groupId>jboss</groupId>
@@ -79,11 +109,13 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>jboss.profiler.jvmti</groupId>
       <artifactId>jboss-profiler-jvmti</artifactId>
       <version>1.0.0.CR5</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
