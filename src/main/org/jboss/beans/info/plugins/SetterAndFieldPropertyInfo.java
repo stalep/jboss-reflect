@@ -19,64 +19,46 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.beaninfo.support;
+package org.jboss.beans.info.plugins;
+
+import org.jboss.beans.info.spi.PropertyInfo;
+import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.MethodInfo;
 
 /**
+ * Combined setter and field property info.
+ *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
-public class NestedBean implements SetGetHook<NestedBean>
+public class SetterAndFieldPropertyInfo extends FieldPropertyInfo
 {
-   private NestedBean bean;
-   private String string;
+   private static final long serialVersionUID = 1L;
 
-   public NestedBean()
+   /** Previous property info */
+   private PropertyInfo previous;
+
+   public SetterAndFieldPropertyInfo(PropertyInfo previous, FieldInfo field)
    {
+      // TODO - what to do with annotations, merge?
+      super(field);
+
+      if (previous == null)
+         throw new IllegalArgumentException("Null previous");
+      this.previous = previous;
    }
 
-   public NestedBean getBean()
+   public void set(Object bean, Object value) throws Throwable
    {
-      return bean;
+      previous.set(bean, value);
    }
 
-   public void doSetHook(NestedBean child)
+   public MethodInfo getSetter()
    {
-      bean = child;
+      return previous.getSetter();
    }
 
-   public NestedBean doGetHook()
+   public void setSetter(MethodInfo setter)
    {
-      return bean;
-   }
-
-   public boolean valid()
-   {
-      return bean != null;
-   }
-
-   public void setBean(NestedBean bean)
-   {
-      this.bean = bean;
-   }
-
-   public NestedBean getDifferentGetter()
-   {
-      return null;
-   }
-
-   public NestedBean getOtherBean()
-   {
-      NestedBean other = new NestedBean();
-      other.setString(string);
-      return other;
-   }
-
-   public String getString()
-   {
-      return string;
-   }
-
-   public void setString(String string)
-   {
-      this.string = string;
+      previous.setSetter(setter);
    }
 }

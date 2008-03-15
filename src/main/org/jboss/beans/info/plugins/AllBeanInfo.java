@@ -19,64 +19,38 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.beaninfo.support;
+package org.jboss.beans.info.plugins;
+
+import java.util.Set;
+
+import org.jboss.beans.info.spi.BeanInfoFactory;
+import org.jboss.beans.info.spi.EventInfo;
+import org.jboss.beans.info.spi.PropertyInfo;
+import org.jboss.classadapter.spi.ClassAdapter;
+import org.jboss.reflect.spi.ConstructorInfo;
+import org.jboss.reflect.spi.MethodInfo;
 
 /**
+ * All bean info.
+ * @see org.jboss.beans.info.spi.BeanAccessMode#ALL
+ *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
-public class NestedBean implements SetGetHook<NestedBean>
+public class AllBeanInfo extends FieldBeanInfo
 {
-   private NestedBean bean;
-   private String string;
-
-   public NestedBean()
+   public AllBeanInfo(
+         BeanInfoFactory beanInfoFactory,
+         ClassAdapter classAdapter,
+         Set<PropertyInfo> properties,
+         Set<ConstructorInfo> constructors,
+         Set<MethodInfo> methods,
+         Set<EventInfo> events)
    {
+      super(beanInfoFactory, classAdapter, properties, constructors, methods, events);
    }
 
-   public NestedBean getBean()
+   protected FieldFilter getFieldFilter()
    {
-      return bean;
-   }
-
-   public void doSetHook(NestedBean child)
-   {
-      bean = child;
-   }
-
-   public NestedBean doGetHook()
-   {
-      return bean;
-   }
-
-   public boolean valid()
-   {
-      return bean != null;
-   }
-
-   public void setBean(NestedBean bean)
-   {
-      this.bean = bean;
-   }
-
-   public NestedBean getDifferentGetter()
-   {
-      return null;
-   }
-
-   public NestedBean getOtherBean()
-   {
-      NestedBean other = new NestedBean();
-      other.setString(string);
-      return other;
-   }
-
-   public String getString()
-   {
-      return string;
-   }
-
-   public void setString(String string)
-   {
-      this.string = string;
+      return FieldFilter.ALL;
    }
 }

@@ -19,64 +19,46 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.beaninfo.support;
+package org.jboss.beans.info.plugins;
+
+import org.jboss.beans.info.spi.PropertyInfo;
+import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.MethodInfo;
 
 /**
+ * Combined getter and field property info.
+ *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
-public class NestedBean implements SetGetHook<NestedBean>
+public class GetterAndFieldPropertyInfo extends FieldPropertyInfo
 {
-   private NestedBean bean;
-   private String string;
+   private static final long serialVersionUID = 1L;
 
-   public NestedBean()
+   /** Previous property info */
+   private PropertyInfo previous;
+
+   public GetterAndFieldPropertyInfo(PropertyInfo previous, FieldInfo field)
    {
+      // TODO - what to do with annotations, merge?
+      super(field);
+
+      if (previous == null)
+         throw new IllegalArgumentException("Null previous");
+      this.previous = previous;
    }
 
-   public NestedBean getBean()
+   public Object get(Object bean) throws Throwable
    {
-      return bean;
+      return previous.get(bean);
    }
 
-   public void doSetHook(NestedBean child)
+   public MethodInfo getGetter()
    {
-      bean = child;
+      return previous.getGetter();
    }
 
-   public NestedBean doGetHook()
+   public void setGetter(MethodInfo getter)
    {
-      return bean;
-   }
-
-   public boolean valid()
-   {
-      return bean != null;
-   }
-
-   public void setBean(NestedBean bean)
-   {
-      this.bean = bean;
-   }
-
-   public NestedBean getDifferentGetter()
-   {
-      return null;
-   }
-
-   public NestedBean getOtherBean()
-   {
-      NestedBean other = new NestedBean();
-      other.setString(string);
-      return other;
-   }
-
-   public String getString()
-   {
-      return string;
-   }
-
-   public void setString(String string)
-   {
-      this.string = string;
+      previous.setGetter(getter);
    }
 }

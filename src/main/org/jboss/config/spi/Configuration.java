@@ -25,6 +25,7 @@ import java.lang.reflect.Type;
 
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
+import org.jboss.beans.info.spi.BeanAccessMode;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.joinpoint.spi.JoinpointFactoryBuilder;
 import org.jboss.reflect.spi.ClassInfo;
@@ -67,6 +68,35 @@ public interface Configuration
     */
    BeanInfo getBeanInfo(TypeInfo type);
    
+   /**
+    * Get the bean info
+    *
+    * @param className the class name
+    * @param cl the classloader
+    * @param accessMode the bean access mode
+    * @return the bean info
+    * @throws ClassNotFoundException when the class could not be loaded
+    */
+   BeanInfo getBeanInfo(String className, ClassLoader cl, BeanAccessMode accessMode) throws ClassNotFoundException;
+
+   /**
+    * Get the bean info
+    *
+    * @param clazz the class
+    * @param accessMode the bean access mode
+    * @return the bean info
+    */
+   BeanInfo getBeanInfo(Class<?> clazz, BeanAccessMode accessMode);
+
+   /**
+    * Get the bean info
+    *
+    * @param type the type info
+    * @param accessMode the bean access mode
+    * @return the bean info
+    */
+   BeanInfo getBeanInfo(TypeInfo type, BeanAccessMode accessMode);
+
    /**
     * Get the class info for a class
     * 

@@ -24,28 +24,19 @@ package org.jboss.test.beaninfo.support;
 /**
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
-public class NestedBean implements SetGetHook<NestedBean>
+public class PrivateMixNestedBean<T extends PrivateMixNestedBean> implements SetGetHook<T>
 {
-   private NestedBean bean;
-   private String string;
+   private T bean;
+   private boolean usedSetterOrGetter;
 
-   public NestedBean()
+   public void doSetHook(T child)
    {
+      setBean(child);
    }
 
-   public NestedBean getBean()
+   public T doGetHook()
    {
-      return bean;
-   }
-
-   public void doSetHook(NestedBean child)
-   {
-      bean = child;
-   }
-
-   public NestedBean doGetHook()
-   {
-      return bean;
+      return getBean();
    }
 
    public boolean valid()
@@ -53,30 +44,20 @@ public class NestedBean implements SetGetHook<NestedBean>
       return bean != null;
    }
 
-   public void setBean(NestedBean bean)
+   public T getBean()
    {
+      usedSetterOrGetter = true;
+      return bean;
+   }
+
+   public void setBean(T bean)
+   {
+      usedSetterOrGetter = true;
       this.bean = bean;
    }
 
-   public NestedBean getDifferentGetter()
+   public boolean isUsedSetterOrGetter()
    {
-      return null;
-   }
-
-   public NestedBean getOtherBean()
-   {
-      NestedBean other = new NestedBean();
-      other.setString(string);
-      return other;
-   }
-
-   public String getString()
-   {
-      return string;
-   }
-
-   public void setString(String string)
-   {
-      this.string = string;
-   }
+      return usedSetterOrGetter;
+   }      
 }

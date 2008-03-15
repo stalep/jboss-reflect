@@ -32,7 +32,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jboss.beans.info.plugins.AbstractPropertyInfo;
+import org.jboss.beans.info.plugins.DefaultPropertyInfo;
+import org.jboss.beans.info.plugins.FieldPropertyInfo;
+import org.jboss.beans.info.plugins.SetterAndFieldPropertyInfo;
+import org.jboss.beans.info.plugins.GetterAndFieldPropertyInfo;
+import org.jboss.beans.info.spi.BeanAccessMode;
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.config.plugins.BasicConfiguration;
@@ -46,6 +50,7 @@ import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.test.classinfo.test.AbstractClassInfoTest;
 
 /**
@@ -65,12 +70,17 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
    
    protected void assertBeanInfo(BeanInfo beanInfo, Class<?> clazz) throws Throwable
    {
+      assertBeanInfo(beanInfo, clazz, BeanAccessMode.STANDARD);
+   }
+
+   protected void assertBeanInfo(BeanInfo beanInfo, Class<?> clazz, BeanAccessMode mode) throws Throwable
+   {
       assertEquals(clazz.getName(), beanInfo.getName());
       ClassInfo classInfo = beanInfo.getClassInfo();
       assertClassInfo(classInfo, clazz);
       assertBeanConstructors(beanInfo, clazz);
       assertBeanMethods(beanInfo, clazz);
-      assertBeanProperties(beanInfo, clazz);
+      assertBeanProperties(beanInfo, clazz, mode);
    }
    
    protected void assertBeanConstructors(BeanInfo beanInfo, Class<?> clazz)
@@ -109,7 +119,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
       TypeInfoFactory factory = getTypeInfoFactory();
       Set<MethodInfo> expected = new HashSet<MethodInfo>();
 
-      Method[] methods = null;
+      Method[] methods;
       if (clazz.isAnnotation())
          methods = clazz.getDeclaredMethods();
       else
@@ -138,13 +148,13 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
       assertEquals(expected, actual);
    }
    
-   protected void assertBeanProperties(BeanInfo beanInfo, Class<?> clazz) throws Throwable
+   protected void assertBeanProperties(BeanInfo beanInfo, Class<?> clazz, BeanAccessMode mode) throws Throwable
    {
-      Set<PropertyInfo> expected = null;
+      Set<PropertyInfo> expected;
       if (clazz.isAnnotation())
          expected = getExpectedAnnotationProperties(clazz);
       else
-         expected = getExpectedProperties(clazz);
+         expected = getExpectedProperties(clazz, mode);
       
       Set<PropertyInfo> actual = beanInfo.getProperties();
       if (expected.isEmpty())
@@ -153,7 +163,14 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
          return;
       }
       getLog().debug(clazz + " expected properties=" + expected + " actual=" + actual);
-      assertEquals(expected, actual);
+      boolean equals = expected.equals(actual);
+      if (equals == false)
+      {
+         System.out.println("expected = " + expected);
+         System.out.println("actual = " + actual);
+      }
+      assertTrue(equals);
+//      assertEquals(expected, actual);
       
       HashMap<String, PropertyInfo> actualProps = new HashMap<String, PropertyInfo>();
       for (PropertyInfo prop : actual)
@@ -181,7 +198,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
       }
    }
 
-   protected Set<PropertyInfo> getExpectedProperties(Class<?> clazz)
+   protected Set<PropertyInfo> getExpectedProperties(Class<?> clazz, BeanAccessMode mode)
    {
       TypeInfoFactory factory = getTypeInfoFactory();
       Method[] methods = clazz.getMethods();
@@ -192,11 +209,14 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
          for (Method method : methods)
          {
             String name = method.getName();
-            String upperName = getUpperPropertyName(name);
             if (isGetter(method))
+            {
+               String upperName = getUpperPropertyName(name);
                getters.put(upperName, method);
+            }
             else if (isSetter(method))
             {
+               String upperName = getUpperPropertyName(name);
                List<Method> list = setters.get(upperName);
                if (list == null)
                {
@@ -208,7 +228,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
          }
       }
 
-      HashSet<PropertyInfo> properties = new HashSet<PropertyInfo>();
+      Map<String, PropertyInfo> properties = new HashMap<String, PropertyInfo>();
       if (getters.isEmpty() == false)
       {
          for (Iterator<Map.Entry<String, Method>> i = getters.entrySet().iterator(); i.hasNext();)
@@ -264,7 +284,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
                paramAnnotations[0] = setterAnnotations.toArray(new AnnotationValue[setterAnnotations.size()]);
                setterInfo = new MethodInfoImpl(null, setter.getName(), PrimitiveInfo.VOID, new TypeInfo[] { type }, paramAnnotations, null, setter.getModifiers(), declaringType);
             }
-            properties.add(new AbstractPropertyInfo(lowerName, name, type, getterInfo, setterInfo, annotations));
+            properties.put(lowerName, new DefaultPropertyInfo(lowerName, name, type, getterInfo, setterInfo, annotations));
          }
       }
       if (setters.isEmpty() == false)
@@ -288,11 +308,33 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
                setterAnnotations = getExpectedAnnotations(setter.getParameterAnnotations()[0]); 
                paramAnnotations[0] = setterAnnotations.toArray(new AnnotationValue[setterAnnotations.size()]);
                MethodInfo setterInfo = new MethodInfoImpl(null, setter.getName(), PrimitiveInfo.VOID, new TypeInfo[] { type }, paramAnnotations, null, setter.getModifiers(), declaringType);
-               properties.add(new AbstractPropertyInfo(lowerName, name, type, null, setterInfo, annotations));
+               properties.put(lowerName, new DefaultPropertyInfo(lowerName, name, type, null, setterInfo, annotations));
             }
          }
       }
-      return properties;
+      if (mode != BeanAccessMode.STANDARD)
+      {
+         ClassInfo classInfo = (ClassInfo)factory.getTypeInfo(clazz);
+         Set<FieldInfo> fields = getFields(classInfo, mode);
+         for(FieldInfo field : fields)
+         {
+            String name = field.getName();
+            PropertyInfo pi = properties.get(name);
+            if (pi == null)
+            {
+               properties.put(name, new FieldPropertyInfo(field));
+            }
+            else if (pi.isReadable() == false)
+            {
+               properties.put(name, new SetterAndFieldPropertyInfo(pi, field));
+            }
+            else if (pi.isWritable() == false)
+            {
+               properties.put(name, new GetterAndFieldPropertyInfo(pi, field));               
+            }
+         }
+      }
+      return new HashSet<PropertyInfo>(properties.values());
    }
    
    protected Set<PropertyInfo> getExpectedAnnotationProperties(Class<?> clazz)
@@ -312,12 +354,39 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
             Set<AnnotationValue> getterAnnotations = getExpectedAnnotations(method.getAnnotations()); 
             AnnotationValue[] annotations = getterAnnotations.toArray(new AnnotationValue[getterAnnotations.size()]);
             MethodInfo getter = new MethodInfoImpl(null, name, returnType, new TypeInfo[0], new AnnotationValue[0][], null, method.getModifiers(), declaringType);
-            properties.add(new AbstractPropertyInfo(name, name, returnType, getter, null, annotations));
+            properties.add(new DefaultPropertyInfo(name, name, returnType, getter, null, annotations));
          }
       }
       return properties;
    }
    
+   /**
+    * Get the fields
+    *
+    * @param classInfo the class info
+    * @param mode the mode
+    * @return the fields
+    */
+   protected static Set<FieldInfo> getFields(ClassInfo classInfo, BeanAccessMode mode)
+   {
+      HashSet<FieldInfo> fields = new HashSet<FieldInfo>();
+      while (classInfo != null)
+      {
+         FieldInfo[] finfos = classInfo.getDeclaredFields();
+         if (finfos != null && finfos.length > 0)
+         {
+            for (int i = 0; i < finfos.length; ++i)
+            {
+               FieldInfo field = finfos[i];
+               if ((mode == BeanAccessMode.FIELDS && field.isPublic()) || (mode == BeanAccessMode.ALL))
+                  fields.add(field);
+            }
+         }
+         classInfo = classInfo.getSuperclass();
+      }
+      return fields;
+   }
+
    protected static String getUpperPropertyName(String name)
    {
       int start = 3;
@@ -383,6 +452,11 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
       return configuration.getBeanInfo(clazz);
    }
    
+   protected BeanInfo getBeanInfo(Class<?> clazz, BeanAccessMode accessMode) throws Throwable
+   {
+      return configuration.getBeanInfo(clazz, accessMode);
+   }
+
    protected Configuration getConfiguration()
    {
       return configuration;

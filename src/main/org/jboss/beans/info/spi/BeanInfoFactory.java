@@ -26,6 +26,7 @@ import org.jboss.classadapter.spi.ClassAdapter;
 /**
  * BeanInfo Factory.
  * 
+ * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
@@ -38,4 +39,13 @@ public interface BeanInfoFactory
     * @return the bean information
     */
    BeanInfo getBeanInfo(ClassAdapter classAdapter);
+
+   /**
+    * Retrieve the bean information
+    *
+    * @param classAdapter the classAdapter
+    * @param accessMode the access mode
+    * @return the bean information
+    */
+   BeanInfo getBeanInfo(ClassAdapter classAdapter, BeanAccessMode accessMode);
 }

@@ -27,6 +27,7 @@ import java.util.Set;
 import junit.framework.Test;
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
+import org.jboss.beans.info.spi.BeanAccessMode;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterAndSetter;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterAndSetterSimpleMerge;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotatedGetterAndSetterWithInterface;
@@ -51,6 +52,24 @@ import org.jboss.test.beaninfo.support.BeanInfoParameterConstructor;
 import org.jboss.test.beaninfo.support.BeanInfoProperties;
 import org.jboss.test.beaninfo.support.BeanInfoSetterOnly;
 import org.jboss.test.beaninfo.support.BeanInfoUpperPropertyName;
+import org.jboss.test.beaninfo.support.BeanInfoMethods;
+import org.jboss.test.beaninfo.support.BeanInfoGetterAndField;
+import org.jboss.test.beaninfo.support.BeanInfoFields;
+import org.jboss.test.beaninfo.support.SubBeanInfoGetterAndSetter;
+import org.jboss.test.beaninfo.support.BeanInfoGetterAndSetter2;
+import org.jboss.test.beaninfo.support.BeanInfoGetterAndField2;
+import org.jboss.test.beaninfo.support.SubBeanInfoGetterAndField;
+import org.jboss.test.beaninfo.support.BeanInfoSetterAndField;
+import org.jboss.test.beaninfo.support.BeanInfoSetterAndField2;
+import org.jboss.test.beaninfo.support.SubBeanInfoSetterAndField;
+import org.jboss.test.beaninfo.support.BeanInfoExtendsFoo;
+import org.jboss.test.beaninfo.support.BeanInfoExtendsFoo2;
+import org.jboss.test.beaninfo.support.BeanInfoExtendsFoo3;
+import org.jboss.test.beaninfo.support.BeanInfoExtendsFoo4;
+import org.jboss.test.beaninfo.support.BeanInfoExtendsFoo5;
+import org.jboss.test.beaninfo.support.BeanInfoExtendsFoo6;
+import org.jboss.test.beaninfo.support.BeanInfoExtendsFoo7;
+import org.jboss.test.beaninfo.support.BeanInfoExtendsFoo8;
 
 /**
  * BeanInfo Test Case.
@@ -82,9 +101,14 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
    
    public void testBeanMethods() throws Throwable
    {
-      testBean(BeanInfoConstructors.class, null);
+      testBean(BeanInfoMethods.class, null);
    }
    
+   public void testBeanFields() throws Throwable
+   {
+      testBean(BeanInfoFields.class, null);
+   }
+
    public void testBeanGetterOnly() throws Throwable
    {
       testBean(BeanInfoGetterOnly.class, new String[] { "something" });
@@ -95,11 +119,62 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
       testBean(BeanInfoSetterOnly.class, new String[] { "something" });
    }
    
+   public void testBeanGetterAndField() throws Throwable
+   {
+      testBean(BeanInfoGetterAndField.class, new String[] { "something" });
+      testBean(BeanInfoGetterAndField2.class, new String[] { "something" });
+      testBean(SubBeanInfoGetterAndField.class, new String[] { "something" });
+   }
+
+   public void testBeanSetterAndField() throws Throwable
+   {
+      testBean(BeanInfoSetterAndField.class, new String[] { "something" });
+      testBean(BeanInfoSetterAndField2.class, new String[] { "something" });
+      testBean(SubBeanInfoSetterAndField.class, new String[] { "something" });
+   }
+
    public void testBeanGetterAndSetter() throws Throwable
    {
       testBean(BeanInfoGetterAndSetter.class, new String[] { "something" });
+      testBean(BeanInfoGetterAndSetter2.class, new String[] { "something" });
+      testBean(SubBeanInfoGetterAndSetter.class, new String[] { "something" });
    }
-   
+
+   public void testHierarchyBean() throws Throwable
+   {
+      testBean(BeanInfoExtendsFoo.class, BeanAccessMode.STANDARD, new String[]{});
+      testBean(BeanInfoExtendsFoo.class, BeanAccessMode.FIELDS, new String[]{"foo", "bar"});
+      testBean(BeanInfoExtendsFoo.class, BeanAccessMode.ALL, new String[]{"foo", "bar"});
+
+      testBean(BeanInfoExtendsFoo2.class, BeanAccessMode.STANDARD, new String[]{"bar"});
+      testBean(BeanInfoExtendsFoo2.class, BeanAccessMode.FIELDS, new String[]{"foo", "bar"});
+      testBean(BeanInfoExtendsFoo2.class, BeanAccessMode.ALL, new String[]{"foo", "bar"});
+
+      testBean(BeanInfoExtendsFoo3.class, BeanAccessMode.STANDARD, new String[]{});
+      testBean(BeanInfoExtendsFoo3.class, BeanAccessMode.FIELDS, new String[]{"bar"});
+      testBean(BeanInfoExtendsFoo3.class, BeanAccessMode.ALL, new String[]{"foo", "bar"});
+
+      testBean(BeanInfoExtendsFoo4.class, BeanAccessMode.STANDARD, new String[]{"bar"});
+      testBean(BeanInfoExtendsFoo4.class, BeanAccessMode.FIELDS, new String[]{"bar"});
+      testBean(BeanInfoExtendsFoo4.class, BeanAccessMode.ALL, new String[]{"foo", "bar"});
+
+      testBean(BeanInfoExtendsFoo5.class, BeanAccessMode.STANDARD, new String[]{});
+      testBean(BeanInfoExtendsFoo5.class, BeanAccessMode.FIELDS, new String[]{});
+      testBean(BeanInfoExtendsFoo5.class, BeanAccessMode.ALL, new String[]{"foo", "bar"});
+
+      testBean(BeanInfoExtendsFoo6.class, BeanAccessMode.STANDARD, new String[]{"foo"});
+      testBean(BeanInfoExtendsFoo6.class, BeanAccessMode.FIELDS, new String[]{"foo"});
+      testBean(BeanInfoExtendsFoo6.class, BeanAccessMode.ALL, new String[]{"foo", "bar"});
+
+      testBean(BeanInfoExtendsFoo7.class, BeanAccessMode.STANDARD, new String[]{});
+      testBean(BeanInfoExtendsFoo7.class, BeanAccessMode.FIELDS, new String[]{});
+      testBean(BeanInfoExtendsFoo7.class, BeanAccessMode.ALL, new String[]{"bar"});
+
+      testBean(BeanInfoExtendsFoo8.class, BeanAccessMode.STANDARD, new String[]{});
+      testBean(BeanInfoExtendsFoo8.class, BeanAccessMode.FIELDS, new String[]{});
+      testBean(BeanInfoExtendsFoo8.class, BeanAccessMode.ALL, new String[]{"bar", "foo"});
+   }
+
    public void testBeanBooleanProperties() throws Throwable
    {
       testBean(BeanInfoBooleanProperties.class, new String[] { "something", "somethingElse" });
@@ -251,8 +326,15 @@ public class BeanInfoUnitTestCase extends AbstractBeanInfoTest
 
    protected void testBean(Class<?> clazz, String[] beanNames) throws Throwable
    {
-      BeanInfo beanInfo = getBeanInfo(clazz);
-      assertBeanInfo(beanInfo, clazz);
+      for (BeanAccessMode mode : BeanAccessMode.values())
+      {
+         testBean(clazz, mode, beanNames);
+      }
+   }
+   protected void testBean(Class<?> clazz, BeanAccessMode mode, String[] beanNames) throws Throwable
+   {
+      BeanInfo beanInfo = getBeanInfo(clazz, mode);
+      assertBeanInfo(beanInfo, clazz, mode);
       if (beanNames != null)
       {
          Set<PropertyInfo> properties = beanInfo.getProperties();

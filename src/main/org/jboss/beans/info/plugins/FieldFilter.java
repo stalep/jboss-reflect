@@ -19,64 +19,47 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jboss.test.beaninfo.support;
+package org.jboss.beans.info.plugins;
+
+import org.jboss.reflect.spi.FieldInfo;
 
 /**
+ * Simple field filter.
+ *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
-public class NestedBean implements SetGetHook<NestedBean>
+interface FieldFilter
 {
-   private NestedBean bean;
-   private String string;
+   static final FieldFilter PUBLIC = new IsPublicFieldFilter();
+   static final FieldFilter ALL = new AllFieldFilter();
 
-   public NestedBean()
+   /**
+    * Should we use the field.
+    *
+    * @param field the field info
+    * @return true if field should be used
+    */
+   boolean useField(FieldInfo field);
+
+   /**
+    * All field filter.
+    */
+   class AllFieldFilter implements FieldFilter
    {
+      public boolean useField(FieldInfo field)
+      {
+         return true;
+      }
    }
 
-   public NestedBean getBean()
+   /**
+    * Just public field filter.
+    */
+   class IsPublicFieldFilter implements FieldFilter
    {
-      return bean;
-   }
-
-   public void doSetHook(NestedBean child)
-   {
-      bean = child;
-   }
-
-   public NestedBean doGetHook()
-   {
-      return bean;
-   }
-
-   public boolean valid()
-   {
-      return bean != null;
-   }
-
-   public void setBean(NestedBean bean)
-   {
-      this.bean = bean;
-   }
-
-   public NestedBean getDifferentGetter()
-   {
-      return null;
-   }
-
-   public NestedBean getOtherBean()
-   {
-      NestedBean other = new NestedBean();
-      other.setString(string);
-      return other;
-   }
-
-   public String getString()
-   {
-      return string;
-   }
-
-   public void setString(String string)
-   {
-      this.string = string;
+      public boolean useField(FieldInfo field)
+      {
+         return field.isPublic();
+      }
    }
 }

@@ -27,46 +27,40 @@ import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.reflect.plugins.AnnotationHolder;
 import org.jboss.reflect.spi.AnnotationValue;
-import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
 
 /**
  * Property info.
  * 
+ * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class AbstractPropertyInfo extends AnnotationHolder
+public abstract class AbstractPropertyInfo extends AnnotationHolder
    implements PropertyInfo, Serializable
 {
    /** The serialVersionUID */
    private static final long serialVersionUID = 2;
 
    /** The bean info */
-   protected transient BeanInfo beanInfo;
+   private transient BeanInfo beanInfo;
    
    /** The property name */
-   protected String name;
+   private String name;
 
    /** The upper property name */
-   protected String upperName;
+   private String upperName;
    
    /** The type */
-   protected TypeInfo type;
-   
-   /** The getter */
-   protected MethodInfo getter;
-   
-   /** The setter */
-   protected MethodInfo setter;
+   private TypeInfo type;
 
    /**
     * Create a new property info
     */
    public AbstractPropertyInfo()
    {
-      this(null, null, null, null, null);
+      this(null, null, null);
    }
 
    /**
@@ -76,7 +70,7 @@ public class AbstractPropertyInfo extends AnnotationHolder
     */
    public AbstractPropertyInfo(String name)
    {
-      this(name, name, null, null, null);
+      this(name, name, null);
    }
 
    /**
@@ -85,16 +79,10 @@ public class AbstractPropertyInfo extends AnnotationHolder
     * @param name the name
     * @param upperName the upper case version of the name
     * @param type the type
-    * @param getter the getter
-    * @param setter the setter
     */
-   public AbstractPropertyInfo(String name, String upperName, TypeInfo type, MethodInfo getter, MethodInfo setter)
+   public AbstractPropertyInfo(String name, String upperName, TypeInfo type)
    {
-      this.name = name;
-      this.upperName = upperName;
-      this.type = type;
-      this.getter = getter;
-      this.setter = setter;
+      init(name, upperName, type);
    }
 
    /**
@@ -103,25 +91,38 @@ public class AbstractPropertyInfo extends AnnotationHolder
     * @param name the name
     * @param upperName the upper case version of the name
     * @param type the type
-    * @param getter the getter
-    * @param setter the setter
     * @param annotations the annotations
     */
-   public AbstractPropertyInfo(String name, String upperName, TypeInfo type, MethodInfo getter, MethodInfo setter, AnnotationValue[] annotations)
+   public AbstractPropertyInfo(String name, String upperName, TypeInfo type, AnnotationValue[] annotations)
    {
       super(annotations);
+      init(name, upperName, type);
+   }
+
+   /**
+    * Initialize fields.
+    *
+    * @param name the name
+    * @param upperName the upper name
+    * @param type the type
+    */
+   protected void init(String name, String upperName, TypeInfo type)
+   {
       this.name = name;
       this.upperName = upperName;
       this.type = type;
-      this.getter = getter;
-      this.setter = setter;
    }
-   
+
    public BeanInfo getBeanInfo()
    {
       return beanInfo;
    }
-   
+
+   void setBeanInfo(BeanInfo beanInfo)
+   {
+      this.beanInfo = beanInfo;
+   }
+
    public String getName()
    {
       return name;
@@ -141,46 +142,6 @@ public class AbstractPropertyInfo extends AnnotationHolder
    {
       this.type = type;
    }
-   
-   public MethodInfo getGetter()
-   {
-      return getter;
-   }
-
-   public void setGetter(MethodInfo getter)
-   {
-      this.getter = getter;
-   }
-   
-   public MethodInfo getSetter()
-   {
-      return setter;
-   }
-
-   public void setSetter(MethodInfo setter)
-   {
-      this.setter = setter;
-   }
-   
-   public Object get(Object bean) throws Throwable
-   {
-      if (bean == null)
-         throw new IllegalArgumentException("Null bean");
-      if (getter == null)
-         throw new IllegalArgumentException("Property is not readable: " + getName() + " for " + beanInfo.getName());
-      
-      return getter.invoke(bean, null);
-   }
-
-   public void set(Object bean, Object value) throws Throwable
-   {
-      if (bean == null)
-         throw new IllegalArgumentException("Null bean");
-      if (setter == null)
-         throw new IllegalArgumentException("Property is not writable: " + getName() + " for " + beanInfo.getName());
-      
-      setter.invoke(bean, new Object[] { value });
-   }
 
    @Override
    public boolean equals(Object object)
@@ -191,10 +152,6 @@ public class AbstractPropertyInfo extends AnnotationHolder
       AbstractPropertyInfo other = (AbstractPropertyInfo) object;
       if (notEqual(name, other.name))
          return false;
-      else if (notEqual(getter, other.getter))
-         return false;
-      else if (notEqual(setter, other.setter))
-         return false;
       return true;
    }
    
@@ -202,8 +159,6 @@ public class AbstractPropertyInfo extends AnnotationHolder
    public void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);
-      buffer.append(" getter=").append(getter);
-      buffer.append(" setter=").append(setter);
    }
    
    @Override

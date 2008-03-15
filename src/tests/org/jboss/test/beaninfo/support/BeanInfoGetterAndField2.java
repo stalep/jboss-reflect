@@ -22,61 +22,14 @@
 package org.jboss.test.beaninfo.support;
 
 /**
- * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
+ * BeanInfoGetterAndField.
+ *
+ * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  */
-public class NestedBean implements SetGetHook<NestedBean>
+public class BeanInfoGetterAndField2 extends SuperBeanInfoGetterAndSetter 
 {
-   private NestedBean bean;
-   private String string;
-
-   public NestedBean()
+   public int getSomething()
    {
-   }
-
-   public NestedBean getBean()
-   {
-      return bean;
-   }
-
-   public void doSetHook(NestedBean child)
-   {
-      bean = child;
-   }
-
-   public NestedBean doGetHook()
-   {
-      return bean;
-   }
-
-   public boolean valid()
-   {
-      return bean != null;
-   }
-
-   public void setBean(NestedBean bean)
-   {
-      this.bean = bean;
-   }
-
-   public NestedBean getDifferentGetter()
-   {
-      return null;
-   }
-
-   public NestedBean getOtherBean()
-   {
-      NestedBean other = new NestedBean();
-      other.setString(string);
-      return other;
-   }
-
-   public String getString()
-   {
-      return string;
-   }
-
-   public void setString(String string)
-   {
-      this.string = string;
+      return 0;
    }
 }

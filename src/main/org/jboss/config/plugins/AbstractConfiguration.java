@@ -25,6 +25,7 @@ import java.lang.reflect.Type;
 
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
+import org.jboss.beans.info.spi.BeanAccessMode;
 import org.jboss.classadapter.spi.ClassAdapter;
 import org.jboss.classadapter.spi.ClassAdapterFactory;
 import org.jboss.config.spi.Configuration;
@@ -80,6 +81,24 @@ public abstract class AbstractConfiguration implements Configuration
       return getBeanInfoFactory().getBeanInfo(classAdapter);
    }
    
+   public BeanInfo getBeanInfo(String className, ClassLoader cl, BeanAccessMode accessMode) throws ClassNotFoundException
+   {
+      ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(className, cl);
+      return getBeanInfoFactory().getBeanInfo(classAdapter, accessMode);
+   }
+
+   public BeanInfo getBeanInfo(Class<?> clazz, BeanAccessMode accessMode)
+   {
+      ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(clazz);
+      return getBeanInfoFactory().getBeanInfo(classAdapter, accessMode);
+   }
+
+   public BeanInfo getBeanInfo(TypeInfo typeInfo, BeanAccessMode accessMode)
+   {
+      ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(typeInfo);
+      return getBeanInfoFactory().getBeanInfo(classAdapter, accessMode);
+   }
+
    public ClassInfo getClassInfo(String className, ClassLoader cl) throws ClassNotFoundException
    {
       ClassAdapter classAdapter = getClassAdapterFactory().getClassAdapter(className, cl);

@@ -88,7 +88,21 @@ public interface PropertyInfo extends AnnotatedInfo
     * @param setter the setter
     */
    void setSetter(MethodInfo setter);
-   
+
+   /**
+    * Is property readable.
+    *
+    * @return
+    */
+   boolean isReadable();
+
+   /**
+    * Is property writable.
+    *
+    * @return
+    */
+   boolean isWritable();
+
    /**
     * Get the property value
     * 

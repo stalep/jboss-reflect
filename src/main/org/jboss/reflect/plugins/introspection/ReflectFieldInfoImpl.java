@@ -24,6 +24,8 @@ package org.jboss.reflect.plugins.introspection;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.ReflectPermission;
+import java.security.Permission;
 
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.spi.AnnotationValue;
@@ -33,6 +35,7 @@ import org.jboss.reflect.spi.TypeInfo;
 /**
  * A field info
  *
+ * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
@@ -40,6 +43,9 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
 {
    /** The serialVersionUID */
    private static final long serialVersionUID = 2;
+
+   /** The permission */
+   private static Permission accessCheck = new ReflectPermission("suppressAccessChecks");
 
    /** The field */
    protected transient Field field;
@@ -53,7 +59,7 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
 
    /**
     * Create a new FieldInfo.
-    * 
+    *
     * @param annotations the annotations
     * @param name the name
     * @param type the field type
@@ -67,17 +73,19 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
 
    /**
     * Set the field
-    * 
+    *
     * @param field the field
     */
    public void setField(Field field)
    {
       this.field = field;
+      if (isPublic() == false && field != null)
+         field.setAccessible(true);
    }
 
    /**
     * Get the field
-    * 
+    *
     * @return the field
     */
    public Field getField()
@@ -85,16 +93,31 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
       return field;
    }
 
+   /**
+    * Check access permission.
+    */
+   protected void accessCheck()
+   {
+      if (isPublic() == false)
+      {
+         SecurityManager sm = System.getSecurityManager();
+         if (sm != null)
+            sm.checkPermission(accessCheck);
+      }
+   }
+
    public Object get(Object target) throws Throwable
    {
+      accessCheck();
       return ReflectionUtils.getField(field, target);
    }
 
    public Object set(Object target, Object value) throws Throwable
    {
+      accessCheck();
       return ReflectionUtils.setField(field, target, value);
    }
-   
+
    /**
     * Read the object, handling field read.
     *
@@ -107,6 +130,6 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
          throws IOException, ClassNotFoundException, NoSuchFieldException
    {
       oistream.defaultReadObject();
-      field = ReflectionUtils.findExactField(getDeclaringClass().getType(), name);
+      setField(ReflectionUtils.findExactField(getDeclaringClass().getType(), name));
    }
 }

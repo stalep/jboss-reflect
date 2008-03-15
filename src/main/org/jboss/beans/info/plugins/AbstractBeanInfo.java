@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashSet;
 
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
@@ -46,34 +47,35 @@ import org.jboss.util.JBossStringBuilder;
 /**
  * BeanInfo.
  * 
+ * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
 public class AbstractBeanInfo extends JBossObject implements BeanInfo
 {
    /** The class name */
-   protected String name;
+   private String name;
 
    /** The class adapter */
    protected ClassAdapter classAdapter;
 
    /** The properties */
-   protected Set<PropertyInfo> properties;
+   private Set<PropertyInfo> properties;
 
    /** The properties by name */
    private transient Map<String, PropertyInfo> propertiesByName = Collections.emptyMap();
 
    /** The constructors */
-   protected Set<ConstructorInfo> constructors;
+   private Set<ConstructorInfo> constructors;
 
    /** The methods */
-   protected Set<MethodInfo> methods;
+   private Set<MethodInfo> methods;
 
    /** The events */
-   protected Set<EventInfo> events;
+   private Set<EventInfo> events;
 
    /** The BeanInfoFactory */
-   protected BeanInfoFactory beanInfoFactory;
+   private BeanInfoFactory beanInfoFactory;
 
    /**
     * Create a new bean info
@@ -85,10 +87,17 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
     * @param methods the methods
     * @param events the events
     */
-   public AbstractBeanInfo(BeanInfoFactory beanInfoFactory, ClassAdapter classAdapter, Set<PropertyInfo> properties, Set<ConstructorInfo> constructors,
-         Set<MethodInfo> methods, Set<EventInfo> events)
+   public AbstractBeanInfo(
+         BeanInfoFactory beanInfoFactory,
+         ClassAdapter classAdapter,
+         Set<PropertyInfo> properties,
+         Set<ConstructorInfo> constructors,
+         Set<MethodInfo> methods,
+         Set<EventInfo> events)
    {
       this.beanInfoFactory = beanInfoFactory;
+      if (classAdapter == null)
+         throw new IllegalArgumentException("Null class adapter.");
       this.name = classAdapter.getClassInfo().getName();
       this.classAdapter = classAdapter;
       setProperties(properties);
@@ -109,13 +118,14 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
 
    public void setProperties(Set<PropertyInfo> properties)
    {
-      this.properties = properties;
       if (properties != null && properties.isEmpty() == false)
       {
-         propertiesByName = new HashMap<String, PropertyInfo>(properties.size());
+         this.properties = new HashSet<PropertyInfo>(properties.size());
+         this.propertiesByName = new HashMap<String, PropertyInfo>(properties.size());
+
          for (PropertyInfo property : properties)
          {
-            PropertyInfo previous = propertiesByName.put(property.getName(), property);
+            PropertyInfo previous = replaceAndAddProperty(property);
             if (previous != null)
             {
                NestedPropertyInfo nestedPropertyInfo;
@@ -130,11 +140,6 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
                   propertiesByName.put(previous.getName(), nestedPropertyInfo);
                }
                nestedPropertyInfo.addPropertyInfo(property);
-            }
-            if (property instanceof AbstractPropertyInfo)
-            {
-               AbstractPropertyInfo ainfo = (AbstractPropertyInfo) property;
-               ainfo.beanInfo = this;
             }
          }
       }
@@ -152,10 +157,63 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       if (name == null)
          throw new IllegalArgumentException("Null name");
 
-      PropertyInfo property = propertiesByName.get(name);
+      PropertyInfo property = findPropertyInfo(name);
       if (property == null)
          throw new IllegalArgumentException("No such property " + name + " for bean " + getName() + " available " + propertiesByName.keySet());
       return property;
+   }
+
+   /**
+    * Find property
+    *
+    * @param name the property name
+    * @return the property or null if no such property
+    */
+   protected PropertyInfo findPropertyInfo(String name)
+   {
+      return propertiesByName.get(name);
+   }
+
+   /**
+    * Replace and add property.
+    *
+    * @param property the property to add
+    * @return previous property or null if it doesn't exist
+    */
+   protected PropertyInfo replaceAndAddProperty(PropertyInfo property)
+   {
+      property = replaceProperty(property);
+      return addProperty(property);
+   }
+
+   /**
+    * Add property.
+    *
+    * @param property the property to add
+    * @return previous property or null if it doesn't exist
+    */
+   protected PropertyInfo addProperty(PropertyInfo property)
+   {
+      properties.add(property);
+      PropertyInfo previous = propertiesByName.put(property.getName(), property);
+      if (property instanceof AbstractPropertyInfo)
+      {
+         AbstractPropertyInfo ainfo = (AbstractPropertyInfo) property;
+         ainfo.setBeanInfo(this);
+      }
+      return previous;
+   }
+
+   /**
+    * Do we need to replace property due to access mode.
+    * By default we don't do anything, returning original.
+    *
+    * @param original the original property
+    * @return replaced property or original if no replacement neccessary
+    */
+   protected PropertyInfo replaceProperty(PropertyInfo original)
+   {
+      return original;
    }
 
    public ClassInfo getClassInfo()
