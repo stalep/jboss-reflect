@@ -333,6 +333,13 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       return properties;
    }
 
+   /**
+    * Merge annotations.
+    *
+    * @param first first array of annotations
+    * @param second second array of annotations
+    * @return merged annotations
+    */
    static AnnotationValue[] mergeAnnotations(AnnotationValue[] first, AnnotationValue[] second)
    {
       if (first == null || first.length == 0)
