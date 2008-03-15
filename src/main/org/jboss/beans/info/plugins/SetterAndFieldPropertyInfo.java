@@ -24,6 +24,7 @@ package org.jboss.beans.info.plugins;
 import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import static org.jboss.beans.info.plugins.AbstractBeanInfoFactory.mergeAnnotations;
 
 /**
  * Combined setter and field property info.
@@ -39,12 +40,12 @@ public class SetterAndFieldPropertyInfo extends FieldPropertyInfo
 
    public SetterAndFieldPropertyInfo(PropertyInfo previous, FieldInfo field)
    {
-      // TODO - what to do with annotations, merge?
-      super(field);
+      super(field, false);
 
       if (previous == null)
          throw new IllegalArgumentException("Null previous");
       this.previous = previous;
+      setupAnnotations(mergeAnnotations(field.getAnnotations(), previous.getAnnotations()));
    }
 
    public void set(Object bean, Object value) throws Throwable

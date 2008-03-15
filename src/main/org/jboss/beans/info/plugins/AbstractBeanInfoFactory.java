@@ -309,17 +309,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
             AnnotationValue[] setterAnnotations = null;
             if (setter != null)
                setterAnnotations = setter.getAnnotations();
-            if (annotations == null || annotations.length == 0)
-               annotations = setterAnnotations;
-            else if (setterAnnotations != null && setterAnnotations.length > 0)
-            {
-               HashSet<AnnotationValue> merged = new HashSet<AnnotationValue>();
-               for (AnnotationValue annotation : annotations)
-                  merged.add(annotation);
-               for (AnnotationValue annotation : setterAnnotations)
-                  merged.add(annotation);
-               annotations = merged.toArray(new AnnotationValue[merged.size()]);
-            }
+            annotations = mergeAnnotations(annotations, setterAnnotations);
             TypeInfo type = getPropertyType(getter, setter);
             properties.add(new DefaultPropertyInfo(lowerName, name, type, getter, setter, annotations));
          }
@@ -341,6 +331,22 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          }
       }
       return properties;
+   }
+
+   static AnnotationValue[] mergeAnnotations(AnnotationValue[] first, AnnotationValue[] second)
+   {
+      if (first == null || first.length == 0)
+         first = second;
+      else if (second != null && second.length > 0)
+      {
+         HashSet<AnnotationValue> merged = new HashSet<AnnotationValue>();
+         for (AnnotationValue annotation : first)
+            merged.add(annotation);
+         for (AnnotationValue annotation : second)
+            merged.add(annotation);
+         first = merged.toArray(new AnnotationValue[merged.size()]);
+      }
+      return first;
    }
 
    /**

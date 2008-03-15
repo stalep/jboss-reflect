@@ -39,12 +39,18 @@ public class FieldPropertyInfo extends AbstractPropertyInfo
 
    public FieldPropertyInfo(FieldInfo field)
    {
+      this(field, true);
+   }
+
+   protected FieldPropertyInfo(FieldInfo field, boolean setAnnotations)
+   {
       if (field == null)
          throw new IllegalArgumentException("Null field");
 
       this.field = field;
       init(field.getName(), field.getName(), field.getType());
-      setupAnnotations(field.getAnnotations());
+      if (setAnnotations)
+         setupAnnotations(field.getAnnotations());
    }
 
    public MethodInfo getGetter()

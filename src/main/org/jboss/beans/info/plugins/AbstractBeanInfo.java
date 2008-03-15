@@ -125,22 +125,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
 
          for (PropertyInfo property : properties)
          {
-            PropertyInfo previous = replaceAndAddProperty(property);
-            if (previous != null)
-            {
-               NestedPropertyInfo nestedPropertyInfo;
-               if (previous instanceof NestedPropertyInfo)
-               {
-                  nestedPropertyInfo = (NestedPropertyInfo)previous;
-               }
-               else
-               {
-                  nestedPropertyInfo = new NestedPropertyInfo(previous.getName(), this);
-                  nestedPropertyInfo.addPropertyInfo(previous);
-                  propertiesByName.put(previous.getName(), nestedPropertyInfo);
-               }
-               nestedPropertyInfo.addPropertyInfo(property);
-            }
+            replaceAndAddProperty(property);
          }
       }
    }
@@ -180,10 +165,10 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
     * @param property the property to add
     * @return previous property or null if it doesn't exist
     */
-   protected PropertyInfo replaceAndAddProperty(PropertyInfo property)
+   protected void replaceAndAddProperty(PropertyInfo property)
    {
       property = replaceProperty(property);
-      return addProperty(property);
+      addProperty(property);
    }
 
    /**
@@ -192,16 +177,30 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
     * @param property the property to add
     * @return previous property or null if it doesn't exist
     */
-   protected PropertyInfo addProperty(PropertyInfo property)
+   protected void addProperty(PropertyInfo property)
    {
       properties.add(property);
       PropertyInfo previous = propertiesByName.put(property.getName(), property);
+      if (previous != null)
+      {
+         NestedPropertyInfo nestedPropertyInfo;
+         if (previous instanceof NestedPropertyInfo)
+         {
+            nestedPropertyInfo = (NestedPropertyInfo)previous;
+         }
+         else
+         {
+            nestedPropertyInfo = new NestedPropertyInfo(previous.getName(), this);
+            nestedPropertyInfo.addPropertyInfo(previous);
+            propertiesByName.put(previous.getName(), nestedPropertyInfo);
+         }
+         nestedPropertyInfo.addPropertyInfo(property);
+      }
       if (property instanceof AbstractPropertyInfo)
       {
          AbstractPropertyInfo ainfo = (AbstractPropertyInfo) property;
          ainfo.setBeanInfo(this);
       }
-      return previous;
    }
 
    /**

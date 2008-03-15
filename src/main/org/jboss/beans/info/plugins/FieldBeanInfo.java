@@ -65,7 +65,8 @@ public class FieldBeanInfo extends AbstractBeanInfo
       for(FieldInfo field : fieldsByName.values())
       {
          PropertyInfo previous = findPropertyInfo(field.getName());
-         if (previous == null)
+         // expecting that property type is less exact
+         if (previous == null || previous.getType().isAssignableFrom(field.getType()) == false)
             addProperty(new FieldPropertyInfo(field));
       }
    }
@@ -77,13 +78,13 @@ public class FieldBeanInfo extends AbstractBeanInfo
       if (original.isReadable() == false)
       {
          FieldInfo field = getField(name);
-         if (field != null) // TODO - match type?
+         if (field != null && original.getType().isAssignableFrom(field.getType()))
             return new SetterAndFieldPropertyInfo(original, field);
       }
       else if (original.isWritable() == false)
       {
          FieldInfo field = getField(name);
-         if (field != null) // TODO - match type?
+         if (field != null && original.getType().isAssignableFrom(field.getType()))
             return new GetterAndFieldPropertyInfo(original, field);
       }
       return original;
@@ -137,9 +138,9 @@ public class FieldBeanInfo extends AbstractBeanInfo
          FieldInfo[] finfos = classInfo.getDeclaredFields();
          if (finfos != null && finfos.length > 0)
          {
-            for (int i = 0; i < finfos.length; ++i)
-               if (filter.useField(finfos[i]))
-                  fields.add(finfos[i]);
+            for (FieldInfo field : finfos)
+               if (filter.useField(field))
+                  fields.add(field);
          }
          classInfo = classInfo.getSuperclass();
       }
