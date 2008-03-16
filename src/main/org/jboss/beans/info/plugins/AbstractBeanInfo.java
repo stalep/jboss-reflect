@@ -163,7 +163,6 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
     * Replace and add property.
     *
     * @param property the property to add
-    * @return previous property or null if it doesn't exist
     */
    protected void replaceAndAddProperty(PropertyInfo property)
    {
@@ -175,7 +174,6 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
     * Add property.
     *
     * @param property the property to add
-    * @return previous property or null if it doesn't exist
     */
    protected void addProperty(PropertyInfo property)
    {
