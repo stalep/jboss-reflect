@@ -129,7 +129,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       if (classAdapter == null)
          throw new IllegalArgumentException("Null class adapter.");
       if (accessMode == null)
-         throw new IllegalArgumentException("Null bean access mode.");
+         accessMode = BeanAccessMode.STANDARD;
 
       synchronized (cache)
       {
