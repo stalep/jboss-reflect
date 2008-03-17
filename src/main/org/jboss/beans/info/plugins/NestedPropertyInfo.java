@@ -31,6 +31,7 @@ import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.NotImplementedException;
@@ -184,6 +185,11 @@ public class NestedPropertyInfo extends JBossObject implements PropertyInfo, Ser
    public boolean isWritable()
    {
       return false;
+   }
+
+   public FieldInfo getFieldInfo()
+   {
+      return null;
    }
 
    public AnnotationValue[] getAnnotations()

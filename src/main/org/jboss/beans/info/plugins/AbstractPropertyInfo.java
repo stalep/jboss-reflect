@@ -28,6 +28,7 @@ import org.jboss.beans.info.spi.PropertyInfo;
 import org.jboss.reflect.plugins.AnnotationHolder;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.util.JBossStringBuilder;
 
 /**
@@ -141,6 +142,11 @@ public abstract class AbstractPropertyInfo extends AnnotationHolder
    public void setType(TypeInfo type)
    {
       this.type = type;
+   }
+
+   public FieldInfo getFieldInfo()
+   {
+      return null;
    }
 
    @Override

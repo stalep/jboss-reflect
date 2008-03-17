@@ -99,6 +99,11 @@ public class FieldPropertyInfo extends AbstractPropertyInfo
       field.set(bean, value);
    }
 
+   public FieldInfo getFieldInfo()
+   {
+      return field;
+   }
+
    @Override
    public boolean equals(Object object)
    {

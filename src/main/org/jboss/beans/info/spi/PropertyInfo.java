@@ -24,6 +24,7 @@ package org.jboss.beans.info.spi;
 import org.jboss.reflect.spi.AnnotatedInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
+import org.jboss.reflect.spi.FieldInfo;
 
 /**
  * Description of a property.
@@ -120,4 +121,13 @@ public interface PropertyInfo extends AnnotatedInfo
     * @throws Throwable for any error
     */
    void set(Object bean, Object value) throws Throwable;
+
+   /**
+    * Get the field info
+    * in case impl uses field to
+    * handle property ops.
+    *
+    * @return the field info or null if no such info available
+    */
+   FieldInfo getFieldInfo();
 }
