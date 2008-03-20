@@ -22,8 +22,10 @@
 package org.jboss.test.beaninfo.support;
 
 /**
+ * @param <T> blah
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
+@SuppressWarnings("unchecked")
 public class PubMixNestedBean<T extends PubMixNestedBean> implements SetGetHook<T>
 {
    public T bean;

@@ -84,6 +84,7 @@ public class BeanInfoUtilTestCase extends AbstractBeanInfoTest
       }
    }
 
+   @SuppressWarnings("unchecked")
    public void testSimpleGet() throws Throwable
    {
       checkSimpleGet(NestedBean.class, BeanAccessMode.STANDARD);
@@ -133,6 +134,7 @@ public class BeanInfoUtilTestCase extends AbstractBeanInfoTest
       }
    }
 
+   @SuppressWarnings("unchecked")
    public void testSimpleSet() throws Throwable
    {
       checkSimpleSet(NestedBean.class, BeanAccessMode.STANDARD);
@@ -183,6 +185,7 @@ public class BeanInfoUtilTestCase extends AbstractBeanInfoTest
       }
    }
 
+   @SuppressWarnings("unchecked")
    public void testNestedGet() throws Throwable
    {
       checkNestedGet(NestedBean.class, BeanAccessMode.STANDARD);
@@ -235,6 +238,7 @@ public class BeanInfoUtilTestCase extends AbstractBeanInfoTest
       }
    }
 
+   @SuppressWarnings("unchecked")
    public void testNestedSet() throws Throwable
    {
       checkNestedSet(NestedBean.class, BeanAccessMode.STANDARD);
@@ -282,6 +286,7 @@ public class BeanInfoUtilTestCase extends AbstractBeanInfoTest
       }
    }
 
+   @SuppressWarnings("unchecked")
    public void testNestedGetFail() throws Throwable
    {
       checkNestedGetFail(NestedBean.class, BeanAccessMode.STANDARD);
@@ -327,6 +332,7 @@ public class BeanInfoUtilTestCase extends AbstractBeanInfoTest
       }
    }
 
+   @SuppressWarnings("unchecked")
    public void testNestedSetFail() throws Throwable
    {
       checkNestedSetFail(NestedBean.class, BeanAccessMode.STANDARD);

@@ -30,8 +30,11 @@ import java.util.Date;
  */
 public class BeanInfoFields
 {
+   @SuppressWarnings("unused")
    private String stringPrivate;
+   @SuppressWarnings("unused")
    private Date datePrivate;
+   @SuppressWarnings("unused")
    private long longPrivate;
    protected String stringProt;
    protected Date dateProt;

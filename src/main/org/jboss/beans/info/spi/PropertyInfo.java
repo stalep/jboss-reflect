@@ -93,14 +93,14 @@ public interface PropertyInfo extends AnnotatedInfo
    /**
     * Is property readable.
     *
-    * @return
+    * @return true if the property is readable
     */
    boolean isReadable();
 
    /**
     * Is property writable.
     *
-    * @return
+    * @return true if the property is writable
     */
    boolean isWritable();
 
