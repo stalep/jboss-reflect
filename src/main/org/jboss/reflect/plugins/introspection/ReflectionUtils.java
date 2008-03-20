@@ -237,7 +237,7 @@ public class ReflectionUtils
    {
       Method method = findMethod(clazz, name, parameterTypes);
       if (method == null)
-         throw new NoSuchMethodException(clazz + "." + name + " - " +  arrayInfo(parameterTypes));
+         throw new NoSuchMethodException(clazz + "." + name + " - " +  arrayInfo((Object[]) parameterTypes));
       return method;
    }
 
@@ -315,7 +315,7 @@ public class ReflectionUtils
    {
       Constructor<?> constructor = findConstructor(clazz, parameterTypes);
       if (constructor == null)
-         throw new NoSuchMethodException(clazz + " - " + arrayInfo(parameterTypes));
+         throw new NoSuchMethodException(clazz + " - " + arrayInfo((Object[]) parameterTypes));
       return constructor;
    }
 

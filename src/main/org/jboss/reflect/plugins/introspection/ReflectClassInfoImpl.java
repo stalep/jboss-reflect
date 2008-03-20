@@ -67,11 +67,13 @@ public class ReflectClassInfoImpl extends ClassInfoImpl implements InterfaceInfo
       super(name, modifiers, interfaces, superclass);
    }
 
+   @SuppressWarnings("deprecation")
    public boolean isInterface()
    {
       return getType().isInterface();
    }
 
+   @SuppressWarnings("deprecation")
    Object readResolve()
    {
       TypeInfoFactory typeInfoFactory = IntrospectionTypeInfoFactory.getDelegate();

@@ -114,6 +114,7 @@ public class ReflectConstructorInfoImpl extends ConstructorInfoImpl
     * @throws ClassNotFoundException cnf error
     * @throws NoSuchMethodException no such method error
     */
+   @SuppressWarnings("deprecation")
    private void readObject(ObjectInputStream oistream)
          throws IOException, ClassNotFoundException, NoSuchMethodException
    {

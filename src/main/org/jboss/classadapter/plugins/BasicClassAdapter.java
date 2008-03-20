@@ -64,6 +64,7 @@ public class BasicClassAdapter extends JBossObject implements ClassAdapter
       return builder.createJoinpointFactory(classInfo);
    }
 
+   @SuppressWarnings("deprecation")
    public ClassLoader getClassLoader()
    {
       return classInfo.getType().getClassLoader();

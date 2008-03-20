@@ -527,6 +527,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return classInfoHelper.getTypeInfo(arrayClass);
    }
 
+   @SuppressWarnings("deprecation")
    public Object newArrayInstance(int size) throws Throwable
    {
       if (isArray() == false)
@@ -534,6 +535,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return Array.newInstance(getComponentType().getType(), size);
    }
 
+   @SuppressWarnings("deprecation")
    public boolean isAssignableFrom(TypeInfo info)
    {
       if (info == null)

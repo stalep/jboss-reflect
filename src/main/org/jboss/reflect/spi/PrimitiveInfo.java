@@ -265,7 +265,7 @@ public class PrimitiveInfo extends AbstractTypeInfo
       throw new UnsupportedOperationException("Not an array " + name);
    }
 
-   @SuppressWarnings("unchecked")
+   @SuppressWarnings({"unchecked", "deprecation"})
    public boolean isAssignableFrom(TypeInfo info)
    {
       if (info == this)

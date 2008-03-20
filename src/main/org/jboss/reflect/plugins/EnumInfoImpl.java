@@ -83,7 +83,7 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
       return constants.get(name);
    }
 
-   @SuppressWarnings("unchecked")
+   @SuppressWarnings({"unchecked", "deprecation"})
    public Object getEnumValue(String name)
    {
       return Enum.valueOf((Class<Enum>) getType(), name);

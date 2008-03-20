@@ -368,6 +368,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return factory.getTypeInfo(arrayClass);
    }
 
+   @SuppressWarnings("deprecation")
    public Object newArrayInstance(int size) throws Throwable
    {
       if (isArray() == false)
@@ -375,6 +376,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return Array.newInstance(getComponentType().getType(), size);
    }
 
+   @SuppressWarnings("deprecation")
    public boolean isAssignableFrom(TypeInfo info)
    {
       if (info == null)

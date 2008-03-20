@@ -128,6 +128,7 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
     * @throws ClassNotFoundException cnf error
     * @throws NoSuchFieldException no such field error
     */
+   @SuppressWarnings("deprecation")
    private void readObject(ObjectInputStream oistream)
          throws IOException, ClassNotFoundException, NoSuchFieldException
    {

@@ -291,7 +291,7 @@ public abstract class ClassInfoGenericClassTest extends AbstractClassInfoTest
    
    private void assertComponentType(String methodName, Class<?> expected) throws Exception
    {
-      Method method = ClassInfoGenericClassTest.class.getMethod(methodName, null);
+      Method method = ClassInfoGenericClassTest.class.getMethod(methodName, (Class[]) null);
       Type type = method.getGenericReturnType();
       assertComponentType(type, expected);
    }
@@ -309,7 +309,7 @@ public abstract class ClassInfoGenericClassTest extends AbstractClassInfoTest
    
    private void assertKeyValueType(String methodName, Class<?> keyExpected, Class<?> valueExpected) throws Exception
    {
-      Method method = ClassInfoGenericClassTest.class.getMethod(methodName, null);
+      Method method = ClassInfoGenericClassTest.class.getMethod(methodName, (Class[]) null);
       Type type = method.getGenericReturnType();
       assertKeyValueType(type, keyExpected, valueExpected);
    }

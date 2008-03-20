@@ -63,6 +63,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       super(name);
    }
    
+   @SuppressWarnings("deprecation")
    protected TypeInfo testBasics(Class<?> clazz, TypeInfo expected) throws Throwable
    {
       TypeInfoFactory factory = getTypeInfoFactory();
@@ -101,6 +102,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       return (getClass().getName().contains("Javassist"));  
    }
 
+   @SuppressWarnings("deprecation")
    protected void testArray(Class<?> clazz, TypeInfo info) throws Throwable
    {
       TypeInfo arrayType = info.getArrayType();

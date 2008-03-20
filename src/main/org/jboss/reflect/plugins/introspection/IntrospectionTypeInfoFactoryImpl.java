@@ -79,6 +79,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       // Everything is done lazily
    }
 
+   @SuppressWarnings("deprecation")
    public ClassInfoImpl getSuperClass(ClassInfoImpl classInfo)
    {
       Class<?> clazz = classInfo.getType();
@@ -92,6 +93,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return superType;
    }
 
+   @SuppressWarnings("deprecation")
    public ClassInfo getGenericSuperClass(ClassInfoImpl classInfo)
    {
       Class<?> clazz = classInfo.getType();
@@ -134,6 +136,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return AnnotationValueFactory.createAnnotationValue(this, this, info, ann);
    }
 
+   @SuppressWarnings("deprecation")
    public ConstructorInfoImpl[] getConstructors(ClassInfoImpl classInfo)
    {
       Class<?> clazz = classInfo.getType();
@@ -164,6 +167,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return infos;
    }
 
+   @SuppressWarnings("deprecation")
    public FieldInfoImpl[] getFields(ClassInfoImpl classInfo)
    {
       Class<?> clazz = classInfo.getType();
@@ -182,6 +186,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return infos;
    }
 
+   @SuppressWarnings("deprecation")
    public MethodInfoImpl[] getMethods(ClassInfoImpl classInfo)
    {
       Class<?> clazz = classInfo.getType();
@@ -199,6 +204,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return infos;
    }
 
+   @SuppressWarnings("deprecation")
    public InterfaceInfo[] getInterfaces(ClassInfoImpl classInfo)
    {
       Class<?> clazz = classInfo.getType();
@@ -213,6 +219,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return infos;
    }
 
+   @SuppressWarnings("deprecation")
    public InterfaceInfo[] getGenericInterfaces(ClassInfoImpl classInfo)
    {
       Class<?> clazz = classInfo.getType();
@@ -227,6 +234,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return infos;
    }
 
+   @SuppressWarnings("deprecation")
    public PackageInfoImpl getPackage(ClassInfoImpl classInfo)
    {
       Class<?> clazz = classInfo.getType();
@@ -568,6 +576,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return findActualType(classInfo, Map.class, 1);
    }
 
+   @SuppressWarnings("deprecation")
    protected TypeInfo findActualType(ClassInfo classInfo, Class<?> reference, int parameter)
    {
       Type type = classInfo.getType();
