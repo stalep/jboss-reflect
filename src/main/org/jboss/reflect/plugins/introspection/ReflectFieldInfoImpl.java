@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.ReflectPermission;
+import java.security.AccessController;
 import java.security.Permission;
+import java.security.PrivilegedAction;
 
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.spi.AnnotationValue;
@@ -80,7 +82,7 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
    {
       this.field = field;
       if (isPublic() == false && field != null)
-         field.setAccessible(true);
+         setAccessible();
    }
 
    /**
@@ -131,5 +133,29 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
    {
       oistream.defaultReadObject();
       setField(ReflectionUtils.findExactField(getDeclaringClass().getType(), name));
+   }
+
+   /**
+    * Set field accessible to true
+    */
+   private void setAccessible()
+   {
+      SecurityManager sm = System.getSecurityManager();
+      if (sm == null)
+         field.setAccessible(true);
+      else
+         AccessController.doPrivileged(new SetAccessible());
+   }
+
+   /**
+    * Set accessible privileged block
+    */
+   private class SetAccessible implements PrivilegedAction<Object>
+   {
+      public Object run()
+      {
+         field.setAccessible(true);
+         return null;
+      }
    }
 }
