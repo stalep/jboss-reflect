@@ -7,15 +7,15 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>jboss-reflect</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>2.0.0.Beta12</version>
   <packaging>jar</packaging>
   <name>JBoss Reflection</name>
   <url>http://www.jboss.com/products/jbossmc</url>
   <description>JBoss Reflection</description>
   <scm>
-    <connection>scm:svn:http://anonsvn.jboss.org/repos/jbossas/projects/jboss-reflect/trunk/</connection>
-    <developerConnection>scm:svn:https://svn.jboss.org/repos/jbossas/projects/jboss-reflect/trunk/</developerConnection>
-    <url>http://viewvc.jboss.org/cgi-bin/viewvc.cgi/jbossas/projects/jboss-reflect/trunk/</url>
+    <connection>scm:svn:http://anonsvn.jboss.org/repos/jbossas/projects/jboss-reflect/tags/2.0.0.Beta12</connection>
+    <developerConnection>scm:svn:https://svn.jboss.org/repos/jbossas/projects/jboss-reflect/tags/2.0.0.Beta12</developerConnection>
+    <url>http://viewvc.jboss.org/cgi-bin/viewvc.cgi/jbossas/projects/jboss-reflect/tags/2.0.0.Beta12</url>
   </scm>
 
   <build>
