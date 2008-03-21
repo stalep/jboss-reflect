@@ -24,6 +24,7 @@ package org.jboss.reflect.plugins.introspection;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ReflectPermission;
 import java.security.AccessController;
 import java.security.Permission;
@@ -80,6 +81,7 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
     */
    public void setField(Field field)
    {
+      accessCheck(Modifier.isPublic(field.getModifiers()));
       this.field = field;
       if (isPublic() == false && field != null)
          setAccessible();
@@ -92,15 +94,26 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
     */
    public Field getField()
    {
+      accessCheck();
       return field;
    }
 
    /**
     * Check access permission.
     */
-   protected void accessCheck()
+   protected final void accessCheck() // final because we don't want subclasses to disable it
    {
-      if (isPublic() == false)
+      accessCheck(isPublic());
+   }
+
+   /**
+    * Check access permission.
+    * 
+    * @param isPublic whether the field is public
+    */
+   protected final void accessCheck(final boolean isPublic) // final because we don't want subclasses to disable it
+   {
+      if (isPublic == false)
       {
          SecurityManager sm = System.getSecurityManager();
          if (sm != null)

@@ -25,8 +25,7 @@ import java.lang.reflect.Field;
 import java.security.AccessControlException;
 
 import junit.framework.Test;
-import org.jboss.beans.info.spi.BeanAccessMode;
-import org.jboss.beans.info.spi.BeanInfo;
+
 import org.jboss.config.plugins.BasicConfiguration;
 import org.jboss.config.spi.Configuration;
 import org.jboss.reflect.plugins.introspection.ReflectFieldInfoImpl;
@@ -76,19 +75,6 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       return delegate;
    }
 
-   protected BeanInfo getBeanInfo(Class<?> clazz, BeanAccessMode mode)
-   {
-      SecurityManager sm = suspendSecurity();
-      try
-      {
-         return configuration.getBeanInfo(clazz, mode);
-      }
-      finally
-      {
-         resumeSecurity(sm);
-      }
-   }
-
    protected ClassInfo getClassInfo(Class<?> clazz)
    {
       SecurityManager sm = suspendSecurity();
@@ -130,11 +116,25 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
          assertInstanceOf(t, IllegalAccessException.class);
       }
 
-      impl.setField(field); // So I'll use this hole
-      field = impl.getField(); // This should have an access check
-      // why does this work?!?
-      field.set(tester, "foobar");
-      assertEquals("foobar", tester.getPrivString());
+      try
+      {
+         impl.setField(field);
+         fail("Should not be here");
+      }
+      catch (Throwable t)
+      {
+         checkThrowable(AccessControlException.class, t);
+      }
+      try
+      {
+         field.set(tester, "foobar");
+         fail("Should not be here");
+      }
+      catch (Throwable t)
+      {
+         checkThrowable(IllegalAccessException.class, t);
+      }
+      assertNull("foobar", tester.getPrivString());
 
       Runnable runnable = new Runnable()
       {
@@ -155,13 +155,11 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       other.start();
       other.join();
       // we should get an error here
-/*
       assertNotNull("Should get access restriction exception.", other.getError());
       RuntimeException re = assertInstanceOf(other.getError(), RuntimeException.class);
       Throwable cause = re.getCause();
       assertNotNull(cause);
       assertInstanceOf(cause, AccessControlException.class, false);
-*/
    }
 
    public void testFieldAccessFromOther() throws Throwable
@@ -172,9 +170,31 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       FieldInfo pub = classInfo.getDeclaredField("pubString");
       assertNotNull(pub);
       final FieldInfo pri = classInfo.getDeclaredField("privString");
+
+      // Shouldn't be able to set the private field
       try
       {
          pri.set(tester, "foobar");
+         fail("Should not be here.");
+      }
+      catch (Throwable t)
+      {
+         assertInstanceOf(t, AccessControlException.class);
+      }
+      // Shouldn't be able to get the private field
+      try
+      {
+         pri.get(tester);
+         fail("Should not be here.");
+      }
+      catch (Throwable t)
+      {
+         assertInstanceOf(t, AccessControlException.class);
+      }
+      // Shouldn't be able to steal the private field which has setAccessible(true)
+      try
+      {
+         ((ReflectFieldInfoImpl) pri).getField();
          fail("Should not be here.");
       }
       catch (Throwable t)

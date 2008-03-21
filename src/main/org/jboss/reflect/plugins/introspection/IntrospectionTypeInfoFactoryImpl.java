@@ -168,22 +168,28 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
    }
 
    @SuppressWarnings("deprecation")
-   public FieldInfoImpl[] getFields(ClassInfoImpl classInfo)
+   public FieldInfoImpl[] getFields(final ClassInfoImpl classInfo)
    {
-      Class<?> clazz = classInfo.getType();
-      Field[] fields = getDeclaredFields(clazz);
-      if (fields == null || fields.length == 0)
-         return null;
-
-      ReflectFieldInfoImpl[] infos = new ReflectFieldInfoImpl[fields.length];
-      for (int i = 0; i < fields.length; ++i)
+      return AccessController.doPrivileged(new PrivilegedAction<FieldInfoImpl[]>()
       {
-         AnnotationValue[] annotations = getAnnotations(fields[i]);
-         infos[i] = new ReflectFieldInfoImpl(annotations, fields[i].getName(), getTypeInfo(fields[i].getGenericType()), fields[i].getModifiers(), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
-         infos[i].setField(fields[i]);
-      }
+         public FieldInfoImpl[] run()
+         {
+            Class<?> clazz = classInfo.getType();
+            Field[] fields = getDeclaredFields(clazz);
+            if (fields == null || fields.length == 0)
+               return null;
 
-      return infos;
+            ReflectFieldInfoImpl[] infos = new ReflectFieldInfoImpl[fields.length];
+            for (int i = 0; i < fields.length; ++i)
+            {
+               AnnotationValue[] annotations = getAnnotations(fields[i]);
+               infos[i] = new ReflectFieldInfoImpl(annotations, fields[i].getName(), getTypeInfo(fields[i].getGenericType()), fields[i].getModifiers(), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
+               infos[i].setField(fields[i]);
+            }
+
+            return infos;
+         }
+      });
    }
 
    @SuppressWarnings("deprecation")
