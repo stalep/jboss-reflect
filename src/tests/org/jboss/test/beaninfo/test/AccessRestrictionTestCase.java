@@ -84,7 +84,7 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       beanInfo.setProperty(test, "pubString", "public");
       assertEquals("public", test.pubString);
       
-      // But we should be able to set the private field
+      // But we shouldn't be able to set the private field
       try
       {
          beanInfo.setProperty(test, "privString", "private");

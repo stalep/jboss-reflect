@@ -81,8 +81,11 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
     */
    public void setField(Field field)
    {
-      accessCheck(Modifier.isPublic(field.getModifiers()));
+      if (field != null)
+         accessCheck(Modifier.isPublic(field.getModifiers()));
+
       this.field = field;
+
       if (isPublic() == false && field != null)
          setAccessible();
    }
