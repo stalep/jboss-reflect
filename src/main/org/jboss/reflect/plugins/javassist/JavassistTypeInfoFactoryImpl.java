@@ -65,7 +65,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
     */
    public static NoClassDefFoundError raiseClassNotFound(String name, NotFoundException e) throws NoClassDefFoundError
    {
-      NoClassDefFoundError ex = new NoClassDefFoundError("Unable to find class");
+      NoClassDefFoundError ex = new NoClassDefFoundError("Unable to find class " + name);
       if (e.getCause() != null)
          ex.initCause(e.getCause()); // Hide the javassist error
       throw ex;
@@ -81,7 +81,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
     */
    public static NoClassDefFoundError raiseClassNotFound(String name, ClassNotFoundException e) throws NoClassDefFoundError
    {
-      NoClassDefFoundError ex = new NoClassDefFoundError("Unable to find class");
+      NoClassDefFoundError ex = new NoClassDefFoundError("Unable to find class " + name);
       ex.initCause(e);
       throw ex;
    }
@@ -112,7 +112,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
     */
    public static NoClassDefFoundError raiseFieldNotFound(String name, NotFoundException e) throws NoClassDefFoundError
    {
-      NoSuchFieldError ex = new NoSuchFieldError("Unable to find field");
+      NoSuchFieldError ex = new NoSuchFieldError("Unable to find field " + name);
       if (e.getCause() != null)
          ex.initCause(e.getCause()); // Hide the javassist error
       throw ex;
