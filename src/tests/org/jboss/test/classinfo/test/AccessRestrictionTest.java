@@ -21,44 +21,38 @@
 */
 package org.jboss.test.classinfo.test;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.AccessibleObject;
 import java.security.AccessControlException;
-
-import junit.framework.Test;
 
 import org.jboss.config.plugins.BasicConfiguration;
 import org.jboss.config.spi.Configuration;
-import org.jboss.reflect.plugins.introspection.ReflectFieldInfoImpl;
+import org.jboss.reflect.spi.AnnotatedInfo;
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.test.AbstractTestCaseWithSetup;
 import org.jboss.test.AbstractTestDelegate;
 import org.jboss.test.classinfo.support.ErrorHolderThread;
-import org.jboss.test.classinfo.support.FieldsClass;
 
 /**
  * Access restriction test.
  *
+ * @param <T> exact tester type
+ * @param <U> exact annotated info
+ * @param <V> exact accessible object
  * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  */
-public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
+public abstract class AccessRestrictionTest<T, U extends AnnotatedInfo, V extends AccessibleObject> extends AbstractTestCaseWithSetup
 {
    /** The bean info factory */
-   private Configuration configuration = new BasicConfiguration();
+   protected Configuration configuration = new BasicConfiguration();
 
    /**
-    * Create a new ContainerTest.
+    * Create a new AccessRestrictionTest.
     *
     * @param name the test name
     */
-   public AccessRestrictionTestCase(String name)
+   protected AccessRestrictionTest(String name)
    {
       super(name);
-   }
-
-   public static Test suite()
-   {
-      return suite(AccessRestrictionTestCase.class);
    }
 
    /**
@@ -88,17 +82,30 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       }
    }
 
+   protected abstract T getInstance();
+   protected abstract Class<T> getInstanceClass();
+   protected abstract U getInfo();
+   protected abstract U getSetAnnotatedInfo(ClassInfo info, String member);
+   protected abstract U getGetAnnotatedInfo(ClassInfo info, String member);
+   protected abstract V getAccessibleObject(String member) throws Exception;
+   protected abstract void set(U annotatedInfo, T instance, String string) throws Throwable;
+   protected abstract Object get(U annotatedInfo, T instance) throws Throwable;
+   protected abstract void set(V accessibleObject, T instance, String string) throws Exception;
+   protected abstract void set(U info, V accessibleObject);
+   protected abstract String getPrivateString(T instance);
+   protected abstract V getAccessibleObject(U info);
+
    public void testFieldAcessFromMain() throws Throwable
    {
-      final FieldsClass tester = new FieldsClass();
-      final ReflectFieldInfoImpl impl = new ReflectFieldInfoImpl();
+      final T tester = getInstance();
+      final U impl = getInfo();
 
       // I can't do setAccesible
-      Field field = FieldsClass.class.getDeclaredField("privString");
+      V accessibleObject = getAccessibleObject("privString");
       // let's try accessible
       try
       {
-         field.setAccessible(true);
+         accessibleObject.setAccessible(true);
          fail("Should not be here.");
       }
       catch (Throwable t)
@@ -108,7 +115,7 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       // ok, setAccessible not set, so set should also fail
       try
       {
-         field.set(tester, "foobar");
+         set(accessibleObject, tester, "foobar");
          fail("Should not be here.");
       }
       catch (Throwable t)
@@ -118,7 +125,7 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
 
       try
       {
-         impl.setField(field);
+         set(impl, accessibleObject);
          fail("Should not be here");
       }
       catch (Throwable t)
@@ -127,14 +134,14 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       }
       try
       {
-         field.set(tester, "foobar");
+         set(accessibleObject, tester, "foobar");
          fail("Should not be here");
       }
       catch (Throwable t)
       {
          checkThrowable(IllegalAccessException.class, t);
       }
-      assertNull("foobar", tester.getPrivString());
+      assertNull(getPrivateString(tester));
 
       Runnable runnable = new Runnable()
       {
@@ -142,8 +149,8 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
          {
             try
             {
-               Field fi = impl.getField(); // This should have an access check
-               fi.set(tester, "something"); // this should check for caller
+               V ao = getAccessibleObject(impl); // This should have an access check
+               set(ao, tester, "something"); // this should check for caller
             }
             catch (Throwable t)
             {
@@ -164,17 +171,18 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
 
    public void testFieldAccessFromOther() throws Throwable
    {
-      final FieldsClass tester = new FieldsClass();
-      ClassInfo classInfo = configuration.getClassInfo(FieldsClass.class);
+      final T tester = getInstance();
+      ClassInfo classInfo = configuration.getClassInfo(getInstanceClass());
       // we should not fail
-      FieldInfo pub = classInfo.getDeclaredField("pubString");
+      U pub = getGetAnnotatedInfo(classInfo, "pubString");
       assertNotNull(pub);
-      final FieldInfo pri = classInfo.getDeclaredField("privString");
+      final U priSet = getSetAnnotatedInfo(classInfo, "privString");
+      final U priGet = getGetAnnotatedInfo(classInfo, "privString");
 
       // Shouldn't be able to set the private field
       try
       {
-         pri.set(tester, "foobar");
+         set(priSet, tester, "foobar");
          fail("Should not be here.");
       }
       catch (Throwable t)
@@ -184,7 +192,7 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       // Shouldn't be able to get the private field
       try
       {
-         pri.get(tester);
+         get(priGet, tester);
          fail("Should not be here.");
       }
       catch (Throwable t)
@@ -194,7 +202,7 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       // Shouldn't be able to steal the private field which has setAccessible(true)
       try
       {
-         ((ReflectFieldInfoImpl) pri).getField();
+         getAccessibleObject(priGet);
          fail("Should not be here.");
       }
       catch (Throwable t)
@@ -208,7 +216,7 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
             SecurityManager sm = suspendSecurity();
             try
             {
-               pri.set(tester, "foobar");
+               set(priSet, tester, "foobar");
             }
             catch(Throwable t)
             {
@@ -220,10 +228,10 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
             }
          }
       });
-      assertNull(tester.getPrivString());
+      assertNull(getPrivateString(tester));
       other.start();
       other.join();
       assertNull(other.getError());
-      assertEquals("foobar", tester.getPrivString());
+      assertEquals("foobar", getPrivateString(tester));
    }
 }

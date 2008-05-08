@@ -23,8 +23,6 @@ package org.jboss.test.beaninfo.test;
 
 import java.security.AccessControlException;
 
-import junit.framework.Test;
-
 import org.jboss.beans.info.spi.BeanAccessMode;
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.PropertyInfo;
@@ -32,31 +30,26 @@ import org.jboss.config.plugins.BasicConfiguration;
 import org.jboss.config.spi.Configuration;
 import org.jboss.test.AbstractTestCaseWithSetup;
 import org.jboss.test.AbstractTestDelegate;
-import org.jboss.test.beaninfo.support.FieldsClass;
 
 /**
  * Access restriction test.
  *
+ * @param <T> exact tester class
  * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  */
-public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
+public abstract class AccessRestrictionTest<T> extends AbstractTestCaseWithSetup
 {
    /** The bean info factory */
    private Configuration configuration = new BasicConfiguration();
 
    /**
-    * Create a new ContainerTest.
+    * Create a new AccessRestrictionTest.
     *
     * @param name the test name
     */
-   public AccessRestrictionTestCase(String name)
+   protected AccessRestrictionTest(String name)
    {
       super(name);
-   }
-
-   public static Test suite()
-   {
-      return suite(AccessRestrictionTestCase.class);
    }
 
    /**
@@ -73,16 +66,21 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       return delegate;
    }
 
+   protected abstract T getInstance();
+   protected abstract Class<T> getInstanceClass();
+   protected abstract String getPublicString(T instance);
+   protected abstract String getPrivateString(T instance);
+
    public void testBeanFieldAccess() throws Throwable
    {
       // First try to get the Bean info without the priviledge on the private field
-      FieldsClass test = new FieldsClass();
+      T test = getInstance();
       // This should work
-      BeanInfo beanInfo = configuration.getBeanInfo(FieldsClass.class, BeanAccessMode.ALL);
+      BeanInfo beanInfo = configuration.getBeanInfo(getInstanceClass(), BeanAccessMode.ALL);
       
       // We should be able to set the public field
       beanInfo.setProperty(test, "pubString", "public");
-      assertEquals("public", test.pubString);
+      assertEquals("public", getPublicString(test));
       
       // But we shouldn't be able to set the private field
       try
@@ -103,14 +101,14 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       {
          checkThrowable(AccessControlException.class, t);
       }
-      assertNull(test.getPrivStringNotGetter());
+      assertNull(getPrivateString(test));
 
       // Repeat for the properties
       PropertyInfo pubProp = beanInfo.getProperty("pubString");
-      test = new FieldsClass();
+      test = getInstance();
       
       pubProp.set(test, "public");
-      assertEquals("public", test.pubString);
+      assertEquals("public", getPublicString(test));
       
       PropertyInfo privProp = beanInfo.getProperty("privString");
       try
@@ -131,17 +129,17 @@ public class AccessRestrictionTestCase extends AbstractTestCaseWithSetup
       {
          checkThrowable(AccessControlException.class, t);
       }
-      assertNull(test.getPrivStringNotGetter());
+      assertNull(getPrivateString(test));
       
       // Now lets disable security and check we can do what we couldn't do before
       SecurityManager sm = suspendSecurity();
       try
       {
-         test = new FieldsClass();
+         test = getInstance();
          beanInfo.setProperty(test, "privString", "private");
          assertEquals("private", beanInfo.getProperty(test, "privString"));
 
-         test = new FieldsClass();
+         test = getInstance();
          privProp.set(test, "private");
          assertEquals("private", privProp.get(test));
       }

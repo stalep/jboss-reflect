@@ -193,21 +193,27 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
    }
 
    @SuppressWarnings("deprecation")
-   public MethodInfoImpl[] getMethods(ClassInfoImpl classInfo)
+   public MethodInfoImpl[] getMethods(final ClassInfoImpl classInfo)
    {
-      Class<?> clazz = classInfo.getType();
-      Method[] methods = getDeclaredMethods(clazz);
-      if (methods == null || methods.length == 0)
-         return null;
-
-      ReflectMethodInfoImpl[] infos = new ReflectMethodInfoImpl[methods.length];
-      for (int i = 0; i < methods.length; ++i)
+      return AccessController.doPrivileged(new PrivilegedAction<MethodInfoImpl[]>()
       {
-         AnnotationValue[] annotations = getAnnotations(methods[i]);
-         infos[i] = new ReflectMethodInfoImpl(annotations, methods[i].getName(), getTypeInfo(methods[i].getGenericReturnType()), getTypeInfos(methods[i].getGenericParameterTypes()), getParameterAnnotations(methods[i].getParameterAnnotations()), getClassInfos(methods[i].getGenericExceptionTypes()), methods[i].getModifiers(), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
-         infos[i].setMethod(methods[i]);
-      }
-      return infos;
+         public MethodInfoImpl[] run()
+         {
+            Class<?> clazz = classInfo.getType();
+            Method[] methods = getDeclaredMethods(clazz);
+            if (methods == null || methods.length == 0)
+               return null;
+
+            ReflectMethodInfoImpl[] infos = new ReflectMethodInfoImpl[methods.length];
+            for (int i = 0; i < methods.length; ++i)
+            {
+               AnnotationValue[] annotations = getAnnotations(methods[i]);
+               infos[i] = new ReflectMethodInfoImpl(annotations, methods[i].getName(), getTypeInfo(methods[i].getGenericReturnType()), getTypeInfos(methods[i].getGenericParameterTypes()), getParameterAnnotations(methods[i].getParameterAnnotations()), getClassInfos(methods[i].getGenericExceptionTypes()), methods[i].getModifiers(), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
+               infos[i].setMethod(methods[i]);
+            }
+            return infos;
+         }
+      });
    }
 
    @SuppressWarnings("deprecation")

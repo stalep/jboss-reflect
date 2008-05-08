@@ -24,6 +24,11 @@ package org.jboss.reflect.plugins.introspection;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
+import java.lang.reflect.ReflectPermission;
+import java.lang.reflect.Modifier;
+import java.security.Permission;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import org.jboss.reflect.plugins.MethodInfoImpl;
 import org.jboss.reflect.spi.AnnotationValue;
@@ -36,12 +41,16 @@ import org.jboss.reflect.spi.TypeInfo;
  *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
+ * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class ReflectMethodInfoImpl extends MethodInfoImpl
 {
    /** The serialVersionUID */
    private static final long serialVersionUID = 2;
    
+   /** The permission */
+   private static Permission accessCheck = new ReflectPermission("suppressAccessChecks");
+
    /** The method */
    protected transient Method method;
 
@@ -92,7 +101,13 @@ public class ReflectMethodInfoImpl extends MethodInfoImpl
     */
    public void setMethod(Method method)
    {
+      if (method != null)
+         accessCheck(Modifier.isPublic(method.getModifiers()));
+
       this.method = method;
+
+      if (isPublic() == false && method != null)
+         setAccessible();
    }
 
    /**
@@ -102,11 +117,36 @@ public class ReflectMethodInfoImpl extends MethodInfoImpl
     */
    public Method getMethod()
    {
+      accessCheck();
       return method;
    }
    
+   /**
+    * Check access permission.
+    */
+   protected final void accessCheck() // final because we don't want subclasses to disable it
+   {
+      accessCheck(isPublic());
+   }
+
+   /**
+    * Check access permission.
+    *
+    * @param isPublic whether the field is public
+    */
+   protected final void accessCheck(final boolean isPublic) // final because we don't want subclasses to disable it
+   {
+      if (isPublic == false)
+      {
+         SecurityManager sm = System.getSecurityManager();
+         if (sm != null)
+            sm.checkPermission(accessCheck);
+      }
+   }
+
    public Object invoke(Object target, Object[] args) throws Throwable
    {
+      accessCheck();
       return ReflectionUtils.invoke(method, target, args);
    }
 
@@ -128,5 +168,29 @@ public class ReflectMethodInfoImpl extends MethodInfoImpl
       for(int i = 0; i < length; i++)
          classes[i] = parameterTypes[i].getType();
       method = ReflectionUtils.findExactMethod(getDeclaringClass().getType(), name, classes);
+   }
+
+   /**
+    * Set field accessible to true
+    */
+   private void setAccessible()
+   {
+      SecurityManager sm = System.getSecurityManager();
+      if (sm == null)
+         method.setAccessible(true);
+      else
+         AccessController.doPrivileged(new SetAccessible());
+   }
+
+   /**
+    * Set accessible privileged block
+    */
+   private class SetAccessible implements PrivilegedAction<Object>
+   {
+      public Object run()
+      {
+         method.setAccessible(true);
+         return null;
+      }
    }
 }
