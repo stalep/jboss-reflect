@@ -24,9 +24,11 @@ package org.jboss.reflect.plugins.introspection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.jboss.util.Strings;
 
@@ -34,10 +36,33 @@ import org.jboss.util.Strings;
  * ReflectionUtils.
  * 
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  * @version $Revision$
  */
 public class ReflectionUtils
 {
+   /**
+    * Check if member and target are ok.
+    *
+    * @param target the target
+    * @param member the member
+    * @param memberType member type info
+    * @throws Throwable for any error
+    */
+   protected static void checkMember(Object target, Member member, String memberType) throws Throwable
+   {
+      if (member == null)
+         throw new IllegalArgumentException("Null " + memberType);
+
+      if (target != null)
+      {
+         Class<?> declaringClass = member.getDeclaringClass();
+         if (declaringClass.isInstance(target) == false)
+            throw new IllegalArgumentException("Target (" + Strings.defaultToString(target) + ") doesn't match " + memberType + " 's (" + member + ") declaring class.");
+      }
+
+   }
+
    /**
     * Invoke on a method
     * 
@@ -49,8 +74,8 @@ public class ReflectionUtils
     */
    public static Object invoke(Method method, Object target, Object[] arguments) throws Throwable
    {
-      if (method == null)
-         throw new IllegalArgumentException("Null method");
+      checkMember(target, method, "method");
+
       try
       {
          return method.invoke(target, arguments);
@@ -72,6 +97,7 @@ public class ReflectionUtils
    {
       if (clazz == null)
          throw new IllegalArgumentException("Null clazz");
+
       try
       {
          return clazz.newInstance();
@@ -96,6 +122,7 @@ public class ReflectionUtils
          throw new IllegalArgumentException("Null class name");
       if (cl == null)
          throw new IllegalArgumentException("Null classloader");
+
       Class<?> clazz = Class.forName(className, false, cl);
       try
       {
@@ -132,6 +159,7 @@ public class ReflectionUtils
    {
       if (constructor == null)
          throw new IllegalArgumentException("Null constructor");
+
       try
       {
          return constructor.newInstance(arguments);
@@ -152,15 +180,15 @@ public class ReflectionUtils
     */
    public static Object getField(Field field, Object target) throws Throwable
    {
-      if (field == null)
-         throw new IllegalArgumentException("Null field");
+      checkMember(target, field, "field");
+
       try
       {
          return field.get(target);
       }
       catch (Throwable t)
       {
-         throw handleErrors("set", field, target, null, t);
+         throw handleErrors("get", field, target, null, t);
       }
    }
 
@@ -175,8 +203,8 @@ public class ReflectionUtils
     */
    public static Object setField(Field field, Object target, Object value) throws Throwable
    {
-      if (field == null)
-         throw new IllegalArgumentException("Null field");
+      checkMember(target, field, "field");
+
       try
       {
          field.set(target, value);
@@ -238,6 +266,7 @@ public class ReflectionUtils
       Method method = findMethod(clazz, name, parameterTypes);
       if (method == null)
          throw new NoSuchMethodException(clazz + "." + name + " - " +  arrayInfo((Object[]) parameterTypes));
+
       return method;
    }
 
@@ -277,6 +306,7 @@ public class ReflectionUtils
       Field field = findField(clazz, name);
       if (field == null)
          throw new NoSuchFieldException(clazz + "." + name);
+
       return field;
    }
 
@@ -316,6 +346,7 @@ public class ReflectionUtils
       Constructor<?> constructor = findConstructor(clazz, parameterTypes);
       if (constructor == null)
          throw new NoSuchMethodException(clazz + " - " + arrayInfo((Object[]) parameterTypes));
+
       return constructor;
    }
 
@@ -336,13 +367,14 @@ public class ReflectionUtils
       {
          if (target == null)
             throw new IllegalArgumentException("Null target for " + context);
-         ArrayList<String> expected = new ArrayList<String>();
+
+         List<String> expected = new ArrayList<String>();
          if (parameters != null)
          {
             for (int i = 0; i < parameters.length; ++i)
                expected.add(parameters[i].getName());
          }
-         ArrayList<String> actual = new ArrayList<String>();
+         List<String> actual = new ArrayList<String>();
          if (arguments != null)
          {
             for (int i = 0; i < arguments.length; ++i)
