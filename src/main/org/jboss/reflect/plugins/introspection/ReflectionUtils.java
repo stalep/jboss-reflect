@@ -24,7 +24,6 @@ package org.jboss.reflect.plugins.introspection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,28 +41,6 @@ import org.jboss.util.Strings;
 public class ReflectionUtils
 {
    /**
-    * Check if member and target are ok.
-    *
-    * @param target the target
-    * @param member the member
-    * @param memberType member type info
-    * @throws Throwable for any error
-    */
-   protected static void checkMember(Object target, Member member, String memberType) throws Throwable
-   {
-      if (member == null)
-         throw new IllegalArgumentException("Null " + memberType);
-
-      if (target != null)
-      {
-         Class<?> declaringClass = member.getDeclaringClass();
-         if (declaringClass.isInstance(target) == false)
-            throw new IllegalArgumentException("Target (" + Strings.defaultToString(target) + ") doesn't match " + memberType + " 's (" + member + ") declaring class.");
-      }
-
-   }
-
-   /**
     * Invoke on a method
     * 
     * @param method the method
@@ -74,7 +51,8 @@ public class ReflectionUtils
     */
    public static Object invoke(Method method, Object target, Object[] arguments) throws Throwable
    {
-      checkMember(target, method, "method");
+      if (method == null)
+         throw new IllegalArgumentException("Null method");
 
       try
       {
@@ -82,6 +60,12 @@ public class ReflectionUtils
       }
       catch (Throwable t)
       {
+         if (target != null && t instanceof IllegalArgumentException)
+         {
+            Class<?> clazz = method.getDeclaringClass();
+            if (clazz.isInstance(target) == false)
+               throw new IllegalArgumentException("Wrong target. " + target.getClass().getName() + " is not a " + clazz.getName());
+         }
          throw handleErrors(method.getName(), Strings.defaultToString(target), method.getParameterTypes(), arguments, t);
       }
    }
@@ -180,7 +164,8 @@ public class ReflectionUtils
     */
    public static Object getField(Field field, Object target) throws Throwable
    {
-      checkMember(target, field, "field");
+      if (field == null)
+         throw new IllegalArgumentException("Null field");
 
       try
       {
@@ -203,7 +188,8 @@ public class ReflectionUtils
     */
    public static Object setField(Field field, Object target, Object value) throws Throwable
    {
-      checkMember(target, field, "field");
+      if (field == null)
+         throw new IllegalArgumentException("Null field");
 
       try
       {
@@ -371,18 +357,18 @@ public class ReflectionUtils
          List<String> expected = new ArrayList<String>();
          if (parameters != null)
          {
-            for (int i = 0; i < parameters.length; ++i)
-               expected.add(parameters[i].getName());
+            for (Class<?> parameter : parameters)
+               expected.add(parameter.getName());
          }
          List<String> actual = new ArrayList<String>();
          if (arguments != null)
          {
-            for (int i = 0; i < arguments.length; ++i)
+            for (Object argument : arguments)
             {
-               if (arguments[i] == null)
+               if (argument == null)
                   actual.add(null);
                else
-                  actual.add(arguments[i].getClass().getName());
+                  actual.add(argument.getClass().getName());
             }
          }
          throw new IllegalArgumentException("Wrong arguments. " + context + " for target " + target + " expected=" + expected + " actual=" + actual);
@@ -409,6 +395,10 @@ public class ReflectionUtils
    {
       if (t instanceof IllegalArgumentException)
       {
+         Class<?> clazz = field.getDeclaringClass();
+         if (clazz.isInstance(target) == false)
+            throw new IllegalArgumentException("Wrong target. " + target.getClass().getName() + " is not a " + clazz.getName());
+
          String valueType = null;
          if (value != null)
             valueType = value.getClass().getName();
