@@ -263,9 +263,12 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       NumberInfo number = NumberInfo.valueOf(clazz.getName());
       if (number != null)
       {
-         if (number.isInitialized() == false)
+         synchronized (number)
          {
-            number.setDelegate((TypeInfo) get(clazz));
+            if (number.isInitialized() == false)
+            {
+               number.setDelegate((TypeInfo) get(clazz));
+            }
          }
          return number;
       }
@@ -287,9 +290,12 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       NumberInfo number = NumberInfo.valueOf(name);
       if (number != null)
       {
-         if (number.isInitialized() == false)
+         synchronized (number)
          {
-            number.setDelegate((TypeInfo) get(Class.forName(name, false, cl)));
+            if (number.isInitialized() == false)
+            {
+               number.setDelegate((TypeInfo) get(Class.forName(name, false, cl)));
+            }
          }
          return number;
       }

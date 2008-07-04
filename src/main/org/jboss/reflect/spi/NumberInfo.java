@@ -26,7 +26,6 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.jboss.util.JBossStringBuilder;
 
@@ -63,9 +62,6 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
 
    /** The atomic long info */
    public static final NumberInfo ATOMIC_LONG = new NumberInfo(7, AtomicLong.class);
-
-   /** The lock */
-   private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
    /** The primitives */
    private static final NumberInfo[] values = {
@@ -133,15 +129,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       if (info instanceof NumberInfo)
          throw new IllegalArgumentException("Cannot be delegate to itself: " + info);
 
-      lock.writeLock().lock();
-      try
-      {
-         delegate = (ClassInfo) info;
-      }
-      finally
-      {
-         lock.writeLock().unlock();
-      }
+      delegate = (ClassInfo) info;
    }
 
    /**
@@ -151,15 +139,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
     */
    public boolean isInitialized()
    {
-      lock.readLock().lock();
-      try
-      {
-         return (delegate != null);
-      }
-      finally
-      {
-         lock.readLock().unlock();
-      }
+      return (delegate != null);
    }
 
    @Override
