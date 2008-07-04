@@ -142,6 +142,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
          throw new IllegalArgumentException("Cannot be delegate to itself: " + info);
 
       delegate = (ClassInfo) info;
+      phase = Phase.COMPLETE;
    }
 
    /**
