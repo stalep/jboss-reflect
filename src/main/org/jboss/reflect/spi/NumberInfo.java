@@ -124,6 +124,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
    protected NumberInfo(int ordinal, Class<? extends Object> type)
    {
       super(type.getName(), ordinal, type);
+      phase = Phase.INSTANTIATED;
    }
 
    /**
