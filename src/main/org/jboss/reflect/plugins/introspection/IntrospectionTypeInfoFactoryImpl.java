@@ -302,12 +302,13 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          return primitive;
 
       NumberInfo number = NumberInfo.valueOf(clazz.getName());
-      if (number != null)
+      if (number != null && number.getPhase() != NumberInfo.Phase.INITIALIZING)
       {
          synchronized (number)
          {
-            if (number.isInitialized() == false)
+            if (number.getPhase() != NumberInfo.Phase.COMPLETE)
             {
+               number.initializing();
                number.setDelegate(get(clazz));
             }
          }
@@ -332,12 +333,13 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
             return primitive;
 
          NumberInfo number = NumberInfo.valueOf(name);
-         if (number != null)
+         if (number != null && number.getPhase() != NumberInfo.Phase.INITIALIZING)
          {
             synchronized (number)
             {
-               if (number.isInitialized() == false)
+               if (number.getPhase() != NumberInfo.Phase.COMPLETE)
                {
+                  number.initializing();
                   number.setDelegate(get(type));
                }
             }
@@ -358,12 +360,13 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          return primitive;
 
       NumberInfo number = NumberInfo.valueOf(name);
-      if (number != null)
+      if (number != null && number.getPhase() != NumberInfo.Phase.INITIALIZING)
       {
          synchronized (number)
          {
-            if (number.isInitialized() == false)
+            if (number.getPhase() != NumberInfo.Phase.COMPLETE)
             {
+               number.initializing();
                number.setDelegate(resolveComplexTypeInfo(cl, name));
             }
          }

@@ -261,13 +261,14 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          return primitive;
 
       NumberInfo number = NumberInfo.valueOf(clazz.getName());
-      if (number != null)
+      if (number != null && number.getPhase() != NumberInfo.Phase.INITIALIZING)
       {
          synchronized (number)
          {
-            if (number.isInitialized() == false)
+            if (number.getPhase() != NumberInfo.Phase.COMPLETE)
             {
-               number.setDelegate((TypeInfo) get(clazz));
+               number.initializing();
+               number.setDelegate((TypeInfo)get(clazz));
             }
          }
          return number;
@@ -288,12 +289,13 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          return primitive;
 
       NumberInfo number = NumberInfo.valueOf(name);
-      if (number != null)
+      if (number != null && number.getPhase() != NumberInfo.Phase.INITIALIZING)
       {
          synchronized (number)
          {
-            if (number.isInitialized() == false)
+            if (number.getPhase() != NumberInfo.Phase.COMPLETE)
             {
+               number.initializing();
                number.setDelegate((TypeInfo) get(Class.forName(name, false, cl)));
             }
          }

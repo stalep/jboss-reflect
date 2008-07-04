@@ -36,6 +36,16 @@ import org.jboss.util.JBossStringBuilder;
  */
 public class NumberInfo extends PrimitiveInfo implements ClassInfo
 {
+   /**
+    * The phase enum
+    */
+   public enum Phase
+   {
+      INSTANTIATED,
+      INITIALIZING,
+      COMPLETE
+   }
+
    /** serialVersionUID */
    private static final long serialVersionUID = 1L;
 
@@ -92,6 +102,8 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
 
    private transient ClassInfo delegate;
 
+   private transient Phase phase;
+
    /**
     * Get the primitive info for a type
     *
@@ -133,13 +145,21 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
    }
 
    /**
-    * Whether the delegate is initialized
-    * 
-    * @return true when there is a delegate
+    * Get the phase.
+    *
+    * @return the current phase
     */
-   public boolean isInitialized()
+   public Phase getPhase()
    {
-      return (delegate != null);
+      return phase;
+   }
+
+   /**
+    * Are we currently initializing delegate.
+    */
+   public void initializing()
+   {
+      phase = Phase.INITIALIZING;
    }
 
    @Override

@@ -69,13 +69,13 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       TypeInfoFactory factory = getTypeInfoFactory();
       getLog().debug("Using typeInfoFactory: " + factory);
       
-      TypeInfo info = factory.getTypeInfo(clazz);
+      TypeInfo info = factory.getTypeInfo(clazz.getName(), getClass().getClassLoader());
       getLog().debug("Got: " + info + " from " + clazz);
       assertNotNull(info);
       assertEquals(info, expected);
 
       ClassLoader cl = getClass().getClassLoader();
-      info = factory.getTypeInfo(clazz.getName(), getClass().getClassLoader());
+      info = factory.getTypeInfo(clazz);
       getLog().debug("Got: " + info + " from " + clazz.getName() + " cl=" + cl);
       assertNotNull(info);
       assertEquals(info, expected);
