@@ -261,17 +261,20 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          return primitive;
 
       NumberInfo number = NumberInfo.valueOf(clazz.getName());
-      if (number != null && number.getPhase() != NumberInfo.Phase.INITIALIZING)
+      if (number != null)
       {
          synchronized (number)
          {
-            if (number.getPhase() != NumberInfo.Phase.COMPLETE)
+            if (number.getPhase() != NumberInfo.Phase.INITIALIZING)
             {
-               number.initializing();
-               number.setDelegate((TypeInfo)get(clazz));
+               if (number.getPhase() != NumberInfo.Phase.COMPLETE)
+               {
+                  number.initializing();
+                  number.setDelegate((TypeInfo)get(clazz));
+               }
+               return number;
             }
          }
-         return number;
       }
 
       return (TypeInfo) get(clazz);
@@ -289,17 +292,20 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          return primitive;
 
       NumberInfo number = NumberInfo.valueOf(name);
-      if (number != null && number.getPhase() != NumberInfo.Phase.INITIALIZING)
+      if (number != null)
       {
          synchronized (number)
          {
-            if (number.getPhase() != NumberInfo.Phase.COMPLETE)
+            if (number.getPhase() != NumberInfo.Phase.INITIALIZING)
             {
-               number.initializing();
-               number.setDelegate((TypeInfo) get(Class.forName(name, false, cl)));
+               if (number.getPhase() != NumberInfo.Phase.COMPLETE)
+               {
+                  number.initializing();
+                  number.setDelegate((TypeInfo)get(Class.forName(name, false, cl)));
+               }
+               return number;
             }
          }
-         return number;
       }
 
       Class<?> clazz = Class.forName(name, false, cl);

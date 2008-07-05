@@ -302,17 +302,21 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          return primitive;
 
       NumberInfo number = NumberInfo.valueOf(clazz.getName());
-      if (number != null && number.getPhase() != NumberInfo.Phase.INITIALIZING)
+      if (number != null)
       {
          synchronized (number)
          {
-            if (number.getPhase() != NumberInfo.Phase.COMPLETE)
+            // are we (since it's our synch monitor) just initializing
+            if (number.getPhase() != NumberInfo.Phase.INITIALIZING)
             {
-               number.initializing();
-               number.setDelegate(get(clazz));
+               if (number.getPhase() != NumberInfo.Phase.COMPLETE)
+               {
+                  number.initializing();
+                  number.setDelegate(get(clazz));
+               }
+               return number;
             }
          }
-         return number;
       }
 
       return get(clazz);
@@ -333,17 +337,21 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
             return primitive;
 
          NumberInfo number = NumberInfo.valueOf(name);
-         if (number != null && number.getPhase() != NumberInfo.Phase.INITIALIZING)
+         if (number != null)
          {
             synchronized (number)
             {
-               if (number.getPhase() != NumberInfo.Phase.COMPLETE)
+               // are we (since it's our synch monitor) just initializing
+               if (number.getPhase() != NumberInfo.Phase.INITIALIZING)
                {
-                  number.initializing();
-                  number.setDelegate(get(type));
+                  if (number.getPhase() != NumberInfo.Phase.COMPLETE)
+                  {
+                     number.initializing();
+                     number.setDelegate(get(type));
+                  }
+                  return number;
                }
             }
-            return number;
          }
       }
 
@@ -360,17 +368,21 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
          return primitive;
 
       NumberInfo number = NumberInfo.valueOf(name);
-      if (number != null && number.getPhase() != NumberInfo.Phase.INITIALIZING)
+      if (number != null)
       {
          synchronized (number)
          {
-            if (number.getPhase() != NumberInfo.Phase.COMPLETE)
+            // are we (since it's our synch monitor) just initializing
+            if (number.getPhase() != NumberInfo.Phase.INITIALIZING)
             {
-               number.initializing();
-               number.setDelegate(resolveComplexTypeInfo(cl, name));
+               if (number.getPhase() != NumberInfo.Phase.COMPLETE)
+               {
+                  number.initializing();
+                  number.setDelegate(resolveComplexTypeInfo(cl, name));
+               }
+               return number;
             }
          }
-         return number;
       }
 
       return resolveComplexTypeInfo(cl, name);
