@@ -36,11 +36,13 @@ public class MethodsClass
       return privString;     
    }
 
+   @SuppressWarnings("unused")
    private String getPrivString()
    {
       return privString;
    }
 
+   @SuppressWarnings("unused")
    private void setPrivString(String privString)
    {
       this.privString = privString;

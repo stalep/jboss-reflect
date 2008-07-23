@@ -9,6 +9,6 @@
   <classpathentry kind="var" path="M2_REPO/junit/junit/4.4/junit-4.4.jar" sourcepath="M2_REPO/junit/junit/4.4/junit-4.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14.jar" sourcepath="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jboss/javassist/3.7.1.GA/javassist-3.7.1.GA.jar" sourcepath="M2_REPO/org/jboss/javassist/3.7.1.GA/javassist-3.7.1.GA-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/jboss/jboss-common-core/2.2.3.GA/jboss-common-core-2.2.3.GA.jar" sourcepath="M2_REPO/org/jboss/jboss-common-core/2.2.3.GA/jboss-common-core-2.2.3.GA-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/jboss/jboss-common-core/2.2.5.GA/jboss-common-core-2.2.5.GA.jar" sourcepath="M2_REPO/org/jboss/jboss-common-core/2.2.3.GA/jboss-common-core-2.2.5.GA-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jboss/jboss-test/1.0.5.GA/jboss-test-1.0.5.GA.jar" sourcepath="M2_REPO/org/jboss/jboss-test/1.0.5.GA/jboss-test-1.0.5.GA-sources.jar"/>
 </classpath>
