@@ -48,6 +48,16 @@ public interface JoinpointFactory
     * @throws JoinpointException when no such constructor
     */
    ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo) throws JoinpointException;
+   
+   /**
+    * Get a constructor join point
+    * 
+    * @param constructorInfo the constructor info
+    * @param metaData the metaData
+    * @return the constructor join point
+    * @throws JoinpointException when no such constructor
+    */
+   ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo, Object metaData) throws JoinpointException;
 
    /**
     * Get a field get join point

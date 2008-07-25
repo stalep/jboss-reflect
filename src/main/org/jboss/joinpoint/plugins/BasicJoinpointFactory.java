@@ -59,6 +59,11 @@ public class BasicJoinpointFactory extends JBossObject implements JoinpointFacto
       return new BasicConstructorJoinPoint(constructorInfo);
    }
 
+   public ConstructorJoinpoint getConstructorJoinpoint(ConstructorInfo constructorInfo, Object metaData) throws JoinpointException
+   {
+      return getConstructorJoinpoint(constructorInfo);
+   }
+
    public FieldGetJoinpoint getFieldGetJoinpoint(FieldInfo fieldInfo) throws JoinpointException
    {
       return new BasicFieldGetJoinPoint(fieldInfo);
