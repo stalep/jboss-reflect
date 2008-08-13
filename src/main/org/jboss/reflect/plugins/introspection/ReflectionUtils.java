@@ -227,12 +227,23 @@ public class ReflectionUtils
       if (clazz == null)
          return null;
 
-      try
+      Method[] methods = clazz.getDeclaredMethods();
+      if (methods.length != 0)
       {
-         return clazz.getDeclaredMethod(name, parameterTypes);
-      }
-      catch(Exception ignored)
-      {
+         for (Method method : methods)
+         {
+            if (method.getName().equals(name))
+            {
+               Class<?>[] methodParams = method.getParameterTypes();
+               if (methodParams.length != 0)
+               {
+                  if (Arrays.equals(methodParams, parameterTypes))
+                     return method;
+               }
+               else if (parameterTypes == null || parameterTypes.length == 0)
+                  return method;
+            }
+         }
       }
       return findMethod(clazz.getSuperclass(), name, parameterTypes);
    }
@@ -268,12 +279,14 @@ public class ReflectionUtils
       if (clazz == null)
          return null;
 
-      try
+      Field[] fields = clazz.getDeclaredFields();
+      if (fields.length != 0)
       {
-         return clazz.getDeclaredField(name);
-      }
-      catch(Exception ignored)
-      {
+         for (Field field : fields)
+         {
+            if (field.getName().equals(name))
+               return field;
+         }
       }
       return findField(clazz.getSuperclass(), name);
    }
@@ -308,12 +321,20 @@ public class ReflectionUtils
       if (clazz == null)
          return null;
 
-      try
+      Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+      if (constructors.length != 0)
       {
-         return clazz.getDeclaredConstructor(parameterTypes);
-      }
-      catch(Exception ignored)
-      {
+         for (Constructor<?> constructor : constructors)
+         {
+            Class<?>[] constructorParams = constructor.getParameterTypes();
+            if (constructorParams.length != 0)
+            {
+               if (Arrays.equals(constructorParams, parameterTypes))
+                  return constructor;
+            }
+            else if (parameterTypes == null || parameterTypes.length == 0)
+               return constructor;
+         }
       }
       return findConstructor(clazz.getSuperclass(), parameterTypes);
    }
