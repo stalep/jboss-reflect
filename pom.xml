@@ -61,14 +61,14 @@
     <dependency>
       <groupId>org.jboss</groupId>
       <artifactId>jboss-common-core</artifactId>
-      <version>2.2.7.GA</version>
+      <version>2.2.8.GA</version>
     </dependency>
     
     <!-- Test dependencies -->
     <dependency>
       <groupId>org.jboss.test</groupId>
       <artifactId>jboss-test</artifactId>
-      <version>1.1.0.GA</version>
+      <version>1.1.1.GA</version>
       <scope>test</scope>
     </dependency>
     
