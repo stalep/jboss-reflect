@@ -40,6 +40,7 @@ import org.jboss.reflect.spi.TypeInfo;
  * Config utilities.
  *
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  * @version $Revision$
  */
 public class Config
@@ -266,10 +267,10 @@ public class Config
       ConstructorInfo[] constructors = classInfo.getDeclaredConstructors();
       if (constructors != null)
       {
-         for (int i = 0; i < constructors.length; ++i)
+         for (ConstructorInfo constructor : constructors)
          {
-            if (equals(paramTypes, constructors[i].getParameterTypes()))
-               return constructors[i];
+            if (equals(paramTypes, constructor.getParameterTypes()))
+               return constructor;
          }
          throw new JoinpointException("Constructor not found " + classInfo.getName() + Arrays.asList(paramTypes) + " in " + Arrays.asList(constructors));
       }
@@ -311,10 +312,10 @@ public class Config
       FieldInfo[] fields = classInfo.getDeclaredFields();
       if (fields != null)
       {
-         for (int i = 0; i < fields.length; ++i)
+         for (FieldInfo field : fields)
          {
-            if (name.equals(fields[i].getName()))
-               return fields[i];
+            if (name.equals(field.getName()))
+               return field;
          }
       }
       return null;
@@ -415,12 +416,12 @@ public class Config
       MethodInfo[] methods = classInfo.getDeclaredMethods();
       if (methods != null)
       {
-         for (int i = 0; i < methods.length; ++i)
+         for (MethodInfo method : methods)
          {
-            if (name.equals(methods[i].getName()) &&
-                equals(paramTypes, methods[i].getParameterTypes()) &&
-                (strict == false || (methods[i].isStatic() == isStatic && methods[i].isPublic() == isPublic)))
-               return methods[i];
+            if (name.equals(method.getName()) &&
+                  equals(paramTypes, method.getParameterTypes()) &&
+                  (strict == false || (method.isStatic() == isStatic && method.isPublic() == isPublic)))
+               return method;
          }
       }
       return null;
@@ -449,17 +450,12 @@ public class Config
    /**
     * A simple null and length check.
     *
-    * @param typeNames
-    * @param typeInfos
+    * @param typeNames the type names
+    * @param typeInfos the type infos
     * @return false if either argument is null or lengths differ, else true
     */
    protected static boolean simpleCheck(String[] typeNames, TypeInfo[] typeInfos)
    {
-      if (typeNames == null || typeInfos == null)
-      {
-         return false;
-      }
-      return typeNames.length == typeInfos.length;
+      return typeNames != null && typeInfos != null && typeNames.length == typeInfos.length;
    }
-
 }
