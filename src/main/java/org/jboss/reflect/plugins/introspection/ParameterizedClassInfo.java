@@ -115,7 +115,7 @@ public class ParameterizedClassInfo extends DelegateClassInfo
    @Override
    public TypeInfo getKeyType()
    {
-      if (keyType == ClassInfoImpl.UNKNOWN_TYPE);
+      if (keyType == ClassInfoImpl.UNKNOWN_TYPE)
          keyType = factory.getKeyType(this);
       return keyType;
    }
