@@ -47,16 +47,16 @@ import org.jboss.util.collection.WeakValueHashMap;
 
 /**
  * A bean info factory.
- * 
- * @author <a href="ales.justin@jboss.com">Ales Justin</a>
+ *
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
+ * @author <a href="ales.justin@jboss.com">Ales Justin</a>
  * @version $Revision$
  */
 public class AbstractBeanInfoFactory implements BeanInfoFactory
 {
    /** The cache */
-   protected Map<ClassLoader, Map<String, Map<BeanAccessMode, BeanInfo>>> cache = new WeakHashMap<ClassLoader, Map<String, Map<BeanAccessMode, BeanInfo>>>();
-   
+   protected Map<ClassInfo, Map<BeanAccessMode, BeanInfo>> cache = new WeakHashMap<ClassInfo, Map<BeanAccessMode, BeanInfo>>();
+
    protected static boolean isGetter(MethodInfo minfo)
    {
       String name = minfo.getName();
@@ -72,7 +72,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       }
       return false;
    }
-   
+
    protected static boolean isSetter(MethodInfo minfo)
    {
       String name = minfo.getName();
@@ -85,16 +85,16 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       }
       return false;
    }
-   
+
    protected static String getUpperPropertyName(String name)
    {
       int start = 3;
       if (name.startsWith("is"))
          start = 2;
-      
+
       return name.substring(start);
    }
-   
+
    protected static String getLowerPropertyName(String name)
    {
       // If the second character is upper case then we don't make
@@ -133,20 +133,13 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
 
       synchronized (cache)
       {
-         ClassLoader cl = classAdapter.getClassLoader();
          ClassInfo classInfo = classAdapter.getClassInfo();
-         String className = classInfo.getName();
-         Map<String, Map<BeanAccessMode, BeanInfo>> map = cache.get(cl);
-         Map<BeanAccessMode, BeanInfo> modeMap = null;
-         if (map != null)
+         Map<BeanAccessMode, BeanInfo> modeMap = cache.get(classInfo);
+         if (modeMap != null)
          {
-            modeMap = map.get(className);
-            if (modeMap != null)
-            {
-               BeanInfo info = modeMap.get(accessMode);
-               if (info != null)
-                  return info;
-            }
+            BeanInfo info = modeMap.get(accessMode);
+            if (info != null)
+               return info;
          }
 
          Set<ConstructorInfo> constructors = getConstructors(classInfo);
@@ -159,15 +152,10 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          Set<EventInfo> events = getEvents(classInfo);
 
          BeanInfo result = createBeanInfo(classAdapter, accessMode, properties, constructors, methods, events);
-         if (map == null)
-         {
-            map = new WeakValueHashMap<String, Map<BeanAccessMode, BeanInfo>>();
-            cache.put(cl, map);
-         }
          if (modeMap == null)
          {
             modeMap = new WeakValueHashMap<BeanAccessMode, BeanInfo>();
-            map.put(className, modeMap);
+            cache.put(classInfo, modeMap);
          }
          modeMap.put(accessMode, result);
          return result;
@@ -176,7 +164,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
 
    /**
     * Create the bean info
-    * 
+    *
     * @param classAdapter the class adapter
     * @param accessMode the access mode
     * @param properties the properties
@@ -195,10 +183,10 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
    {
       return accessMode.create(this, classAdapter, properties, constructors, methods, events);
    }
-   
+
    /**
     * Get the constructors
-    * 
+    *
     * @param classInfo the class info
     * @return the constructors
     */
@@ -216,17 +204,17 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       }
       return result;
    }
-   
+
    /**
     * Get the methods
-    * 
+    *
     * @param classInfo the class info
     * @return the methods
     */
    protected Set<MethodInfo> getMethods(ClassInfo classInfo)
    {
       HashSet<MethodInfo> result = new HashSet<MethodInfo>();
-      
+
       while (classInfo != null)
       {
          MethodInfo[] minfos = classInfo.getDeclaredMethods();
@@ -238,16 +226,16 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
                   result.add(minfos[i]);
             }
          }
-         
+
          classInfo = classInfo.getSuperclass();
       }
-      
+
       return result;
    }
-   
+
    /**
     * Get the properties for a bean
-    * 
+    *
     * @param methods the methods
     * @return the properties
     */
@@ -303,7 +291,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
                }
             }
             String lowerName = getLowerPropertyName(name);
-            
+
             // Merge the annotations between the getters and setters
             AnnotationValue[] annotations = getter.getAnnotations();
             AnnotationValue[] setterAnnotations = null;
@@ -375,7 +363,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
 
    /**
     * Get the properties for an annotation
-    * 
+    *
     * @param methods the methods
     * @return the properties
     */
@@ -397,7 +385,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       }
       return properties;
    }
-   
+
    /**
     * Get the events
     *

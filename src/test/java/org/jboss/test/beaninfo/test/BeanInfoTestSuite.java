@@ -44,6 +44,7 @@ public class BeanInfoTestSuite extends TestSuite
 
       suite.addTest(BeanInfoUnitTestCase.suite());
       suite.addTest(BeanInfoUtilTestCase.suite());
+      suite.addTest(BeanInfoCacheTestCase.suite());
       suite.addTest(FieldAccessRestrictionTestCase.suite());
       suite.addTest(MethodAccessRestrictionTestCase.suite());
 
