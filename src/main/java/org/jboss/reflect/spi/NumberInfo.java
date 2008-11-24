@@ -335,12 +335,13 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return this;
    }
 
-   public String toShortString()
+   public void toShortString(JBossStringBuilder buffer)
    {
-      return name;
+      buffer.append(name);
    }
 
-   public void toShortString(JBossStringBuilder buffer)
+   @Override
+   protected void toString(JBossStringBuilder buffer)
    {
       buffer.append(name);
    }

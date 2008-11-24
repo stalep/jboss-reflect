@@ -268,13 +268,33 @@ public class PrimitiveInfo extends AbstractTypeInfo
    @SuppressWarnings({"unchecked", "deprecation"})
    public boolean isAssignableFrom(TypeInfo info)
    {
+      if (info == null)
+         throw new NullPointerException("Parameter info cannot be null!");
+
       if (info == this)
          return true;
 
+      return canProgress(info.getType());
+   }
+
+   @SuppressWarnings("deprecation")
+   public boolean isInstance(Object object)
+   {
+      return object != null && canProgress(object.getClass());
+   }
+
+   /**
+    * Can we progress class param to this type info.
+    *
+    * @param clazz the class to progress
+    * @return true if we can progress, false otherwise
+    */
+   protected boolean canProgress(Class<?> clazz)
+   {
       try
       {
          ProgressionConvertor pc = ProgressionConvertorFactory.getInstance().getConvertor();
-         return pc.canProgress(getType(), info.getType());
+         return pc.canProgress(getType(), clazz);
       }
       catch (Throwable throwable)
       {

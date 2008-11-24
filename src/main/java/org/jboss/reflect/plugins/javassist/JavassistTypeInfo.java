@@ -380,10 +380,15 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    public boolean isAssignableFrom(TypeInfo info)
    {
       if (info == null)
-      {
          throw new NullPointerException("Parameter info cannot be null!");
-      }
+
       return getType().isAssignableFrom(info.getType());
+   }
+
+   @SuppressWarnings("deprecation")
+   public boolean isInstance(Object object)
+   {
+      return getType().isInstance(object);
    }
 
    public TypeInfoFactory getTypeInfoFactory()

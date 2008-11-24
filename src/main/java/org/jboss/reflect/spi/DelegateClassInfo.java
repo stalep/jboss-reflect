@@ -290,6 +290,11 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
       return delegate.isAssignableFrom(info);
    }
 
+   public boolean isInstance(Object object)
+   {
+      return delegate.isInstance(object);
+   }
+
    public TypeInfo[] getActualTypeArguments()
    {
       return delegate.getActualTypeArguments();

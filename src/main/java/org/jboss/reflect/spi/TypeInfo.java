@@ -144,7 +144,7 @@ public interface TypeInfo extends Serializable
    /**
     * Mostly using
     * @see java.lang.Class#isAssignableFrom
-    * NumberInfo tests for progression
+    * PrimitiveInfo tests for progression
     *
     * @param info type info
     * @return the boolean value indicating whether objects of the
@@ -153,6 +153,16 @@ public interface TypeInfo extends Serializable
     *            null.
     */
    boolean isAssignableFrom(TypeInfo info);
+
+   /**
+    * Is object instance of this type info.
+    * @see Class#isInstance(Object)
+    * PrimitiveInfo tests for progression
+    *
+    * @param object the object to check
+    * @return  true if <code>object</code> is an instance of this class
+    */
+   boolean isInstance(Object object);
 
    /**
     * Get the TypeInfoFactory that created this type info
