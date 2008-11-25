@@ -55,7 +55,7 @@ import org.jboss.util.collection.WeakValueHashMap;
 public class AbstractBeanInfoFactory implements BeanInfoFactory
 {
    /** The cache */
-   protected Map<ClassInfo, Map<BeanAccessMode, BeanInfo>> cache = new WeakHashMap<ClassInfo, Map<BeanAccessMode, BeanInfo>>();
+   protected Map<ClassLoader, Map<ClassInfo, Map<BeanAccessMode, BeanInfo>>> cache = new WeakHashMap<ClassLoader, Map<ClassInfo, Map<BeanAccessMode, BeanInfo>>>();
 
    protected static boolean isGetter(MethodInfo minfo)
    {
@@ -133,13 +133,19 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
 
       synchronized (cache)
       {
+         ClassLoader cl = classAdapter.getClassLoader();
          ClassInfo classInfo = classAdapter.getClassInfo();
-         Map<BeanAccessMode, BeanInfo> modeMap = cache.get(classInfo);
-         if (modeMap != null)
+         Map<ClassInfo, Map<BeanAccessMode, BeanInfo>> classInfoMap = cache.get(cl);
+         Map<BeanAccessMode, BeanInfo> modeMap = null;
+         if (classInfoMap != null)
          {
-            BeanInfo info = modeMap.get(accessMode);
-            if (info != null)
-               return info;
+            modeMap = classInfoMap.get(classInfo);
+            if (modeMap != null)
+            {
+               BeanInfo info = modeMap.get(accessMode);
+               if (info != null)
+                  return info;
+            }
          }
 
          Set<ConstructorInfo> constructors = getConstructors(classInfo);
@@ -152,10 +158,15 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          Set<EventInfo> events = getEvents(classInfo);
 
          BeanInfo result = createBeanInfo(classAdapter, accessMode, properties, constructors, methods, events);
+         if (classInfoMap == null)
+         {
+            classInfoMap = new WeakHashMap<ClassInfo, Map<BeanAccessMode, BeanInfo>>();
+            cache.put(cl, classInfoMap);
+         }
          if (modeMap == null)
          {
             modeMap = new WeakValueHashMap<BeanAccessMode, BeanInfo>();
-            cache.put(classInfo, modeMap);
+            classInfoMap.put(classInfo, modeMap);
          }
          modeMap.put(accessMode, result);
          return result;

@@ -23,11 +23,14 @@ package org.jboss.test.beaninfo.test;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 import java.util.Set;
 
 import junit.framework.Test;
 import org.jboss.beans.info.spi.BeanInfo;
+import org.jboss.config.spi.Configuration;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.test.beaninfo.support.BeanInfoAnnotation;
@@ -62,6 +65,31 @@ public class BeanInfoCacheTestCase extends AbstractBeanInfoTest
       assertBeanInfoCaching("", String.class);
       assertBeanInfoCaching("", BeanInfoAnnotation.class);
       assertBeanInfoCaching("", BeanInfoEmpty.class);
+   }
+
+   public void testClassLoaderCaching() throws Throwable
+   {
+      String className = BeanInfoEmpty.class.getName();
+      Class<?> clazz = Class.forName(className);
+      URL url1 = clazz.getProtectionDomain().getCodeSource().getLocation();
+      URL[] urls =  {url1};
+      ClassLoader cl1 = new URLClassLoader(urls, null);
+
+      clazz = Class.forName(ClassInfo.class.getName());
+      URL url2 = clazz.getProtectionDomain().getCodeSource().getLocation();
+      urls = new URL[]{url1, url2};
+      ClassLoader cl2 = new URLClassLoader(urls, null);
+
+      Configuration configuration = getConfiguration();
+
+      ClassInfo ci1 = configuration.getClassInfo(className, cl1);
+      ClassInfo ci2 = configuration.getClassInfo(className, cl2);
+      assertEquals(ci1, ci2);
+
+      className = "org.jboss.test.beaninfo.support.BeanInfoCache";
+      BeanInfo bi1 = configuration.getBeanInfo(className, cl1);
+      BeanInfo bi2 = configuration.getBeanInfo(className, cl2);
+      assertFalse(bi1.equals(bi2));
    }
 
    private void assertBeanInfoCaching(String string, Class<?> clazz) throws Exception
