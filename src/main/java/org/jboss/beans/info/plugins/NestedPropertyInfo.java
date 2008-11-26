@@ -52,12 +52,20 @@ public class NestedPropertyInfo extends JBossObject implements PropertyInfo, Ser
    private static final long serialVersionUID = 1L;
 
    private String name;
+   private String upperName;
    private BeanInfo beanInfo;
    private List<PropertyInfo> propertys = new ArrayList<PropertyInfo>();
 
+   @Deprecated
    public NestedPropertyInfo(String name, BeanInfo beanInfo)
    {
+      this(name, name, beanInfo);
+   }
+
+   public NestedPropertyInfo(String name, String upperName, BeanInfo beanInfo)
+   {
       this.name = name;
+      this.upperName = upperName;
       this.beanInfo = beanInfo;
    }
 
@@ -80,7 +88,7 @@ public class NestedPropertyInfo extends JBossObject implements PropertyInfo, Ser
 
    public String getUpperName()
    {
-      return name;
+      return upperName;
    }
 
    /**
