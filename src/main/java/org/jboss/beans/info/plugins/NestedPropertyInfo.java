@@ -102,14 +102,10 @@ public class NestedPropertyInfo extends JBossObject implements PropertyInfo, Ser
          for (PropertyInfo pi : propertys)
          {
             TypeInfo info = pi.getType();
-            if (info != null)
+            if (info != null && info.isInstance(value))
             {
-               TypeInfo valueTypeInfo = info.getTypeInfoFactory().getTypeInfo(value.getClass());
-               if (info.isAssignableFrom(valueTypeInfo))
-               {
-                  pi.set(bean, value);
-                  return;
-               }
+               pi.set(bean, info.convertValue(value));
+               return;
             }
          }
       }
