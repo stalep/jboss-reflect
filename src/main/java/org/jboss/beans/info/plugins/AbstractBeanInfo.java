@@ -22,11 +22,10 @@
 package org.jboss.beans.info.plugins;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
 
 import org.jboss.beans.info.spi.BeanInfo;
 import org.jboss.beans.info.spi.BeanInfoFactory;
@@ -43,6 +42,7 @@ import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossObject;
 import org.jboss.util.JBossStringBuilder;
+import org.jboss.util.collection.CollectionsFactory;
 
 /**
  * BeanInfo.
@@ -60,10 +60,10 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    protected ClassAdapter classAdapter;
 
    /** The properties */
-   private Set<PropertyInfo> properties;
+   private Set<PropertyInfo> properties = CollectionsFactory.createLazySet();
 
    /** The properties by name */
-   private transient Map<String, PropertyInfo> propertiesByName = Collections.emptyMap();
+   private transient Map<String, PropertyInfo> propertiesByName = CollectionsFactory.createLazyMap();
 
    /** The constructors */
    private Set<ConstructorInfo> constructors;
