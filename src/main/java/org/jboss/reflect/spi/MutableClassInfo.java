@@ -61,7 +61,7 @@ public interface MutableClassInfo extends ClassInfo
     * @return
     */
    MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, 
-         MutableClassInfo[] parameters, MutableClassInfo[] exceptions);
+         ClassInfo[] parameters, ClassInfo[] exceptions);
    
    
    /**
@@ -91,7 +91,7 @@ public interface MutableClassInfo extends ClassInfo
     * @return
     */
    MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, Body body,
-         MutableClassInfo[] parameters, MutableClassInfo[] exceptions);
+         ClassInfo[] parameters, ClassInfo[] exceptions);
 
    
    /**
@@ -123,8 +123,8 @@ public interface MutableClassInfo extends ClassInfo
     * @param exceptions
     * @return
     */
-   MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, MutableClassInfo[] parameters, 
-         MutableClassInfo[] exceptions);
+   MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, ClassInfo[] parameters, 
+         ClassInfo[] exceptions);
    
    /**
     * Create a constructor with the params given.
@@ -150,7 +150,25 @@ public interface MutableClassInfo extends ClassInfo
     * @return
     */
    MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, Body body,
-         MutableClassInfo[] parameters, MutableClassInfo[] exceptions);
+         ClassInfo[] parameters, ClassInfo[] exceptions);
+   
+   /**
+    * Create a field connected to this class with the params given.
+    * 
+    * @param modifier
+    * @param type
+    * @return
+    */
+   MutableFieldInfo createMutableField(ModifierInfo modifier, String type);
+   
+   /**
+    * Create a field connected to this class with the params given.
+    * 
+    * @param modifier
+    * @param type
+    * @return
+    */
+   MutableFieldInfo createMutableField(ModifierInfo modifier, ClassInfo type);
    
    /**
     * Add a method
@@ -179,6 +197,20 @@ public interface MutableClassInfo extends ClassInfo
     * @param mci
     */
    void removeConstructor(MutableConstructorInfo mci);
+   
+   /**
+    * Add a field
+    * 
+    * @param mfi
+    */
+   void addField(MutableFieldInfo mfi);
+   
+   /**
+    * Remove a field
+    * 
+    * @param mfi
+    */
+   void removeField(MutableFieldInfo mfi);
    
    /**
     * Converts the class to a Class file. 
