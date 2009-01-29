@@ -323,14 +323,16 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
 
    public boolean isArray()
    {
-      return getType().isArray();
+      return getCtClass().isArray();
    }
 
+ //TODO: need to change the use of getType() here
    public boolean isCollection()
    {
       return Collection.class.isAssignableFrom(getType());
    }
 
+   //TODO: need to change the use of getType() here
    public boolean isMap()
    {
       return Map.class.isAssignableFrom(getType());
@@ -338,17 +340,17 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
 
    public boolean isAnnotation()
    {
-      return getType().isAnnotation();
+      return getCtClass().isAnnotation();
    }
 
    public boolean isEnum()
    {
-      return getType().isEnum();
+      return getCtClass().isEnum();
    }
 
    public boolean isPrimitive()
    {
-      return getType().isPrimitive();
+      return getCtClass().isPrimitive();
    }
 
    /**
@@ -699,5 +701,10 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
             return null;
       }
       return attachments.getAttachment(name);
+   }
+   
+   protected CtClass getCtClass()
+   {
+      return ctClass;
    }
 }
