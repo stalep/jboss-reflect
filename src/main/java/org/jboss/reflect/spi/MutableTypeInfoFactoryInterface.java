@@ -38,4 +38,14 @@ public interface MutableTypeInfoFactoryInterface
     */
    MutableClassInfo createNewMutableClass(String name);
    
+   /**
+    * Get the information for a MutableClass.
+    * Note that this will not put the MutableClass in any cache
+    * 
+    * @param name
+    * @param cl
+    * @return
+    */
+   MutableClassInfo getMutable(String name, ClassLoader cl);
+   
 }

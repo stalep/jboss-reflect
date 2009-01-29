@@ -73,7 +73,8 @@ public class JavassistReflectionFactory
     */
    public JavassistMethod createMethod(CtMethod ctMethod) throws Throwable
    {
-      ClassPool pool = JavassistTypeInfoFactoryImpl.pool;
+      //TODO: Fix this to use a more reasonable  factory
+      ClassPool pool = JavassistTypeInfoFactoryImpl.poolFactory.getPoolForLoader(null);
       final CtClass result = pool.makeClass(JavassistMethod.class.getName() + counter.incrementAndGet());
       /* TODO JBMICROCONT-133 figure out how to do this on all JDKs
       try
@@ -254,7 +255,8 @@ public class JavassistReflectionFactory
     */
    public JavassistConstructor createConstructor(CtConstructor ctConstructor) throws Throwable
    {
-      ClassPool pool = JavassistTypeInfoFactoryImpl.pool;
+      //TODO: FIx this to use a more reasonable factory
+      ClassPool pool = JavassistTypeInfoFactoryImpl.poolFactory.getPoolForLoader(null);
       final CtClass result = pool.makeClass(JavassistConstructor.class.getName() + counter.incrementAndGet());
       try
       {
@@ -379,7 +381,8 @@ public class JavassistReflectionFactory
     */
    public JavassistField createField(CtField ctField) throws Throwable
    {
-      ClassPool pool = JavassistTypeInfoFactoryImpl.pool;
+      // Fix this to use a better pool factory
+      ClassPool pool = JavassistTypeInfoFactoryImpl.poolFactory.getPoolForLoader(null);
       final CtClass result = pool.makeClass(JavassistField.class.getName() + counter.incrementAndGet());
       try
       {
