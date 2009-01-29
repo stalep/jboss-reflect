@@ -19,23 +19,24 @@
   * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   */
-package org.jboss.reflect.spi;
+package org.jboss.reflect.plugins.javassist;
+
+import javassist.ClassPool;
+
+import org.jboss.reflect.spi.ClassPoolFactory;
 
 /**
- * A MutableTypeInfoFactoryInterface.
+ * A DummyClassPoolFactory.
  * 
- * @author <a href="stalep@gmail.com">Stale W. Pedersen</a>
+ * @author <a href="mailto:stale.pedersen@jboss.org">Stale W. Pedersen</a>
  * @version $Revision: 1.1 $
  */
-public interface MutableTypeInfoFactoryInterface
+public class DummyClassPoolFactory implements ClassPoolFactory
 {
 
-   /**
-    * Create a new MutableClass
-    * 
-    * @param name
-    * @return
-    */
-   MutableClassInfo createNewMutableClass(String name);
-   
+   public ClassPool getPoolForLoader(ClassLoader cl)
+   {
+      return ClassPool.getDefault();
+   }
+
 }

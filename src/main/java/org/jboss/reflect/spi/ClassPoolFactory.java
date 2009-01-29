@@ -21,21 +21,15 @@
   */
 package org.jboss.reflect.spi;
 
+import javassist.ClassPool;
+
 /**
- * A MutableTypeInfoFactoryInterface.
+ * A ClassPoolFactory.
  * 
- * @author <a href="stalep@gmail.com">Stale W. Pedersen</a>
+ * @author <a href="mailto:stale.pedersen@jboss.org">Stale W. Pedersen</a>
  * @version $Revision: 1.1 $
  */
-public interface MutableTypeInfoFactoryInterface
-{
-
-   /**
-    * Create a new MutableClass
-    * 
-    * @param name
-    * @return
-    */
-   MutableClassInfo createNewMutableClass(String name);
-   
+public interface ClassPoolFactory
+{ 
+   ClassPool getPoolForLoader(ClassLoader cl);
 }
