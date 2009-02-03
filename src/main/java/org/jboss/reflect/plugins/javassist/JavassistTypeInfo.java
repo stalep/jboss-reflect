@@ -37,11 +37,17 @@ import org.jboss.reflect.plugins.PackageInfoImpl;
 import org.jboss.reflect.plugins.TypeInfoAttachments;
 import org.jboss.reflect.plugins.ValueConvertor;
 import org.jboss.reflect.spi.AnnotationValue;
+import org.jboss.reflect.spi.Body;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.ModifierInfo;
+import org.jboss.reflect.spi.MutableClassInfo;
+import org.jboss.reflect.spi.MutableConstructorInfo;
+import org.jboss.reflect.spi.MutableFieldInfo;
+import org.jboss.reflect.spi.MutableMethodInfo;
 import org.jboss.reflect.spi.PackageInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
@@ -53,7 +59,7 @@ import org.jboss.util.JBossStringBuilder;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder implements ClassInfo, InterfaceInfo
+public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder implements MutableClassInfo, InterfaceInfo
 {
    /** The serialVersionUID */
    private static final long serialVersionUID = -5072033691434335775L;
@@ -157,6 +163,9 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    @Deprecated
    public Class<? extends Object> getType()
    {
+      if(clazz == null)
+         clazz = JavassistUtil.ctClassToClass(ctClass);
+      
       return clazz;
    }
 
@@ -706,5 +715,128 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    protected CtClass getCtClass()
    {
       return ctClass;
+   }
+
+   
+   public void addConstructor(MutableConstructorInfo mci)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void addField(MutableFieldInfo mfi)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void addMethod(MutableMethodInfo mmi)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public MutableConstructorInfo createMutableConstructor(Body body)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, String[] parameters,
+         String[] exceptions)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, ClassInfo[] parameters,
+         ClassInfo[] exceptions)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, Body body, String[] parameters,
+         String[] exceptions)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, Body body, ClassInfo[] parameters,
+         ClassInfo[] exceptions)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableFieldInfo createMutableField(ModifierInfo modifier, String type)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableFieldInfo createMutableField(ModifierInfo modifier, ClassInfo type)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableMethodInfo createMutableMethod(Body body)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, String[] parameters,
+         String[] exceptions)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, ClassInfo[] parameters,
+         ClassInfo[] exceptions)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, Body body, String[] parameters,
+         String[] exceptions)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, Body body, ClassInfo[] parameters,
+         ClassInfo[] exceptions)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   public void removeConstructor(MutableConstructorInfo mci)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void removeField(MutableFieldInfo mfi)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void removeMethod(MutableMethodInfo mmi)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public byte[] toByteCode()
+   {
+      // TODO Auto-generated method stub
+      return null;
    }
 }

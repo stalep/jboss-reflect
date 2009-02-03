@@ -28,6 +28,7 @@ import java.util.Map;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtPrimitiveType;
+import javassist.NotFoundException;
 
 /**
  * A JavassistUtil.
@@ -65,6 +66,8 @@ public class JavassistUtil
 
       loadAndDisplayClass("int");
       loadAndDisplayClass("byte[][][]");
+      loadAndDisplayClass("java.lang.String[][]");
+      loadAndDisplayClass("java.lang.String[][][]");
       loadAndDisplayClass("org.jboss.reflect.plugins.javassist.JavassistUtil[]");
    }
    
@@ -84,16 +87,20 @@ public class JavassistUtil
       return ctClassToClass(pool.get(name));
    }
 
-   public static Class<?> ctClassToClass(CtClass ct) throws Exception
+   public static Class<?> ctClassToClass(CtClass ct)
    {
+      try
+      {
       if (ct.isArray())
       {
          int dim = 0;
-         while (ct.getComponentType() != null)
-         {
-            dim++;
-            ct = ct.getComponentType();
-         }
+        
+            while (ct.getComponentType() != null)
+            {
+               dim++;
+               ct = ct.getComponentType();
+            }
+        
          if (ct.isPrimitive())
          {
             StringBuilder sb = new StringBuilder();
@@ -114,12 +121,26 @@ public class JavassistUtil
          }
          else
          {
-            return Array.newInstance(ctClassToClass(ct), dim).getClass();
+            return Array.newInstance(ctClassToClass(ct), new int[dim]).getClass();
          }
       }
       else
       {
-         return loader.loadClass(ct.getName());
+         
+            return loader.loadClass(ct.getName());
+         
+         
+      }
+      }
+      catch (NotFoundException e)
+      {
+         e.printStackTrace();
+         return null;
+      }
+      catch (ClassNotFoundException e)
+      {
+         e.printStackTrace();
+         return null;
       }
    }
 
