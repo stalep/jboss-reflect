@@ -19,57 +19,38 @@
   * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   */
-package org.jboss.reflect.spi;
+package org.jboss.test.plugins.javassist;
 
 /**
- * A MutableConstructorInfo.
+ * A Pojo.
  * 
- * @author <a href="stale.pedersen@jboss.org">Stale W. Pedersen</a>
+ * @author <a href="mailto:stale.pedersen@jboss.org">Stale W. Pedersen</a>
  * @version $Revision: 1.1 $
  */
-public interface MutableConstructorInfo extends ConstructorInfo
+public class Pojo
 {
-   /**
-    * Set modifier
-    * If not set it will default to public (non-static)
-    * 
-    * @param mi
-    */
-   void setModifier(ModifierInfo mi);
    
-   /**
-    * The source text of the method body
-    * 
-    * @param body
-    */
-   void setBody(Body body);
+   public String foo;
    
-   /**
-    * A list of the parameter types
-    * 
-    * @param parameters
-    */
-   void setParameters(String[] parameters);
-  
-   /**
-    * A list of the parameter types
-    * 
-    * @param parameters
-    */
-   void setParameters(ClassInfo[] parameters);
+   public Pojo()
+   { 
+   }
    
-   /**
-    * A list of the exception types
-    * 
-    * @param exceptions
-    */
-   void setExceptions(String[] exceptions);
+   public Pojo(String s)
+   {
+   }
    
-   /**
-    * A list of the exception types
-    * 
-    * @param exceptions
-    */
-   void setExceptions(ClassInfo[] exceptions);
- 
+   public String foo()
+   {
+      return null;
+   }
+   
+   public void foo(String s)
+   {
+   }
+   
+   public void bar(String s)
+   {
+   }
+
 }

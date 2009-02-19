@@ -50,7 +50,7 @@ public interface MutableMethodInfo extends MethodInfo
     * 
     * @param returnType
     */
-   void setReturnType(MutableClassInfo returnType);
+   void setReturnType(ClassInfo returnType);
    
    /**
     * Method name
@@ -78,7 +78,7 @@ public interface MutableMethodInfo extends MethodInfo
     * 
     * @param parameters
     */
-   void setParameters(MutableClassInfo[] parameters);
+   void setParameters(ClassInfo[] parameters);
    
    /**
     * A list of the exception types
@@ -92,7 +92,7 @@ public interface MutableMethodInfo extends MethodInfo
     * 
     * @param exceptions
     */
-   void setExceptions(MutableClassInfo[] exceptions);
+   void setExceptions(ClassInfo[] exceptions);
   
    /**
     * TODO: something similar to CtBehavior.instrument(...)

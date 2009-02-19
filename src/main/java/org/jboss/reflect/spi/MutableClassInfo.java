@@ -157,18 +157,20 @@ public interface MutableClassInfo extends ClassInfo
     * 
     * @param modifier
     * @param type
+    * @param name
     * @return
     */
-   MutableFieldInfo createMutableField(ModifierInfo modifier, String type);
+   MutableFieldInfo createMutableField(ModifierInfo modifier, String type, String name);
    
    /**
     * Create a field connected to this class with the params given.
     * 
     * @param modifier
     * @param type
+    * @param name
     * @return
     */
-   MutableFieldInfo createMutableField(ModifierInfo modifier, ClassInfo type);
+   MutableFieldInfo createMutableField(ModifierInfo modifier, ClassInfo type, String name);
    
    /**
     * Add a method

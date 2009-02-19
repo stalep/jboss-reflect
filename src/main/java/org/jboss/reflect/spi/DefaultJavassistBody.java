@@ -38,7 +38,7 @@ public class DefaultJavassistBody extends AbstractJavassistBody
    }
 
    @Override
-   void createBody(CtBehavior behavior)
+   public void createBody(CtBehavior behavior)
    {
       try
       {

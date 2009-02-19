@@ -25,6 +25,8 @@ import org.jboss.reflect.plugins.AnnotationHelper;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.ModifierInfo;
+import org.jboss.reflect.spi.MutableFieldInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
 
@@ -39,7 +41,7 @@ import javassist.NotFoundException;
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @version $Revision$
  */
-public class JavassistFieldInfo extends JavassistAnnotatedInfo implements FieldInfo
+public class JavassistFieldInfo extends JavassistAnnotatedInfo implements MutableFieldInfo
 {
    /** The serialVersionUID */
    private static final long serialVersionUID = -104555531831318930L;
@@ -166,5 +168,34 @@ public class JavassistFieldInfo extends JavassistAnnotatedInfo implements FieldI
    public AnnotationValue[] getAnnotations()
    {
       return getAnnotations(ctField);
+   }
+   
+   public CtField getCtField()
+   {
+      return ctField;
+   }
+
+   public void setModifier(ModifierInfo modifier)
+   {
+      ctField.setModifiers(modifier.getModifiers());
+      typeInfo.clearFieldCache();
+   }
+
+   public void setName(String name)
+   {
+      ctField.setName(name);
+      typeInfo.clearFieldCache();
+   }
+
+   public void setType(ClassInfo type)
+   {
+      ctField.setType(JavassistUtil.toCtClass(type));
+      typeInfo.clearFieldCache();
+   }
+   
+   public void setType(String type)
+   {
+      ctField.setType(JavassistUtil.toCtClass(type));
+      typeInfo.clearFieldCache();
    }
 }

@@ -27,8 +27,18 @@ package org.jboss.reflect.spi;
  * @author <a href="stale.pedersen@jboss.org">Stale W. Pedersen</a>
  * @version $Revision: 1.1 $
  */
-public class NotFoundException extends Exception
+public class NotFoundException extends RuntimeException
 {
+
+   /**
+    * Create a new NotFoundException.
+    * 
+    * @param string
+    */
+   public NotFoundException(String exception)
+   {
+     super(exception);
+   }
 
    /** The serialVersionUID */
    private static final long serialVersionUID = -4143477618552256445L;

@@ -27,10 +27,13 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMethod;
+import javassist.CtNewConstructor;
+import javassist.CtNewMethod;
 import javassist.NotFoundException;
 
 import org.jboss.reflect.plugins.PackageInfoImpl;
@@ -712,104 +715,216 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return attachments.getAttachment(name);
    }
    
-   protected CtClass getCtClass()
+    CtClass getCtClass()
    {
       return ctClass;
    }
-
+   
+   protected void clearMethodCache()
+   {
+      if(methodArray != null)
+         methodArray = null;
+   }
+   
+   protected void clearConstructorCache()
+   {
+      if(constructorArray != null)
+         constructorArray = null;
+   }
+   
+   protected void clearFieldCache()
+   {
+      if(fieldArray != null)
+         fieldArray = null;
+   }
    
    public void addConstructor(MutableConstructorInfo mci)
    {
-      // TODO Auto-generated method stub
-      
+      if(mci instanceof JavassistConstructorInfo)
+      {
+         try
+         {
+            ctClass.addConstructor(((JavassistConstructorInfo) mci).getCtConstructor());
+         }
+         catch (CannotCompileException e)
+         {
+            throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+         }
+      }
    }
 
    public void addField(MutableFieldInfo mfi)
    {
-      // TODO Auto-generated method stub
+      if(mfi instanceof JavassistFieldInfo)
+      {
+         try
+         {
+            ctClass.addField(((JavassistFieldInfo) mfi).getCtField());
+         }
+         catch (CannotCompileException e)
+         {
+            throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+         }
+      }
       
    }
 
    public void addMethod(MutableMethodInfo mmi)
    {
-      // TODO Auto-generated method stub
-      
+      if(mmi instanceof JavassistMethodInfo)
+      {
+         try
+         {
+            ctClass.addMethod(((JavassistMethodInfo) mmi).getCtMethod());
+         }
+         catch (CannotCompileException e)
+         {
+            throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+         }
+      }
    }
 
    public MutableConstructorInfo createMutableConstructor(Body body)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtConstructor constructor = CtNewConstructor.make(body.getBody(), ctClass);
+         return new JavassistConstructorInfo(factory, this, constructor);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
    public MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, String[] parameters,
          String[] exceptions)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtConstructor constructor = CtNewConstructor.make(JavassistUtil.toCtClass(parameters), 
+               JavassistUtil.toCtClass(exceptions), ctClass);
+         constructor.setModifiers(modifier.getModifiers());
+         return new JavassistConstructorInfo(factory, this, constructor);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
    public MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, ClassInfo[] parameters,
          ClassInfo[] exceptions)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtConstructor constructor = CtNewConstructor.make(JavassistUtil.toCtClass(parameters), 
+               JavassistUtil.toCtClass(exceptions), ctClass);
+         constructor.setModifiers(modifier.getModifiers());
+         return new JavassistConstructorInfo(factory, this, constructor);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
    public MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, Body body, String[] parameters,
          String[] exceptions)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtConstructor constructor = CtNewConstructor.make(JavassistUtil.toCtClass(parameters), 
+               JavassistUtil.toCtClass(exceptions), body.getBody(), ctClass);
+         constructor.setModifiers(modifier.getModifiers());
+         return new JavassistConstructorInfo(factory, this, constructor);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
    public MutableConstructorInfo createMutableConstructor(ModifierInfo modifier, Body body, ClassInfo[] parameters,
          ClassInfo[] exceptions)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtConstructor constructor = CtNewConstructor.make(JavassistUtil.toCtClass(parameters), 
+               JavassistUtil.toCtClass(exceptions), body.getBody(), ctClass);
+         constructor.setModifiers(modifier.getModifiers());
+         return new JavassistConstructorInfo(factory, this, constructor);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
-   public MutableFieldInfo createMutableField(ModifierInfo modifier, String type)
+   public MutableFieldInfo createMutableField(ModifierInfo modifier, String type, String fieldName)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtField field = new CtField(JavassistUtil.toCtClass(type), fieldName, ctClass);
+         field.setModifiers(modifier.getModifiers());
+         return new JavassistFieldInfo(factory, this, field);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
-   public MutableFieldInfo createMutableField(ModifierInfo modifier, ClassInfo type)
+   public MutableFieldInfo createMutableField(ModifierInfo modifier, ClassInfo type, String fieldName)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtField field = new CtField(JavassistUtil.toCtClass(type), fieldName, ctClass);
+         field.setModifiers(modifier.getModifiers());
+         return new JavassistFieldInfo(factory, this, field);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
    public MutableMethodInfo createMutableMethod(Body body)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtMethod method = CtNewMethod.make(body.getBody(), ctClass);
+         return new JavassistMethodInfo(factory, this, 
+               new SignatureKey(method.getName(), new String[0]), method);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
-   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, String[] parameters,
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String methodName, String[] parameters,
          String[] exceptions)
    {
       // TODO Auto-generated method stub
       return null;
    }
 
-   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, ClassInfo[] parameters,
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String methodName, ClassInfo[] parameters,
          ClassInfo[] exceptions)
    {
       // TODO Auto-generated method stub
       return null;
    }
 
-   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, Body body, String[] parameters,
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String methodName, Body body, String[] parameters,
          String[] exceptions)
    {
       // TODO Auto-generated method stub
       return null;
    }
 
-   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, Body body, ClassInfo[] parameters,
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String methodName, Body body, ClassInfo[] parameters,
          ClassInfo[] exceptions)
    {
       // TODO Auto-generated method stub

@@ -38,7 +38,7 @@ public class InsertBeforeJavassistBody extends AbstractJavassistBody
       super(body);
    }
    @Override
-   void createBody(CtBehavior behavior)
+   public void createBody(CtBehavior behavior)
    {
       try
       {

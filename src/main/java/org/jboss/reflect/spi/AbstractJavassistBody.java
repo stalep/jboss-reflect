@@ -42,6 +42,6 @@ public abstract class AbstractJavassistBody implements Body
       return body;
    }
    
-   abstract void createBody(CtBehavior behaviour);
+   public abstract void createBody(CtBehavior behaviour);
    
 }

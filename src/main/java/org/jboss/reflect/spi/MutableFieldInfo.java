@@ -34,7 +34,7 @@ public interface MutableFieldInfo extends FieldInfo
     * Name of the field
     * 
     */
-   void setName();
+   void setName(String name);
    
    /**
     * Field type
@@ -42,6 +42,13 @@ public interface MutableFieldInfo extends FieldInfo
     * @param type
     */
    void setType(ClassInfo type);
+   
+   /**
+    * Field type
+    * 
+    * @param type
+    */
+   void setType(String type);
    
    /**
     * Field modifier
