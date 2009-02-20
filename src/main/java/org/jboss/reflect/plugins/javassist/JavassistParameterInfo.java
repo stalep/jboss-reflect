@@ -83,6 +83,7 @@ public class JavassistParameterInfo extends JavassistAnnotatedInfo implements Pa
       return parameterType;
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (this == obj)
@@ -94,16 +95,19 @@ public class JavassistParameterInfo extends JavassistAnnotatedInfo implements Pa
       return parameterType.equals(other.getParameterType());
    }
 
+   @Override
    protected int getHashCode()
    {
       return getName().hashCode();
    }
 
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(getParameterType());
    }
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("type=").append(getParameterType());

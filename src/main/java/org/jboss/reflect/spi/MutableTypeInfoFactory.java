@@ -22,12 +22,12 @@
 package org.jboss.reflect.spi;
 
 /**
- * A MutableTypeInfoFactoryInterface.
+ * A MutableTypeInfoFactory
  * 
  * @author <a href="stalep@gmail.com">Stale W. Pedersen</a>
  * @version $Revision: 1.1 $
  */
-public interface MutableTypeInfoFactoryInterface
+public interface MutableTypeInfoFactory extends TypeInfoFactory
 {
 
    /**
@@ -37,6 +37,32 @@ public interface MutableTypeInfoFactoryInterface
     * @return
     */
    MutableClassInfo createNewMutableClass(String name);
+   
+   /**
+    * Create a new MutableClass
+    * 
+    * @param name
+    * @param superClass
+    * @return
+    */
+   MutableClassInfo createNewMutableClass(String name, ClassInfo superClass);
+   
+   /**
+    * Create a new mutable interface
+    * 
+    * @param name
+    * @return
+    */
+   MutableClassInfo createNewMutableInterface(String name);
+   
+   /**
+    * Create a new mutable interface
+    * 
+    * @param name
+    * @param superClass
+    * @return
+    */
+   MutableClassInfo createNewMutableInterface(String name, ClassInfo superClass);
    
    /**
     * Get the information for a MutableClass.

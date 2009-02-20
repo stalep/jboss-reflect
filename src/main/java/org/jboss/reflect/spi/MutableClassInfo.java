@@ -43,25 +43,27 @@ public interface MutableClassInfo extends ClassInfo
     * Compiles an empty method with the signature given by the params.
     * 
     * @param modifier
+    * @param returnType
     * @param name
     * @param parameters
     * @param exceptions
     * @return
     */
-   MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, 
-         String[] parameters, String[] exceptions);
+   MutableMethodInfo createMutableMethod(ModifierInfo modifier, String returnType, 
+         String name, String[] parameters, String[] exceptions);
    
    /**
     * Compiles an empty method with the signature given by the params.
     * 
     * @param modifier
+    * @param returnType
     * @param name
     * @param parameters
     * @param exceptions
     * @return
     */
-   MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, 
-         ClassInfo[] parameters, ClassInfo[] exceptions);
+   MutableMethodInfo createMutableMethod(ModifierInfo modifier, ClassInfo returnType, 
+         String name, ClassInfo[] parameters, ClassInfo[] exceptions);
    
    
    /**
@@ -69,14 +71,15 @@ public interface MutableClassInfo extends ClassInfo
     * Note that the source code of the body must be surrounded by <code>{}</code>.
     * 
     * @param modifier
+    * @param returnType
     * @param name
     * @param body
     * @param parameters
     * @param exceptions
     * @return
     */
-   MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, Body body, 
-         String[] parameters, String[] exceptions);
+   MutableMethodInfo createMutableMethod(ModifierInfo modifier, String returnType, String name, 
+         Body body, String[] parameters, String[] exceptions);
 
  
    /**
@@ -84,14 +87,15 @@ public interface MutableClassInfo extends ClassInfo
     * Note that the source code of the body must be surrounded by <code>{}</code>.
     * 
     * @param modifier
+    * @param returnType
     * @param name
     * @param body
     * @param parameters
     * @param exceptions
     * @return
     */
-   MutableMethodInfo createMutableMethod(ModifierInfo modifier, String name, Body body,
-         ClassInfo[] parameters, ClassInfo[] exceptions);
+   MutableMethodInfo createMutableMethod(ModifierInfo modifier, ClassInfo returnType, String name,
+         Body body, ClassInfo[] parameters, ClassInfo[] exceptions);
 
    
    /**

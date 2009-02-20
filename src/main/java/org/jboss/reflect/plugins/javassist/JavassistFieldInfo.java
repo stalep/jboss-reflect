@@ -136,11 +136,13 @@ public class JavassistFieldInfo extends JavassistAnnotatedInfo implements Mutabl
       return null;
    }
 
+   @Override
    protected int getHashCode()
    {
       return getName().hashCode();
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (obj == this)
@@ -154,11 +156,13 @@ public class JavassistFieldInfo extends JavassistAnnotatedInfo implements Mutabl
       return getDeclaringClass().equals(other.getDeclaringClass());
    }
 
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(getName());
    }
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(getName());

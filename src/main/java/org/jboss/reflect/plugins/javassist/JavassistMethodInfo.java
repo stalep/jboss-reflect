@@ -37,7 +37,6 @@ import org.jboss.reflect.spi.Body;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.ModifierInfo;
-import org.jboss.reflect.spi.MutableClassInfo;
 import org.jboss.reflect.spi.MutableMethodInfo;
 import org.jboss.reflect.spi.MutableMethodInfoCommand;
 import org.jboss.reflect.spi.ParameterInfo;
@@ -51,9 +50,6 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
 
    /** The reflection factory */
    private static final JavassistReflectionFactory reflectionFactory = new JavassistReflectionFactory(true);
-   
-   /** The key */
-   private SignatureKey key;
    
    /** The method */
    private CtMethod ctMethod;
@@ -69,20 +65,18 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
     * 
     * @param annotationHelper the annotation helper
     * @param typeInfo the type info
-    * @param key the key
     * @param ctMethod the method
     */
-   public JavassistMethodInfo(AnnotationHelper annotationHelper, JavassistTypeInfo typeInfo, SignatureKey key, CtMethod ctMethod)
+   public JavassistMethodInfo(AnnotationHelper annotationHelper, JavassistTypeInfo typeInfo, CtMethod ctMethod)
    {
       super(annotationHelper);
       this.typeInfo = typeInfo;
-      this.key = key;
       this.ctMethod = ctMethod;
    }
 
    public String getName()
    {
-      return key.name;
+      return ctMethod.getName();
    }
 
    public ClassInfo getDeclaringClass()
@@ -166,11 +160,13 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
       return method.invoke(target, args);
    }
 
+   @Override
    protected int getHashCode()
    {
       return getName().hashCode();
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (obj == this)
@@ -189,11 +185,13 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
       return Arrays.equals(getParameterTypes(), other.getParameterTypes());
    }
 
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(getName());
    }
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(getName());
@@ -231,6 +229,7 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
       return ctMethod;
    }
 
+   @Override
    protected void createParameterAnnotations()
    {
       try
@@ -245,10 +244,9 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
       }
    }
 
+   //TODO: need to be implemented...
    public void executeCommand(MutableMethodInfoCommand mmc)
    {
-      // TODO Auto-generated method stub
-      
    }
    
    public CtMethod getCtMethod()

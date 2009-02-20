@@ -86,26 +86,31 @@ public class JavassistArrayInfoImpl extends JavassistTypeInfo implements ArrayIn
       calculateHash();
    }
 
+   @Override
    public TypeInfo getComponentType()
    {
       return componentType;
    }
    
+   @Override
    public AnnotationValue getAnnotation(String name)
    {
       return null;
    }
 
+   @Override
    public AnnotationValue[] getAnnotations()
    {
       return UNKNOWN_ANNOTATIONS;
    }
 
+   @Override
    public boolean isAnnotationPresent(String name)
    {
       return false;
    }
 
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -119,6 +124,7 @@ public class JavassistArrayInfoImpl extends JavassistTypeInfo implements ArrayIn
       return true;
    }
 
+   @Override
    public int hashCode() { return hash; }
 
    /**

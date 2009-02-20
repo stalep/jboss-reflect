@@ -82,6 +82,7 @@ public class JavassistAnnotationInfo extends JavassistTypeInfo implements Annota
       return attributeMap.get(name);
    }
 
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -94,6 +95,7 @@ public class JavassistAnnotationInfo extends JavassistTypeInfo implements Annota
       return true;
    }
 
+   @Override
    public int hashCode()
    {
       return getName().hashCode();

@@ -36,7 +36,6 @@ import org.jboss.reflect.spi.Body;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.ModifierInfo;
-import org.jboss.reflect.spi.MutableClassInfo;
 import org.jboss.reflect.spi.MutableConstructorInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
@@ -142,6 +141,7 @@ public class JavassistConstructorInfo extends JavassistAnnotatedParameterInfo im
       return constructor.newInstance(args);
    }
 
+   @Override
    protected int getHashCode()
    {
       int result = getDeclaringClass().hashCode();
@@ -154,6 +154,7 @@ public class JavassistConstructorInfo extends JavassistAnnotatedParameterInfo im
       return result;
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (this == obj) 
@@ -169,6 +170,7 @@ public class JavassistConstructorInfo extends JavassistAnnotatedParameterInfo im
    }
 
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append(Arrays.asList(getParameterTypes()));
@@ -201,6 +203,7 @@ public class JavassistConstructorInfo extends JavassistAnnotatedParameterInfo im
       return getAnnotations(ctConstructor);
    }
 
+   @Override
    protected void createParameterAnnotations()
    {
       try

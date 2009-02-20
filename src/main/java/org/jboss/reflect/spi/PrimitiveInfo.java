@@ -265,7 +265,7 @@ public class PrimitiveInfo extends AbstractTypeInfo
       throw new UnsupportedOperationException("Not an array " + name);
    }
 
-   @SuppressWarnings({"unchecked", "deprecation"})
+   @SuppressWarnings({"deprecation"})
    public boolean isAssignableFrom(TypeInfo info)
    {
       if (info == null)
@@ -277,7 +277,6 @@ public class PrimitiveInfo extends AbstractTypeInfo
       return canProgress(info.getType());
    }
 
-   @SuppressWarnings("deprecation")
    public boolean isInstance(Object object)
    {
       return object != null && canProgress(object.getClass());

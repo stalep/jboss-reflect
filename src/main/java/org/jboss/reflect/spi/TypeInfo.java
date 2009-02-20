@@ -51,6 +51,7 @@ public interface TypeInfo extends Serializable
     * @deprecated I'm not sure this should be here?
     * @return the class
     */
+   @Deprecated
    Class<?> getType();
    
    /**

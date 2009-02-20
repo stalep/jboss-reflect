@@ -78,6 +78,7 @@ public class PrimitiveValue extends AbstractValue
       return type;
    }
 
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -91,6 +92,7 @@ public class PrimitiveValue extends AbstractValue
       return true;
    }
 
+   @Override
    public int hashCode()
    {
       int result;

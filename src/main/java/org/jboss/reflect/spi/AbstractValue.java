@@ -33,6 +33,9 @@ import org.jboss.util.JBossObject;
  */
 public abstract class AbstractValue extends JBossObject implements Value, Serializable
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = -6618658144629045180L;
+
    public AnnotationValue asAnnotation()
    {
       if (isAnnotation() == false)

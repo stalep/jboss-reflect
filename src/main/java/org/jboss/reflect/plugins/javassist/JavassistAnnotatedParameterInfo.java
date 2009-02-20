@@ -37,6 +37,9 @@ import org.jboss.reflect.spi.TypeInfo;
  */
 public abstract class JavassistAnnotatedParameterInfo extends JavassistAnnotatedInfo
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = -494071110672611729L;
+
    /** The parameters */
    protected transient ParameterInfo[] parameters;
    

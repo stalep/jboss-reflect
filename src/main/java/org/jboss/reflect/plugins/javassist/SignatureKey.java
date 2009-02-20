@@ -74,6 +74,7 @@ class SignatureKey
          this.params = params;
    }
    
+   @Override
    public boolean equals(Object obj)
    {
       if (obj == this)
@@ -108,6 +109,7 @@ class SignatureKey
       return true;
    }
    
+   @Override
    public int hashCode()
    {
       if (cachedHashCode == Integer.MIN_VALUE)
@@ -125,6 +127,7 @@ class SignatureKey
       return cachedHashCode;
    }
    
+   @Override
    public String toString()
    {
       if (params == null)

@@ -177,6 +177,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return other.ordinal == this.ordinal;
    }
 
+   @Override
    Object readResolve() throws ObjectStreamException
    {
       return values[ordinal];
@@ -194,9 +195,9 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return delegate.getDeclaredConstructors();
    }
 
-   public FieldInfo getDeclaredField(String name)
+   public FieldInfo getDeclaredField(String fieldName)
    {
-      return delegate.getDeclaredField(name);
+      return delegate.getDeclaredField(fieldName);
    }
 
    public FieldInfo[] getDeclaredFields()
@@ -204,9 +205,9 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return delegate.getDeclaredFields();
    }
 
-   public MethodInfo getDeclaredMethod(String name, TypeInfo[] parameters)
+   public MethodInfo getDeclaredMethod(String methodName, TypeInfo[] parameters)
    {
-      return delegate.getDeclaredMethod(name, parameters);
+      return delegate.getDeclaredMethod(methodName, parameters);
    }
 
    public MethodInfo[] getDeclaredMethods()
@@ -239,9 +240,9 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return delegate.isInterface();
    }
 
-   public AnnotationValue getAnnotation(String name)
+   public AnnotationValue getAnnotation(String annotationName)
    {
-      return delegate.getAnnotation(name);
+      return delegate.getAnnotation(annotationName);
    }
 
    public AnnotationValue[] getAnnotations()
@@ -249,9 +250,9 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return delegate.getAnnotations();
    }
 
-   public boolean isAnnotationPresent(String name)
+   public boolean isAnnotationPresent(String annotationName)
    {
-      return delegate.isAnnotationPresent(name);
+      return delegate.isAnnotationPresent(annotationName);
    }
 
    public <T extends Annotation> T getUnderlyingAnnotation(Class<T> annotationType)
@@ -289,6 +290,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return delegate.isVolatile();
    }
 
+   @Override
    public boolean isPrimitive()
    {
       return delegate.isPrimitive();
@@ -335,6 +337,7 @@ public class NumberInfo extends PrimitiveInfo implements ClassInfo
       return this;
    }
 
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(name);

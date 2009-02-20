@@ -22,11 +22,8 @@
 package org.jboss.reflect.plugins.javassist;
 
 import java.lang.reflect.Array;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.MutableClassInfo;
 
 import javassist.ClassPool;
 import javassist.CtClass;

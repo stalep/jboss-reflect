@@ -21,6 +21,7 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -44,6 +45,7 @@ import org.jboss.reflect.spi.Body;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.InsertBeforeJavassistBody;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.ModifierInfo;
@@ -254,11 +256,11 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return generateConstructorInfo(key);
    }
 
-   public FieldInfo getDeclaredField(String name)
+   public FieldInfo getDeclaredField(String fieldName)
    {
       synchronized (fields)
       {
-         FieldInfo field = fields.get(name);
+         FieldInfo field = fields.get(fieldName);
          if (field != null)
             return field;
       }
@@ -266,7 +268,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
          return null;
       try
       {
-         CtField field = ctClass.getDeclaredField(name);
+         CtField field = ctClass.getDeclaredField(fieldName);
          if (field == null)
             return null;
          return generateFieldInfo(field);
@@ -298,9 +300,9 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return fieldArray;
    }
 
-   public MethodInfo getDeclaredMethod(String name, TypeInfo[] parameters)
+   public MethodInfo getDeclaredMethod(String methodName, TypeInfo[] parameters)
    {
-      SignatureKey key = new SignatureKey(name, parameters);
+      SignatureKey key = new SignatureKey(methodName, parameters);
       synchronized (methods)
       {
          MethodInfo method = methods.get(key);
@@ -399,7 +401,6 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return getType().isAssignableFrom(info.getType());
    }
 
-   @SuppressWarnings("deprecation")
    public boolean isInstance(Object object)
    {
       return getType().isInstance(object);
@@ -425,11 +426,13 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return ValueConvertor.convertValue(getType(), value, replaceProperties, trim);
    }
 
+   @Override
    protected int getHashCode()
    {
       return getName().hashCode();
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (obj == this)
@@ -441,11 +444,13 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return getName().equals(other.getName());
    }
 
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(getName());
    }
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(getName());
@@ -578,7 +583,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
     */
    protected MethodInfo generateMethodInfo(SignatureKey key, CtMethod method)
    {
-      JavassistMethodInfo info = new JavassistMethodInfo(factory, this, key, method);
+      JavassistMethodInfo info = new JavassistMethodInfo(factory, this, method);
       synchronized (methods)
       {
          methods.put(key, info);
@@ -609,6 +614,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return ctClass;
    }
    
+   @Override
    public AnnotationValue[] getAnnotations()
    {
       return getAnnotations(ctClass);
@@ -666,8 +672,8 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    {
       if (packageInfo == null)
       {
-         String name = ctClass.getPackageName();
-         if (name != null)
+         String packageName = ctClass.getPackageName();
+         if (packageName != null)
             packageInfo = new PackageInfoImpl(ctClass.getPackageName());
       }
       // TODO package annotations
@@ -703,16 +709,16 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return expectedType.cast(result);
    }
 
-   public Object getAttachment(String name)
+   public Object getAttachment(String attachmentName)
    {
-      if (name == null)
+      if (attachmentName == null)
          throw new IllegalArgumentException("Null name");
       synchronized (this)
       {
          if (attachments == null)
             return null;
       }
-      return attachments.getAttachment(name);
+      return attachments.getAttachment(attachmentName);
    }
    
     CtClass getCtClass()
@@ -745,6 +751,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
          try
          {
             ctClass.addConstructor(((JavassistConstructorInfo) mci).getCtConstructor());
+            clearConstructorCache();
          }
          catch (CannotCompileException e)
          {
@@ -760,6 +767,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
          try
          {
             ctClass.addField(((JavassistFieldInfo) mfi).getCtField());
+            clearFieldCache();
          }
          catch (CannotCompileException e)
          {
@@ -776,6 +784,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
          try
          {
             ctClass.addMethod(((JavassistMethodInfo) mmi).getCtMethod());
+            clearMethodCache();
          }
          catch (CannotCompileException e)
          {
@@ -894,8 +903,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       try
       {
          CtMethod method = CtNewMethod.make(body.getBody(), ctClass);
-         return new JavassistMethodInfo(factory, this, 
-               new SignatureKey(method.getName(), new String[0]), method);
+         return new JavassistMethodInfo(factory, this, method);
       }
       catch (CannotCompileException e)
       {
@@ -903,55 +911,125 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       }
    }
 
-   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String methodName, String[] parameters,
-         String[] exceptions)
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String returnType, String methodName,
+         String[] parameters, String[] exceptions)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtMethod method = CtNewMethod.make(modifier.getModifiers(), JavassistUtil.toCtClass(returnType),
+               methodName, JavassistUtil.toCtClass(parameters), JavassistUtil.toCtClass(exceptions),
+               new InsertBeforeJavassistBody("{}").getBody(), ctClass);
+         return new JavassistMethodInfo(factory, this, method);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
-   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String methodName, ClassInfo[] parameters,
-         ClassInfo[] exceptions)
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, ClassInfo returnType, String methodName,
+         ClassInfo[] parameters, ClassInfo[] exceptions)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtMethod method = CtNewMethod.make(modifier.getModifiers(), JavassistUtil.toCtClass(returnType),
+               methodName, JavassistUtil.toCtClass(parameters), JavassistUtil.toCtClass(exceptions),
+               new InsertBeforeJavassistBody("{}").getBody(), ctClass);
+         return new JavassistMethodInfo(factory, this, method);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
-   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String methodName, Body body, String[] parameters,
-         String[] exceptions)
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String returnType, String methodName, Body body,
+         String[] parameters, String[] exceptions)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtMethod method = CtNewMethod.make(modifier.getModifiers(), JavassistUtil.toCtClass(returnType),
+               methodName, JavassistUtil.toCtClass(parameters), JavassistUtil.toCtClass(exceptions),
+               body.getBody(), ctClass);
+         return new JavassistMethodInfo(factory, this, method);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
-   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, String methodName, Body body, ClassInfo[] parameters,
-         ClassInfo[] exceptions)
+   public MutableMethodInfo createMutableMethod(ModifierInfo modifier, ClassInfo returnType, String methodName, Body body,
+         ClassInfo[] parameters, ClassInfo[] exceptions)
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         CtMethod method = CtNewMethod.make(modifier.getModifiers(), JavassistUtil.toCtClass(returnType),
+               methodName, JavassistUtil.toCtClass(parameters), JavassistUtil.toCtClass(exceptions),
+               body.getBody(), ctClass);
+         return new JavassistMethodInfo(factory, this, method);
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 
    public void removeConstructor(MutableConstructorInfo mci)
    {
-      // TODO Auto-generated method stub
-      
+      if(mci instanceof JavassistConstructorInfo)
+         try
+         {
+            ctClass.removeConstructor(((JavassistConstructorInfo) mci).getCtConstructor());
+            clearConstructorCache();
+         }
+         catch (NotFoundException e)
+         {
+            throw new org.jboss.reflect.spi.NotFoundException(e.toString());
+         }
    }
 
    public void removeField(MutableFieldInfo mfi)
    {
-      // TODO Auto-generated method stub
-      
+      if(mfi instanceof JavassistFieldInfo)
+         try
+         {
+            ctClass.removeField(((JavassistFieldInfo) mfi).getCtField());
+            clearFieldCache();
+         }
+         catch (NotFoundException e)
+         {
+            throw new org.jboss.reflect.spi.NotFoundException(e.toString());
+         }
    }
 
    public void removeMethod(MutableMethodInfo mmi)
    {
-      // TODO Auto-generated method stub
-      
+      if(mmi instanceof JavassistMethodInfo)
+         try
+         {
+            ctClass.removeMethod(((JavassistMethodInfo) mmi).getCtMethod());
+            clearMethodCache();
+         }
+         catch (NotFoundException e)
+         {
+            throw new org.jboss.reflect.spi.NotFoundException(e.toString());
+         }
    }
 
    public byte[] toByteCode()
    {
-      // TODO Auto-generated method stub
-      return null;
+      try
+      {
+         return ctClass.toBytecode();
+      }
+      catch (IOException e)
+      {
+         throw new RuntimeException(e.toString());
+      }
+      catch (CannotCompileException e)
+      {
+         throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+      }
    }
 }

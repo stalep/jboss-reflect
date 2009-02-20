@@ -37,6 +37,9 @@ import org.jboss.reflect.spi.AnnotationValue;
  */
 public abstract class JavassistInheritableAnnotationHolder extends JavassistAnnotatedInfo
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = -714018976926313160L;
+
    /** The classname of the <code>@Inherited</code> annotation, this needs retroing to work on JDK 1.4 */
    private static final String INHERITED_NAME = Inherited.class.getName();//This 
 
@@ -61,6 +64,7 @@ public abstract class JavassistInheritableAnnotationHolder extends JavassistAnno
       return allAnnotationsArray;
    }
 
+   @Override
    protected AnnotationValue[] getAnnotations(Object obj)
    {
       synchronized (this)
@@ -75,12 +79,14 @@ public abstract class JavassistInheritableAnnotationHolder extends JavassistAnno
       return allAnnotationsArray;
    }
 
+   @Override
    public AnnotationValue getAnnotation(String name)
    {
       getAnnotations();
       return allAnnotations.get(name);
    }
 
+   @Override
    public boolean isAnnotationPresent(String name)
    {
       getAnnotations();
@@ -93,6 +99,7 @@ public abstract class JavassistInheritableAnnotationHolder extends JavassistAnno
     *
     * @param annotations the annotations
     */
+   @Override
    public void setupAnnotations(AnnotationValue[] annotations)
    {
       JavassistInheritableAnnotationHolder superHolder = getSuperHolder();

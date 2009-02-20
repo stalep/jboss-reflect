@@ -36,6 +36,9 @@ import org.jboss.reflect.spi.AnnotationValue;
  */
 public abstract class JavassistAnnotatedInfo extends AbstractAnnotatedInfo
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = -598578132033887927L;
+
    final static AnnotationValue[] NOT_CONFIGURED = new AnnotationValue[0];
 
    /** The annotations */

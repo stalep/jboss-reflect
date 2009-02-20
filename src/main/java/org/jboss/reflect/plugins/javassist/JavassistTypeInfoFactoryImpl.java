@@ -26,7 +26,6 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMember;
@@ -42,19 +41,21 @@ import org.jboss.reflect.spi.AnnotationInfo;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ClassPoolFactory;
+import org.jboss.reflect.spi.MutableClassInfo;
+import org.jboss.reflect.spi.MutableTypeInfoFactory;
 import org.jboss.reflect.spi.NumberInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.collection.WeakClassCache;
 
 /**
  * A javassist type factory.
+ * TODO: need to fix the cl stuff
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements TypeInfoFactory, AnnotationHelper
+public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements MutableTypeInfoFactory, AnnotationHelper
 {
    //TODO: Need to change this to a usable CPF.
    static final ClassPoolFactory poolFactory = new DummyClassPoolFactory();
@@ -123,6 +124,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       throw ex;
    }
 
+   @Override
    @SuppressWarnings("unchecked")
    protected Object instantiate(Class clazz)
    {
@@ -173,7 +175,6 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       }
    }
    
-   @SuppressWarnings("unchecked")
    protected Object instantiate(CtClass ctClass)
    {
       try
@@ -256,6 +257,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
     * @param clazz the class
     * @return the info
     */
+   @SuppressWarnings("unchecked")
    @Override
    public Object get(Class clazz)
    {
@@ -284,9 +286,9 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       if (clazz == null)
          throw new IllegalArgumentException("Null class");
       
-      Map classLoaderCache = getClassLoaderCache(clazz.getClassPool().getClassLoader());
+      Map<String, WeakReference<Object>> classLoaderCache = getClassLoaderCache(clazz.getClassPool().getClassLoader());
 
-      WeakReference weak = (WeakReference) classLoaderCache.get(clazz.getName());
+      WeakReference<Object> weak = (WeakReference<Object>) classLoaderCache.get(clazz.getName());
       if (weak != null)
       {
          Object result = weak.get();
@@ -303,7 +305,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
 
       Object result = instantiate(clazz);
       
-      weak = new WeakReference(result);
+      weak = new WeakReference<Object>(result);
       classLoaderCache.put(clazz.getName(), weak);
       
 //      we just ignore generate(..) since it doesnt do anything atm
@@ -381,7 +383,6 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
    {
       try
       {
-         //TODO: Need to change this
          return poolFactory.getPoolForLoader(null).get(name);
       }
       catch (NotFoundException e)
@@ -390,6 +391,7 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
       }
    }
 
+   @Override
    @SuppressWarnings("unchecked")
    protected void generate(Class clazz, Object result)
    {
@@ -523,5 +525,43 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Type
          return true;
       else
          return false;
+   }
+
+   public MutableClassInfo getMutable(String name, ClassLoader cl)
+   {
+      CtClass clazz;
+      try
+      {
+         clazz = poolFactory.getPoolForLoader(cl).get(name);
+         return new JavassistTypeInfo(this, clazz, null);
+      }
+      catch (NotFoundException e)
+      {
+         throw new org.jboss.reflect.spi.NotFoundException(e.toString());
+      }
+   }
+
+   public MutableClassInfo createNewMutableClass(String name)
+   {
+      CtClass clazz = poolFactory.getPoolForLoader(null).makeClass(name);
+      return new JavassistTypeInfo(this, clazz, null);
+   }
+
+   public MutableClassInfo createNewMutableClass(String name, ClassInfo superClass)
+   {
+      CtClass clazz = poolFactory.getPoolForLoader(null).makeClass(name, JavassistUtil.toCtClass(superClass));
+      return new JavassistTypeInfo(this, clazz, null);
+   }
+
+   public MutableClassInfo createNewMutableInterface(String name)
+   {
+      CtClass clazz = poolFactory.getPoolForLoader(null).makeInterface(name);
+      return new JavassistTypeInfo(this, clazz, null);
+   }
+
+   public MutableClassInfo createNewMutableInterface(String name, ClassInfo superClass)
+   {
+      CtClass clazz = poolFactory.getPoolForLoader(null).makeInterface(name, JavassistUtil.toCtClass(superClass));
+      return new JavassistTypeInfo(this, clazz, null);
    }
 }

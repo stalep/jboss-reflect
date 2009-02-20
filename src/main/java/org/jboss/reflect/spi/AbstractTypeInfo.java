@@ -32,6 +32,9 @@ import org.jboss.util.JBossObject;
  */
 public abstract class AbstractTypeInfo extends JBossObject implements TypeInfo
 {
+   /** The serialVersionUID */
+   private static final long serialVersionUID = -3395908398225434453L;
+   
    /** The attachments */
    private transient TypeInfoAttachments attachments;
 
