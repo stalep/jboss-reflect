@@ -43,11 +43,8 @@ import org.jboss.reflect.plugins.ValueConvertor;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.Body;
 import org.jboss.reflect.spi.ClassInfo;
-import org.jboss.reflect.spi.ConstructorInfo;
-import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InsertBeforeJavassistBody;
 import org.jboss.reflect.spi.InterfaceInfo;
-import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.MutableClassInfo;
 import org.jboss.reflect.spi.MutableConstructorInfo;
@@ -82,19 +79,19 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    private Map<SignatureKey, JavassistConstructorInfo> constructors = new ConcurrentHashMap<SignatureKey, JavassistConstructorInfo>();
 
    /** The constructors */
-   private ConstructorInfo[] constructorArray;
+   private MutableConstructorInfo[] constructorArray;
 
    /** The fields */
    private Map<String, JavassistFieldInfo> fields = new ConcurrentHashMap<String, JavassistFieldInfo>();
 
    /** The fields */
-   private FieldInfo[] fieldArray;
+   private MutableFieldInfo[] fieldArray;
 
    /** The methods */
    private Map<SignatureKey, JavassistMethodInfo> methods = new ConcurrentHashMap<SignatureKey, JavassistMethodInfo>();
 
    /** The methods */
-   private MethodInfo[] methodArray;
+   private MutableMethodInfo[] methodArray;
 
    /** The package info */
    private PackageInfo packageInfo;
@@ -221,13 +218,13 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       throw new org.jboss.util.NotImplementedException("getGenericInterfaces");
    }
 
-   public ConstructorInfo[] getDeclaredConstructors()
+   public MutableConstructorInfo[] getDeclaredConstructors()
    {
       if (constructorArray == null)
       {
          CtConstructor[] declaredConstructors = ctClass.getDeclaredConstructors();
          if (declaredConstructors == null || declaredConstructors.length == 0)
-            constructorArray = new ConstructorInfo[0];
+            constructorArray = new MutableConstructorInfo[0];
          else
          {
             synchronized (constructors)
@@ -235,19 +232,19 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
                for (int i = 0; i < declaredConstructors.length; ++i)
                   generateConstructorInfo(declaredConstructors[i]);
                Collection<JavassistConstructorInfo> constructorCollection = constructors.values();
-               constructorArray = constructorCollection.toArray(new ConstructorInfo[constructorCollection.size()]);
+               constructorArray = constructorCollection.toArray(new MutableConstructorInfo[constructorCollection.size()]);
             }
          }
       }
       return constructorArray;
    }
 
-   public ConstructorInfo getDeclaredConstructor(TypeInfo[] parameters)
+   public MutableConstructorInfo getDeclaredConstructor(TypeInfo[] parameters)
    {
       SignatureKey key = new SignatureKey(null, parameters);
       synchronized (constructors)
       {
-         ConstructorInfo constructor = constructors.get(key);
+         MutableConstructorInfo constructor = constructors.get(key);
          if (constructor != null)
             return constructor;
       }
@@ -256,11 +253,11 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return generateConstructorInfo(key);
    }
 
-   public FieldInfo getDeclaredField(String fieldName)
+   public MutableFieldInfo getDeclaredField(String fieldName)
    {
       synchronized (fields)
       {
-         FieldInfo field = fields.get(fieldName);
+         MutableFieldInfo field = fields.get(fieldName);
          if (field != null)
             return field;
       }
@@ -279,13 +276,13 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       }
    }
 
-   public FieldInfo[] getDeclaredFields()
+   public MutableFieldInfo[] getDeclaredFields()
    {
       if (fieldArray == null)
       {
          CtField[] declaredFields = ctClass.getDeclaredFields();
          if (declaredFields == null || declaredFields.length == 0)
-            fieldArray = new FieldInfo[0];
+            fieldArray = new MutableFieldInfo[0];
          else
          {
             synchronized (fields)
@@ -293,19 +290,19 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
                for (int i = 0; i < declaredFields.length; ++i)
                   generateFieldInfo(declaredFields[i]);
                Collection<JavassistFieldInfo> fieldCollection = fields.values();
-               fieldArray = fieldCollection.toArray(new FieldInfo[fieldCollection.size()]);
+               fieldArray = fieldCollection.toArray(new MutableFieldInfo[fieldCollection.size()]);
             }
          }
       }
       return fieldArray;
    }
 
-   public MethodInfo getDeclaredMethod(String methodName, TypeInfo[] parameters)
+   public MutableMethodInfo getDeclaredMethod(String methodName, TypeInfo[] parameters)
    {
       SignatureKey key = new SignatureKey(methodName, parameters);
       synchronized (methods)
       {
-         MethodInfo method = methods.get(key);
+         MutableMethodInfo method = methods.get(key);
          if (method != null)
             return method;
       }
@@ -314,13 +311,13 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return generateMethodInfo(key);
    }
 
-   public MethodInfo[] getDeclaredMethods()
+   public MutableMethodInfo[] getDeclaredMethods()
    {
       if (methodArray == null)
       {
          CtMethod[] declaredMethods = ctClass.getDeclaredMethods();
          if (declaredMethods == null || declaredMethods.length == 0)
-            methodArray = new MethodInfo[0];
+            methodArray = new MutableMethodInfo[0];
          else
          {
             synchronized (methods)
@@ -328,7 +325,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
                for (int i = 0; i < declaredMethods.length; ++i)
                   generateMethodInfo(declaredMethods[i]);
                Collection<JavassistMethodInfo> methodCollection = methods.values();
-               methodArray = methodCollection.toArray(new MethodInfo[methodCollection.size()]);
+               methodArray = methodCollection.toArray(new MutableMethodInfo[methodCollection.size()]);
             }
          }
       }
@@ -473,7 +470,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
     * @param constructor the constructor
     * @return the constructor info
     */
-   protected ConstructorInfo generateConstructorInfo(CtConstructor constructor)
+   protected MutableConstructorInfo generateConstructorInfo(CtConstructor constructor)
    {
       try
       {
@@ -501,7 +498,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
     * @param key the key
     * @return the constructor info
     */
-   protected ConstructorInfo generateConstructorInfo(SignatureKey key)
+   protected MutableConstructorInfo generateConstructorInfo(SignatureKey key)
    {
       CtClass[] params = getParameterTypes(key);
       try
@@ -521,7 +518,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
     * @param field the field
     * @return the field info
     */
-   protected FieldInfo generateFieldInfo(CtField field)
+   protected MutableFieldInfo generateFieldInfo(CtField field)
    {
       JavassistFieldInfo info = new JavassistFieldInfo(factory, this, field);
       synchronized (fields)
@@ -537,7 +534,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
     * @param key the key
     * @return the method info
     */
-   protected MethodInfo generateMethodInfo(SignatureKey key)
+   protected MutableMethodInfo generateMethodInfo(SignatureKey key)
    {
       CtClass[] params = getParameterTypes(key);
       try
@@ -557,7 +554,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
     * @param method the method
     * @return the method info
     */
-   protected MethodInfo generateMethodInfo(CtMethod method)
+   protected MutableMethodInfo generateMethodInfo(CtMethod method)
    {
       try
       {
@@ -581,7 +578,7 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
     * @param method the method
     * @return the method info
     */
-   protected MethodInfo generateMethodInfo(SignatureKey key, CtMethod method)
+   protected MutableMethodInfo generateMethodInfo(SignatureKey key, CtMethod method)
    {
       JavassistMethodInfo info = new JavassistMethodInfo(factory, this, method);
       synchronized (methods)

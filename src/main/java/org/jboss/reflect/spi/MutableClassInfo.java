@@ -31,6 +31,52 @@ public interface MutableClassInfo extends ClassInfo
 {
    
    /**
+    * Get the declared method
+    * 
+    * @param name the method name
+    * @param parameters the parameters
+    * @return the method info
+    */
+   MutableMethodInfo getDeclaredMethod(String name, TypeInfo[] parameters);
+   
+   /**
+    * Get the declared methods
+    * 
+    * @return the methods
+    */
+   MutableMethodInfo[] getDeclaredMethods();
+   
+   /**
+    * Get the declared constructors
+    * 
+    * @return the constructors
+    */
+   MutableConstructorInfo[] getDeclaredConstructors();
+
+   /**
+    * Get a declared constructor
+    * 
+    * @param parameters the parameters
+    * @return the constructor
+    */
+   MutableConstructorInfo getDeclaredConstructor(TypeInfo[] parameters);
+
+   /**
+    * Get the declared field
+    * 
+    * @param name the field name
+    * @return the field
+    */
+   MutableFieldInfo getDeclaredField(String name);
+
+   /**
+    * Get the declared fields
+    * 
+    * @return the fields
+    */
+   MutableFieldInfo[] getDeclaredFields();
+   
+   /**
     * Compiles the code included in Body and returns a MutableMethodInfo representation of it.
     * The Body must include the whole declaration of the method.
     * 
