@@ -25,11 +25,13 @@ package org.jboss.test.plugins.javassist;
 import java.util.HashMap;
 import java.util.Map;
 
+import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMethod;
+import javassist.CtNewMethod;
 import javassist.Modifier;
 import javassist.NotFoundException;
 
@@ -80,6 +82,46 @@ public class JavassistUtilTestCase extends ContainerTest
       assertEquals("[[Ljava.lang.String;", clazz.getName());
       clazz = loadClass("java.lang.String[][][]");
       assertEquals("[[[Ljava.lang.String;", clazz.getName());
+   }
+   
+   public void testGeneratedCtClassToClass()
+   {
+      CtClass clazz = ClassPool.getDefault().makeClass("TestClass");
+      try
+      {
+         CtMethod foo = CtNewMethod.make("public void foo() { }", clazz);
+         clazz.addMethod(foo);
+         Class<?> theClass = JavassistUtil.ctClassToClass(clazz);
+         assertEquals("TestClass", theClass.getName());
+      }
+      catch (CannotCompileException e)
+      {
+         e.printStackTrace();
+      }
+   }
+   
+   public void testChangedCtClassToClass()
+   {
+      try
+      {
+         CtClass clazz = ClassPool.getDefault().get("org.jboss.test.plugins.javassist.Pojo2");
+         CtMethod foo = CtNewMethod.make("public void test1() { }", clazz);
+         clazz.addMethod(foo);
+         
+         
+         Class theClass = JavassistUtil.ctClassToClass(clazz);
+         assertEquals(2, theClass.getDeclaredMethods().length);
+      }
+      catch (CannotCompileException e)
+      {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+      catch (NotFoundException e)
+      {
+         e.printStackTrace();
+      }
+      
    }
    
    public void testModifier()

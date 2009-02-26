@@ -25,6 +25,7 @@ import java.lang.reflect.Array;
 
 import org.jboss.reflect.spi.ClassInfo;
 
+import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtPrimitiveType;
@@ -44,6 +45,18 @@ public class JavassistUtil
 
    public static Class<?> ctClassToClass(CtClass ct)
    {
+      if(ct.isModified())
+      {
+         try
+         {
+            ct.toClass();
+         }
+         catch (CannotCompileException e)
+         {
+            throw new org.jboss.reflect.spi.CannotCompileException(e.toString());
+         }
+      }
+      
       try
       {
          if (ct.isArray())
@@ -86,13 +99,18 @@ public class JavassistUtil
       }
       catch (NotFoundException e)
       {
-         e.printStackTrace();
-         return null;
+         throw new org.jboss.reflect.spi.NotFoundException(e.toString());
       }
       catch (ClassNotFoundException e)
       {
-         e.printStackTrace();
-         return null;
+         try
+         {
+            return ct.toClass();
+         }
+         catch (CannotCompileException e1)
+         {
+            throw new org.jboss.reflect.spi.CannotCompileException(e1.toString());
+         }
       }
    }
    
