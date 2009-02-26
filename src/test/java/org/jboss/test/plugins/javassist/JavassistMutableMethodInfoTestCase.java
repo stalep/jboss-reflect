@@ -21,10 +21,8 @@
   */
 package org.jboss.test.plugins.javassist;
 
-import org.jboss.reflect.plugins.javassist.JavassistTypeInfo;
 import org.jboss.reflect.plugins.javassist.JavassistTypeInfoFactoryImpl;
 import org.jboss.reflect.spi.InsertBeforeJavassistBody;
-import org.jboss.reflect.spi.MethodInfo;
 import org.jboss.reflect.spi.MutableClassInfo;
 import org.jboss.reflect.spi.MutableMethodInfo;
 import org.jboss.reflect.spi.TypeInfo;
@@ -51,17 +49,17 @@ public class JavassistMutableMethodInfoTestCase extends ContainerTest
    
    public void testMethods()
    {
-      MutableClassInfo mci = new JavassistTypeInfoFactoryImpl().getMutable("org.jboss.test.plugins.javassist.Pojo", null);
+      MutableClassInfo mci = new JavassistTypeInfoFactoryImpl().getMutable("org.jboss.test.plugins.javassist.Pojo3", null);
       
       MutableMethodInfo[] methods = mci.getDeclaredMethods();
       try
       {
          MutableMethodInfo bar = mci.getDeclaredMethod("bar", new TypeInfo[] {(TypeInfo) new JavassistTypeInfoFactoryImpl().get("java.lang.String", Thread.currentThread().getContextClassLoader()) });
-    
-      assertEquals(3, methods.length);
-      System.out.println("should expect bar, but got "+bar.getName());
-      assertEquals("bar", bar.getName());
-      assertEquals("java.lang.String", bar.getParameterTypes()[0].getName());
+
+         assertEquals(3, methods.length);
+         System.out.println("should expect bar, but got "+bar.getName());
+         assertEquals("bar", bar.getName());
+         assertEquals("java.lang.String", bar.getParameterTypes()[0].getName());
       
       
       }
@@ -76,7 +74,7 @@ public class JavassistMutableMethodInfoTestCase extends ContainerTest
    
    public void testNewMethods()
    {
-      MutableClassInfo mci = new JavassistTypeInfoFactoryImpl().getMutable("org.jboss.test.plugins.javassist.Pojo", null);
+      MutableClassInfo mci = new JavassistTypeInfoFactoryImpl().getMutable("org.jboss.test.plugins.javassist.Pojo3", null);
       MutableMethodInfo newMethod1 = mci.createMutableMethod(new InsertBeforeJavassistBody("public void test1() { }"));
       mci.addMethod(newMethod1);
       

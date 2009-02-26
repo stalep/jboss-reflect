@@ -21,11 +21,9 @@
   */
 package org.jboss.test.plugins.javassist;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.jboss.reflect.plugins.javassist.JavassistTypeInfoFactoryImpl;
-import org.jboss.reflect.spi.DefaultJavassistBody;
 import org.jboss.reflect.spi.InsertAfterJavassistBody;
 import org.jboss.reflect.spi.InsertBeforeJavassistBody;
 import org.jboss.reflect.spi.MutableClassInfo;
@@ -55,21 +53,19 @@ public class JavassistBodyTestCase extends ContainerTest
    public void testBody()
    {
       MutableClassInfo mci = new JavassistTypeInfoFactoryImpl().getMutable("org.jboss.test.plugins.javassist.PojoBody", null);
-//      MutableMethodInfo mmi = mci.getDeclaredMethods()[1];
       try
       {
          MutableMethodInfo mmi = mci.getDeclaredMethod("foo", new TypeInfo[] {(TypeInfo) new JavassistTypeInfoFactoryImpl().get("int", Thread.currentThread().getContextClassLoader()) });
-    
-      System.out.println("got method: "+mmi.getName());
-      mmi.setBody(new InsertBeforeJavassistBody("i = 42;"));
-      MutableMethodInfo mmi2 = mci.getDeclaredMethods()[0];
-      System.out.println("mmi2: "+mmi2.getName());
-      mmi2.setBody(new InsertAfterJavassistBody("s = \"after\" + s; return s;"));
-      
-      
-      Class<?> clazz = mci.getType();
-      
-      
+
+         System.out.println("got method: "+mmi.getName());
+         mmi.setBody(new InsertBeforeJavassistBody("i = 42;"));
+         MutableMethodInfo mmi2 = mci.getDeclaredMethod("bar", new TypeInfo[] {});
+         System.out.println("mmi2: "+mmi2.getName());
+         mmi2.setBody(new InsertAfterJavassistBody("s = \"after\" + s; return s;"));
+         System.out.println("mmi2: "+mmi2.getName());
+
+         Class<?> clazz = mci.getType();
+
          Object pojoBody = clazz.newInstance();
          Method m1 = clazz.getDeclaredMethods()[0];
          assertEquals(42, m1.invoke(pojoBody, new Object[] {1}));
@@ -77,37 +73,11 @@ public class JavassistBodyTestCase extends ContainerTest
          assertEquals("afterbar", m2.invoke(pojoBody, new Object[] {}));
          
          System.out.println();
-    
       }
-      catch (ClassNotFoundException e1)
+      catch (Exception e)
       {
-         // TODO Auto-generated catch block
-         e1.printStackTrace();
-      }
-      catch (IllegalArgumentException e)
-      {
-         // TODO Auto-generated catch block
          e.printStackTrace();
       }
-      catch (InvocationTargetException e)
-      {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-
-      catch (InstantiationException e)
-      {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-      catch (IllegalAccessException e)
-      {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-//      System.out.println("Method name: "+m1.getName());
-      
-      
    }
 
 }

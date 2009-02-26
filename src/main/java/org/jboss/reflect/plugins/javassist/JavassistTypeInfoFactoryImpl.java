@@ -281,10 +281,13 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Muta
     * @param clazz the class
     * @return the info
     */
+   @SuppressWarnings("unchecked")
    public Object get(CtClass clazz)
    {
       if (clazz == null)
          throw new IllegalArgumentException("Null class");
+      if(clazz instanceof CtPrimitiveType)
+         return instantiate(clazz);
       
       Map<String, WeakReference<Object>> classLoaderCache = getClassLoaderCache(clazz.getClassPool().getClassLoader());
 

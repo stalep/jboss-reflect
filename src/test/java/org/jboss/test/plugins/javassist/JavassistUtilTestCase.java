@@ -100,30 +100,7 @@ public class JavassistUtilTestCase extends ContainerTest
       }
    }
    
-   public void testChangedCtClassToClass()
-   {
-      try
-      {
-         CtClass clazz = ClassPool.getDefault().get("org.jboss.test.plugins.javassist.Pojo2");
-         CtMethod foo = CtNewMethod.make("public void test1() { }", clazz);
-         clazz.addMethod(foo);
-         
-         
-         Class theClass = JavassistUtil.ctClassToClass(clazz);
-         assertEquals(2, theClass.getDeclaredMethods().length);
-      }
-      catch (CannotCompileException e)
-      {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-      catch (NotFoundException e)
-      {
-         e.printStackTrace();
-      }
-      
-   }
-   
+
    public void testModifier()
    {
       assertEquals(ModifierInfo.PUBLIC, Modifier.PUBLIC);
@@ -157,6 +134,31 @@ public class JavassistUtilTestCase extends ContainerTest
          e.printStackTrace();
       }
    }
+   
+   public void testChangedCtClassToClass()
+   {
+      try
+      {
+         CtClass clazz = ClassPool.getDefault().get("org.jboss.test.plugins.javassist.Pojo");
+         CtMethod foo = CtNewMethod.make("public void test1() { }", clazz);
+         clazz.addMethod(foo);
+         
+         
+         Class<?> theClass = JavassistUtil.ctClassToClass(clazz);
+         assertEquals(4, theClass.getDeclaredMethods().length);
+      }
+      catch (CannotCompileException e)
+      {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+      catch (NotFoundException e)
+      {
+         e.printStackTrace();
+      }
+      
+   }
+   
    
    private Class<?> loadClass(String name)
    {

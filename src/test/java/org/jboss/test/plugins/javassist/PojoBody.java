@@ -31,6 +31,7 @@ public class PojoBody
 {
 
    private String s;
+//   private int i = 0;
    public int foo(int i)
    {
       return i;
