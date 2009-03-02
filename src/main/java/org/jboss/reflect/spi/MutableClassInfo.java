@@ -40,6 +40,18 @@ public interface MutableClassInfo extends ClassInfo
    MutableMethodInfo getDeclaredMethod(String name, TypeInfo[] parameters);
    
    /**
+    * Get the declared method
+    * Note: the parameters will be loaded with the classloader defined in
+    * TypeInfoFactory.
+    * 
+    * @param name the method name
+    * @param parameters the parameters
+    * @return the method info
+    * @throws ClassNotFoundException 
+    */
+   MutableMethodInfo getDeclaredMethod(String name, String[] parameters) throws ClassNotFoundException;
+   
+   /**
     * Get the declared methods
     * 
     * @return the methods
@@ -61,6 +73,17 @@ public interface MutableClassInfo extends ClassInfo
     */
    MutableConstructorInfo getDeclaredConstructor(TypeInfo[] parameters);
 
+   /**
+    * Get a declared constructor
+    * Note: the parameters will be loaded with the classloader defined in
+    * TypeInfoFactory.
+    * 
+    * @param parameters the parameters
+    * @return the constructor
+    * @throws ClassNotFoundException 
+    */
+   MutableConstructorInfo getDeclaredConstructor(String[] parameters) throws ClassNotFoundException;
+   
    /**
     * Get the declared field
     * 

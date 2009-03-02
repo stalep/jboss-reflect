@@ -84,24 +84,24 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
       return typeInfo;
    }
 
-   public int getModifiers()
+   public ModifierInfo getModifiers()
    {
-      return ctMethod.getModifiers();
+      return ModifierInfo.getNewModifier(ctMethod.getModifiers());
    }
 
    public boolean isPublic()
    {
-      return Modifier.isPublic(getModifiers());
+      return getModifiers().isPublic();
    }
 
    public boolean isStatic()
    {
-      return Modifier.isStatic(getModifiers());
+      return getModifiers().isStatic();
    }
 
    public boolean isVolatile()
    {
-      return Modifier.isVolatile(getModifiers());
+      return getModifiers().isVolatile();
    }
 
    public ClassInfo[] getExceptionTypes()
@@ -336,13 +336,11 @@ public class JavassistMethodInfo extends JavassistAnnotatedParameterInfo impleme
 
    public void setReturnType(String returnType)
    {
-      // TODO Auto-generated method stub
-      
+      throw new RuntimeException("Method not supported by Javassist");
    }
 
    public void setReturnType(ClassInfo returnType)
    {
-      // TODO Auto-generated method stub
-      
+      throw new RuntimeException("Method not supported by Javassist");
    }
 }

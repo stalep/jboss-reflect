@@ -50,6 +50,7 @@ public class JavassistBodyTestCase extends ContainerTest
       super(name);
    }
    
+   @SuppressWarnings("deprecation")
    public void testBody()
    {
       MutableClassInfo mci = new JavassistTypeInfoFactoryImpl().getMutable("org.jboss.test.plugins.javassist.PojoBody", null);

@@ -142,24 +142,24 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return getType().getSimpleName();
    }
 
-   public int getModifiers()
+   public ModifierInfo getModifiers()
    {
-      return ctClass.getModifiers();
+      return ModifierInfo.getNewModifier(ctClass.getModifiers());
    }
 
    public boolean isPublic()
    {
-      return Modifier.isPublic(getModifiers());
+      return getModifiers().isPublic();
    }
 
    public boolean isStatic()
    {
-      return Modifier.isStatic(getModifiers());
+      return getModifiers().isStatic();
    }
 
    public boolean isVolatile()
    {
-      return Modifier.isVolatile(getModifiers());
+      return getModifiers().isVolatile();
    }
 
    @Deprecated
@@ -253,6 +253,17 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return generateConstructorInfo(key);
    }
 
+   public MutableConstructorInfo getDeclaredConstructor(String[] parameters) throws ClassNotFoundException
+   {
+      TypeInfo[] typeParams = new TypeInfo[parameters.length];
+      for(int i=0; i<parameters.length;i++)
+      {
+         typeParams[i] = factory.getTypeInfo(parameters[i], 
+               JavassistTypeInfoFactoryImpl.poolFactory.getPoolForLoader(null).getClassLoader());
+      }
+      return getDeclaredConstructor(typeParams);
+   }
+   
    public MutableFieldInfo getDeclaredField(String fieldName)
    {
       synchronized (fields)
@@ -311,6 +322,17 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       return generateMethodInfo(key);
    }
 
+   public MutableMethodInfo getDeclaredMethod(String methodName, String[] parameters) throws ClassNotFoundException
+   {
+      TypeInfo[] typeParams = new TypeInfo[parameters.length];
+      for(int i=0; i<parameters.length;i++)
+      {
+         typeParams[i] = factory.getTypeInfo(parameters[i], 
+               JavassistTypeInfoFactoryImpl.poolFactory.getPoolForLoader(null).getClassLoader());
+      }         
+      return getDeclaredMethod(methodName, typeParams);
+   }
+   
    public MutableMethodInfo[] getDeclaredMethods()
    {
       if (methodArray == null)
@@ -727,6 +749,8 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    {
       if(methodArray != null)
          methodArray = null;
+      if(methods.size() > 0)
+         methods.clear();
    }
    
    protected void clearConstructorCache()

@@ -33,6 +33,7 @@ import java.security.PrivilegedAction;
 import org.jboss.reflect.plugins.MethodInfoImpl;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
 
@@ -73,7 +74,7 @@ public class ReflectMethodInfoImpl extends MethodInfoImpl
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public ReflectMethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public ReflectMethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, ModifierInfo modifiers, ClassInfo declaring)
    {
       super(annotations, name, returnType, parameterTypes, parameterAnnotations, exceptionTypes, modifiers, declaring);
    }
@@ -89,7 +90,7 @@ public class ReflectMethodInfoImpl extends MethodInfoImpl
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public ReflectMethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, ParameterInfo[] parameters, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public ReflectMethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, ParameterInfo[] parameters, ClassInfo[] exceptionTypes, ModifierInfo modifiers, ClassInfo declaring)
    {
       super(annotations, name, returnType, parameters, exceptionTypes, modifiers, declaring);
    }

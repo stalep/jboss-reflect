@@ -33,6 +33,7 @@ import org.jboss.reflect.spi.DelegateClassInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.PackageInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
@@ -78,7 +79,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    protected String name;
    
    /** The class modifiers */
-   protected int modifiers;
+   protected ModifierInfo modifiers;
    
    /** The interfaces */
    protected InterfaceInfo[] interfaces = UNKNOWN_INTERFACES;
@@ -148,7 +149,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
     * @param name the class name
     * @param modifiers the class modifiers
     */
-   public ClassInfoImpl(String name, int modifiers)
+   public ClassInfoImpl(String name, ModifierInfo modifiers)
    {
       this.name = name;
       this.modifiers = modifiers;
@@ -162,7 +163,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
     * @param interfaces the interfaces
     * @param superclass the super class
     */
-   public ClassInfoImpl(String name, int modifiers, InterfaceInfo[] interfaces,
+   public ClassInfoImpl(String name, ModifierInfo modifiers, InterfaceInfo[] interfaces,
                         ClassInfoImpl superclass)
    {
       this.name = name;
@@ -270,7 +271,7 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    {
       setAnnotatedElement(type);
       if (type != null)
-         modifiers = type.getModifiers();
+         modifiers = ModifierInfo.getNewModifier(type.getModifiers());
    }
    
    /**
@@ -439,24 +440,24 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return genericSuperclass;
    }
    
-   public int getModifiers()
+   public ModifierInfo getModifiers()
    {
       return modifiers;
    }
    
    public boolean isStatic()
    {
-      return Modifier.isStatic(modifiers);
+      return modifiers.isStatic();
    }
    
    public boolean isPublic()
    {
-      return Modifier.isPublic(modifiers);
+      return modifiers.isPublic();
    }
 
    public boolean isVolatile()
    {
-      return Modifier.isVolatile(modifiers);
+      return modifiers.isVolatile();
    }
 
    public String getName()

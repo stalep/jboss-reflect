@@ -22,7 +22,6 @@
 package org.jboss.test.classinfo.test;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,6 +30,7 @@ import org.jboss.reflect.plugins.EnumInfoImpl;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.EnumConstantInfo;
 import org.jboss.reflect.spi.EnumInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.test.classinfo.support.ClassInfoEnum;
 import org.jboss.test.classinfo.support.ClassInfoEnumAnnotation;
@@ -67,7 +67,7 @@ public abstract class ClassInfoEnumTest extends AbstractClassInfoTest
    @SuppressWarnings("unchecked")
    private void testEnum(Class enumClass) throws Throwable
    {
-      EnumInfoImpl expected = new EnumInfoImpl(enumClass.getName(), Modifier.PUBLIC);
+      EnumInfoImpl expected = new EnumInfoImpl(enumClass.getName(), ModifierInfo.PUBLIC);
       TypeInfo info = testBasics(enumClass, expected);
       
       assertFalse(info.isArray());

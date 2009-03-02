@@ -27,6 +27,7 @@ import java.util.Arrays;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
@@ -59,7 +60,7 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    protected ClassInfo[] exceptionTypes;
    
    /** The modifiers */
-   protected int modifiers;
+   protected ModifierInfo modifiers;
    
    /** The return type */
    protected TypeInfo returnType;
@@ -86,7 +87,7 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public MethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public MethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, ModifierInfo modifiers, ClassInfo declaring)
    {
       super(annotations);
       this.name = name;
@@ -123,7 +124,7 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public MethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, ParameterInfo[] parameters, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public MethodInfoImpl(AnnotationValue[] annotations, String name, TypeInfo returnType, ParameterInfo[] parameters, ClassInfo[] exceptionTypes, ModifierInfo modifiers, ClassInfo declaring)
    {
       super(annotations);
       this.name = name;
@@ -179,24 +180,24 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       return returnType;
    }
    
-   public int getModifiers()
+   public ModifierInfo getModifiers()
    {
       return modifiers;
    }
    
    public boolean isStatic()
    {
-      return Modifier.isStatic(modifiers);
+      return modifiers.isStatic();
    }
    
    public boolean isPublic()
    {
-      return Modifier.isPublic(modifiers);
+      return modifiers.isPublic();
    }
    
    public boolean isVolatile()
    {
-      return Modifier.isVolatile(modifiers);
+      return modifiers.isVolatile();
    }
 
    public Object invoke(Object target, Object[] args) throws Throwable

@@ -21,10 +21,9 @@
 */
 package org.jboss.test.classinfo.test;
 
-import java.lang.reflect.Modifier;
-
 import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.test.classinfo.support.ClassInfoAnnotationInterface;
 import org.jboss.test.classinfo.support.ClassInfoEmptyInterface;
@@ -90,7 +89,7 @@ public abstract class ClassInfoInterfaceTest extends AbstractClassInfoTest
    
    private void testInterface(Class<?> clazz) throws Throwable
    {
-      ClassInfoImpl expected = new ClassInfoImpl(clazz.getName(), Modifier.PUBLIC);
+      ClassInfoImpl expected = new ClassInfoImpl(clazz.getName(), ModifierInfo.PUBLIC);
       TypeInfo info = testBasics(clazz, expected);
       
       assertFalse(info.isArray());

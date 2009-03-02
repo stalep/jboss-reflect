@@ -47,6 +47,7 @@ import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
@@ -97,7 +98,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
          int i = 0;
          for (Class<?> c : paramClasses)
             paramTypes[i++] = factory.getTypeInfo(c);
-         ConstructorInfo c = new ConstructorInfoImpl(null, paramTypes, paramAnnotations, null, constructor.getModifiers(), classInfo);
+         ConstructorInfo c = new ConstructorInfoImpl(null, paramTypes, paramAnnotations, null, ModifierInfo.getNewModifier(constructor.getModifiers()), classInfo);
          expected.add(c);
       }
       
@@ -134,7 +135,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
          for (Class<?> c : paramClasses)
             paramTypes[i++] = factory.getTypeInfo(c);
          ClassInfo classInfo = (ClassInfo) factory.getTypeInfo(method.getDeclaringClass());
-         MethodInfo m = new MethodInfoImpl(null, method.getName(), returnType, paramTypes, paramAnnotations, null, method.getModifiers(), classInfo);
+         MethodInfo m = new MethodInfoImpl(null, method.getName(), returnType, paramTypes, paramAnnotations, null, ModifierInfo.getNewModifier(method.getModifiers()), classInfo);
          expected.add(m);
       }
       
@@ -274,7 +275,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
             
             TypeInfo type = factory.getTypeInfo(getter.getGenericReturnType());
             ClassInfo declaringType = (ClassInfo) factory.getTypeInfo(getter.getDeclaringClass());
-            MethodInfo getterInfo = new MethodInfoImpl(null, getter.getName(), type, new TypeInfo[0], null, null, getter.getModifiers(), declaringType);
+            MethodInfo getterInfo = new MethodInfoImpl(null, getter.getName(), type, new TypeInfo[0], null, null, ModifierInfo.getNewModifier(getter.getModifiers()), declaringType);
             MethodInfo setterInfo = null;
             if (setter != null)
             {
@@ -282,7 +283,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
                AnnotationValue[][] paramAnnotations = new AnnotationValue[1][];
                setterAnnotations = getExpectedAnnotations(setter.getParameterAnnotations()[0]); 
                paramAnnotations[0] = setterAnnotations.toArray(new AnnotationValue[setterAnnotations.size()]);
-               setterInfo = new MethodInfoImpl(null, setter.getName(), PrimitiveInfo.VOID, new TypeInfo[] { type }, paramAnnotations, null, setter.getModifiers(), declaringType);
+               setterInfo = new MethodInfoImpl(null, setter.getName(), PrimitiveInfo.VOID, new TypeInfo[] { type }, paramAnnotations, null, ModifierInfo.getNewModifier(setter.getModifiers()), declaringType);
             }
             properties.put(lowerName, new DefaultPropertyInfo(lowerName, name, type, getterInfo, setterInfo, annotations));
          }
@@ -307,7 +308,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
                AnnotationValue[][] paramAnnotations = new AnnotationValue[1][];
                setterAnnotations = getExpectedAnnotations(setter.getParameterAnnotations()[0]); 
                paramAnnotations[0] = setterAnnotations.toArray(new AnnotationValue[setterAnnotations.size()]);
-               MethodInfo setterInfo = new MethodInfoImpl(null, setter.getName(), PrimitiveInfo.VOID, new TypeInfo[] { type }, paramAnnotations, null, setter.getModifiers(), declaringType);
+               MethodInfo setterInfo = new MethodInfoImpl(null, setter.getName(), PrimitiveInfo.VOID, new TypeInfo[] { type }, paramAnnotations, null, ModifierInfo.getNewModifier(setter.getModifiers()), declaringType);
                properties.put(lowerName, new DefaultPropertyInfo(lowerName, name, type, null, setterInfo, annotations));
             }
          }
@@ -353,7 +354,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
             ClassInfo declaringType = (ClassInfo) factory.getTypeInfo(method.getDeclaringClass());
             Set<AnnotationValue> getterAnnotations = getExpectedAnnotations(method.getAnnotations()); 
             AnnotationValue[] annotations = getterAnnotations.toArray(new AnnotationValue[getterAnnotations.size()]);
-            MethodInfo getter = new MethodInfoImpl(null, name, returnType, new TypeInfo[0], new AnnotationValue[0][], null, method.getModifiers(), declaringType);
+            MethodInfo getter = new MethodInfoImpl(null, name, returnType, new TypeInfo[0], new AnnotationValue[0][], null, ModifierInfo.getNewModifier(method.getModifiers()), declaringType);
             properties.add(new DefaultPropertyInfo(name, name, returnType, getter, null, annotations));
          }
       }
@@ -378,7 +379,7 @@ public abstract class AbstractBeanInfoTest extends AbstractClassInfoTest
             for (int i = 0; i < finfos.length; ++i)
             {
                FieldInfo field = finfos[i];
-               if ((mode == BeanAccessMode.FIELDS && field.isPublic()) || (mode == BeanAccessMode.ALL))
+               if ((mode == BeanAccessMode.FIELDS && field.getModifiers().isPublic()) || (mode == BeanAccessMode.ALL))
                   fields.add(field);
             }
          }

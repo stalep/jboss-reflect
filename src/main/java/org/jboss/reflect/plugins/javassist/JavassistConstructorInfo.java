@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import javassist.CannotCompileException;
@@ -76,24 +75,24 @@ public class JavassistConstructorInfo extends JavassistAnnotatedParameterInfo im
       
    }
 
-   public int getModifiers()
+   public ModifierInfo getModifiers()
    {
-      return ctConstructor.getModifiers();
+      return ModifierInfo.getNewModifier(ctConstructor.getModifiers());
    }
 
    public boolean isPublic()
    {
-      return Modifier.isPublic(getModifiers());
+      return getModifiers().isPublic();
    }
 
    public boolean isStatic()
    {
-      return Modifier.isStatic(getModifiers());
+      return getModifiers().isStatic();
    }
 
    public boolean isVolatile()
    {
-      return Modifier.isVolatile(getModifiers());
+      return getModifiers().isVolatile();
    }
 
    public ClassInfo getDeclaringClass()

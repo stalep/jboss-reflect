@@ -33,6 +33,7 @@ import java.security.PrivilegedAction;
 import org.jboss.reflect.plugins.FieldInfoImpl;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.TypeInfo;
 
 /**
@@ -69,7 +70,7 @@ public class ReflectFieldInfoImpl extends FieldInfoImpl
     * @param modifiers the field modifiers
     * @param declaring the declaring class
     */
-   public ReflectFieldInfoImpl(AnnotationValue[] annotations, String name, TypeInfo type, int modifiers, ClassInfo declaring)
+   public ReflectFieldInfoImpl(AnnotationValue[] annotations, String name, TypeInfo type, ModifierInfo modifiers, ClassInfo declaring)
    {
       super(annotations, name, type, modifiers, declaring);
    }

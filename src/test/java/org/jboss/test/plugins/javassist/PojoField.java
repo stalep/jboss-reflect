@@ -27,18 +27,16 @@ package org.jboss.test.plugins.javassist;
  * @author <a href="mailto:stale.pedersen@jboss.org">Stale W. Pedersen</a>
  * @version $Revision: 1.1 $
  */
-public class Pojo
+public class PojoField
 {
    
    public String foo;
    
-   public int bar;
-   
-   public Pojo()
+   public PojoField()
    { 
    }
    
-   public Pojo(String s)
+   public PojoField(String s)
    {
    }
    

@@ -27,7 +27,7 @@ package org.jboss.reflect.spi;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface MemberInfo extends ModifierInfo
+public interface MemberInfo
 {
    /**
     * Get the declaring class
@@ -35,4 +35,6 @@ public interface MemberInfo extends ModifierInfo
     * @return the declaring class 
     */
    ClassInfo getDeclaringClass();
+   
+   ModifierInfo getModifiers();
 }

@@ -21,6 +21,8 @@
   */
 package org.jboss.test.plugins.javassist;
 
+import java.lang.reflect.Method;
+
 import org.jboss.reflect.plugins.javassist.JavassistTypeInfoFactoryImpl;
 import org.jboss.reflect.spi.InsertBeforeJavassistBody;
 import org.jboss.reflect.spi.MethodInfo;
@@ -47,39 +49,29 @@ public class JavassistMutableTypeInfoTestCase extends ContainerTest
       super(name);
    }
    
+   @SuppressWarnings("deprecation")
    public void testNewClass()
    {
-      MutableClassInfo mci = new JavassistTypeInfoFactoryImpl().createNewMutableClass("org.jboss.test.plugins.javassist.Pojo2");
-      assertEquals(mci.getName(), "org.jboss.test.plugins.javassist.Pojo2");
-      assertEquals(mci.isPublic(), true);
+      MutableClassInfo mci = new JavassistTypeInfoFactoryImpl().createNewMutableClass("org.jboss.test.plugins.javassist.PojoNew");
+      assertEquals(mci.getName(), "org.jboss.test.plugins.javassist.PojoNew");
+      assertEquals(mci.getModifiers().isPublic(), true);
       MutableMethodInfo mmi1 = mci.createMutableMethod(new InsertBeforeJavassistBody("public String getFoo() { return \"foo\"; }"));
       mci.addMethod(mmi1);
       assertEquals(mci.getDeclaredMethods().length, 1);
       MethodInfo mi = mci.getDeclaredMethods()[0];
       assertEquals(mi.getReturnType().getName(), "java.lang.String");
       
-      
-      
-      System.out.println("return type: "+mi.getReturnType().getName());
-      
-      
-      
-//      
-//      Thread.currentThread().getClass().getClassLoader()
-//      Class<?> clazz = mci.getType();
-//      try
-//      {
-//         Object pojo = clazz.newInstance();
-//         Method m1 = clazz.getMethod("getFoo", new Class[0]);
-//         
-//         String s = (String) m1.invoke(pojo, new Object[0]);
-//         System.out.println("Foo returned: "+s);
-//      }
-//      catch (Exception e)
-//      {
-//         // TODO Auto-generated catch block
-//         e.printStackTrace();
-//      }      
+      Class<?> clazz = mci.getType();
+      try
+      {
+         Object pojo = clazz.newInstance();
+         Method m1 = clazz.getMethod("getFoo", new Class[0]);
+         assertEquals("foo", m1.invoke(pojo, new Object[0]));
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+      }      
    }
 
 }

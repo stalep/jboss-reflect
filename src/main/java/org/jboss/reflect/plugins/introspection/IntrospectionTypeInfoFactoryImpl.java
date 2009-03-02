@@ -53,6 +53,7 @@ import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ArrayInfo;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.NumberInfo;
 import org.jboss.reflect.spi.PrimitiveInfo;
 import org.jboss.reflect.spi.TypeInfo;
@@ -159,7 +160,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
                if (genericParameterTypes.length != parameterTypes.length)
                   genericParameterTypes = parameterTypes;
 
-               infos[i] = new ReflectConstructorInfoImpl(annotations, getTypeInfos(genericParameterTypes), getParameterAnnotations(constructors[i].getParameterAnnotations()), getClassInfos(constructors[i].getGenericExceptionTypes()), constructors[i].getModifiers(), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
+               infos[i] = new ReflectConstructorInfoImpl(annotations, getTypeInfos(genericParameterTypes), getParameterAnnotations(constructors[i].getParameterAnnotations()), getClassInfos(constructors[i].getGenericExceptionTypes()), ModifierInfo.getNewModifier(constructors[i].getModifiers()), (ClassInfo) getTypeInfo(constructors[i].getDeclaringClass()));
                infos[i].setConstructor(constructors[i]);
             }
          }
@@ -183,7 +184,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
             for (int i = 0; i < fields.length; ++i)
             {
                AnnotationValue[] annotations = getAnnotations(fields[i]);
-               infos[i] = new ReflectFieldInfoImpl(annotations, fields[i].getName(), getTypeInfo(fields[i].getGenericType()), fields[i].getModifiers(), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
+               infos[i] = new ReflectFieldInfoImpl(annotations, fields[i].getName(), getTypeInfo(fields[i].getGenericType()), ModifierInfo.getNewModifier(fields[i].getModifiers()), (ClassInfo) getTypeInfo(fields[i].getDeclaringClass()));
                infos[i].setField(fields[i]);
             }
 
@@ -208,7 +209,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
             for (int i = 0; i < methods.length; ++i)
             {
                AnnotationValue[] annotations = getAnnotations(methods[i]);
-               infos[i] = new ReflectMethodInfoImpl(annotations, methods[i].getName(), getTypeInfo(methods[i].getGenericReturnType()), getTypeInfos(methods[i].getGenericParameterTypes()), getParameterAnnotations(methods[i].getParameterAnnotations()), getClassInfos(methods[i].getGenericExceptionTypes()), methods[i].getModifiers(), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
+               infos[i] = new ReflectMethodInfoImpl(annotations, methods[i].getName(), getTypeInfo(methods[i].getGenericReturnType()), getTypeInfos(methods[i].getGenericParameterTypes()), getParameterAnnotations(methods[i].getParameterAnnotations()), getClassInfos(methods[i].getGenericExceptionTypes()), ModifierInfo.getNewModifier(methods[i].getModifiers()), (ClassInfo) getTypeInfo(methods[i].getDeclaringClass()));
                infos[i].setMethod(methods[i]);
             }
             return infos;
@@ -430,7 +431,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       }
       else if (clazz.isEnum())
       {
-         EnumInfoImpl enumInfoImpl = new EnumInfoImpl(clazz.getName(), clazz.getModifiers());
+         EnumInfoImpl enumInfoImpl = new EnumInfoImpl(clazz.getName(), ModifierInfo.getNewModifier(clazz.getModifiers()));
          result = enumInfoImpl;
          Field[] fields = clazz.getFields();
          EnumConstantInfoImpl[] constants = new EnumConstantInfoImpl[fields.length];
@@ -444,7 +445,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       }
       else if (clazz.isAnnotation())
       {
-         result = new AnnotationInfoImpl(clazz.getName(), clazz.getModifiers());
+         result = new AnnotationInfoImpl(clazz.getName(), ModifierInfo.getNewModifier(clazz.getModifiers()));
          Method[] methods = getDeclaredMethods(clazz);
          AnnotationAttributeImpl[] atttributes = new AnnotationAttributeImpl[methods.length];
          for (int i = 0 ; i < methods.length ; i++)

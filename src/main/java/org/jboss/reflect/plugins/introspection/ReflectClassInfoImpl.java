@@ -23,6 +23,7 @@ package org.jboss.reflect.plugins.introspection;
 
 import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 
 /**
@@ -61,7 +62,7 @@ public class ReflectClassInfoImpl extends ClassInfoImpl implements InterfaceInfo
     * @param interfaces the interfaces
     * @param superclass the super class
     */
-   public ReflectClassInfoImpl(String name, int modifiers, InterfaceInfo[] interfaces,
+   public ReflectClassInfoImpl(String name, ModifierInfo modifiers, InterfaceInfo[] interfaces,
                         ReflectClassInfoImpl superclass)
    {
       super(name, modifiers, interfaces, superclass);

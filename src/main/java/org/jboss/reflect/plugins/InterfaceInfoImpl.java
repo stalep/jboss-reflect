@@ -22,6 +22,7 @@
 package org.jboss.reflect.plugins;
 
 import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 
 /**
  * Interface info
@@ -57,7 +58,7 @@ public class InterfaceInfoImpl extends ClassInfoImpl implements InterfaceInfo
     * @param name the interface name
     * @param modifiers the interface modifier
     */
-   public InterfaceInfoImpl(String name, int modifiers)
+   public InterfaceInfoImpl(String name, ModifierInfo modifiers)
    {
       super(name, modifiers);
    }
@@ -69,7 +70,7 @@ public class InterfaceInfoImpl extends ClassInfoImpl implements InterfaceInfo
     * @param modifiers the interface modifier
     * @param interfaces the interfaces
     */
-   public InterfaceInfoImpl(String name, int modifiers, InterfaceInfo[] interfaces)
+   public InterfaceInfoImpl(String name, ModifierInfo modifiers, InterfaceInfo[] interfaces)
    {
       super(name, modifiers, interfaces, null);
    }

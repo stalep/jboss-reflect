@@ -26,6 +26,7 @@ import java.lang.reflect.Modifier;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.FieldInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
 import org.jboss.util.NotImplementedException;
@@ -48,7 +49,7 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
    protected TypeInfo type;
    
    /** The field modifier */
-   protected int modifiers;
+   protected ModifierInfo modifiers;
    
    /** The declaring class */
    protected ClassInfo declaringClass;
@@ -72,7 +73,7 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
     * @param modifiers the field modifiers
     * @param declaring the declaring class
     */
-   public FieldInfoImpl(AnnotationValue[] annotations, String name, TypeInfo type, int modifiers, ClassInfo declaring)
+   public FieldInfoImpl(AnnotationValue[] annotations, String name, TypeInfo type, ModifierInfo modifiers, ClassInfo declaring)
    {
       super(annotations);
       this.name = name;
@@ -97,24 +98,24 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
       return declaringClass;
    }
    
-   public int getModifiers()
+   public ModifierInfo getModifiers()
    {
       return modifiers;
    }
    
    public boolean isStatic()
    {
-      return Modifier.isStatic(modifiers);
+      return modifiers.isStatic();
    }
    
    public boolean isPublic()
    {
-      return Modifier.isPublic(modifiers);
+      return modifiers.isPublic();
    }
 
    public boolean isVolatile()
    {
-      return Modifier.isVolatile(modifiers);
+      return modifiers.isVolatile();
    }
 
    public Object get(Object target) throws Throwable

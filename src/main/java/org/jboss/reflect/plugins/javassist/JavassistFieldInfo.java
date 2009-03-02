@@ -32,7 +32,6 @@ import org.jboss.util.JBossStringBuilder;
 
 import javassist.CtClass;
 import javassist.CtField;
-import javassist.Modifier;
 import javassist.NotFoundException;
 
 /**
@@ -80,24 +79,24 @@ public class JavassistFieldInfo extends JavassistAnnotatedInfo implements Mutabl
       return ctField.getName();
    }
 
-   public int getModifiers()
+   public ModifierInfo getModifiers()
    {
-      return ctField.getModifiers();
+      return ModifierInfo.getNewModifier(ctField.getModifiers());
    }
 
    public boolean isPublic()
    {
-      return Modifier.isPublic(getModifiers());
+      return getModifiers().isPublic();
    }
 
    public boolean isStatic()
    {
-      return Modifier.isStatic(getModifiers());
+      return getModifiers().isStatic();
    }
 
    public boolean isVolatile()
    {
-      return Modifier.isVolatile(getModifiers());
+      return getModifiers().isVolatile();
    }
 
    public ClassInfo getDeclaringClass()

@@ -25,6 +25,7 @@ import java.util.HashMap;
 
 import org.jboss.reflect.spi.AnnotationAttribute;
 import org.jboss.reflect.spi.AnnotationInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 
 /**
  * Annotation Info
@@ -56,7 +57,7 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
     * @param name the name
     * @param modifiers the modifiers
     */
-   public AnnotationInfoImpl(String name, int modifiers)
+   public AnnotationInfoImpl(String name, ModifierInfo modifiers)
    {
       super(name, modifiers);
    }
@@ -85,7 +86,7 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
       return true;
    }
    
-   public int getModifiers()
+   public ModifierInfo getModifiers()
    {
       return modifiers;
    }

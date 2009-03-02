@@ -27,7 +27,7 @@ package org.jboss.reflect.spi;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface ClassInfo extends AnnotatedInfo, ModifierInfo, TypeInfo
+public interface ClassInfo extends AnnotatedInfo, TypeInfo
 {
    /**
     * Get the class name
@@ -165,4 +165,6 @@ public interface ClassInfo extends AnnotatedInfo, ModifierInfo, TypeInfo
     * @return the package
     */
    PackageInfo getPackage();
+   
+   ModifierInfo getModifiers();
 }

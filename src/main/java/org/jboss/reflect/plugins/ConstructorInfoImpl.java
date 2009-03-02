@@ -28,6 +28,7 @@ import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.util.JBossStringBuilder;
@@ -57,7 +58,7 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
    protected ClassInfo[] exceptionTypes;
    
    /** The modifiers */
-   protected int modifiers;
+   protected ModifierInfo modifiers;
    
    /** The hash code */
    protected int hash;
@@ -79,7 +80,7 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public ConstructorInfoImpl(AnnotationValue[] annotations, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public ConstructorInfoImpl(AnnotationValue[] annotations, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, ModifierInfo modifiers, ClassInfo declaring)
    {
       super(annotations);
       if (parameterTypes == null)
@@ -112,7 +113,7 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public ConstructorInfoImpl(AnnotationValue[] annotations, ParameterInfo[] parameters, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public ConstructorInfoImpl(AnnotationValue[] annotations, ParameterInfo[] parameters, ClassInfo[] exceptionTypes, ModifierInfo modifiers, ClassInfo declaring)
    {
       super(annotations);
       if (parameters == null || parameters.length == 0)
@@ -156,24 +157,24 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
       return exceptionTypes;
    }
    
-   public int getModifiers()
+   public ModifierInfo getModifiers()
    {
       return modifiers;
    }
    
    public boolean isStatic()
    {
-      return Modifier.isStatic(modifiers);
+      return modifiers.isStatic();
    }
    
    public boolean isPublic()
    {
-      return Modifier.isPublic(modifiers);
+      return modifiers.isPublic();
    }
    
    public boolean isVolatile()
    {
-      return Modifier.isVolatile(modifiers);
+      return modifiers.isVolatile();
    }
 
    public Object newInstance(Object[] args) throws Throwable

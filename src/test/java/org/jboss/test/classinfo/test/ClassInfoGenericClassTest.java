@@ -22,7 +22,6 @@
 package org.jboss.test.classinfo.test;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,6 +31,7 @@ import java.util.Map;
 import org.jboss.reflect.plugins.ClassInfoImpl;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.TypeInfo;
 import org.jboss.reflect.spi.TypeInfoFactory;
 import org.jboss.test.classinfo.support.ClassInfoEmptyClass;
@@ -330,7 +330,7 @@ public abstract class ClassInfoGenericClassTest extends AbstractClassInfoTest
    
    private void testGenericClass(Class<?> clazz) throws Throwable
    {
-      ClassInfoImpl expected = new ClassInfoImpl(clazz.getName(), Modifier.PUBLIC);
+      ClassInfoImpl expected = new ClassInfoImpl(clazz.getName(), ModifierInfo.PUBLIC);
       TypeInfo info = testBasics(clazz, expected);
       
       assertFalse(info.isArray());

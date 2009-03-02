@@ -210,7 +210,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
       HashSet<ConstructorInfo> result = new HashSet<ConstructorInfo>();
       for (int i = 0; i < cinfos.length; ++i)
       {
-         if (cinfos[i].isPublic() && cinfos[i].isStatic() == false)
+         if (cinfos[i].getModifiers().isPublic() && cinfos[i].getModifiers().isStatic() == false)
             result.add(cinfos[i]);
       }
       return result;
@@ -233,7 +233,7 @@ public class AbstractBeanInfoFactory implements BeanInfoFactory
          {
             for (int i = 0; i < minfos.length; ++i)
             {
-               if (result.contains(minfos[i]) == false && minfos[i].isPublic() && minfos[i].isStatic() == false && minfos[i].isVolatile() == false)
+               if (result.contains(minfos[i]) == false && minfos[i].getModifiers().isPublic() && minfos[i].getModifiers().isStatic() == false && minfos[i].getModifiers().isVolatile() == false)
                   result.add(minfos[i]);
             }
          }

@@ -28,6 +28,7 @@ import java.lang.reflect.Constructor;
 import org.jboss.reflect.plugins.ConstructorInfoImpl;
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
 
@@ -62,7 +63,7 @@ public class ReflectConstructorInfoImpl extends ConstructorInfoImpl
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public ReflectConstructorInfoImpl(AnnotationValue[] annotations, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public ReflectConstructorInfoImpl(AnnotationValue[] annotations, TypeInfo[] parameterTypes, AnnotationValue[][] parameterAnnotations, ClassInfo[] exceptionTypes, ModifierInfo modifiers, ClassInfo declaring)
    {
       super(annotations, parameterTypes, parameterAnnotations, exceptionTypes, modifiers, declaring);
    }
@@ -76,7 +77,7 @@ public class ReflectConstructorInfoImpl extends ConstructorInfoImpl
     * @param modifiers the modifiers
     * @param declaring the declaring class
     */
-   public ReflectConstructorInfoImpl(AnnotationValue[] annotations, ParameterInfo[] parameters, ClassInfo[] exceptionTypes, int modifiers, ClassInfo declaring)
+   public ReflectConstructorInfoImpl(AnnotationValue[] annotations, ParameterInfo[] parameters, ClassInfo[] exceptionTypes, ModifierInfo modifiers, ClassInfo declaring)
    {
       super(annotations, parameters, exceptionTypes, modifiers, declaring);
    }

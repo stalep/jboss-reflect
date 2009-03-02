@@ -28,7 +28,7 @@ package org.jboss.reflect.spi;
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public interface AnnotationInfo extends InterfaceInfo, ModifierInfo
+public interface AnnotationInfo extends InterfaceInfo
 {
    /**
     * Get the name
@@ -51,4 +51,6 @@ public interface AnnotationInfo extends InterfaceInfo, ModifierInfo
     * @return the attribute
     */
    AnnotationAttribute getAttribute(String name);
+   
+   ModifierInfo getModifiers();
 }

@@ -415,7 +415,7 @@ public abstract class ClassInfoTest extends ContainerTest
       
       HashSet<FieldInfo> result = new HashSet<FieldInfo>();
       result.add(new FieldInfoImpl(null, "PUBLIC_CONSTANT", objectType, ModifierInfo.PUBLIC_CONSTANT, simpleBean));
-      result.add(new FieldInfoImpl(null, "PACKAGE_PRIVATE_CONSTANT", objectType, ModifierInfo.PACKAGE_CONSTANT, simpleBean));
+      result.add(new FieldInfoImpl(null, "PACKAGE_PRIVATE_CONSTANT", objectType, ModifierInfo.CONSTANT, simpleBean));
       result.add(new FieldInfoImpl(null, "PROTECTED_CONSTANT", objectType, ModifierInfo.PROTECTED_CONSTANT, simpleBean));
       result.add(new FieldInfoImpl(null, "PRIVATE_CONSTANT", objectType, ModifierInfo.PRIVATE_CONSTANT, simpleBean));
       result.add(new FieldInfoImpl(null, "serialVersionUID", longType, ModifierInfo.PRIVATE_CONSTANT, simpleBean));
@@ -485,7 +485,7 @@ public abstract class ClassInfoTest extends ContainerTest
       result.add(new MethodInfoImpl(null, "overloadedMethod", voidType, objectParameters, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC, simpleBean));
       result.add(new MethodInfoImpl(null, "overloadedMethod", voidType, stringParameters, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC, simpleBean));
       result.add(new MethodInfoImpl(null, "publicStaticMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PUBLIC_STATIC, simpleBean));
-      result.add(new MethodInfoImpl(null, "packagePrivateStaticMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PACKAGE_STATIC, simpleBean));
+      result.add(new MethodInfoImpl(null, "packagePrivateStaticMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.STATIC, simpleBean));
       result.add(new MethodInfoImpl(null, "protectedStaticMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PROTECTED_STATIC, simpleBean));
       result.add(new MethodInfoImpl(null, "privateStaticMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PRIVATE_STATIC, simpleBean));
       result.add(new MethodInfoImpl(null, "packagePrivateMethod", voidType, MethodInfo.NO_PARAMS, MethodInfo.NO_EXCEPTIONS, ModifierInfo.PACKAGE, simpleBean));

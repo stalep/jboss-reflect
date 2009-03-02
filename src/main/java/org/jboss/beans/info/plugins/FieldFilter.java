@@ -59,7 +59,7 @@ interface FieldFilter
    {
       public boolean useField(FieldInfo field)
       {
-         return field.isPublic();
+         return field.getModifiers().isPublic();
       }
    }
 }

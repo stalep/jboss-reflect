@@ -100,15 +100,6 @@ public class JavassistUtilTestCase extends ContainerTest
       }
    }
    
-
-   public void testModifier()
-   {
-      assertEquals(ModifierInfo.PUBLIC, Modifier.PUBLIC);
-      assertEquals(ModifierInfo.PRIVATE, Modifier.PRIVATE);
-      assertEquals(ModifierInfo.PROTECTED, Modifier.PROTECTED);
-      assertEquals(ModifierInfo.STATIC, Modifier.STATIC);
-   }
-   
    public void testSignature()
    {
       try

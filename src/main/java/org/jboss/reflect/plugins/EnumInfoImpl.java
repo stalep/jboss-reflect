@@ -25,6 +25,7 @@ import java.util.HashMap;
 
 import org.jboss.reflect.spi.EnumConstantInfo;
 import org.jboss.reflect.spi.EnumInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 
 /**
  * Enumeration info
@@ -56,7 +57,7 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
     * @param name the enumeration name
     * @param modifiers the modifiers
     */
-   public EnumInfoImpl(String name, int modifiers)
+   public EnumInfoImpl(String name, ModifierInfo modifiers)
    {
       super(name, modifiers);
    }

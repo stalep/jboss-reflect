@@ -201,24 +201,24 @@ public class DelegateClassInfo extends AbstractTypeInfo implements ClassInfo, In
       return delegate.isAnnotationPresent(annotationType);
    }
 
-   public int getModifiers()
+   public ModifierInfo getModifiers()
    {
       return delegate.getModifiers();
    }
 
    public boolean isPublic()
    {
-      return delegate.isPublic();
+      return delegate.getModifiers().isPublic();
    }
 
    public boolean isStatic()
    {
-      return delegate.isStatic();
+      return delegate.getModifiers().isStatic();
    }
 
    public boolean isVolatile()
    {
-      return delegate.isVolatile();
+      return delegate.getModifiers().isVolatile();
    }
 
    public Object convertValue(Object value) throws Throwable

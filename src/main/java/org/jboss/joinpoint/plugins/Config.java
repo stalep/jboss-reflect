@@ -420,7 +420,7 @@ public class Config
          {
             if (name.equals(method.getName()) &&
                   equals(paramTypes, method.getParameterTypes()) &&
-                  (strict == false || (method.isStatic() == isStatic && method.isPublic() == isPublic)))
+                  (strict == false || (method.getModifiers().isStatic() == isStatic && method.getModifiers().isPublic() == isPublic)))
                return method;
          }
       }

@@ -43,6 +43,7 @@ import org.jboss.reflect.spi.ConstructorInfo;
 import org.jboss.reflect.spi.FieldInfo;
 import org.jboss.reflect.spi.InterfaceInfo;
 import org.jboss.reflect.spi.MethodInfo;
+import org.jboss.reflect.spi.ModifierInfo;
 import org.jboss.reflect.spi.PackageInfo;
 import org.jboss.reflect.spi.ParameterInfo;
 import org.jboss.reflect.spi.TypeInfo;
@@ -147,7 +148,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
    protected void assertModifiers(Class<?> clazz, ClassInfo classInfo) throws Throwable
    {
       int expected = clazz.getModifiers();
-      int actual = classInfo.getModifiers();
+      int actual = classInfo.getModifiers().getModifiers();
       getLog().debug(clazz + " modifier expected=" + expected + " actual=" + actual);
       assertEquals(expected, actual);
    }
@@ -224,7 +225,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       for (Field field : clazz.getDeclaredFields())
       {
          TypeInfo type = factory.getTypeInfo(field.getGenericType());
-         FieldInfo f = new FieldInfoImpl(null, field.getName(), type, field.getModifiers(), classInfo);
+         FieldInfo f = new FieldInfoImpl(null, field.getName(), type, ModifierInfo.getNewModifier(field.getModifiers()), classInfo);
          expected.add(f);
       }
       
@@ -257,7 +258,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       TypeInfo type = factory.getTypeInfo(field.getGenericType());
       assertTypeEquals(field.getName(), type, fieldInfo.getType());
       assertEquals(classInfo, fieldInfo.getDeclaringClass());
-      assertEquals(field.getModifiers(), fieldInfo.getModifiers());
+      assertEquals(field.getModifiers(), fieldInfo.getModifiers().getModifiers());
       assertFieldAnnotations(field, fieldInfo);
    }
    
@@ -274,7 +275,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
          int i = 0;
          for (Class<?> c : paramClasses)
             paramTypes[i++] = factory.getTypeInfo(c);
-         MethodInfo m = new MethodInfoImpl(null, method.getName(), returnType, paramTypes, paramAnnotations, null, method.getModifiers(), classInfo);
+         MethodInfo m = new MethodInfoImpl(null, method.getName(), returnType, paramTypes, paramAnnotations, null, ModifierInfo.getNewModifier(method.getModifiers()), classInfo);
          expected.add(m);
       }
       
@@ -321,7 +322,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
          assertTypeEquals(method.getName() + " exception" + i, expectedExceptionTypes[i], actualExceptionTypes[i]);
       assertTypeEquals(method.getName() + " returnType", returnType, methodInfo.getReturnType());
       assertEquals(classInfo, methodInfo.getDeclaringClass());
-      assertEquals(method.getModifiers(), methodInfo.getModifiers());
+      assertEquals(method.getModifiers(), methodInfo.getModifiers().getModifiers());
       assertMethodAnnotations(method, methodInfo);
       assertParameterAnnotations(method, methodInfo);
    }
@@ -338,7 +339,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
          int i = 0;
          for (Class<?> c : paramClasses)
             paramTypes[i++] = factory.getTypeInfo(c);
-         ConstructorInfo c = new ConstructorInfoImpl(null, paramTypes, paramAnnotations, null, constructor.getModifiers(), classInfo);
+         ConstructorInfo c = new ConstructorInfoImpl(null, paramTypes, paramAnnotations, null, ModifierInfo.getNewModifier(constructor.getModifiers()), classInfo);
          expected.add(c);
       }
       
@@ -390,7 +391,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       for (int i = 0; i < exceptionClasses.length; ++i)
          assertTypeEquals(clazz + " constructorException" + i, expectedExceptionTypes[i], actualExceptionTypes[i]);
       assertEquals(classInfo, constructorInfo.getDeclaringClass());
-      assertEquals(constructor.getModifiers(), constructorInfo.getModifiers());
+      assertEquals(constructor.getModifiers(), constructorInfo.getModifiers().getModifiers());
       assertConstructorAnnotations(constructor, constructorInfo);
       assertParameterAnnotations(constructor, constructorInfo);
    }
@@ -531,7 +532,7 @@ public abstract class AbstractClassInfoTest extends ContainerTest
       for (Annotation annotation : annotations)
       {
          Class<?> type = annotation.annotationType();
-         AnnotationInfoImpl info = new AnnotationInfoImpl(type.getName(), type.getModifiers());
+         AnnotationInfoImpl info = new AnnotationInfoImpl(type.getName(), ModifierInfo.getNewModifier(type.getModifiers()));
          // TODO JBMICROCONT-127 attributes
          AnnotationValue a = new AnnotationValueImpl(info, new HashMap<String, Value>(), annotation);
          expected.add(a);
