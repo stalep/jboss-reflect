@@ -447,17 +447,17 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    
    public boolean isStatic()
    {
-      return modifiers.isStatic();
+      return (modifiers != null && modifiers.isStatic());
    }
    
    public boolean isPublic()
    {
-      return modifiers.isPublic();
+      return (modifiers != null && modifiers.isPublic());
    }
 
    public boolean isVolatile()
    {
-      return modifiers.isVolatile();
+      return (modifiers != null && modifiers.isVolatile());
    }
 
    public String getName()

@@ -197,8 +197,6 @@ public enum ModifierInfo
    
    ;
    
-   
-
    private final int modifier;
    
    ModifierInfo(int modifier)
@@ -218,8 +216,7 @@ public enum ModifierInfo
    
    public boolean isPublic()
    {
-      return (this.equals(PUBLIC) || this.equals(PUBLIC_ABSTRACT) || 
-            this.equals(PUBLIC_CONSTANT) || this.equals(PUBLIC_STATIC));
+      return (this.name().startsWith("PUBLIC"));
    }
    
    /**
@@ -229,9 +226,7 @@ public enum ModifierInfo
     */
     public boolean isStatic()
     {
-       return (this.equals(STATIC) || //this.equals(PACKAGE_STATIC) || 
-             this.equals(PRIVATE_STATIC) || this.equals(PROTECTED_STATIC) ||
-             this.equals(PUBLIC_STATIC));
+       return (this.name().contains("STATIC"));
     }
 
    /**
@@ -241,7 +236,7 @@ public enum ModifierInfo
     */
     public boolean isVolatile()
     {
-       return (this.equals(VOLATILE));
+       return (this.name().contains("VOLATILE"));
     }
 
    public static ModifierInfo getNewModifier(int modifiers)

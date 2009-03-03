@@ -164,17 +164,17 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
    
    public boolean isStatic()
    {
-      return modifiers.isStatic();
+      return (modifiers != null && modifiers.isStatic());
    }
    
    public boolean isPublic()
    {
-      return modifiers.isPublic();
+      return (modifiers != null && modifiers.isPublic());
    }
    
    public boolean isVolatile()
    {
-      return modifiers.isVolatile();
+      return (modifiers != null && modifiers.isVolatile());
    }
 
    public Object newInstance(Object[] args) throws Throwable

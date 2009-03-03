@@ -34,5 +34,27 @@ public class ModifierInfoTestCase extends ContainerTest
    {
       assertEquals(Modifier.PRIVATE, ModifierInfo.getNewModifier(Modifier.PRIVATE).getModifiers());
    }
+   
+   public void testIsPublic()
+   {
+      assertTrue(ModifierInfo.PUBLIC.isPublic());
+      assertTrue(ModifierInfo.PUBLIC_ABSTRACT_ANNOTATION.isPublic());
+      assertTrue(ModifierInfo.PUBLIC_ABSTRACT_INTERFACE.isPublic());
+      assertFalse(ModifierInfo.STATIC.isPublic());
+      assertFalse(ModifierInfo.PRIVATE_CONSTANT_SYNTHETIC.isPublic());
+      assertFalse(ModifierInfo.PRIVATE_CONSTANT_ENUM.isPublic());
+   }
+   
+   public void testIsStatic()
+   {
+      assertTrue(ModifierInfo.STATIC.isStatic());
+      assertTrue(ModifierInfo.PUBLIC_STATIC.isStatic());
+      assertTrue(ModifierInfo.PROTECTED_STATIC_TRANSIENT.isStatic());
+      assertFalse(ModifierInfo.PROTECTED_ABSTRACT_INTERFACE_ANNOTATION.isStatic());
+      assertFalse(ModifierInfo.PACKAGE_ABSTRACT.isStatic());
+      
+      
+      
+   }
 
 }

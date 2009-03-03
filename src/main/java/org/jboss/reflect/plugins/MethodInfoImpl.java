@@ -187,17 +187,17 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
    
    public boolean isStatic()
    {
-      return modifiers.isStatic();
+      return (modifiers != null && modifiers.isStatic());
    }
    
    public boolean isPublic()
    {
-      return modifiers.isPublic();
+      return (modifiers != null && modifiers.isPublic());
    }
    
    public boolean isVolatile()
    {
-      return modifiers.isVolatile();
+      return (modifiers != null && modifiers.isVolatile());
    }
 
    public Object invoke(Object target, Object[] args) throws Throwable

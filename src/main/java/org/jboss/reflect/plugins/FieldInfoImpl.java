@@ -105,17 +105,17 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
    
    public boolean isStatic()
    {
-      return modifiers.isStatic();
+      return (modifiers != null && modifiers.isStatic());
    }
    
    public boolean isPublic()
    {
-      return modifiers.isPublic();
+      return (modifiers != null && modifiers.isPublic());
    }
 
    public boolean isVolatile()
    {
-      return modifiers.isVolatile();
+      return (modifiers != null && modifiers.isVolatile());
    }
 
    public Object get(Object target) throws Throwable
