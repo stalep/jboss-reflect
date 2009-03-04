@@ -21,13 +21,6 @@ public class ModifierInfoTestCase extends ContainerTest
       assertEquals(ModifierInfo.STATIC.getModifiers(), Modifier.STATIC);
       assertEquals(ModifierInfo.PUBLIC_STATIC.getModifiers(), Modifier.PUBLIC + Modifier.STATIC);
       
-      System.out.println("Value of Public is: "+Modifier.PUBLIC);
-      
-      System.out.println("Value of Private is: "+Modifier.PRIVATE);
-      
-      for(ModifierInfo mi : ModifierInfo.values())
-         System.out.println(mi.name()+": "+mi.getModifiers());
-      
    }
    
    public void testNewModifiers()
@@ -52,9 +45,7 @@ public class ModifierInfoTestCase extends ContainerTest
       assertTrue(ModifierInfo.PROTECTED_STATIC_TRANSIENT.isStatic());
       assertFalse(ModifierInfo.PROTECTED_ABSTRACT_INTERFACE_ANNOTATION.isStatic());
       assertFalse(ModifierInfo.PACKAGE_ABSTRACT.isStatic());
-      
-      
-      
+         
    }
 
 }

@@ -88,10 +88,31 @@ public class JavassistMutableMethodInfoTestCase extends ContainerTest
       MutableClassInfo mci = new JavassistTypeInfoFactoryImpl().getMutable("org.jboss.test.plugins.javassist.Pojo3", null);
       MutableMethodInfo newMethod1 = mci.createMutableMethod(new InsertBeforeJavassistBody("public void test1() { }"));
       mci.addMethod(newMethod1);
-      
-      assertEquals(3, mci.getDeclaredMethods().length);
+      MutableMethodInfo newMethod2 = mci.createMutableMethod(new InsertBeforeJavassistBody("public String test2() { return \"foo\"; }"));
+      try
+      {
+      newMethod2.setReturnType("java.lang.String");
+      assertFalse("MutableMethoInfo should throw an exception!", true);
+      }
+      catch(RuntimeException re)
+      {
+      }
+      newMethod2.setName("test3");
+      mci.addMethod(newMethod2);
+       
+      assertEquals(4, mci.getDeclaredMethods().length);
       Class<?> theClass = mci.getType();
-      assertEquals(3, theClass.getDeclaredMethods().length);
+      assertEquals(4, theClass.getDeclaredMethods().length);
+      try
+      {
+         assertNotNull(theClass.getDeclaredMethod("test3", new Class[] { }));
+      }
+      catch (SecurityException e)
+      {
+      }
+      catch (NoSuchMethodException e)
+      {
+      }
    }
    
 
