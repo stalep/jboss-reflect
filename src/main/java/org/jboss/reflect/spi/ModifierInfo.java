@@ -25,6 +25,8 @@ import java.lang.reflect.Modifier;
 
 /**
  * Modifier info
+ * Note that modifiers that are not specified with any restrictions
+ * are by default package protected. eg: ModifierInfo.STATIC.
  *
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
