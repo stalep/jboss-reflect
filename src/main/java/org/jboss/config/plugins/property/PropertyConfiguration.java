@@ -75,11 +75,13 @@ public class PropertyConfiguration extends AbstractConfiguration
       return properties;
    }
    
+   @Override
    protected BeanInfoFactory createDefaultBeanInfoFactory() throws Throwable
    {
       return (BeanInfoFactory) loadFromProperties(PropertyConfigurationConstants.BEAN_INFO_FACTORY_NAME, PropertyConfigurationConstants.BEAN_INFO_FACTORY_DEFAULT, BeanInfoFactory.class);
    }
    
+   @Override
    protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable
    {
       ClassAdapterFactory result = (ClassAdapterFactory) loadFromProperties(PropertyConfigurationConstants.CLASS_ADAPTER_FACTORY_NAME, PropertyConfigurationConstants.CLASS_ADAPTER_FACTORY_DEFAULT, ClassAdapterFactory.class);
@@ -87,11 +89,13 @@ public class PropertyConfiguration extends AbstractConfiguration
       return result;
    }
 
+   @Override
    protected TypeInfoFactory createDefaultTypeInfoFactory() throws Throwable
    {
       return (TypeInfoFactory) loadFromProperties(PropertyConfigurationConstants.TYPE_INFO_FACTORY_NAME, PropertyConfigurationConstants.TYPE_INFO_FACTORY_DEFAULT, TypeInfoFactory.class);
    }
 
+   @Override
    protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
    {
       return (JoinpointFactoryBuilder) loadFromProperties(PropertyConfigurationConstants.JOIN_POINT_FACTORY_BUILDER_NAME, PropertyConfigurationConstants.JOIN_POINT_FACTORY_BUILDER_DEFAULT, JoinpointFactoryBuilder.class);

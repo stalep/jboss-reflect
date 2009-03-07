@@ -76,6 +76,7 @@ public class ConfigurationPermission extends BasicPermission
    /**
     * @return human readable string.
     */
+   @Override
    public String toString()
    {
       StringBuffer buffer = new StringBuffer(100);
@@ -94,6 +95,7 @@ public class ConfigurationPermission extends BasicPermission
     * @param p the permission
     * @return true when the permission is implied
     */ 
+   @Override
    public boolean implies(Permission p)
    {
       if( (p instanceof ConfigurationPermission) == false)
@@ -107,6 +109,7 @@ public class ConfigurationPermission extends BasicPermission
     * 
     * @return the permission collection
     */ 
+   @Override
    public PermissionCollection newPermissionCollection()
    {
       return new ConfigurationPermissionCollection();
@@ -153,6 +156,7 @@ public class ConfigurationPermission extends BasicPermission
       /** Whether we have all permissions */
       private boolean hasAll;
 
+      @Override
       public void add(Permission p)
       {
          if (isReadOnly())
@@ -165,6 +169,7 @@ public class ConfigurationPermission extends BasicPermission
             hasAll = true;
       }
 
+      @Override
       public boolean implies(Permission p)
       {
          boolean implies = false;
@@ -177,6 +182,7 @@ public class ConfigurationPermission extends BasicPermission
          return implies;
       }
 
+      @Override
       public Enumeration<Permission> elements()
       {
          final Iterator<Permission> iter = permissions.iterator();

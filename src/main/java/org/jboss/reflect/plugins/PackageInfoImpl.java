@@ -90,8 +90,8 @@ public class PackageInfoImpl extends AnnotationHolder implements PackageInfo
 
       final PackageInfo other = (PackageInfo) obj;
 
-      String name = getName();
-      if (name != null ? name.equals(other.getName()) == false : other.getName() != null)
+      String thisName = getName();
+      if (thisName != null ? thisName.equals(other.getName()) == false : other.getName() != null)
          return false;
       return true;
    }

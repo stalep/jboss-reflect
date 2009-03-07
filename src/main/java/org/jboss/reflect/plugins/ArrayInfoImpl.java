@@ -85,8 +85,8 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
       calculateHash();
    }
 
+   @Override
    @Deprecated
-   @SuppressWarnings("unchecked")
    public Class<? extends Object> getType()
    {
       if (annotatedElement == null)
@@ -104,26 +104,31 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
       return (Class<? extends Object>)annotatedElement;
    }
 
+   @Override
    public TypeInfo getComponentType()
    {
       return componentType;
    }
    
-   public AnnotationValue getAnnotation(String name)
+   @Override
+   public AnnotationValue getAnnotation(String annotationName)
    {
       return null;
    }
 
+   @Override
    public AnnotationValue[] getAnnotations()
    {
       return UNKNOWN_ANNOTATIONS;
    }
 
-   public boolean isAnnotationPresent(String name)
+   @Override
+   public boolean isAnnotationPresent(String annotationName)
    {
       return false;
    }
 
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -137,6 +142,7 @@ public class ArrayInfoImpl extends ClassInfoImpl implements ArrayInfo
       return true;
    }
 
+   @Override
    public int hashCode() { return hash; }
 
    /**

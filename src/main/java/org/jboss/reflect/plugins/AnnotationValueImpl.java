@@ -125,11 +125,12 @@ public class AnnotationValueImpl extends AbstractValue implements AnnotationValu
       return underlying;
    }
 
-   public <T extends Annotation> T getUnderlyingAnnotation(Class<T> annotationType)
+   public <T extends Annotation> T getUnderlyingAnnotation(Class<T> type)
    {
-      return annotationType.cast(underlying);
+      return type.cast(underlying);
    }
 
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -148,6 +149,7 @@ public class AnnotationValueImpl extends AbstractValue implements AnnotationValu
       return underlying.equals(otherUnderlying);
    }
 
+   @Override
    public int hashCode()
    {
       return hash;
@@ -164,11 +166,13 @@ public class AnnotationValueImpl extends AbstractValue implements AnnotationValu
       hash = result;
    }
 
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(annotationType.getName());
    }
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(annotationType.getName());

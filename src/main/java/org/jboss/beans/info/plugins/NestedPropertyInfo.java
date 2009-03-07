@@ -201,12 +201,12 @@ public class NestedPropertyInfo extends JBossObject implements PropertyInfo, Ser
       throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + name);
    }
 
-   public AnnotationValue getAnnotation(String name)
+   public AnnotationValue getAnnotation(String annotationName)
    {
       throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + this.name);
    }
 
-   public boolean isAnnotationPresent(String name)
+   public boolean isAnnotationPresent(String annotationName)
    {
       throw new IllegalArgumentException("Unable to determine right PropertyInfo on " + beanInfo + " by name: " + this.name);
    }

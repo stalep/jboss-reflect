@@ -81,6 +81,7 @@ public class EnumValueImpl extends AbstractValue implements EnumValue
       return type;
    }
 
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -94,6 +95,7 @@ public class EnumValueImpl extends AbstractValue implements EnumValue
       return true;
    }
 
+   @Override
    public int hashCode()
    {
       return hash;

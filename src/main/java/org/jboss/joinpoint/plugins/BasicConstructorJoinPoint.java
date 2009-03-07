@@ -63,6 +63,7 @@ public class BasicConstructorJoinPoint implements ConstructorJoinpoint
       this.arguments = args;
    }
 
+   @Override
    public Object clone()
    {
       try

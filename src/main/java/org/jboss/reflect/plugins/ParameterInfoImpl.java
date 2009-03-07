@@ -72,6 +72,7 @@ public class ParameterInfoImpl extends AnnotationHolder implements ParameterInfo
       return parameterType;
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (this == obj)
@@ -83,6 +84,7 @@ public class ParameterInfoImpl extends AnnotationHolder implements ParameterInfo
       return parameterType.equals(other.getParameterType());
    }
    
+   @Override
    public int hashCode()
    {
       return parameterType.hashCode();

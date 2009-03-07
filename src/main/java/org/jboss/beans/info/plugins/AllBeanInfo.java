@@ -49,6 +49,7 @@ public class AllBeanInfo extends FieldBeanInfo
       super(beanInfoFactory, classAdapter, properties, constructors, methods, events);
    }
 
+   @Override
    protected FieldFilter getFieldFilter()
    {
       return FieldFilter.ALL;

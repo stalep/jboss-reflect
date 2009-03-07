@@ -77,6 +77,7 @@ public class StringValueImpl extends AbstractValue implements StringValue
       return type;
    }
 
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -90,6 +91,7 @@ public class StringValueImpl extends AbstractValue implements StringValue
       return true;
    }
 
+   @Override
    public int hashCode()
    {
       int result;

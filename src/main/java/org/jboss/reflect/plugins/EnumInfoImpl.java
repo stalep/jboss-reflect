@@ -79,15 +79,15 @@ public class EnumInfoImpl extends ClassInfoImpl implements EnumInfo
       return enumConstants;
    }
 
-   public EnumConstantInfo getEnumConstant(String name)
+   public EnumConstantInfo getEnumConstant(String enumName)
    {
-      return constants.get(name);
+      return constants.get(enumName);
    }
 
    @SuppressWarnings({"unchecked", "deprecation"})
-   public Object getEnumValue(String name)
+   public Object getEnumValue(String enumName)
    {
-      return Enum.valueOf((Class<Enum>) getType(), name);
+      return Enum.valueOf((Class<Enum>) getType(), enumName);
    }
 
    @Override

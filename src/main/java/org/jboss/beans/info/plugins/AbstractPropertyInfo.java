@@ -103,15 +103,15 @@ public abstract class AbstractPropertyInfo extends AnnotationHolder
    /**
     * Initialize fields.
     *
-    * @param name the name
-    * @param upperName the upper name
-    * @param type the type
+    * @param fieldName the name
+    * @param fieldUpperName the upper name
+    * @param fieldType the type
     */
-   protected void init(String name, String upperName, TypeInfo type)
+   protected void init(String fieldName, String fieldUpperName, TypeInfo fieldType)
    {
-      this.name = name;
-      this.upperName = upperName;
-      this.type = type;
+      this.name = fieldName;
+      this.upperName = fieldUpperName;
+      this.type = fieldType;
    }
 
    public BeanInfo getBeanInfo()

@@ -186,11 +186,13 @@ public class UnmodifiableBeanInfo extends JBossObject implements BeanInfo
       return delegate.invokeStatic(name, paramTypes, params);
    }
 
+   @Override
    public String toShortString()
    {
       return delegate.toShortString();
    }
 
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       delegate.toShortString(buffer);

@@ -45,11 +45,13 @@ public class BasicConfiguration extends AbstractConfiguration
    {
    }
    
+   @Override
    protected BeanInfoFactory createDefaultBeanInfoFactory() throws Throwable
    {
       return new AbstractBeanInfoFactory();
    }
 
+   @Override
    protected ClassAdapterFactory createDefaultClassAdapterFactory() throws Throwable
    {
       BasicClassAdapterFactory result = new BasicClassAdapterFactory();
@@ -57,11 +59,13 @@ public class BasicConfiguration extends AbstractConfiguration
       return result;
    }
 
+   @Override
    protected TypeInfoFactory createDefaultTypeInfoFactory() throws Throwable
    {
       return new IntrospectionTypeInfoFactory();
    }
 
+   @Override
    protected JoinpointFactoryBuilder createDefaultJoinpointFactoryBuilder() throws Throwable
    {
       return new BasicJoinpointFactoryBuilder();

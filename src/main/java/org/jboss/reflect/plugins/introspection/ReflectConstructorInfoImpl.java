@@ -102,6 +102,7 @@ public class ReflectConstructorInfoImpl extends ConstructorInfoImpl
       return constructor;
    }
 
+   @Override
    public Object newInstance(Object[] args) throws Throwable
    {
       return ReflectionUtils.newInstance(constructor, args);

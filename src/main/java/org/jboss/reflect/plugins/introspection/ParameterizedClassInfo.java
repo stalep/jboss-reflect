@@ -77,6 +77,7 @@ public class ParameterizedClassInfo extends DelegateClassInfo
       this.parameterizedType = parameterizedType;
    }
 
+   @Override
    public TypeInfoFactory getTypeInfoFactory()
    {
       return factory;

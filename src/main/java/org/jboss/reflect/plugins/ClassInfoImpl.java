@@ -22,7 +22,6 @@
 package org.jboss.reflect.plugins;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -382,11 +381,11 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return genericInterfaces;
    }
    
-   public MethodInfo getDeclaredMethod(String name, TypeInfo[] parameters)
+   public MethodInfo getDeclaredMethod(String methodName, TypeInfo[] parameters)
    {
       if (methods == UNKNOWN_METHODS)
          setDeclaredMethods(classInfoHelper.getMethods(this));
-      return findMethod(methods, name, parameters);
+      return findMethod(methods, methodName, parameters);
    }
 
    public MethodInfo[] getDeclaredMethods()
@@ -396,13 +395,13 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return methods;
    }
 
-   public FieldInfo getDeclaredField(String name)
+   public FieldInfo getDeclaredField(String fieldName)
    {
       if (fields == UNKNOWN_FIELDS)
          setDeclaredFields(classInfoHelper.getFields(this));
       if (fieldMap == null)
          return null;
-      return fieldMap.get(name);
+      return fieldMap.get(fieldName);
    }
 
    public FieldInfo[] getDeclaredFields()
@@ -471,7 +470,6 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
    }
 
    @Deprecated
-   @SuppressWarnings("unchecked")
    public Class<? extends Object> getType()
    {
       return (Class<? extends Object>) annotatedElement;
@@ -545,7 +543,6 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return getType().isAssignableFrom(info.getType());
    }
 
-   @SuppressWarnings("deprecation")
    public boolean isInstance(Object object)
    {
       return getType().isInstance(object);
@@ -623,16 +620,16 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return expectedType.cast(result);
    }
 
-   public Object getAttachment(String name)
+   public Object getAttachment(String attachName)
    {
-      if (name == null)
+      if (attachName == null)
          throw new IllegalArgumentException("Null name");
       synchronized (this)
       {
          if (attachments == null)
             return null;
       }
-      return attachments.getAttachment(name);
+      return attachments.getAttachment(attachName);
    }
 
    @Override
@@ -657,8 +654,8 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
 
       final ClassInfo other = (ClassInfo) obj;
 
-      String name = getName();
-      if (name != null ? name.equals(other.getName()) == false : other.getName() != null)
+      String thisName = getName();
+      if (thisName != null ? thisName.equals(other.getName()) == false : other.getName() != null)
          return false;
       return true;
    }
@@ -669,9 +666,9 @@ public class ClassInfoImpl extends InheritableAnnotationHolder implements ClassI
       return (name != null ? name.hashCode() : 0);
    }
 
-   Object readResolve()
+   protected Object readResolve()
    {
-      TypeInfoFactory typeInfoFactory = SerializationHelper.getTypeInfoFactory();
-      return typeInfoFactory.getTypeInfo(getType());
+      TypeInfoFactory tif = SerializationHelper.getTypeInfoFactory();
+      return tif.getTypeInfo(getType());
    }
 }

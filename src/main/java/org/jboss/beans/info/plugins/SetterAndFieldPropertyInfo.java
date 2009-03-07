@@ -48,16 +48,19 @@ public class SetterAndFieldPropertyInfo extends FieldPropertyInfo
       setupAnnotations(mergeAnnotations(field.getAnnotations(), previous.getAnnotations()));
    }
 
+   @Override
    public void set(Object bean, Object value) throws Throwable
    {
       previous.set(bean, value);
    }
 
+   @Override
    public MethodInfo getSetter()
    {
       return previous.getSetter();
    }
 
+   @Override
    public void setSetter(MethodInfo setter)
    {
       previous.setSetter(setter);

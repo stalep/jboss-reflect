@@ -85,6 +85,7 @@ public class ArrayValueImpl extends AbstractValue implements ArrayValue
       return type;
    }
 
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -98,6 +99,7 @@ public class ArrayValueImpl extends AbstractValue implements ArrayValue
       return true;
    }
 
+   @Override
    public int hashCode()
    {
       return hash;

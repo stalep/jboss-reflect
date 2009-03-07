@@ -281,7 +281,6 @@ public class JavassistTypeInfoFactoryImpl extends WeakClassCache implements Muta
     * @param clazz the class
     * @return the info
     */
-   @SuppressWarnings("unchecked")
    public Object get(CtClass clazz)
    {
       if (clazz == null)

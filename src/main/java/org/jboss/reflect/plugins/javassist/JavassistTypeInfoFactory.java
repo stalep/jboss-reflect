@@ -23,8 +23,10 @@ package org.jboss.reflect.plugins.javassist;
 
 import java.lang.reflect.Type;
 
+import org.jboss.reflect.spi.ClassInfo;
+import org.jboss.reflect.spi.MutableClassInfo;
 import org.jboss.reflect.spi.TypeInfo;
-import org.jboss.reflect.spi.TypeInfoFactory;
+import org.jboss.reflect.spi.MutableTypeInfoFactory;
 
 /**
  * An javassist type factory that uses a static delegate.<p>
@@ -34,12 +36,12 @@ import org.jboss.reflect.spi.TypeInfoFactory;
  * 
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
-public class JavassistTypeInfoFactory implements TypeInfoFactory
+public class JavassistTypeInfoFactory implements MutableTypeInfoFactory
 {
    /** The delegate */
    protected static JavassistTypeInfoFactoryImpl delegate = new JavassistTypeInfoFactoryImpl();
 
-   static TypeInfoFactory getDelegate()
+   static MutableTypeInfoFactory getDelegate()
    {
       return delegate;
    }
@@ -57,6 +59,31 @@ public class JavassistTypeInfoFactory implements TypeInfoFactory
    public TypeInfo getTypeInfo(Type type)
    {
       return delegate.getTypeInfo(type);
+   }
+
+   public MutableClassInfo createNewMutableClass(String name)
+   {
+      return delegate.createNewMutableClass(name);
+   }
+
+   public MutableClassInfo createNewMutableClass(String name, ClassInfo superClass)
+   {
+      return delegate.createNewMutableClass(name, superClass);
+   }
+
+   public MutableClassInfo createNewMutableInterface(String name)
+   {
+      return delegate.createNewMutableInterface(name);
+   }
+
+   public MutableClassInfo createNewMutableInterface(String name, ClassInfo superClass)
+   {
+      return delegate.createNewMutableInterface(name, superClass);
+   }
+
+   public MutableClassInfo getMutable(String name, ClassLoader cl)
+   {
+      return delegate.getMutable(name, cl);
    }
 
 }

@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import org.jboss.reflect.spi.AnnotationValue;
@@ -205,6 +204,7 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       throw new NotImplementedException("invoke");
    }
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);
@@ -212,11 +212,13 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       buffer.append(" return=").append(returnType);
    }
    
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(name);
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (this == obj) return true;
@@ -230,6 +232,7 @@ public class MethodInfoImpl extends AnnotationHolder implements MethodInfo
       return Arrays.equals(parameterTypes, other.getParameterTypes());
    }
 
+   @Override
    public int hashCode()
    {
       return hash;

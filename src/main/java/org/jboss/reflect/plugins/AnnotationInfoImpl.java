@@ -81,11 +81,13 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
       }
    }
 
+   @Override
    public boolean isAnnotation()
    {
       return true;
    }
    
+   @Override
    public ModifierInfo getModifiers()
    {
       return modifiers;
@@ -96,13 +98,14 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
       return attributes;
    }
 
-   public AnnotationAttribute getAttribute(String name)
+   public AnnotationAttribute getAttribute(String annotationName)
    {
       if (attributeMap == null)
          return null;
-      return attributeMap.get(name);
+      return attributeMap.get(annotationName);
    }
 
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -115,6 +118,7 @@ public class AnnotationInfoImpl extends InterfaceInfoImpl implements AnnotationI
       return true;
    }
 
+   @Override
    public int hashCode()
    {
       return name.hashCode();

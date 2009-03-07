@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import org.jboss.reflect.spi.AnnotationValue;
@@ -182,11 +181,13 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
       throw new NotImplementedException("newInstance");
    }
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append(Arrays.asList(parameterTypes));
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (this == obj) 
@@ -201,6 +202,7 @@ public class ConstructorInfoImpl extends AnnotationHolder implements Constructor
       return (Arrays.equals(parameterTypes, other.getParameterTypes()));
    }
 
+   @Override
    public int hashCode()
    {
       return hash;

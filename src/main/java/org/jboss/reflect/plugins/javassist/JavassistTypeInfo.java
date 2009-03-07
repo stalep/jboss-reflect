@@ -23,7 +23,6 @@ package org.jboss.reflect.plugins.javassist;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -44,6 +44,7 @@ public abstract class BasicTargettedJoinPoint implements TargettedJoinpoint
       this.target = target;
    }
 
+   @Override
    public Object clone()
    {
       try

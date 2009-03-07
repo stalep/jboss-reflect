@@ -88,6 +88,7 @@ public class AnnotationAttributeImpl extends JBossObject implements AnnotationAt
       return defaultValue;
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (this == obj)
@@ -105,6 +106,7 @@ public class AnnotationAttributeImpl extends JBossObject implements AnnotationAt
       return true;
    }
 
+   @Override
    public int hashCode()
    {
       return hash;

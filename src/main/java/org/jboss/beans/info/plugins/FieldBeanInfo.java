@@ -58,6 +58,7 @@ public class FieldBeanInfo extends AbstractBeanInfo
       super(beanInfoFactory, classAdapter, properties, constructors, methods, events);
    }
 
+   @Override
    public void setProperties(Set<PropertyInfo> properties)
    {
       setFields(getFields(classAdapter.getClassInfo(), getFieldFilter()));
@@ -71,6 +72,7 @@ public class FieldBeanInfo extends AbstractBeanInfo
       }
    }
 
+   @Override
    protected PropertyInfo replaceProperty(PropertyInfo original)
    {
       String name = original.getName();

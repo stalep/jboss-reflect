@@ -49,6 +49,7 @@ public class ParameterizedArrayInfo extends ParameterizedClassInfo implements Ar
       super(factory, delegate, parameterizedType);
    }
 
+   @Override
    public TypeInfo getComponentType()
    {
       return delegate.getComponentType();

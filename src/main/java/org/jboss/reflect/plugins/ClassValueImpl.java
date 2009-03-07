@@ -81,6 +81,7 @@ public class ClassValueImpl extends AbstractValue implements ClassValue
       return type;
    }
 
+   @Override
    public boolean equals(Object o)
    {
       if (this == o) return true;
@@ -94,6 +95,7 @@ public class ClassValueImpl extends AbstractValue implements ClassValue
       return true;
    }
 
+   @Override
    public int hashCode() { return hash; }
 
    /**

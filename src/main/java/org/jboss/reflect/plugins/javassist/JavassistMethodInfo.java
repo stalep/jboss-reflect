@@ -21,7 +21,6 @@
 */
 package org.jboss.reflect.plugins.javassist;
 
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import javassist.CannotCompileException;

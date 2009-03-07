@@ -79,6 +79,7 @@ public class BasicJoinpointFactory extends JBossObject implements JoinpointFacto
       return new BasicMethodJoinPoint(methodInfo);
    }
    
+   @Override
    public void toString(JBossStringBuilder buffer)
    {
       buffer.append("classInfo=").append(classInfo.getName());

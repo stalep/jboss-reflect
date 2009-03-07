@@ -145,6 +145,7 @@ public class ReflectMethodInfoImpl extends MethodInfoImpl
       }
    }
 
+   @Override
    public Object invoke(Object target, Object[] args) throws Throwable
    {
       accessCheck();

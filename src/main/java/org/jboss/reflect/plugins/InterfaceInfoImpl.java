@@ -75,6 +75,7 @@ public class InterfaceInfoImpl extends ClassInfoImpl implements InterfaceInfo
       super(name, modifiers, interfaces, null);
    }
    
+   @Override
    public boolean isInterface()
    {
       return true;

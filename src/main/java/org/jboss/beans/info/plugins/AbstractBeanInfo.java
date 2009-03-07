@@ -133,18 +133,18 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
    /**
     * Get a property
     *
-    * @param name the property name
+    * @param propertyName the property name
     * @return the property
     * @throws IllegalArgumentException if there is no such property
     */
-   public PropertyInfo getProperty(String name)
+   public PropertyInfo getProperty(String propertyName)
    {
-      if (name == null)
+      if (propertyName == null)
          throw new IllegalArgumentException("Null name");
 
-      PropertyInfo property = findPropertyInfo(name);
+      PropertyInfo property = findPropertyInfo(propertyName);
       if (property == null)
-         throw new IllegalArgumentException("No such property " + name + " for bean " + getName() + " available " + propertiesByName.keySet());
+         throw new IllegalArgumentException("No such property " + propertyName + " for bean " + getName() + " available " + propertiesByName.keySet());
       return property;
    }
 
@@ -154,9 +154,9 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
     * @param name the property name
     * @return the property or null if no such property
     */
-   protected PropertyInfo findPropertyInfo(String name)
+   protected PropertyInfo findPropertyInfo(String propertyName)
    {
-      return propertiesByName.get(name);
+      return propertiesByName.get(propertyName);
    }
 
    /**
@@ -279,9 +279,9 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return newInstance(typeInfosToStrings(paramTypes), params);
    }
 
-   public Object getProperty(Object bean, String name) throws Throwable
+   public Object getProperty(Object bean, String beanName) throws Throwable
    {
-      return BeanInfoUtil.get(this, bean, name);
+      return BeanInfoUtil.get(this, bean, beanName);
    }
 
    public void setProperty(Object bean, String name, Object value) throws Throwable
@@ -289,48 +289,49 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       BeanInfoUtil.set(this, bean, name, value);
    }
 
-   public Object invoke(Object bean, String name) throws Throwable
+   public Object invoke(Object bean, String beanName) throws Throwable
    {
-      return invoke(bean, name, (String[]) null, null);
+      return invoke(bean, beanName, (String[]) null, null);
    }
 
-   public Object invoke(Object bean, String name, String[] paramTypes, Object[] params) throws Throwable
+   public Object invoke(Object bean, String beanName, String[] paramTypes, Object[] params) throws Throwable
    {
-      MethodJoinpoint joinpoint = Config.getMethodJoinpoint(bean, getJoinpointFactory(), name, paramTypes, params);
+      MethodJoinpoint joinpoint = Config.getMethodJoinpoint(bean, getJoinpointFactory(), beanName, paramTypes, params);
       return joinpoint.dispatch();
    }
 
-   public Object invoke(Object bean, String name, Class<?>[] paramTypes, Object[] params) throws Throwable
+   public Object invoke(Object bean, String beanName, Class<?>[] paramTypes, Object[] params) throws Throwable
    {
-      return invoke(bean, name, classesToStrings(paramTypes), params);
+      return invoke(bean, beanName, classesToStrings(paramTypes), params);
    }
 
-   public Object invoke(Object bean, String name, TypeInfo[] paramTypes, Object[] params) throws Throwable
+   public Object invoke(Object bean, String beanName, TypeInfo[] paramTypes, Object[] params) throws Throwable
    {
-      return invoke(bean, name, typeInfosToStrings(paramTypes), params);
+      return invoke(bean, beanName, typeInfosToStrings(paramTypes), params);
    }
 
-   public Object invokeStatic(String name) throws Throwable
+   public Object invokeStatic(String beanName) throws Throwable
    {
-      return invokeStatic(name, (String[]) null, null);
+      return invokeStatic(beanName, (String[]) null, null);
    }
 
-   public Object invokeStatic(String name, String[] paramTypes, Object[] params) throws Throwable
+   public Object invokeStatic(String beanName, String[] paramTypes, Object[] params) throws Throwable
    {
-      MethodJoinpoint joinpoint = Config.getStaticMethodJoinpoint(getJoinpointFactory(), name, paramTypes, params);
+      MethodJoinpoint joinpoint = Config.getStaticMethodJoinpoint(getJoinpointFactory(), beanName, paramTypes, params);
       return joinpoint.dispatch();
    }
 
-   public Object invokeStatic(String name, Class<?>[] paramTypes, Object[] params) throws Throwable
+   public Object invokeStatic(String beanName, Class<?>[] paramTypes, Object[] params) throws Throwable
    {
-      return invokeStatic(name, classesToStrings(paramTypes), params);
+      return invokeStatic(beanName, classesToStrings(paramTypes), params);
    }
 
-   public Object invokeStatic(String name, TypeInfo[] paramTypes, Object[] params) throws Throwable
+   public Object invokeStatic(String beanName, TypeInfo[] paramTypes, Object[] params) throws Throwable
    {
-      return invokeStatic(name, typeInfosToStrings(paramTypes), params);
+      return invokeStatic(beanName, typeInfosToStrings(paramTypes), params);
    }
 
+   @Override
    public boolean equals(Object object)
    {
       if (object == null || object instanceof AbstractBeanInfo == false)
@@ -352,6 +353,7 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       return true;
    }
    
+   @Override
    public void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);
@@ -367,11 +369,13 @@ public class AbstractBeanInfo extends JBossObject implements BeanInfo
       list(buffer, events);
    }
    
+   @Override
    public void toShortString(JBossStringBuilder buffer)
    {
       buffer.append(name);
    }
    
+   @Override
    public int getHashCode()
    {
       return name.hashCode();

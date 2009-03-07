@@ -21,8 +21,6 @@
 */
 package org.jboss.reflect.plugins;
 
-import java.lang.reflect.Modifier;
-
 import org.jboss.reflect.spi.AnnotationValue;
 import org.jboss.reflect.spi.ClassInfo;
 import org.jboss.reflect.spi.FieldInfo;
@@ -128,11 +126,13 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
       throw new NotImplementedException("set");
    }
 
+   @Override
    protected void toString(JBossStringBuilder buffer)
    {
       buffer.append("name=").append(name);
    }
 
+   @Override
    public boolean equals(Object obj)
    {
       if (this == obj) return true;
@@ -146,6 +146,7 @@ public class FieldInfoImpl extends AnnotationHolder implements FieldInfo
       return declaringClass.equals(other.getDeclaringClass());
    }
 
+   @Override
    public int hashCode()
    {
       return hash;

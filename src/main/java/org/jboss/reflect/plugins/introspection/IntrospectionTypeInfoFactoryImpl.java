@@ -421,6 +421,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return getTypeInfo(clazz);
    }
 
+   @Override
    protected TypeInfo instantiate(Class<?> clazz)
    {
       ClassInfoImpl result;
@@ -465,6 +466,7 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return result;
    }
 
+   @Override
    protected TypeInfo instantiate(ParameterizedType type)
    {
       Class<?> rawType = (Class<?>) type.getRawType();
@@ -474,11 +476,13 @@ public class IntrospectionTypeInfoFactoryImpl extends WeakTypeCache<TypeInfo> im
       return new ParameterizedClassInfo(this, rawTypeInfo, type);
    }
 
+   @Override
    protected void generate(Class<?> clazz, TypeInfo result)
    {
       generateTypeInfo(clazz, (ClassInfoImpl) result);
    }
 
+   @Override
    protected void generate(ParameterizedType type, TypeInfo result)
    {
       // Everything is lazy
