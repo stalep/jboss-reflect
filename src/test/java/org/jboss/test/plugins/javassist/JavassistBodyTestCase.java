@@ -23,7 +23,7 @@ package org.jboss.test.plugins.javassist;
 
 import java.lang.reflect.Method;
 
-import org.jboss.reflect.plugins.javassist.JavassistTypeInfoFactoryImpl;
+import org.jboss.reflect.plugins.javassist.JavassistTypeInfoFactory;
 import org.jboss.reflect.spi.InsertAfterJavassistBody;
 import org.jboss.reflect.spi.InsertBeforeJavassistBody;
 import org.jboss.reflect.spi.MutableClassInfo;
@@ -53,10 +53,10 @@ public class JavassistBodyTestCase extends ContainerTest
    @SuppressWarnings("deprecation")
    public void testBody()
    {
-      MutableClassInfo mci = new JavassistTypeInfoFactoryImpl().getMutable("org.jboss.test.plugins.javassist.PojoBody", null);
+      MutableClassInfo mci = new JavassistTypeInfoFactory().getMutable("org.jboss.test.plugins.javassist.PojoBody", null);
       try
       {
-         MutableMethodInfo mmi = mci.getDeclaredMethod("foo", new TypeInfo[] {(TypeInfo) new JavassistTypeInfoFactoryImpl().get("int", Thread.currentThread().getContextClassLoader()) });
+         MutableMethodInfo mmi = mci.getDeclaredMethod("foo", new TypeInfo[] {(TypeInfo) new JavassistTypeInfoFactory().getMutable("int", null) });
 
          System.out.println("got method: "+mmi.getName());
          mmi.setBody(new InsertBeforeJavassistBody("i = 42;"));

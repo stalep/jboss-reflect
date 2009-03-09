@@ -756,12 +756,16 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
    {
       if(constructorArray != null)
          constructorArray = null;
+      if(constructors.size() > 0)
+         constructors.clear();
    }
    
    protected void clearFieldCache()
    {
       if(fieldArray != null)
          fieldArray = null;
+      if(fields.size() > 0)
+         fields.clear();
    }
    
    public void addConstructor(MutableConstructorInfo mci)
@@ -1014,7 +1018,9 @@ public class JavassistTypeInfo extends JavassistInheritableAnnotationHolder impl
       if(mfi instanceof JavassistFieldInfo)
          try
          {
+            System.out.println("Number of fields before remove: "+ctClass.getDeclaredFields().length);
             ctClass.removeField(((JavassistFieldInfo) mfi).getCtField());
+            System.out.println("Number of fields after remove: "+ctClass.getDeclaredFields().length);
             clearFieldCache();
          }
          catch (NotFoundException e)

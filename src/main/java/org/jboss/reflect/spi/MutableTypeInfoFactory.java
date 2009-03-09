@@ -69,7 +69,7 @@ public interface MutableTypeInfoFactory extends TypeInfoFactory
     * Note that this will not put the MutableClass in any cache
     * 
     * @param name
-    * @param cl
+    * @param cl - if cl is null, the default ClassLoader will be used.
     * @return
     */
    MutableClassInfo getMutable(String name, ClassLoader cl);

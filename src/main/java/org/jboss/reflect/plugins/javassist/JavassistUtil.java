@@ -128,6 +128,8 @@ public class JavassistUtil
    
    public static CtClass[] toCtClass(String[] names)
    {
+      if(names == null)
+         return new CtClass[0];
       CtClass[] classes = new CtClass[names.length];
       for(int i=0; i < names.length; i++)
       {
