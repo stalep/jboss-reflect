@@ -1,2 +1,47 @@
+---
+Usage of JBoss Reflect
+---
+Ståle W. Pedersen
+---
+09-Jan-2009
+---
 
-JBoss Reflect have implemented support for two 
+Mutable
+
+   Mutable objects in JBoss Reflect can be changed in any way the user wants, only exception is object that has
+   already been loaded and system classes.
+
+   Simple example of how we can create an object in runtime:
++----+
+MutableClassInfo mci = new JavassistTypeInfoFactory().createNewMutableClass("Pojo");
+MutableMethodInfo mmi1 = mci.createMutableMethod(new InsertBeforeJavassistBody("public String getFoo() { return \"foo\"; }"));
+mci.addMethod(mmi1);
+Class<?> PojoClass = mci.getType(); // when we create the .class representation of the object it cannot be changed anymore
++----+
+   Edit an existing object;
+   We already have a Foo object like this:
++----+
+public class Foo
+{
+  private int num = 0;
+
+  public int getNum()
+  {
+     return num;
+  }
+}
++----+
+   Lets say we want to add a method like:
++----+
+  public void setNum(int n)
+  {
+     num = n;
+  }
++----+
+   Then we can do something like:
++----+
+MutableClassInfo mci = new JavassistTypeInfoFactory().getMutable("Foo", null); // using null as cl will cause it to use the default
+MutableMethodInfo getNum = mci.createMutableMethod(new InsertBeforeJavassistBody("public int getNum() { return num;}"));
+mci.addMethod(getNum);
+      
++----+

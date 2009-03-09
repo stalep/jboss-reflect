@@ -9,7 +9,7 @@
   <version>2.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>JBoss Reflection</name>
-  <url>http://www.jboss.com/products/jbossmc</url>
+  <url>http://www.jboss.org/jbossreflect</url>
   <description>JBoss Reflection</description>
   <scm>
     <connection>scm:svn:http://anonsvn.jboss.org/repos/jbossas/projects/jboss-reflect/trunk/</connection>
@@ -104,6 +104,29 @@
       </plugin>
     </plugins>
   </reporting>
+  
+  <developers>
+    <developer>
+      <name>Adrian Brock</name>
+    </developer>
+    <developer>
+      <name>Bill Burke</name>
+    </developer>
+    <developer>
+      <name>Ales Justin</name>
+    </developer>
+    <developer>
+      <name>Ståle W. Pedersen</name>
+    </developer>
+  </developers>
 
+  <distributionManagement>
+    <site>
+      <id>www.jboss.org</id>
+      <name>www.jboss.org</name>
+      <!-- This should be set to a local checkout of the jboss.org/jbossretro freezone. -->
+      <url>file://${jbossreflect.site.root}</url>
+    </site>
+  </distributionManagement>
 
 </project>
