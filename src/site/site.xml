@@ -1,0 +1,28 @@
+<project name="JBoss Reflect">
+  <bannerLeft>
+    <name>JBoss Retro</name>
+    <href>http://www.jboss.org/jbossretro</href>
+  </bannerLeft>
+  <bannerRight>
+    <name>JBoss.org</name>
+    <src>http://www.jboss.org/junk</src>
+  </bannerRight>
+  <skin>
+    <groupId>org.jboss.maven.skins</groupId>
+    <artifactId>maven-body-only-skin</artifactId>
+  </skin>
+  <publishDate format="dd MMM yyyy" />
+  <body>
+    <links>
+      <item name="JBoss" href="http://www.jboss.org/"/>
+    </links>
+    <head>
+      <meta name="faq" content="proficio"/>
+    </head>
+    <menu name="Quick Links">
+      <item name="Features" href="/maven-features.html"/>
+    </menu>
+    ${reports}
+  </body>
+
+</project>
