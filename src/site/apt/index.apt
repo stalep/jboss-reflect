@@ -1,17 +1,20 @@
 
 JBoss Reflect
 
-   Jboss-reflect is a one-stop shop for reflection and byte-code manipulation implemented on top of 
+   JBoss-reflect is a one-stop shop for reflection and byte-code manipulation implemented on top of 
    javassist and java.lang.reflect (or any other byte code tool).
 
    It is designed to abstract away the implementation specific details of java.lang.reflect and 
    javassist.
    An overview over the different SPI's can be found {{{http://www.jboss.org/community/docs/DOC-13272}here}}.
 
-   With the support of Javassist JBoss Reflect support mutable objects. This means that its possible to runtime
-   change classes/methods/constructors/fields. Its possible to load the changed objects in runtime or get a 
+   With the support of Javassist, JBoss Reflect support mutable objects. This means that its possible to change
+   classes/methods/constructors/fields in runtime. Its possible to load the changed objects in runtime or get a 
    bytearray representation of the class which can be saved to disc and loaded later. As in Javassist its not
    possible to change a Class that has already been loaded by the classloader.
+
+   JBoss-Reflect will also cache already loaded objects, methods, fields and constructors. This makes it faster than
+   using java.lang.reflect / javassist directly.
 
 *Usage
   
